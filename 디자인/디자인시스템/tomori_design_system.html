@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>토모리 디자인 시스템 — 시각화 v2 (4.7 문서화 형식)</title>
+<style>
+/* ============================================================
+   토모리 디자인 시스템 — 토큰 정의
+   사양서 design_system_spec.md v2 기준. 임의 색 추가 없음.
+   ============================================================ */
+:root, [data-theme="light"]{
+  /* 2.1 표면·텍스트 */
+  --bg-base:#FAF7F3;
+  --bg-surface:#FFFFFF;
+  --bg-elevated:#FFFFFF;
+  --elevated-shadow:0 6px 20px rgba(26,22,19,.10);
+  --border:#E8E1D9;
+  --border-strong:#D4C9BC;
+  --text-high:#1A1613;
+  --text-mid:#6B6259;
+  --text-low:#9C948B;
+  /* 2.2 브랜드 */
+  --brand:#F5B942;
+  --brand-text:#8F5E08;          /* 2026-07-21 확정 — 구 #A06A0A는 bg-base 위 4.31로 미달 */
+  --brand-halo:rgba(245,185,66,.28);
+  /* 2.3 코스 5색 — 면(태그 배경·테두리·진행바 채움) */
+  --course-jlpt:#2F6FD0;
+  --course-travel:#1F8F76;
+  --course-biz:#6B45C4;
+  --course-news:#C84870;
+  --course-folk:#55913A;
+  /* 2.3b 코스 5색 — 글자(라벨·아이콘). brand/brand-text와 동일한 패턴 */
+  --course-jlpt-text:#2F6FD0;    /* 원색 그대로 — 이미 통과 */
+  --course-travel-text:#1B7E68;
+  --course-biz-text:#6B45C4;     /* 원색 그대로 — 이미 통과 */
+  --course-news-text:#C53E68;
+  --course-folk-text:#497D32;
+  /* 2.4 상태색 */
+  --success:#2E7D4F;
+  --error:#B5533D;               /* 2026-07-21 확정 — 구 #C05B45는 4.08로 미달 */
+  --info:#2F6FD0;
+  /* 2.2 on-brand — brand 면 위 글자. 모드 무관 고정(brand 자체가 모드 무관이므로). 10.19:1 */
+  --on-brand:#1A1613;
+  /* 2.6 scrim — 모달 딤. 라이트는 bg-elevated와 3.02:1(비텍스트 최소 3:1)이 되는 지점 */
+  --scrim:rgba(26,22,19,.44);
+}
+[data-theme="dark"]{
+  --bg-base:#14110F;
+  --bg-surface:#1E1A17;
+  --bg-elevated:#2A2521;
+  --elevated-shadow:0 6px 20px rgba(0,0,0,.45);
+  --border:#3A332D;
+  --border-strong:#544A41;
+  --text-high:#F5F1EC;
+  --text-mid:#B5ADA4;
+  --text-low:#7D766E;
+  --brand:#F5B942;
+  --brand-text:#F5B942;
+  --brand-halo:rgba(245,185,66,.18);
+  --course-jlpt:#5B9BF5;
+  --course-travel:#3FC8A8;
+  --course-biz:#9B72F0;
+  --course-news:#F2789E;
+  --course-folk:#7FBF5A;
+  /* 다크는 기존 값이 이미 전부 통과 → -text = 코스색 동일 (brand/brand-text와 같은 구조) */
+  --course-jlpt-text:#5B9BF5;
+  --course-travel-text:#3FC8A8;
+  --course-biz-text:#9B72F0;
+  --course-news-text:#F2789E;
+  --course-folk-text:#7FBF5A;
+  --success:#5FD08A;
+  --error:#E8705F;
+  --info:#6FA8DC;
+  --on-brand:#1A1613;            /* 다크에서도 동일 — brand 면이 같은 색이므로 */
+  /* 다크는 스크림만으로 3:1을 못 만든다(bg-elevated 대비 최대 1.39:1).
+     그래서 값은 「대비」가 아니라 「배경 정보량 죽이기」용이고, 분리는 border-strong 테두리가 맡는다. */
+  --scrim:rgba(0,0,0,.60);
+}
+
+/* ============================================================
+   3.1 폰트 스택 — 한국어 UI와 일본어 콘텐츠를 분리한다.
+   외부 로드 없음. 시스템 폴백 스택만 지정.
+   ============================================================ */
+:root{
+  --font-ko: Pretendard, "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+             "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", "Segoe UI", Roboto, sans-serif;
+  --font-jp: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+             "Yu Gothic", "YuGothic", "Meiryo", "MS PGothic", sans-serif;
+  --font-jp-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", monospace;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; padding:0;
+  background:var(--bg-base); color:var(--text-high);
+  font-family:var(--font-ko);
+  font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .25s ease-out, color .25s ease-out;
+}
+[lang="ja"], .jp{ font-family:var(--font-jp); }
+.jp-serif{ font-family:var(--font-jp-serif); }
+
+/* ---------- 레이아웃 ---------- */
+.wrap{max-width:1080px; margin:0 auto; padding:0 24px 120px}
+header.top{
+  position:sticky; top:0; z-index:50;
+  background:var(--bg-base);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+}
+header.top .brandmark{display:flex;align-items:center;gap:10px;margin-right:auto}
+header.top .lamp{
+  width:22px;height:22px;border-radius:50% 50% 46% 46%;
+  background:var(--brand); box-shadow:0 0 0 6px var(--brand-halo);
+}
+header.top h1{font-size:17px;margin:0;letter-spacing:-.01em}
+header.top .sub{font-size:13px;color:var(--text-mid)}
+
+.themebtn{
+  font-family:inherit; font-size:13px; font-weight:600;
+  min-height:44px; padding:0 18px;
+  border-radius:999px; cursor:pointer;
+  background:var(--brand); color:var(--on-brand); border:none;
+  transition:transform .2s ease-out, filter .2s ease-out;
+}
+.themebtn:hover{filter:brightness(1.05)}
+.themebtn:active{transform:scale(.97)}
+
+section{padding-top:64px; scroll-margin-top:80px}
+h2.sec{
+  font-size:20px; line-height:1.4; margin:0 0 6px;
+  padding-bottom:10px; border-bottom:2px solid var(--border-strong);
+  display:flex; align-items:baseline; gap:10px;
+}
+h2.sec .no{
+  font-size:13px; font-weight:700; color:var(--brand-text);
+  font-family:var(--font-mono);
+}
+h3{font-size:15px; margin:32px 0 12px; color:var(--text-high)}
+h3 .tag-req{font-size:11px;color:var(--error);margin-left:6px;vertical-align:2px}
+p.lead{color:var(--text-mid); font-size:14px; margin:8px 0 20px}
+
+/* ---------- memo 블록 (와이어프레임 memo 스타일 계승) ---------- */
+.memo{
+  margin:14px 0 0; padding:12px 14px;
+  border-left:3px solid var(--brand);
+  background:color-mix(in srgb, var(--brand) 8%, var(--bg-surface));
+  border-radius:0 8px 8px 0;
+  font-size:13px; line-height:1.65; color:var(--text-mid);
+}
+.memo b{color:var(--text-high)}
+.memo.warn{border-left-color:var(--error); background:color-mix(in srgb, var(--error) 8%, var(--bg-surface));}
+.memo .label{
+  display:inline-block; font-size:11px; font-weight:700; letter-spacing:.04em;
+  color:var(--brand-text); margin-right:6px;
+}
+.memo.warn .label{color:var(--error)}
+
+/* ============================================================
+   4.7 문서화 형식 — 모든 컴포넌트를 5블록으로 기술한다.
+   원칙 → 사용 가능한 속성 → 대표 예시 → ✅ 이렇게 쓰세요 → ❌ 이렇게 쓰지 않아요
+   ============================================================ */
+.doc{
+  border:1px solid var(--border); border-radius:14px; background:var(--bg-surface);
+  margin:20px 0 0; overflow:hidden;
+}
+.doc > .head{
+  padding:14px 18px; border-bottom:1px solid var(--border); background:var(--bg-base);
+  display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+}
+.doc > .head h4{margin:0; font-size:16px; letter-spacing:-.01em}
+.doc > .head .spec{font-family:var(--font-mono); font-size:11px; color:var(--text-low)}
+.doc .blk{padding:16px 18px; border-bottom:1px solid var(--border)}
+.doc .blk:last-child{border-bottom:none}
+.doc .blk > .bt{
+  font-size:11px; font-weight:800; letter-spacing:.08em; color:var(--text-mid);
+  margin:0 0 10px; display:flex; align-items:center; gap:7px;
+}
+.doc .blk > .bt .n{
+  display:inline-grid; place-items:center; width:17px; height:17px; border-radius:5px;
+  background:var(--border); color:var(--text-mid); font-size:10px; font-family:var(--font-mono);
+}
+.doc .principle{font-size:14px; color:var(--text-high); margin:0}
+.doc .principle b{color:var(--brand-text)}
+
+/* 속성 표 */
+table.props{width:100%; border-collapse:collapse; font-size:12.5px}
+table.props th,table.props td{text-align:left; padding:7px 10px; border-bottom:1px solid var(--border); vertical-align:top}
+table.props tr:last-child td{border-bottom:none}
+table.props th{font-size:10.5px; letter-spacing:.05em; color:var(--text-low); font-weight:700}
+table.props code{font-size:11.5px}
+
+/* ✅ / ❌ 블록 — 라벨과 테두리로 구분하고, 본문 글자는 상태색을 쓰지 않는다(2.5) */
+.doc .blk.do{background:color-mix(in srgb, var(--success) 6%, var(--bg-surface))}
+.doc .blk.dont{background:color-mix(in srgb, var(--error) 6%, var(--bg-surface))}
+.doc .blk.do > .bt{color:var(--text-high)}
+.doc .blk.dont > .bt{color:var(--text-high)}
+.doc .blk.do > .bt .n{background:var(--success); color:#FFFFFF}
+.doc .blk.dont > .bt .n{background:var(--error); color:#FFFFFF}
+.doc ul.rules{margin:0; padding-left:19px}
+.doc ul.rules li{font-size:13px; line-height:1.65; color:var(--text-mid); margin-bottom:7px}
+.doc ul.rules li:last-child{margin-bottom:0}
+.doc ul.rules li b{color:var(--text-high)}
+.doc ul.rules li .why{display:block; color:var(--text-low); font-size:12px; margin-top:2px}
+
+/* 나쁜 예 / 좋은 예 나란히 */
+.vs{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px}
+.vs > div{border-radius:10px; padding:13px 14px; background:var(--bg-surface); border:1px solid var(--border-strong)}
+.vs > div.bad{border-color:var(--error)}
+.vs > div.good{border-color:var(--success)}
+.vs .vh{font-size:11px; font-weight:800; margin-bottom:9px; color:var(--text-high);
+  display:flex; align-items:center; gap:6px}
+.vs .vh .g{font-size:14px}
+.vs .bad .vh .g{color:var(--error)}
+.vs .good .vh .g{color:var(--success)}
+.vs .note{font-family:var(--font-mono); font-size:11px; color:var(--text-mid); margin-top:9px}
+@media (max-width:760px){ .vs{grid-template-columns:1fr} }
+
+/* ---------- 간격 4배수 눈금 ---------- */
+.spacescale{display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; margin-top:12px}
+.spacescale .u{text-align:center}
+.spacescale .u i{display:block; background:var(--brand); border-radius:3px 3px 0 0; width:26px}
+.spacescale .u span{display:block; font-family:var(--font-mono); font-size:10px; color:var(--text-mid); margin-top:4px}
+
+/* ---------- 인터랙션 4상태 ---------- */
+.states{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:12px}
+.states .st{border:1px solid var(--border); border-radius:10px; padding:13px; text-align:center; background:var(--bg-surface)}
+.states .st .lb{font-family:var(--font-mono); font-size:10px; color:var(--text-low); margin-bottom:10px}
+.states .st .desc{font-size:11px; color:var(--text-mid); margin-top:9px; line-height:1.5}
+.btn-demo{
+  display:inline-block; min-height:44px; line-height:44px; padding:0 20px; border-radius:10px;
+  background:var(--brand); color:var(--on-brand); font-weight:700; font-size:14px;
+}
+.btn-demo.pressed{filter:brightness(.90)}
+[data-theme="dark"] .btn-demo.pressed{filter:brightness(1.12)}
+.btn-demo.focused{outline:2px solid var(--brand); outline-offset:3px}
+.btn-demo.disabled{opacity:.38}
+
+/* ---------- Safe Area ---------- */
+.safearea{
+  position:relative; width:190px; height:330px; margin:12px auto 0;
+  border:2px solid var(--border-strong); border-radius:22px; background:var(--bg-surface); overflow:hidden;
+}
+.safearea .zone{position:absolute; left:0; right:0; background:color-mix(in srgb,var(--error) 15%, transparent);
+  border-color:var(--error); border-style:dashed; display:grid; place-items:center;
+  font-size:9px; color:var(--text-high); font-weight:700}
+.safearea .zone.top{top:0; height:44px; border-bottom-width:1px; border-top:0;border-left:0;border-right:0}
+.safearea .zone.bot{bottom:0; height:30px; border-top-width:1px; border-bottom:0;border-left:0;border-right:0}
+.safearea .content{position:absolute; top:52px; bottom:38px; left:10px; right:10px;
+  border:1px dashed var(--success); border-radius:8px; display:grid; place-items:center;
+  font-size:10px; color:var(--text-mid); text-align:center; padding:6px}
+.safearea .cta{position:absolute; left:10px; right:10px; bottom:38px; height:44px; border-radius:10px;
+  background:var(--brand); color:var(--on-brand); display:grid; place-items:center; font-size:11px; font-weight:700}
+
+/* ---------- Skeleton ---------- */
+@keyframes sk{0%{opacity:.55}50%{opacity:.9}100%{opacity:.55}}
+.sk{background:var(--border); border-radius:6px; animation:sk 1.8s ease-in-out infinite}
+.sk.t{height:12px} .sk.t.lg{height:16px}
+.sk.w40{width:40%} .sk.w60{width:60%} .sk.w80{width:80%} .sk.w100{width:100%}
+.sk.circle{width:40px;height:40px;border-radius:50%}
+.sk.thumb{width:52px;height:52px;border-radius:8px}
+.skrow{display:flex; gap:12px; align-items:center; padding:11px 0; border-bottom:1px solid var(--border)}
+.skrow:last-child{border-bottom:none}
+.skstack{display:flex; flex-direction:column; gap:7px; flex:1}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none} }
+
+/* ---------- 모달 · scrim ---------- */
+.modaldemo{position:relative; height:230px; border-radius:12px; overflow:hidden;
+  border:1px solid var(--border); background:var(--bg-base); padding:14px}
+.modaldemo .bgtext{font-size:12px; color:var(--text-mid); line-height:1.8}
+.modaldemo .scrim{position:absolute; inset:0; background:var(--scrim)}
+.modaldemo .sheet{
+  position:absolute; left:16px; right:16px; top:50%; transform:translateY(-50%);
+  background:var(--bg-elevated); border-radius:14px; padding:16px;
+  box-shadow:var(--elevated-shadow); border:1px solid transparent;
+}
+/* 다크는 그림자가 먹히지 않으므로 테두리가 분리를 맡는다 */
+[data-theme="dark"] .modaldemo .sheet{border-color:var(--border-strong)}
+
+/* ---------- 브레이크포인트 (자리만) ---------- */
+.bps{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-top:12px}
+.bp{border:1px solid var(--border); border-radius:10px; padding:14px; background:var(--bg-surface)}
+.bp .n{font-family:var(--font-mono); font-size:11px; color:var(--brand-text); font-weight:700}
+.bp .r{font-size:15px; font-weight:700; margin:4px 0 6px}
+.bp .d{font-size:12px; color:var(--text-mid); line-height:1.55}
+
+/* ⋯ nowrap 시연 */
+.nb{white-space:nowrap}
+.wrapdemo{width:270px; border:1px dashed var(--border-strong); border-radius:8px; padding:10px 12px;
+  font-family:var(--font-jp); font-size:16px; line-height:2.0; background:var(--bg-surface)}
+.wrapdemo .dots{color:var(--text-low); font-size:11px; margin-left:6px}
+
+/* ---------- 스와치 ---------- */
+.swatches{display:grid; grid-template-columns:repeat(auto-fill,minmax(168px,1fr)); gap:12px}
+.sw{
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  background:var(--bg-surface);
+}
+.sw .chip{height:64px; display:block}
+.sw .meta{padding:9px 11px 11px}
+.sw .name{font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--text-high)}
+.sw .hex{font-family:var(--font-mono); font-size:11px; color:var(--text-mid); margin-top:2px}
+.sw .use{font-size:11px; color:var(--text-low); margin-top:4px}
+.sw .chip.checker{
+  background-image:linear-gradient(45deg,var(--border) 25%,transparent 25%,transparent 75%,var(--border) 75%),
+                   linear-gradient(45deg,var(--border) 25%,transparent 25%,transparent 75%,var(--border) 75%);
+  background-size:12px 12px; background-position:0 0,6px 6px;
+}
+
+/* ---------- 브랜드 면 vs 글자 시연 ---------- */
+.brand-demo{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px}
+.demo-card{
+  border-radius:12px; padding:18px; background:var(--bg-surface);
+  border:1px solid var(--border);
+}
+.demo-card.bad{border:1px solid var(--error)}
+.demo-card.good{border:1px solid var(--success)}
+.demo-card .verdict{font-size:12px; font-weight:700; margin-bottom:12px}
+.demo-card.bad .verdict{color:var(--error)}
+.demo-card.good .verdict{color:var(--success)}
+.demo-card .ratio{
+  font-family:var(--font-mono); font-size:11px; color:var(--text-mid); margin-top:10px;
+}
+.txt-brand-raw{color:#F5B942; font-size:18px; font-weight:700}
+.txt-brand-token{color:var(--brand-text); font-size:18px; font-weight:700}
+.fill-brand{
+  background:var(--brand); color:var(--on-brand); font-weight:700;
+  border-radius:10px; padding:12px 16px; text-align:center; font-size:15px;
+}
+.fill-brand-outline{
+  border:2px solid var(--brand-text); color:var(--brand-text); font-weight:700;
+  border-radius:10px; padding:11px 16px; text-align:center; font-size:15px; background:transparent;
+}
+
+/* ---------- 타이포 ---------- */
+.type-row{
+  display:grid; grid-template-columns:150px 1fr; gap:20px;
+  padding:16px 0; border-bottom:1px solid var(--border); align-items:baseline;
+}
+.type-row .spec{font-family:var(--font-mono); font-size:11px; color:var(--text-mid); line-height:1.6}
+.type-row .spec b{display:block; font-size:12px; color:var(--brand-text); margin-bottom:3px}
+.t-display{font-size:28px; line-height:1.3; font-weight:700; letter-spacing:-.02em}
+.t-title{font-size:20px; line-height:1.4; font-weight:700}
+.t-bodyjp{font-size:18px; line-height:2.0}
+.t-body{font-size:15px; line-height:1.6}
+.t-caption{font-size:13px; line-height:1.5; color:var(--text-mid)}
+
+/* ---------- 루비(후리가나) ---------- */
+.ruby-stage{
+  background:var(--bg-surface); border:1px solid var(--border);
+  border-radius:12px; padding:18px 20px; margin-top:12px;
+}
+.jp-passage{
+  font-family:var(--font-jp); font-size:18px;
+  line-height:2.0;              /* 3.2 — 루비 공간 항상 확보 */
+}
+.jp-passage ruby{ ruby-position:over; }
+.jp-passage rt{
+  font-size:9px;                /* 3.3 ruby 토큰: 9 / 1.0 */
+  line-height:1;
+  color:var(--text-mid);
+  font-weight:400;
+  /* 후리가나 OFF 시 사라지되 공간은 유지 → visibility만 바꾼다 */
+  visibility:visible;
+}
+.jp-passage.furi-off rt{ visibility:hidden; }   /* 공간 유지 */
+.romaji{
+  display:block; font-size:13px; line-height:1.5; color:var(--text-low);
+  margin-top:2px;               /* 한글 발음은 루비와 겹치지 않게 별도 줄 */
+}
+.jp-passage.romaji-off .romaji{ display:none; } /* 공간 회수 */
+
+/* 높이 계측 표시 */
+.hmeter{
+  display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+  margin-top:12px; padding:10px 12px; border-radius:8px;
+  background:var(--bg-base); border:1px solid var(--border);
+  font-family:var(--font-mono); font-size:12px; color:var(--text-mid);
+}
+.hmeter b{color:var(--text-high)}
+.hmeter .chg{font-weight:700}
+.hmeter .chg.same{color:var(--success)}
+.hmeter .chg.moved{color:var(--brand-text)}
+.baseline-guide{
+  position:relative;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0, transparent 35px,
+    color-mix(in srgb, var(--course-jlpt) 22%, transparent) 35px,
+    color-mix(in srgb, var(--course-jlpt) 22%, transparent) 36px);
+}
+
+/* ---------- 컴포넌트 공통 ---------- */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.grid3{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px}
+.stage{
+  background:var(--bg-surface); border:1px solid var(--border);
+  border-radius:12px; padding:18px;
+}
+.stage .cap{font-size:11px; color:var(--text-low); margin-bottom:12px; font-family:var(--font-mono)}
+
+/* 카드 — radius 12, bg-surface, border 1px border */
+.card{
+  background:var(--bg-surface); border:1px solid var(--border);
+  border-radius:12px; padding:16px;
+}
+.card.elevated{background:var(--bg-elevated); box-shadow:var(--elevated-shadow); border-color:transparent}
+.card .card-title{font-size:15px; font-weight:700; margin:0 0 4px}
+.card .card-sub{font-size:13px; color:var(--text-mid); margin:0}
+
+/* 태그 — pill, 코스색 테두리 + 12% 배경 */
+.tags{display:flex; flex-wrap:wrap; gap:8px}
+/* --c = 면(테두리·도트·진행바 채움) / --ct = 글자 */
+.tag{
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:13px; font-weight:600; line-height:1;
+  padding:8px 13px; border-radius:999px;
+  border:1px solid var(--c); color:var(--ct);
+  background:color-mix(in srgb, var(--c) 12%, transparent);
+}
+.tag.custom{ border-style:dashed; }   /* 6.1 커스텀 태그 시각 구분 */
+.tag.colordot{ width:36px; height:36px; padding:0; border-radius:50%; background:var(--c); }
+.tag .dot{width:6px;height:6px;border-radius:50%;background:var(--c)}
+.c-jlpt  {--c:var(--course-jlpt);   --ct:var(--course-jlpt-text)}
+.c-travel{--c:var(--course-travel); --ct:var(--course-travel-text)}
+.c-biz   {--c:var(--course-biz);    --ct:var(--course-biz-text)}
+.c-news  {--c:var(--course-news);   --ct:var(--course-news-text)}
+.c-folk  {--c:var(--course-folk);   --ct:var(--course-folk-text)}
+.c-neutral{--c:var(--text-mid);     --ct:var(--text-mid)}
+
+/* 진행바 — 높이 8, radius full, 트랙 border, 채움 코스색 */
+.pbar{height:8px; border-radius:999px; background:var(--border); overflow:hidden}
+.pbar > i{display:block; height:100%; border-radius:999px; background:var(--c); transition:width .25s ease-out}
+.pbar-row{margin:14px 0}
+.pbar-row .lbl{display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px}
+.pbar-row .lbl .nm{font-weight:600; color:var(--ct)}   /* 라벨은 글자 변형 */
+.pbar-row .lbl .pc{font-family:var(--font-mono); font-size:12px; color:var(--text-mid)}
+
+/* 회독 배지 — 도장 형태, 완료 회차만 brand */
+.stamps{display:flex; gap:10px; align-items:center}
+.stamp{
+  width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;
+  font-size:13px;font-weight:800;
+  border:2px dashed var(--border-strong); color:var(--text-low);
+  background:transparent; transform:rotate(-6deg);
+}
+.stamp.done{
+  border:2px solid var(--brand); background:var(--brand); color:var(--on-brand);
+  border-style:solid;
+}
+
+/* 토글 — ON=brand / OFF=border-strong */
+.tg-row{display:flex; align-items:center; gap:12px; padding:10px 0; min-height:44px}
+.tg{
+  width:52px;height:30px;border-radius:999px; position:relative; cursor:pointer;
+  background:var(--border-strong); border:none; flex:none;
+  transition:background-color .25s ease-out;
+}
+.tg::after{
+  content:""; position:absolute; top:3px; left:3px;
+  width:24px;height:24px;border-radius:50%; background:#FFFFFF;
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+  transition:transform .25s ease-out;
+}
+.tg[aria-checked="true"]{background:var(--brand)}
+.tg[aria-checked="true"]::after{transform:translateX(22px)}
+.tg-row .tglbl{font-size:14px}
+.tg-row .tgstate{font-family:var(--font-mono); font-size:11px; color:var(--text-mid); margin-left:auto}
+
+/* 탭바 — 5탭, 선택 시 brand-text */
+.tabbar{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--border); background:var(--bg-surface);
+  border-radius:0 0 12px 12px; overflow:hidden;
+}
+.tabbar .tab{
+  min-height:56px; display:grid; place-items:center; gap:4px;
+  padding:8px 4px; font-size:11px; color:var(--text-low);
+  background:transparent; border:none; font-family:inherit; cursor:pointer;
+}
+.tabbar .tab .ico{width:22px;height:22px;display:block}
+.tabbar .tab.on{color:var(--brand-text); font-weight:700}
+
+/* 우표 — 사각 + 톱니 테두리 */
+.stampsheet{display:flex; gap:14px; flex-wrap:wrap; align-items:flex-start}
+.postage{
+  --notch:4.5px;
+  width:60px;height:72px; position:relative;
+  background:color-mix(in srgb, var(--border) 55%, var(--bg-surface));
+  display:grid; place-items:center;
+}
+/* 톱니(perforation) — 네 변에만 배경색 원을 얹어 파낸다 */
+.postage::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(circle var(--notch), var(--punch) 97%, #0000 100%) 0 0/12px 12px repeat-x,
+    radial-gradient(circle var(--notch), var(--punch) 97%, #0000 100%) 0 100%/12px 12px repeat-x,
+    radial-gradient(circle var(--notch), var(--punch) 97%, #0000 100%) 0 0/12px 12px repeat-y,
+    radial-gradient(circle var(--notch), var(--punch) 97%, #0000 100%) 100% 0/12px 12px repeat-y;
+}
+.postage .inner{
+  width:calc(100% - 18px); height:calc(100% - 18px);
+  border:1px dashed var(--border-strong); border-radius:2px;
+  display:grid; place-items:center; font-size:12px; color:var(--text-low);
+  font-family:var(--font-jp);
+}
+.postage.earned{ background:color-mix(in srgb, var(--brand) 45%, var(--bg-surface)); }
+.postage-wrap{
+  --punch:var(--bg-surface);
+  display:inline-grid; place-items:center; padding:8px; border-radius:10px;
+}
+.postage-wrap.earned{ box-shadow:0 0 0 7px var(--brand-halo); }
+.postage.earned .inner{border-color:var(--brand-text); color:var(--brand-text); font-weight:800}
+
+/* 토모 placeholder (등불) */
+.tomo-lab{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px}
+.tomo-cell{
+  border:1px solid var(--border); border-radius:12px; padding:26px 16px 18px;
+  background:var(--bg-surface); text-align:center;
+}
+.tomo-cell .mode{
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.06em;
+  color:var(--text-low); margin-bottom:18px;
+}
+.tomo-stage{height:120px; display:grid; place-items:center}
+.tomo{
+  width:56px; height:66px; position:relative;
+  display:grid; place-items:center;
+  transition:transform .25s ease-out;
+}
+.tomo .body{
+  width:44px;height:52px;
+  border-radius:22px 22px 18px 18px;
+  background:color-mix(in srgb, var(--brand) 55%, var(--bg-surface));
+  border:2px solid var(--brand-text);
+}
+.tomo .flame{
+  position:absolute; top:12px; left:50%; transform:translateX(-50%);
+  width:16px;height:20px; border-radius:50% 50% 45% 45%;
+  background:var(--brand);
+}
+.tomo .eyes{
+  position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
+  display:flex; gap:10px;
+}
+.tomo .eyes i{width:4px;height:4px;border-radius:50%;background:var(--text-high);display:block}
+/* Dark 새 쪽지: 빛 번짐(glow) */
+.tomo.dark-alert{ filter:drop-shadow(0 0 14px var(--brand)) drop-shadow(0 0 28px var(--brand-halo)); }
+/* Light 새 쪽지: 헤일로 링 + 1.15배 확대 */
+.tomo.light-alert{ transform:scale(1.15); }
+.tomo.light-alert::before{
+  content:""; position:absolute; inset:-16px; border-radius:50%;
+  border:6px solid var(--brand-halo);
+}
+.tomo-cell .state{font-size:12px; color:var(--text-mid); margin-top:14px}
+.tomo-cell .state b{color:var(--text-high)}
+.forcelight{ background:#FAF7F3; color:#1A1613; border-color:#E8E1D9 }
+.forcedark{ background:#14110F; color:#F5F1EC; border-color:#3A332D }
+.forcelight .mode,.forcedark .mode{opacity:.8}
+.forcedark .state{color:#B5ADA4}
+.forcedark .state b{color:#F5F1EC}
+.forcelight .state{color:#6B6259}
+.forcelight .state b{color:#1A1613}
+.forcedark .tomo .body{background:color-mix(in srgb,#F5B942 55%, #1E1A17); border-color:#F5B942}
+.forcedark .tomo .eyes i{background:#14110F}
+.forcelight .tomo .body{background:color-mix(in srgb,#F5B942 55%, #FFFFFF); border-color:#A06A0A}
+.forcelight .tomo .eyes i{background:#1A1613}
+
+/* 가나 키보드 — 10×5, 키 radius 6 */
+.kana{
+  display:grid; grid-template-columns:repeat(10,1fr); gap:5px;
+  direction:rtl;   /* 일본어 50음도는 오른쪽(あ행)에서 왼쪽으로 */
+}
+.kana .k{
+  aspect-ratio:1/1.05; min-height:38px;
+  border-radius:6px; border:1px solid var(--border);
+  background:var(--bg-surface); color:var(--text-high);
+  font-family:var(--font-jp); font-size:16px;
+  display:grid; place-items:center; cursor:pointer;
+  transition:background-color .2s ease-out;
+}
+.kana .k:hover{background:color-mix(in srgb, var(--brand) 14%, var(--bg-surface))}
+.kana .k.empty{background:transparent; border-color:transparent; cursor:default}
+.kana .k.empty:hover{background:transparent}
+.kbd-actions{display:flex; gap:8px; margin-top:8px}
+.kbd-actions .k{
+  flex:1; min-height:44px; border-radius:6px; border:1px solid var(--border);
+  background:var(--bg-surface); color:var(--text-mid); font-family:inherit; font-size:13px;
+  display:grid; place-items:center; cursor:pointer;
+}
+.kbd-actions .k.primary{background:var(--brand); color:var(--on-brand); border-color:var(--brand); font-weight:700}
+
+/* ---------- 접근성 표 ---------- */
+table.a11y{width:100%; border-collapse:collapse; font-size:13px; margin-top:12px}
+table.a11y th,table.a11y td{
+  text-align:left; padding:10px 12px; border-bottom:1px solid var(--border);
+}
+table.a11y th{font-size:11px; letter-spacing:.04em; color:var(--text-mid); font-weight:700}
+table.a11y td.ratio{font-family:var(--font-mono)}
+/* 🔴 2.5 상태색 틴트 규칙 적용 — 이 페이지 자신이 규칙을 어기고 있었다.
+   구: color:var(--success) + success 14% 배경 → 자기 색 틴트 위 11px 글자(3.9:1대). AA 미달.
+   신: 배경 틴트는 유지하되 글자는 text-high, 상태는 테두리와 앞 글리프(●/▲)가 전달한다.
+   → 색을 빼도 뜻이 읽힌다(색각 이상 대응과 같은 원리). */
+.pill{display:inline-block; font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px;
+  color:var(--text-high); border:1px solid var(--border-strong); background:transparent}
+.pill::before{margin-right:5px; font-weight:900}
+.pill.pass{border-color:var(--success); background:color-mix(in srgb,var(--success) 12%, transparent)}
+.pill.pass::before{content:"●"; color:var(--success)}
+.pill.warn{border-color:var(--error); background:color-mix(in srgb,var(--error) 12%, transparent)}
+.pill.warn::before{content:"▲"; color:var(--error)}
+.sq{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:7px}
+
+.toc{
+  display:flex; flex-wrap:wrap; gap:8px; margin:24px 0 0;
+}
+.toc a{
+  font-size:12px; text-decoration:none; color:var(--text-mid);
+  border:1px solid var(--border); border-radius:999px; padding:7px 12px;
+  background:var(--bg-surface);
+}
+.toc a:hover{color:var(--brand-text); border-color:var(--brand-text)}
+
+.anim-demo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.anim-box{
+  padding:10px 16px;border-radius:10px;background:var(--brand);color:var(--on-brand);
+  font-weight:700;font-size:13px;transition:transform .25s ease-out;cursor:pointer;
+}
+.anim-box:hover{transform:translateY(-3px)}
+
+@media (max-width:760px){
+  .brand-demo,.grid2{grid-template-columns:1fr}
+  .type-row{grid-template-columns:1fr; gap:8px}
+  .kana{grid-template-columns:repeat(5,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brandmark">
+    <span class="lamp" aria-hidden="true"></span>
+    <div>
+      <h1>토모리 디자인 시스템 <span class="sub">— 시각화 v2</span></h1>
+      <div class="sub">design_system_spec.md v2 기준 · 라이트 기본 · <b>4.7 문서화 형식(원칙→속성→예시→✅→❌)</b></div>
+    </div>
+  </div>
+  <button class="themebtn" id="themeToggle" type="button">🌙 다크로 전환</button>
+</header>
+
+<div class="wrap">
+
+  <div class="memo" style="margin-top:24px">
+    <span class="label">2026-07-21 반영</span>
+    대비비 실측에서 나온 문제 5건에 대한 결정을 반영했다.
+    ① <b><code>course-*-text</code> 5색 신설</b>(2.3b) — 코스색도 브랜드와 같은 면/글자 분리 패턴.
+    ② <b><code>brand-text</code> #A06A0A → #8F5E08</b>.
+    ③ <b>라이트 <code>error</code> #C05B45 → #B5533D</b>(톤 유지, 명도만).
+    ④ <b>우표 진행바 = <code>brand</code> 확정</b>(4.5) — 코스색 규칙의 유일한 예외.
+    ⑤ <b>토모 확대분 여백 확보 규칙 명문화</b>(5장) — 후리가나 공간 확보와 같은 원리.
+    <br><b>추가 반영</b> — PRD 8.4 개정(읽기 도움 토글 <b>분리</b>): 3.2를 <b>후리가나 / 한글 발음 2개 토글</b>로 바꾸고,
+    <b>후리가나는 공간 유지 · 발음은 공간 회수</b>라는 서로 다른 처리를 실제로 눌러 볼 수 있게 했다(높이 수치 표시).
+  </div>
+
+  <nav class="toc">
+    <a href="#s1">1. 테마</a>
+    <a href="#s2">2. 컬러</a>
+    <a href="#s3">3. 타이포</a>
+    <a href="#s4">4. 컴포넌트 (5블록)</a>
+    <a href="#s4b">5. 기초 규칙</a>
+    <a href="#s4c">6. 브레이크포인트</a>
+    <a href="#s5">7. 토모 밝아짐</a>
+    <a href="#s6">8. 접근성</a>
+  </nav>
+
+  <!-- ==================== 1. 테마 ==================== -->
+  <section id="s1">
+    <h2 class="sec"><span class="no">01</span> 테마 시스템</h2>
+    <p class="lead">모든 색은 <code>light</code> / <code>dark</code> 두 값을 쌍으로 갖는다. 컴포넌트는 원시 hex를 직접 쓰지 않고 <b>토큰만 참조</b>한다.</p>
+
+    <div class="grid3">
+      <div class="stage">
+        <div class="cap">설정 — 화면 표시 (35번 화면)</div>
+        <div class="tags" style="gap:0;flex-direction:column;align-items:stretch">
+          <label class="tg-row" style="gap:10px;cursor:pointer">
+            <input type="radio" name="themepref" value="system" style="accent-color:var(--brand);width:18px;height:18px">
+            <span class="tglbl">시스템 따름</span>
+          </label>
+          <label class="tg-row" style="gap:10px;cursor:pointer">
+            <input type="radio" name="themepref" value="light" checked style="accent-color:var(--brand);width:18px;height:18px">
+            <span class="tglbl">라이트 <span style="color:var(--text-low);font-size:12px">— 초기값</span></span>
+          </label>
+          <label class="tg-row" style="gap:10px;cursor:pointer">
+            <input type="radio" name="themepref" value="dark" style="accent-color:var(--brand);width:18px;height:18px">
+            <span class="tglbl">다크</span>
+          </label>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="cap">표면 계층 (surface / elevated)</div>
+        <div class="card" style="margin-bottom:12px">
+          <p class="card-title">bg-surface</p>
+          <p class="card-sub">카드·시트. border 1px으로 배경과 분리.</p>
+        </div>
+        <div class="card elevated">
+          <p class="card-title">bg-elevated</p>
+          <p class="card-sub">모달·팝업. 라이트에서는 색이 아니라 <b>그림자</b>로 띄운다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="memo">
+      <span class="label">MEMO</span>
+      라이트 배경이 순백이 아니라 <b>따뜻한 오프화이트 #FAF7F3</b> 인 이유 — 순백은 장시간 응시 시 눈이 피로하고, 앰버 브랜드와 색온도가 어긋난다.
+      라이트에서 <code>bg-surface</code>와 <code>bg-elevated</code>는 <b>동일한 #FFFFFF</b>이며 그림자로만 구별된다. 다크에서는 색상값 자체가 달라진다(<code>#1E1A17</code> / <code>#2A2521</code>).
+    </div>
+  </section>
+
+  <!-- ==================== 2. 컬러 ==================== -->
+  <section id="s2">
+    <h2 class="sec"><span class="no">02</span> 컬러</h2>
+    <p class="lead">아래 스와치는 <b>현재 테마의 실제 토큰값</b>을 렌더한다. 토글을 누르면 hex 표기도 함께 바뀐다.</p>
+
+    <h3>2.1 표면 · 텍스트</h3>
+    <div class="swatches" id="sw-surface"></div>
+
+    <h3>2.2 브랜드 <span class="tag-req">면 ≠ 글자</span></h3>
+    <div class="swatches" id="sw-brand"></div>
+
+    <div class="brand-demo">
+      <div class="demo-card bad" id="brandBadCard">
+        <div class="verdict" id="brandBadVerdict">✕ 잘못된 예 — <code>brand</code>를 글자색으로</div>
+        <div class="txt-brand-raw">오늘의 학습을 시작해요</div>
+        <div style="margin-top:10px"><span class="txt-brand-raw" style="font-size:15px;font-weight:600">이어서 학습하기 →</span></div>
+        <div class="ratio" id="brandRawRatio">#F5B942 on #FFFFFF = <b>1.76:1</b> — WCAG AA(4.5:1) 미달</div>
+      </div>
+      <div class="demo-card good">
+        <div class="verdict">✓ 올바른 예 — 글자는 <code>brand-text</code></div>
+        <div class="txt-brand-token">오늘의 학습을 시작해요</div>
+        <div style="margin-top:10px"><span class="txt-brand-token" style="font-size:15px;font-weight:600">이어서 학습하기 →</span></div>
+        <div class="ratio" id="brandTextRatio">#8F5E08 = 5.57:1(흰 카드) / <b>5.21:1</b>(bg-base) — 두 표면 모두 AA 통과</div>
+      </div>
+      <div class="demo-card good">
+        <div class="verdict">✓ 면으로 쓸 때는 <code>brand</code> 그대로</div>
+        <div class="fill-brand">학습 시작하기</div>
+        <div class="ratio">어두운 글자 <code>#1A1613</code> on <code>#F5B942</code> = <b>10.19:1</b></div>
+      </div>
+      <div class="demo-card good">
+        <div class="verdict">✓ 테두리·아이콘도 <code>brand-text</code></div>
+        <div class="fill-brand-outline">나중에 하기</div>
+        <div class="ratio">테두리·라벨 모두 <code>brand-text</code> 사용</div>
+      </div>
+    </div>
+
+    <div class="memo warn">
+      <span class="label">가장 흔할 실수</span>
+      라이트 모드에서 <b>#F5B942를 글자색으로 쓰면 1.8:1</b> 로 읽히지 않는다. 면으로 쓸 때는 어두운 글자를 얹으므로 문제없다(10:1).
+      → <b>면 = <code>brand</code> / 글자·아이콘·테두리 = <code>brand-text</code></b> 를 기계적으로 지킨다.
+      다크 모드에서는 두 토큰이 같은 값(<code>#F5B942</code>)이 되므로, 라이트에서 검수하지 않으면 이 버그를 놓친다.
+    </div>
+
+    <h3>2.3 코스 5색 — 면</h3>
+    <div class="swatches" id="sw-course"></div>
+    <div class="memo">
+      <span class="label">MEMO</span>
+      브랜드가 앰버이므로 <b>주황·노랑 계열은 배제</b>한다. 코스색은 <b>태그·카드 테두리·진행바에만</b> 쓰고 대면적 배경은 금지.
+      이 색이 PRD 14.2의 <i>"코스 구분은 캐릭터가 아니라 컬러·태그로"</i>를 담당한다 — <b>이 색을 없애면 코스 구분 장치가 사라진다.</b>
+    </div>
+
+    <h3>2.3b 코스 5색 — 글자 <span class="tag-req">2026-07-21 신설</span></h3>
+    <div class="swatches" id="sw-course-text"></div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="stage">
+        <div class="cap">✕ 구 방식 — 면 색을 글자에도 그대로</div>
+        <div style="font-size:15px;font-weight:600;line-height:2">
+          <div style="color:#1F8F76">여행 회화 · 8/12 완료</div>
+          <div style="color:#55913A">전래동화 · 3/20 완료</div>
+          <div style="color:#C84870">뉴스·시사 · 12/24 완료</div>
+        </div>
+        <div class="ratio" style="margin-top:10px">3.75 / 3.58 / 4.26 — 모두 본문 4.5:1 미달</div>
+      </div>
+      <div class="stage">
+        <div class="cap">✓ 신 방식 — 글자는 <code>course-*-text</code></div>
+        <div style="font-size:15px;font-weight:600;line-height:2">
+          <div style="color:var(--course-travel-text)">여행 회화 · 8/12 완료</div>
+          <div style="color:var(--course-folk-text)">전래동화 · 3/20 완료</div>
+          <div style="color:var(--course-news-text)">뉴스·시사 · 12/24 완료</div>
+        </div>
+        <div class="ratio" style="margin-top:10px">4.65 / 4.61 / 4.61 — 두 표면 모두 AA 통과</div>
+      </div>
+    </div>
+
+    <div class="memo">
+      <span class="label">확정 — 2026-07-21</span>
+      브랜드에서 <code>brand</code>(면) / <code>brand-text</code>(글자)를 나눈 것과 <b>똑같은 패턴을 코스색에도 적용</b>한다.
+      토큰이 5개 늘지만 디자인 시스템에서는 <b>패턴 일관성이 개수보다 우선</b>이다 — 규칙이 하나면 실수도 하나만 막으면 된다.
+      <br>· <b>면</b>(태그 배경·테두리·도트·진행바 채움) = <code>course-*</code> &nbsp;/&nbsp; <b>글자</b>(라벨·아이콘) = <code>course-*-text</code>
+      <br>· 라이트 값은 <b>원색의 색상(hue)·채도를 유지하고 명도만 낮춰</b> <code>bg-base #FAF7F3</code>·<code>bg-surface #FFFFFF</code> <b>두 표면 모두 4.5:1 이상</b>이 되도록 실측해 정했다.
+      <br>· JLPT(4.57)·비즈니스(6.01)는 <b>원색이 이미 통과</b>하므로 값을 바꾸지 않았다. 토큰만 정의해 <b>5색 전부 같은 방식으로 참조</b>되게 한다.
+      <br>· 다크는 기존 값이 이미 전부 통과 → <code>course-*-text</code> = 코스색 동일. <b>브랜드와 완전히 같은 구조</b>다.
+    </div>
+
+    <h3>2.4 상태색</h3>
+    <div class="swatches" id="sw-state"></div>
+    <div class="memo">
+      <span class="label">MEMO</span>
+      오답색은 의도적으로 <b>채도를 낮춘 톤</b>이다. 강한 빨강은 죄책감을 유발해 PRD 14.4 관찰자 톤·1.3 철학과 충돌한다.
+      상태색은 <b>배지·재촉 장치로 쓰지 않는다</b>(설계 원칙 3 — 압박 장치 없음).
+    </div>
+
+    <h3>2.5 상태색 틴트 규칙 <span class="tag-req">신설 · 2026-07-22</span></h3>
+    <p class="lead"><b>상태색을 자기 색으로 틴트한 배경 위 「작은 글자」에 그 상태색을 쓰지 않는다.</b> 상태색은 <b>아이콘 · 큰 글리프 · 테두리</b>에만 쓰고, 그 위 본문은 <code>text-high</code> / <code>text-mid</code> 로 쓴다.</p>
+
+    <div class="vs">
+      <div class="bad"><div class="vh"><span class="g">✕</span>error 12% 배경 위에 error 글자</div>
+        <div style="background:color-mix(in srgb,var(--error) 12%, var(--bg-base));border-radius:10px;padding:13px 14px">
+          <div style="color:var(--error);font-size:20px;font-weight:800;margin-bottom:4px">✕ 아쉬워요</div>
+          <div style="color:var(--error);font-size:13px">정답은 ① 約束 — 사람과 서로 정한 일이에요</div>
+        </div>
+        <div class="note">작은 글자 <b>3.93:1</b> — AA(4.5:1) 미달</div></div>
+      <div class="good"><div class="vh"><span class="g">✓</span>상태색은 큰 글리프에만</div>
+        <div style="background:color-mix(in srgb,var(--error) 12%, var(--bg-base));border-radius:10px;padding:13px 14px">
+          <div style="font-size:20px;font-weight:800;margin-bottom:4px"><span style="color:var(--error)">✕</span> <span style="color:var(--text-high)">아쉬워요</span></div>
+          <div style="color:var(--text-mid);font-size:13px">정답은 ① 約束 — 사람과 서로 정한 일이에요</div>
+        </div>
+        <div class="note">✕ 글리프는 <b>큰 글자 3:1</b> 충족 / 본문은 <code>text-mid</code></div></div>
+    </div>
+
+    <table class="props" style="margin-top:14px">
+      <tr><th style="width:38%">요소</th><th style="width:22%">색</th><th>기준</th></tr>
+      <tr><td>큰 글리프 · 아이콘 (18px↑ bold)</td><td><b>상태색 ✅</b></td><td>큰 글자 3:1 충족</td></tr>
+      <tr><td>테두리 · 구분선</td><td><b>상태색 ✅</b></td><td>비텍스트 3:1</td></tr>
+      <tr><td>제목 · 본문 · 캡션 (작은 글자)</td><td><b><code>text-high</code> / <code>text-mid</code></b></td><td>본문 4.5:1</td></tr>
+      <tr><td>틴트 배경 위 작은 글자에 상태색</td><td><b>❌ 금지</b></td><td>3.93:1 — 미달</td></tr>
+    </table>
+
+    <div class="memo warn">
+      <span class="label">발견 경위 — Hi-fi 17번</span>
+      <code>error</code>(#B5533D)는 <code>bg-base</code> 위에서 <b>4.61:1</b>로 AA를 통과한다. 그런데 <b>같은 색으로 12% 틴트한 배경</b> 위에 얹으면 배경이 함께 붉게·밝아져 <b>3.93:1</b>로 떨어진다.
+      <br><b>왜 놓치기 쉬운가</b>: 토큰 표는 색을 <code>bg-base</code>·<code>bg-surface</code> 기준으로만 검증한다. <b>틴트 배경은 표에 없는 제3의 표면</b>이라 검증 범위 밖으로 새어 나간다 — 그래서 <i>“토큰을 썼으니 괜찮다”</i>는 <b>잘못된 안심</b>이 생긴다.
+      <br><b>이건 <code>error</code>만의 문제가 아니다.</b> <code>success</code>·<code>info</code>·<b>코스 5색</b>·<code>brand</code> 등 <b>자기 색으로 틴트한 배경을 만드는 모든 색</b>에 적용된다 — 기본 태그가 이미 코스색 12% 배경을 쓴다.
+      <br>🔴 <b>이 페이지 자신도 이 규칙을 어기고 있었다.</b> 접근성 표의 <code>.pill.pass/.warn</code>이 <b>상태색 틴트 배경 위 11px 상태색 글자</b>였다. 지금은 <b>테두리 + 앞 글리프(● / ▲)</b>가 상태를 전달하고 글자는 <code>text-high</code>다 — <b>색을 빼도 뜻이 읽힌다.</b>
+    </div>
+
+    <h3>2.6 on-brand · scrim <span class="tag-req">신설 · 2026-07-22</span></h3>
+    <div class="swatches">
+      <div class="sw"><span class="chip" style="background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-weight:800;font-size:14px">on-brand</span>
+        <div class="meta"><div class="name">on-brand</div><div class="hex">#1A1613 · 모드 무관 고정</div>
+          <div class="use"><code>brand</code> 면 위 글자·아이콘 — 10.19:1</div></div></div>
+      <div class="sw"><span class="chip" style="background:var(--bg-base);position:relative">
+          <span style="position:absolute;inset:0;background:var(--scrim)"></span></span>
+        <div class="meta"><div class="name">scrim</div><div class="hex">L rgba(26,22,19,.44) / D rgba(0,0,0,.60)</div>
+          <div class="use">모달 딤 — 라이트 3.02:1</div></div></div>
+    </div>
+    <div class="memo">
+      <span class="label">on-brand 가 모드 무관인 이유</span>
+      규칙이 아니라 <b>사실</b>에서 나온다 — <code>brand</code> 자체가 라이트/다크 <b>동일값(#F5B942)</b>이므로, 그 위에 얹는 글자만 모드에 따라 바뀌면 <b>오히려 대비가 깨진다.</b>
+      다크에서 밝은 글자로 바꾸면 <b>1.17:1</b>로 사실상 안 보인다.
+      <br>값은 라이트 <code>text-high</code>와 같다 — <b>새 색을 만든 것이 아니라 「고정 대응색」에 이름을 붙인 것</b>이다.
+      순수 검정(#000, 11.90:1)도 통과하지만 쓰지 않는다: 앰버는 따뜻한 색이라 <b>중성 검정을 얹으면 색온도가 어긋나고</b>, 이미 있는 값을 재사용하면 <b>토큰이 늘지 않는다.</b>
+      <br><b>scrim 상세와 다크의 한계</b>는 <b>04장 「모달 · 바텀시트」</b> 문서 블록 참조.
+    </div>
+  </section>
+
+  <!-- ==================== 3. 타이포 ==================== -->
+  <section id="s3">
+    <h2 class="sec"><span class="no">03</span> 타이포그래피</h2>
+    <p class="lead">스케일 6종. 한국어 UI(Pretendard 스택)와 일본어 콘텐츠(Noto Sans JP 스택)를 분리한다.</p>
+
+    <div class="type-row">
+      <div class="spec"><b>display</b>28 / 1.3<br>온보딩 대제목</div>
+      <div class="t-display">토모와 함께<br>오늘도 한 걸음.</div>
+    </div>
+    <div class="type-row">
+      <div class="spec"><b>title</b>20 / 1.4<br>화면 제목</div>
+      <div class="t-title">여행 회화 · 공항에서</div>
+    </div>
+    <div class="type-row">
+      <div class="spec"><b>body-jp</b>18 / <b style="display:inline">2.0</b><br>일본어 지문·카드<br>(루비 공간 확보)</div>
+      <div class="t-bodyjp jp" lang="ja">切符売り場はどこですか。</div>
+    </div>
+    <div class="type-row">
+      <div class="spec"><b>body</b>15 / 1.6<br>한국어 본문</div>
+      <div class="t-body">표를 파는 곳은 어디입니까? — 공항·역에서 가장 먼저 쓰게 되는 표현입니다.</div>
+    </div>
+    <div class="type-row">
+      <div class="spec"><b>caption</b>13 / 1.5<br>보조 설명</div>
+      <div class="t-caption">3일 전에 학습했어요 · 회독 2회차</div>
+    </div>
+    <div class="type-row">
+      <div class="spec"><b>ruby</b>9 / 1.0<br>후리가나</div>
+      <div class="t-bodyjp jp" lang="ja"><ruby>切符<rt>きっぷ</rt></ruby><ruby>売<rt>う</rt></ruby>り<ruby>場<rt>ば</rt></ruby></div>
+    </div>
+
+    <div class="memo">
+      <span class="label">MEMO</span>
+      일본어 본문이 한국어보다 큰 이유 — 한자 획이 많아 작으면 판독이 어렵고, <b>학습 대상 텍스트</b>라 우선순위가 높다.
+    </div>
+
+    <h3>3.1 한·일 한자 자형 차이 <span class="tag-req">필수</span></h3>
+    <div class="grid2">
+      <div class="stage">
+        <div class="cap">✕ lang 지정 없음 — 한국어 폰트로 렌더될 수 있음</div>
+        <div style="font-family:var(--font-ko);font-size:44px;line-height:1.5">直 骨 次 海 器</div>
+      </div>
+      <div class="stage">
+        <div class="cap">✓ lang="ja" + 일본어 폰트 스택 강제</div>
+        <div lang="ja" class="jp" style="font-size:44px;line-height:1.5">直 骨 次 海 器</div>
+      </div>
+    </div>
+    <div class="memo warn">
+      <span class="label">주의</span>
+      <b>直·骨·次·海·器</b> 등은 한국(강희자전 계열) 자형과 일본 신자체 자형이 다르다. 예: <code>直</code>의 세로획이 아래에서 꺾이는 위치, <code>骨</code> 윗부분의 꺾임 방향, <code>海</code>의 안쪽 점 개수.
+      <b>일본어 학습 앱에서 일본어가 한국식 자형으로 렌더되면 틀린 글자를 가르치는 셈이다.</b>
+      ⚠️ <b>이 페이지의 위 두 칸은 시스템 폰트에 의존한다</b> — 보는 기기에 일본어 폰트가 없으면 둘 다 폴백되어 <b>차이가 안 보인다.</b>
+      <b>차이를 실제로 확인하려면 <code>font_verification.html</code> 을 보라</b> — 폰트를 번들해 <b>190px</b>로 렌더하고 <b>차이 나는 획에 링을 얹어</b> 지목한다.
+    </div>
+
+    <div class="memo">
+      <span class="label">✅ 폰트 확정 — 2026-07-22</span>
+      <b>일본어 폰트는 2개가 상한</b>이다(1웨이트당 1~2MB, <b>서브셋팅 불가</b> — 내일 어떤 한자가 나올지 오늘 알 수 없다).
+      <br>· 한국어 UI = <b>Pretendard</b> (1.48MB) &nbsp;/&nbsp; 일본어 본문 = <b>Noto Sans JP</b> (2.18MB) &nbsp;/&nbsp; 일본어 정서 = <b>Zen Maru Gothic</b> (2.79MB) &nbsp;→ 합계 <b>6.45MB</b>
+      <br>· 웨이트는 <b>Regular 400 + SemiBold 600</b> 2종만. (예외: Zen Maru Gothic 은 600이 배포되지 않아 <b>700</b>)
+      <br>❌ <b>Pretendard JP 탈락</b> — <code>骨</code>·<code>海</code> 등 <b>7글자 전부 한국식 자형</b>이었다. 가나만 일본식이라 <b>화면은 “일본어답게” 보이는데 자형은 틀린</b> 상태가 된다 — <b>틀렸다는 사실 자체가 감춰지므로 전부 틀린 것보다 위험하다.</b> 게다가 3.92MB로 <code>Pretendard + Noto Sans JP</code>(3.66MB)보다 <b>크다.</b>
+      <br>❌ <b>Noto Serif JP 탈락</b> — Zen Maru Gothic 이 정서용 자리를 대체한다. 토모가 <b>둥근 등불</b>이라 조형이 맞고, 전래동화 주력이 <b>N5~N4 리라이트본</b>이라 명조의 격식이 필요 없다.
+    </div>
+
+    <h3>3.1b <code>⋯</code> 줄바꿈 — 마지막 어절과 묶는다 <span class="tag-req">신설 · 2026-07-22</span></h3>
+    <p class="lead">문장의 <b>마지막 어절과 <code>⋯</code></b> 를 <code>white-space: nowrap</code> 으로 묶는다.</p>
+    <div class="vs">
+      <div class="bad"><div class="vh"><span class="g">✕</span>묶지 않으면 <code>⋯</code> 만 떨어진다</div>
+        <div class="wrapdemo" lang="ja">詳しい時間は市のページで見られます。<span class="dots">⋯</span></div>
+        <div class="note">읽기 순서는 “문장 끝”인데 <b>다음 줄 맨 앞</b>에 앉는다 → <b>다음 문장의 컨트롤로 읽힌다</b></div></div>
+      <div class="good"><div class="vh"><span class="g">✓</span><code>.nb</code> 로 마지막 어절과 묶는다</div>
+        <div class="wrapdemo" lang="ja">詳しい時間は市のページで<span class="nb">見られます。<span class="dots">⋯</span></span></div>
+        <div class="note">문장과 컨트롤이 <b>한 덩어리</b>로 움직인다</div></div>
+    </div>
+    <div class="memo">
+      <span class="label">근거 — 조판 관행</span>
+      신문·출판이 <b>“숫자와 단위”, “이름과 직함”</b> 을 붙여 두는 것과 같은 기법이다. <b>의미상 한 덩어리인 것은 조판에서도 쪼개지 않는다.</b>
+      <code>⋯</code> 는 장식이 아니라 <b>그 문장에 속한 컨트롤</b>이므로, 떨어지면 <b>오작동을 유발하는 배치</b>가 된다.
+      <br>⚠️ <b>묶는 범위는 어절 하나까지.</b> 문장 전체를 <code>nowrap</code> 으로 감싸면 <b>문장이 화면 밖으로 나간다.</b>
+      그 대가로 앞 줄이 조금 짧아 보일 수 있는데, <b>컨트롤이 엉뚱한 줄에 앉는 것보다 낫다.</b>
+      <br>→ 함께 필요한 것: <b>지문 문장 길이 가이드</b> (320px에서 일본어 16자 초과 시 줄바꿈 발생).
+    </div>
+
+    <h3>3.2 후리가나 · 한글 발음 — 토글 2개, 처리가 다르다 <span class="tag-req">핵심</span></h3>
+    <p class="lead" style="margin:4px 0 0">
+      PRD 8.4 개정으로 <b>하나였던 읽기 도움 토글이 2개로 분리</b>됐다. 두 토글은 <b>레이아웃 처리가 서로 다르다</b> — 아래에서 직접 눌러 확인할 수 있다.
+    </p>
+    <div class="tg-row" style="max-width:460px">
+      <button class="tg" id="furiToggle" role="switch" aria-checked="true" aria-label="후리가나 토글"></button>
+      <span class="tglbl">후리가나 <span style="color:var(--text-low);font-size:12px">— 공간 항상 확보</span></span>
+      <span class="tgstate" id="furiState">ON</span>
+    </div>
+    <div class="tg-row" style="max-width:460px">
+      <button class="tg" id="romajiToggle" role="switch" aria-checked="true" aria-label="한글 발음 토글"></button>
+      <span class="tglbl">한글 발음 <span style="color:var(--text-low);font-size:12px">— 공간 회수</span></span>
+      <span class="tgstate" id="romajiState">ON</span>
+    </div>
+
+    <div class="ruby-stage">
+      <div class="jp-passage baseline-guide" id="rubyPassage">
+        <p style="margin:0 0 6px" lang="ja"><ruby>今日<rt>きょう</rt></ruby>も<ruby>一歩<rt>いっぽ</rt></ruby>ずつ<ruby>進<rt>すす</rt></ruby>んでいます。</p>
+        <span class="romaji">쿄오모 잇포즈츠 스슨데 이마스</span>
+        <p style="margin:12px 0 6px" lang="ja"><ruby>切符<rt>きっぷ</rt></ruby><ruby>売<rt>う</rt></ruby>り<ruby>場<rt>ば</rt></ruby>は<ruby>駅<rt>えき</rt></ruby>の<ruby>中<rt>なか</rt></ruby>にあります。</p>
+        <span class="romaji">킷푸우리바와 에키노 나카니 아리마스</span>
+      </div>
+      <div class="hmeter">
+        <span>블록 높이 <b id="hNow">—</b>px</span>
+        <span>기준(둘 다 ON) <b id="hBase">—</b>px</span>
+        <span id="hVerdict" class="chg">—</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-low);margin-top:10px;font-family:var(--font-mono)">
+        ↑ 배경 가로선은 행 그리드. <b>후리가나</b>만 껐다 켜면 선이 그대로, <b>발음</b>을 끄면 블록이 짧아진다.
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="stage">
+        <div class="cap">후리가나 OFF — 루비 자리는 남는다</div>
+        <div class="jp-passage furi-off" style="border:1px dashed var(--border-strong);border-radius:8px;padding:8px 10px">
+          <p style="margin:0" lang="ja"><ruby>今日<rt>きょう</rt></ruby>も<ruby>一歩<rt>いっぽ</rt></ruby>ずつ<ruby>進<rt>すす</rt></ruby>んでいます。</p>
+          <span class="romaji">쿄오모 잇포즈츠 스슨데 이마스</span>
+        </div>
+        <div class="ratio" style="margin-top:8px">한자 위 빈 공간이 그대로 → 다시 켜도 글이 안 밀린다</div>
+      </div>
+      <div class="stage">
+        <div class="cap">발음 OFF — 줄 자체가 사라진다</div>
+        <div class="jp-passage romaji-off" style="border:1px dashed var(--border-strong);border-radius:8px;padding:8px 10px">
+          <p style="margin:0" lang="ja"><ruby>今日<rt>きょう</rt></ruby>も<ruby>一歩<rt>いっぽ</rt></ruby>ずつ<ruby>進<rt>すす</rt></ruby>んでいます。</p>
+          <span class="romaji">쿄오모 잇포즈츠 스슨데 이마스</span>
+        </div>
+        <div class="ratio" style="margin-top:8px">아래 한 줄을 회수 → 화면에 지문이 더 들어간다</div>
+      </div>
+    </div>
+
+    <div class="memo">
+      <span class="label">왜 토글을 나눴나 — PRD 8.4 개정</span>
+      <b>두 도구의 수명이 다르기 때문이다.</b> 후리가나는 N2까지 쓰는 도구지만, <b>한글 발음은 빨리 떼야 하는 보조바퀴</b>다 —
+      <code lang="ja" class="jp">つ</code>·<code lang="ja" class="jp">ざ</code>·<code lang="ja" class="jp">ん</code> 같은 소리는 한글로 정확히 적을 수 없어서, 계속 의존하면 <b>틀린 발음이 굳는다.</b>
+      <br>묶어 두면 <b>발음을 떼려는 순간 후리가나까지 사라진다.</b> 초급을 막 벗어나는 사용자 — 정확히 이 앱이 키우려는 사용자 — 에게
+      <b>"둘 다 쓰거나 둘 다 버리거나"라는 잘못된 선택을 강요</b>하게 된다. 그래서 나눴다.
+    </div>
+
+    <div class="memo">
+      <span class="label">구현 규칙 — 처리가 서로 다르다</span>
+      루비 크기 = 본문의 <b>50%</b>(18 → 9). 두 토글은 <b>같은 컴포넌트지만 레이아웃 처리가 반대</b>다.
+      <br>· <b>후리가나 = 공간 항상 확보</b> (<code>line-height</code> 최소 <b>2.0</b> + <b><code>visibility:hidden</code></b>).
+      읽는 <b>도중에 자주</b> 누르는 토글이라, 켤 때마다 글이 밀리면 <b>읽던 자리를 잃는다.</b>
+      <br>· <b>한글 발음 = 공간 회수</b> (<b><code>display:none</code></b>, 루비와 겹치지 않는 별도 줄).
+      학습 단계가 바뀔 때 <b>한 번 끄면 계속 끄는</b> 사실상의 <i>설정</i>이다. 안 쓰는 사용자가 빈 줄을 영원히 볼 이유가 없고, 세로 공간은 지문에 쓰는 편이 낫다.
+      <br>🔴 <b>판별 기준(사양서 4.1): "읽는 중 자주 토글하는가?"</b> — 그렇다면 자리 고정, 아니라면 회수 가능.
+      레이아웃 점프 방지는 <b>목적이 아니라 수단</b>이다. 자주 안 바뀌는 것까지 자리를 잡아두면 화면만 낭비한다.
+      <br>기본값: <b>온보딩 Q2(현재 수준) 연동</b> — 완전 초보 = 둘 다 ON / 조금 안다 이상 = <b>후리가나만 ON</b>.
+      단, PRD 8.4 통합 원칙에 따라 <b>학습 카드 앞면·읽기형 지문 첫 노출은 설정과 무관하게 기본 OFF</b>로 시작한다.
+    </div>
+  </section>
+
+  <!-- ==================== 4. 컴포넌트 ==================== -->
+  <section id="s4">
+    <h2 class="sec"><span class="no">04</span> 컴포넌트 — 5블록 문서화</h2>
+    <p class="lead">사양서 <b>4.7 문서화 형식</b>에 따라 모든 컴포넌트를 <b>원칙 → 사용 가능한 속성 → 대표 예시 → ✅ → ❌</b> 다섯 블록으로 기술한다. 모든 터치 타깃은 최소 <b>44×44</b>.</p>
+
+    <div class="memo">
+      <span class="label">왜 ❌ 블록을 넣는가</span>
+      <b>금지 예시가 가장 강력한 문서다.</b> “이렇게 쓰세요”는 읽고 넘기지만 <b>“이건 실제로 이렇게 망가졌다”</b>는 기억에 남는다.
+      아래 ❌ 는 상상이 아니라 <b>우리가 이 프로젝트에서 실제로 낸 실수</b>거나, 검증 중 <b>수치로 미달이 확인된 것</b>만 적었다.
+      숫자가 붙어 있으면 실측값이다.
+    </div>
+
+    <!-- ========== 4.1 버튼 ========== -->
+    <div class="doc">
+      <div class="head"><h4>버튼</h4><span class="spec">min-height 44 · radius 10 · brand / on-brand</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">화면에서 <b>지금 할 수 있는 가장 중요한 행동 하나</b>를 가리킨다. 기본 버튼이 둘 이상이면 그 화면은 우선순위가 정해지지 않은 것이다.</p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">속성</th><th style="width:30%">값</th><th>규칙</th></tr>
+          <tr><td><code>variant</code></td><td><code>primary</code> / <code>secondary</code> / <code>text</code></td>
+              <td>primary = <code>brand</code> 면 + <code>on-brand</code> 글자 / secondary = <code>border-strong</code> 테두리 + <code>text-high</code> / text = <code>brand-text</code></td></tr>
+          <tr><td><code>size</code></td><td><code>md</code>(44) / <code>lg</code>(52)</td><td>44 미만은 없다 — 접근성 하한</td></tr>
+          <tr><td><code>state</code></td><td>normal / pressed / focused / disabled</td><td>05장 4상태 규칙을 그대로 따른다</td></tr>
+          <tr><td><code>width</code></td><td>hug / block</td><td>하단 고정 CTA는 block + Safe Area 안쪽</td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span class="btn-demo">오늘의 학습 시작</span>
+          <span class="fill-brand-outline" style="display:inline-block;min-height:44px;line-height:20px">나중에</span>
+          <span style="color:var(--brand-text);font-weight:700;font-size:14px;padding:0 8px">전체 해석 보기</span>
+        </div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li><b>면은 <code>brand</code>, 그 위 글자는 <code>on-brand</code></b>.<span class="why">10.19:1 — 두 모드 모두 같은 값이다. <code>brand</code> 자체가 모드 무관이므로 그 위 글자도 바뀌면 안 된다.</span></li>
+          <li>한 화면에 <b>primary는 하나</b>. 나머지는 secondary·text로 내린다.</li>
+          <li>라벨은 <b>동사 + 대상</b>. <span class="why">“확인”보다 “오늘의 학습 시작”. 버튼만 읽어도 무슨 일이 일어날지 알아야 한다.</span></li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li><b>라이트에서 <code>brand</code>(#F5B942)를 글자색으로 쓰지 않는다 — 실측 1.76:1.</b><span class="why">가장 흔한 실수다. 흰 배경 위에서 <b>사실상 읽히지 않는다.</b> 글자는 <code>brand-text</code>(#8F5E08, 5.57:1).</span></li>
+          <li>다크에서 <code>on-brand</code>를 밝은 글자로 바꾸지 않는다.<span class="why">#F5F1EC on #F5B942 = <b>1.17:1</b>. “다크니까 글자도 밝게”라는 반사적 판단이 만드는 사고다.</span></li>
+          <li><b>disabled를 회색으로 치환하지 않는다.</b> 원색을 <b>투명도 38%</b>로 흐린다.<span class="why">회색으로 바꾸면 “다른 버튼”처럼 보여 상태 변화가 아니라 화면 변화로 읽힌다.</span></li>
+        </ul>
+        <div class="vs">
+          <div class="bad"><div class="vh"><span class="g">✕</span>brand 를 글자색으로</div>
+            <div class="txt-brand-raw">오늘의 학습 시작</div>
+            <div class="note">#F5B942 on #FFFFFF = 1.76:1 — AA 미달</div></div>
+          <div class="good"><div class="vh"><span class="g">✓</span>면 = brand / 글자 = on-brand</div>
+            <div class="fill-brand">오늘의 학습 시작</div>
+            <div class="note">#1A1613 on #F5B942 = 10.19:1 — AAA</div></div>
+        </div></div>
+    </div>
+
+    <!-- ========== 4.2 태그 ========== -->
+    <div class="doc">
+      <div class="head"><h4>태그 (코스 · 커스텀)</h4><span class="spec">pill · 코스색 테두리 + 코스색 12% 배경</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">코스를 구분하는 <b>주된 장치</b>다. PRD 14.2가 <b>“코스 구분은 캐릭터가 아니라 컬러·태그로”</b>라고 못박았다 — <b>이 컴포넌트를 없애면 코스 구분 수단이 사라진다.</b></p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">속성</th><th style="width:34%">값</th><th>규칙</th></tr>
+          <tr><td><code>course</code></td><td>jlpt / travel / biz / news / folk</td><td>테두리·배경은 <code>course-*</code>(면), <b>글자는 반드시 <code>course-*-text</code></b></td></tr>
+          <tr><td><code>custom</code></td><td>true / false</td><td>true면 <b>점선 테두리</b> (PRD 6.1 시각 구분)</td></tr>
+          <tr><td><code>label</code></td><td>필수</td><td><b>색만으로 구분하지 않는다</b> — 라벨 생략 불가</td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div class="tags">
+          <span class="tag c-jlpt"><i class="dot"></i>JLPT</span>
+          <span class="tag c-travel"><i class="dot"></i>여행 회화</span>
+          <span class="tag c-biz"><i class="dot"></i>비즈니스</span>
+          <span class="tag c-news"><i class="dot"></i>뉴스·시사</span>
+          <span class="tag c-folk"><i class="dot"></i>전래동화</span>
+          <span class="tag c-neutral custom">＋ 내가 만든 코스</span>
+        </div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li><b>면과 글자를 기계적으로 분리한다</b> — 테두리·도트·배경은 <code>course-*</code>, 글자는 <code>course-*-text</code>.<span class="why">JLPT·비즈니스는 두 토큰의 값이 <b>같다.</b> 그래도 토큰은 5개 전부 정의한다 — 일관성의 실제 이득은 <i>값</i>이 아니라 <b>참조 경로가 하나뿐인 것</b>에 있다.</span></li>
+          <li>커스텀 코스는 <b>점선</b>으로 구분한다.<span class="why">색을 하나 더 만들지 않고 <b>테두리 스타일</b>로 축을 나눴다 — 코스 5색은 그대로 두고 “기본/커스텀”이라는 다른 축을 표현한다.</span></li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li><b>면 토큰(<code>course-*</code>)을 글자색으로 쓰지 않는다.</b><span class="why">뉴스 <code>#C84870</code>을 글자로 쓰면 <b>4.2:1대</b>로 미달한다. <code>course-news-text</code>(#C53E68, 4.61:1)를 써야 한다. Hi-fi 12번에서 실제로 잡힌 건이다.</span></li>
+          <li><b>코스색으로 대면적 배경을 칠하지 않는다.</b><span class="why">원칙 0.1 “빛나되 소리치지 않는다” — 액센트는 선명하되 <b>면적은 작게</b>. 화면 대부분은 조용한 중성색이어야 한다.</span></li>
+          <li><b>색만으로 코스를 구분하지 않는다.</b> 라벨을 반드시 병기한다.<span class="why">색각 이상 사용자에게 5색 중 최소 2쌍이 붙는다. <b>색은 보조이고 라벨이 본체다.</b></span></li>
+        </ul></div>
+    </div>
+
+    <!-- ========== 4.3 진행바 ========== -->
+    <div class="doc">
+      <div class="head"><h4>진행바</h4><span class="spec">높이 8 · radius full · 트랙 border · 채움 코스색</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">채움 색이 <b>“누구의 진행인가”</b>를 말한다. <b>진행의 주체가 코스면 코스색, 앱 전체(브랜드)면 <code>brand</code>.</b></p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">속성</th><th style="width:30%">값</th><th>규칙</th></tr>
+          <tr><td><code>owner</code></td><td><code>course</code> / <code>app</code></td><td>course → <code>course-*</code> 채움 / app → <code>brand</code> 채움</td></tr>
+          <tr><td><code>label</code></td><td>이름 + %</td><td>이름은 <code>course-*-text</code>, % 는 <code>text-mid</code></td></tr>
+          <tr><td>높이</td><td><b>8 고정</b></td><td>변형 없음</td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div class="pbar-row c-jlpt"><div class="lbl"><span class="nm">JLPT N3 · 문법</span><span class="pc">62%</span></div>
+          <div class="pbar"><i style="width:62%"></i></div></div>
+        <div class="pbar-row c-folk"><div class="lbl"><span class="nm">전래동화</span><span class="pc">35%</span></div>
+          <div class="pbar"><i style="width:35%"></i></div></div>
+        <div class="pbar-row" style="--c:var(--brand);--ct:var(--brand-text)">
+          <div class="lbl"><span class="nm">우표 모으기 (앱 전체)</span><span class="pc">8 / 20</span></div>
+          <div class="pbar"><i style="width:40%"></i></div></div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li>코스 안의 진행은 <b>전부 코스색</b>으로 통일한다.<span class="why">*“완료하면 앰버로 바뀐다”* 규칙은 <b>미채택</b>이다 — 색이 두 가지 의미(코스 / 완료)를 동시에 지면 둘 다 흐려진다.</span></li>
+          <li><b>우표 진행바만 <code>brand</code></b>. <span class="why">우표는 특정 코스의 성취가 아니라 <b>앱 전체의 성취</b>다. 규칙의 예외가 아니라 <b>규칙(“진행의 주체”)을 그대로 적용한 결과</b>다.</span></li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li>우표 진행바에 코스색을 쓰지 않는다.<span class="why">“마지막에 본 코스”의 색이 붙으면 <b>우표가 그 코스의 것처럼 보인다.</b></span></li>
+          <li><b>진행이 늦다고 <code>error</code>로 칠하지 않는다.</b><span class="why">원칙 0.3 <b>압박 장치 없음</b>. 빨간 배지·경고색으로 재촉하지 않는다 — 스트릭 프리즈를 기각한 것과 같은 이유다.</span></li>
+        </ul></div>
+    </div>
+
+    <!-- ========== 4.4 토글 · 회독 배지 ========== -->
+    <div class="doc">
+      <div class="head"><h4>토글 · 회독 배지</h4><span class="spec">ON = brand / OFF = border-strong · 도장 형태</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">토글은 <b>즉시 반영되는 설정</b>에만 쓴다(저장 버튼이 필요하면 토글이 아니다). 회독 배지는 <b>완료한 회차만</b> 채워 “쌓인 것”을 보여 준다.</p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">속성</th><th style="width:30%">값</th><th>규칙</th></tr>
+          <tr><td>토글 <code>checked</code></td><td>true / false</td><td>ON = <code>brand</code> 면 / OFF = <code>border-strong</code></td></tr>
+          <tr><td>토글 터치 영역</td><td>행 전체 <b>44 이상</b></td><td>스위치(52×30)만이 아니라 <b>행 전체</b>가 타깃</td></tr>
+          <tr><td>배지 <code>done</code></td><td>true / false</td><td>done = <code>brand</code> 면 + <code>on-brand</code> 숫자 / 미완 = 점선 <code>border-strong</code></td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div class="tg-row"><button class="tg" role="switch" aria-checked="true" aria-label="후리가나"></button>
+          <span class="tglbl">후리가나</span><span class="tgstate">ON · brand</span></div>
+        <div class="tg-row"><button class="tg" role="switch" aria-checked="false" aria-label="한글 발음"></button>
+          <span class="tglbl">한글 발음</span><span class="tgstate">OFF · border-strong</span></div>
+        <div class="stamps" style="margin-top:14px">
+          <span class="stamp done">1</span><span class="stamp done">2</span><span class="stamp done">3</span>
+          <span class="stamp">4</span><span class="stamp">5</span>
+        </div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li><b>OFF는 “꺼짐”이지 “문제”가 아니다</b> — 중성색 <code>border-strong</code>.</li>
+          <li>배지는 <b>완료분만</b> 채우고 남은 회차는 <b>점선으로 자리만</b> 잡아 둔다.<span class="why">4.1 레이아웃 원칙 — 가변 요소는 <b>최대 크기로 미리 자리를 잡는다.</b> 회차가 늘어도 주변이 밀리지 않는다.</span></li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li><b>OFF에 <code>error</code>를 쓰지 않는다.</b><span class="why">“끄면 잘못”이라는 신호가 된다. 후리가나를 끄는 건 <b>실력이 늘었다는 뜻</b>인데 붉게 표시하면 정반대로 읽힌다.</span></li>
+          <li>스위치만 44 미만으로 두고 행을 비활성으로 두지 않는다.<span class="why">스위치 자체는 52×30 이라 <b>세로 30px</b>다. <b>행 전체</b>를 타깃으로 잡아야 44를 충족한다.</span></li>
+          <li>미완 회차를 <b>숨기지</b> 않는다.<span class="why">숨기면 완료할 때마다 배지가 늘어나 <b>레이아웃이 계속 밀린다.</b></span></li>
+        </ul></div>
+    </div>
+
+    <!-- ========== 4.5 우표 · 탭바 · 가나 키보드 ========== -->
+    <div class="doc">
+      <div class="head"><h4>우표 · 탭바 · 가나 키보드</h4><span class="spec">brand 가 주인공이 되는 유일한 구간 / 5탭 / 10×5</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">우표는 <b>브랜드의 보상 장치</b>라 코스색이 물러난다. 탭바는 <b>현재 위치</b>만 말한다. 가나 키보드는 <b>50음도 배열</b>을 그대로 따른다(오른쪽 あ행 → 왼쪽).</p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">컴포넌트</th><th style="width:30%">속성</th><th>규칙</th></tr>
+          <tr><td>우표</td><td><code>earned</code> true/false</td><td>적립 시 <code>brand</code> 면 + <code>brand-halo</code> 번짐</td></tr>
+          <tr><td>탭바</td><td>5탭 고정 · <code>active</code></td><td>선택 = <code>brand-text</code> + 700 / 비선택 = <code>text-low</code></td></tr>
+          <tr><td>가나 키보드</td><td>10×5 · 키 radius 6</td><td>키 최소 높이 38 + gap 5 → 실효 타깃 43↑, 행 간격으로 44 확보</td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div class="stampsheet">
+          <span class="postage-wrap earned"><span class="postage earned"><span class="inner jp">灯</span></span></span>
+          <span class="postage-wrap"><span class="postage"><span class="inner">?</span></span></span>
+          <span class="postage-wrap"><span class="postage"><span class="inner">?</span></span></span>
+        </div>
+        <div class="tabbar" style="margin-top:16px">
+          <button class="tab on"><span class="ico">◉</span>홈</button>
+          <button class="tab"><span class="ico">◎</span>코스</button>
+          <button class="tab"><span class="ico">◎</span>단어장</button>
+          <button class="tab"><span class="ico">◎</span>기록</button>
+          <button class="tab"><span class="ico">◎</span>설정</button>
+        </div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li>적립 순간에만 <code>brand-halo</code>를 쓰고 <b>지속 상태에서는 끈다.</b><span class="why">항상 빛나면 신호가 아니라 배경이 된다.</span></li>
+          <li>탭바 선택 표시는 <b>색 + 굵기 둘 다</b> 바꾼다.<span class="why">색만 바꾸면 색각 이상 사용자에게 현재 위치가 사라진다.</span></li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li>탭바 선택에 <code>brand</code>(면 토큰)를 <b>글자색</b>으로 쓰지 않는다 — <code>brand-text</code>.<span class="why">라이트에서 1.76:1. 탭 라벨은 11px 이라 더 치명적이다.</span></li>
+          <li>우표 적립에 <b>폭죽·팡파레·바운스를 넣지 않는다.</b><span class="why">PRD 14.2 · 19번 화면. 전부 <b>250ms 이하 · ease-out · 작은 변위</b>. 보상은 조용히 밝아지는 정도로 충분하다.</span></li>
+          <li>탭 개수를 5개에서 늘리지 않는다.<span class="why">가로 폭이 320px일 때 5탭이 이미 <b>탭당 64px</b>이다. 6개가 되면 라벨이 잘린다.</span></li>
+        </ul></div>
+    </div>
+
+    <!-- ========== 4.6 모달 · scrim ========== -->
+    <div class="doc">
+      <div class="head"><h4>모달 · 바텀시트 <span class="tag-req">scrim 신설</span></h4><span class="spec">scrim · bg-elevated · 라이트=그림자 / 다크=테두리</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">뒤 화면을 <b>지우지 않고 물린다.</b> 배경이 남아 보여야 <b>“내가 어디서 이걸 열었는지”</b>가 유지된다.</p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">속성</th><th style="width:34%">값</th><th>근거</th></tr>
+          <tr><td><code>scrim</code> Light</td><td><code>rgba(26,22,19,.44)</code></td><td><b>3.02:1</b> — 모달 표면과 딤된 배경의 비텍스트 최소 대비(3:1)를 딱 만족하는 지점</td></tr>
+          <tr><td><code>scrim</code> Dark</td><td><code>rgba(0,0,0,.60)</code></td><td>대비용이 아니라 <b>배경 정보량을 죽이는</b> 용도 — 아래 ❌ 참조</td></tr>
+          <tr><td>표면</td><td><code>bg-elevated</code></td><td>라이트 = 그림자 / <b>다크 = <code>border-strong</code> 1px 필수</b></td></tr>
+          <tr><td>닫기</td><td>스크림 탭</td><td>페이드만, 250ms ease-out</td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div class="modaldemo">
+          <div class="bgtext">뒤에 있던 화면 내용<br>뒤에 있던 화면 내용<br>뒤에 있던 화면 내용<br>뒤에 있던 화면 내용<br>뒤에 있던 화면 내용</div>
+          <div class="scrim"></div>
+          <div class="sheet">
+            <div style="font-size:15px;font-weight:700;margin-bottom:6px">約束 <span style="font-size:12px;color:var(--text-mid)">やくそく</span></div>
+            <div style="font-size:13px;color:var(--text-mid)">약속 — 사람과 서로 정한 일</div>
+          </div>
+        </div>
+        <div class="memo"><span class="label">직접 확인</span> 상단 <b>테마 토글</b>을 눌러 보라. 다크로 가면 <b>그림자가 사라지고 테두리가 대신 분리를 만든다</b> — 아래 ❌ 의 이유가 눈으로 보인다.</div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li>딤은 <b>필요한 최소치</b>만.<span class="why">.32면 2.18:1로 모달이 떠오르지 않고, 더 짙게 하면 원칙 0.1(소리치지 않는다)에 어긋난다. <b>.44는 “가장 옅게 하되 기준은 넘긴” 값</b>이다.</span></li>
+          <li>스크림 색은 <b>검정이 아니라 <code>text-high</code>의 알파</b>.<span class="why">따뜻한 오프화이트(#FAF7F3) 위에 중성 검정을 얹으면 회색기가 돌아 <b>색온도가 어긋난다.</b></span></li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li><b>다크에서 그림자만 믿고 테두리를 빼지 않는다.</b><span class="why">🔴 검증 중 발견한 문제다. 다크 <code>bg-elevated</code>(#2A2521)는 <b>어떤 딤을 얹어도</b> 배경과 3:1을 만들 수 없다 — 순수 검정 배경에서도 <b>1.39:1</b>이 한계다. 표면이 이미 어두워 “더 어둡게 벌리는” 수단이 바닥난다. <b>라이트가 그림자로 하는 일을 다크에서는 테두리가 해야 한다.</b></span></li>
+          <li>라이트/다크 스크림 값을 <b>같게 두지 않는다.</b><span class="why">두 값은 <b>하는 일이 다르다</b> — 라이트는 대비를 만들고, 다크는 배경 정보량을 죽인다. 역할이 다르면 값이 같을 이유가 없다.</span></li>
+          <li>스크림 뒤 화면을 <b>완전히 가리지 않는다.</b><span class="why">맥락이 끊기면 모달이 <b>새 화면</b>으로 읽힌다. 그럴 거면 모달이 아니라 화면 전환을 써야 한다.</span></li>
+        </ul></div>
+    </div>
+
+    <!-- ========== 4.7 애니메이션 ========== -->
+    <div class="doc">
+      <div class="head"><h4>애니메이션</h4><span class="spec">250ms 이하 · ease-out · 작은 변위</span></div>
+
+      <div class="blk"><div class="bt"><span class="n">1</span>원칙</div>
+        <p class="principle">움직임은 <b>“무엇이 어디로 갔는지”</b>를 설명할 때만 쓴다. <b>축하하려고 움직이지 않는다.</b></p></div>
+
+      <div class="blk"><div class="bt"><span class="n">2</span>사용 가능한 속성</div>
+        <table class="props">
+          <tr><th style="width:22%">속성</th><th style="width:30%">값</th><th>규칙</th></tr>
+          <tr><td>duration</td><td><b>≤ 250ms</b></td><td>예외 없음</td></tr>
+          <tr><td>easing</td><td><code>ease-out</code></td><td>들어올 때 빠르고 멈출 때 부드럽게</td></tr>
+          <tr><td>변위</td><td>작게 (≤ 8px, ≤ 1.15배)</td><td>토모 확대는 <b>지속 상태</b>라 250ms는 <i>확대되는 순간</i>에만 적용</td></tr>
+        </table></div>
+
+      <div class="blk"><div class="bt"><span class="n">3</span>대표 예시</div>
+        <div class="anim-demo">
+          <span class="anim-box">호버해 보세요 (250ms ease-out · 3px)</span>
+          <span style="font-size:13px;color:var(--text-mid)">← 이 정도가 상한이다.</span>
+        </div></div>
+
+      <div class="blk do"><div class="bt"><span class="n">✓</span>이렇게 쓰세요</div>
+        <ul class="rules">
+          <li>상태가 <b>바뀌는 순간</b>에만 움직이고, 바뀐 뒤에는 <b>멈춰 있는다.</b><span class="why">토모 확대 중 <b>맥동·펄스 금지</b> — 지속되는 움직임은 주의를 계속 빼앗는다(원칙 0.2).</span></li>
+          <li><code>prefers-reduced-motion</code>을 존중한다.</li>
+        </ul></div>
+
+      <div class="blk dont"><div class="bt"><span class="n">✕</span>이렇게 쓰지 않아요</div>
+        <ul class="rules">
+          <li><b>폭죽·팡파레·바운스 금지</b> (PRD 14.2 · 19번 화면).<span class="why">보상 연출을 크게 하면 <b>보상이 없는 날이 벌처럼 느껴진다.</b> 축하의 크기가 곧 압박의 크기가 된다.</span></li>
+          <li>정답 연출을 “터뜨리지” 않는다. <b>조용히 밝아지는 정도.</b></li>
+        </ul></div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. 기초 규칙 ==================== -->
+  <section id="s4b">
+    <h2 class="sec"><span class="no">05</span> 기초 규칙 — 간격 · 상태 · Safe Area · 로딩</h2>
+    <p class="lead">컴포넌트보다 아래에 있는 층. <b>여기가 흔들리면 위의 모든 컴포넌트가 조금씩 어긋난다.</b></p>
+
+    <h3>5.1 간격 — 4의 배수</h3>
+    <p class="lead"><code>4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 56 · 64</code></p>
+    <div class="stage">
+      <div class="spacescale">
+        <span class="u"><i style="height:4px"></i><span>4</span></span>
+        <span class="u"><i style="height:8px"></i><span>8</span></span>
+        <span class="u"><i style="height:12px"></i><span>12</span></span>
+        <span class="u"><i style="height:16px"></i><span>16</span></span>
+        <span class="u"><i style="height:20px"></i><span>20</span></span>
+        <span class="u"><i style="height:24px"></i><span>24</span></span>
+        <span class="u"><i style="height:32px"></i><span>32</span></span>
+        <span class="u"><i style="height:40px"></i><span>40</span></span>
+        <span class="u"><i style="height:48px"></i><span>48</span></span>
+        <span class="u"><i style="height:56px"></i><span>56</span></span>
+        <span class="u"><i style="height:64px"></i><span>64</span></span>
+      </div>
+      <div class="vs" style="margin-top:18px">
+        <div class="bad"><div class="vh"><span class="g">✕</span>눈대중으로 정한 값</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-mid);line-height:1.9">
+            padding: 13px 17px;<br>gap: 7px;<br>margin-top: 22px;</div>
+          <div class="note">규칙이 없으면 다음 화면에서 또 다른 값이 나온다</div></div>
+        <div class="good"><div class="vh"><span class="g">✓</span>4배수</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-mid);line-height:1.9">
+            padding: 12px 16px;<br>gap: 8px;<br>margin-top: 24px;</div>
+          <div class="note">개발자와 값이 아니라 <b>단계</b>로 대화하게 된다</div></div>
+      </div>
+      <div class="memo"><span class="label">MEMO</span>
+        시각 보정이 필요하면 <b>2px 단위</b>로 쪼개고, 불가피할 때만 1px. <b>요상한 값(예: 57px)이 나왔다면 개발자에게 상황을 설명한다</b> — 예: <i>“높이 56px 내비게이션 <b>바깥에</b> 1px 선이 추가된다”</i>. 숫자만 던지면 버그로 오해받는다.<br>
+        ⚠️ 예외: <b>터치 타깃 44px</b>과 <b>행간 2.0</b>은 접근성·가독성 제약이라 4배수 규칙보다 <b>우선한다.</b> 규칙이 규칙을 이기는 순서를 정해 두지 않으면 매번 다시 싸우게 된다.
+      </div>
+    </div>
+
+    <h3>5.2 인터랙션 4상태 — 전 컴포넌트 공통</h3>
+    <p class="lead"><b>컴포넌트는 기본 상태만으로 정의되지 않는다.</b> 네 상태를 모두 정의해야 “완성”이다.</p>
+    <div class="states">
+      <div class="st"><div class="lb">normal</div><span class="btn-demo">계속하기</span>
+        <div class="desc">기본</div></div>
+      <div class="st"><div class="lb">pressed</div><span class="btn-demo pressed">계속하기</span>
+        <div class="desc">표면을 <b>한 단계</b> 어둡게(라이트)·밝게(다크). <b>크기 변화 없음</b></div></div>
+      <div class="st"><div class="lb">focused</div><span class="btn-demo focused">계속하기</span>
+        <div class="desc"><code>brand</code> 2px 외곽선 — 키보드·접근성 내비게이션</div></div>
+      <div class="st"><div class="lb">disabled</div><span class="btn-demo disabled">계속하기</span>
+        <div class="desc">투명도 <b>38%</b>, 터치 불가. 회색으로 바꾸지 않는다</div></div>
+    </div>
+    <div class="memo"><span class="label">MEMO</span>
+      모바일은 <code>hover</code>가 없으므로 <b>정의하지 않는다</b>(웹 확장 시 추가). <b>pressed에서 크기를 바꾸지 않는 이유</b>: 손가락이 이미 그 자리를 덮고 있어 <b>크기 변화는 보이지 않고</b>, 주변 레이아웃만 흔든다.<br>
+      ⚠️ <b>상태 표현에 빨강·경고색을 쓰지 않는다</b>(압박 장치 금지 원칙 유지).
+    </div>
+
+    <h3>5.3 Safe Area</h3>
+    <div class="grid2" style="align-items:start">
+      <div class="stage">
+        <div class="cap">기기 시스템 영역 vs 콘텐츠</div>
+        <div class="safearea">
+          <div class="zone top">Status Bar — 시스템</div>
+          <div class="content">콘텐츠는<br>이 안에만</div>
+          <div class="cta">하단 고정 버튼</div>
+          <div class="zone bot">Home Indicator — 시스템</div>
+        </div>
+      </div>
+      <div>
+        <table class="props">
+          <tr><th style="width:26%">영역</th><th>규칙</th></tr>
+          <tr><td><b>상단</b></td><td>Status Bar 높이만큼 확보. 기기별로 다르므로 <b>고정값 금지</b> — <b>시스템 inset</b>을 쓴다</td></tr>
+          <tr><td><b>하단</b></td><td>Home Indicator(iOS) / 내비게이션 바(Android) 높이 확보</td></tr>
+          <tr><td><b>하단 고정 버튼</b></td><td>Safe Area <b>바깥이 아니라 안쪽</b>에 배치. 이미 여백이 있는 컴포넌트는 <b>padding을 조정해 중복을 피한다</b></td></tr>
+        </table>
+        <div class="memo warn"><span class="label">✕ 이렇게 쓰지 않아요</span>
+          <b>44px, 34px 같은 고정값을 박아 넣지 않는다.</b> 노치 있는 기기와 없는 기기, iOS와 Android가 전부 다르다.
+          고정값을 쓰면 <b>어떤 기기에서는 버튼이 홈 인디케이터에 가리고, 어떤 기기에서는 빈 띠가 남는다.</b>
+          <br>또한 Safe Area 여백과 컴포넌트 자체 padding을 <b>둘 다</b> 주면 하단만 유독 떠 보인다 — <b>더하지 말고 조정한다.</b>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.4 로딩 — Skeleton / Spinner</h3>
+    <div class="grid2" style="align-items:start">
+      <div class="stage">
+        <div class="cap">Skeleton — 단어장 목록 (형태를 아는 경우)</div>
+        <div class="skrow"><span class="sk thumb"></span><span class="skstack"><span class="sk t lg w60"></span><span class="sk t w40"></span></span></div>
+        <div class="skrow"><span class="sk thumb"></span><span class="skstack"><span class="sk t lg w80"></span><span class="sk t w40"></span></span></div>
+        <div class="skrow"><span class="sk thumb"></span><span class="skstack"><span class="sk t lg w60"></span><span class="sk t w40"></span></span></div>
+      </div>
+      <div>
+        <table class="props">
+          <tr><th style="width:24%">종류</th><th>사용처</th></tr>
+          <tr><td><b>Skeleton</b></td><td>콘텐츠의 <b>형태를 아는</b> 경우 — 단어장 목록, 기사 목록, 코스 카드</td></tr>
+          <tr><td><b>Spinner</b></td><td>형태를 모르거나 짧은 처리 — <b>OCR 처리(30번)</b></td></tr>
+        </table>
+        <div class="memo"><span class="label">✓ 이렇게 쓰세요</span>
+          Skeleton은 <b>실제 콘텐츠와 같은 형태·같은 간격</b>으로. <b>위치가 바뀌면 로딩의 의미가 없다</b> — 오히려 “다 됐나?” 하고 눈이 다시 훑게 만든다.
+        </div>
+        <div class="memo warn"><span class="label">✕ 이렇게 쓰지 않아요</span>
+          <b>반짝임(shimmer)을 빠르고 강하게 넣지 않는다.</b> 로딩은 <b>기다리는 화면</b>인데 거기서 눈길을 끌면 원칙 0.2(학습을 방해하지 않는다)와 충돌한다. <b>느리고 약하게.</b>
+          <br>또한 <b>실제 목록과 다른 모양의 Skeleton</b>을 쓰지 않는다 — 로딩이 끝나는 순간 <b>레이아웃이 튄다.</b>
+          <br><code>prefers-reduced-motion</code>에서는 <b>반짝임을 끈다.</b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. 브레이크포인트 ==================== -->
+  <section id="s4c">
+    <h2 class="sec"><span class="no">06</span> 브레이크포인트 — <span style="font-size:13px;color:var(--text-mid);font-weight:400">자리만 잡아 둔다</span></h2>
+    <p class="lead">정의와 <b>최대 콘텐츠 폭</b> 개념만 둔다. <b>지금 전면 반응형을 설계하지 않는다.</b></p>
+    <div class="bps">
+      <div class="bp"><div class="n">mobile</div><div class="r">320 ~</div><div class="d">현재 <b>유일한 실제 타깃</b>. 모든 목업이 이 폭 기준으로 검증된다.</div></div>
+      <div class="bp"><div class="n">tablet</div><div class="r">768 ~</div><div class="d">최대 콘텐츠 폭을 두고 <b>가운데 정렬</b>. 열을 늘리지 않는다.</div></div>
+      <div class="bp"><div class="n">desktop</div><div class="r">1024 ~</div><div class="d">동일. 읽기 폭은 <b>넓힌다고 좋아지지 않는다.</b></div></div>
+    </div>
+    <div class="memo warn">
+      <span class="label">⚠️ 과설계 금지</span>
+      <b>웹은 나중이다.</b> 아키텍처는 <b>Expo(React Native + React Native Web) 단일 코드베이스</b>로 확정됐다 —
+      즉 웹은 <b>“따로 만드는 것”이 아니라 같은 코드가 넓은 화면에서 열리는 것</b>이다.
+      지금 태블릿·데스크톱 레이아웃을 그리면 <b>검증할 수 없는 화면을 50개 더 만드는 일</b>이 된다.
+      <br><b>여기 있는 것은 “나중에 이 세 단계로 나눈다”는 합의뿐이고, 그 합의가 지금 필요한 전부다.</b>
+      <br>→ 넓은 화면 대응의 기본형: <b>최대 콘텐츠 폭 + 가운데 정렬.</b> 열 수를 늘리는 재배치는 <b>필요가 증명된 뒤에</b> 한다.
+    </div>
+  </section>
+
+  <!-- ==================== 5. 토모 ==================== -->
+  <section id="s5">
+    <h2 class="sec"><span class="no">07</span> 토모 밝아짐 — 모드별 표현이 다르다</h2>
+    <p class="lead">
+      <i>"새 쪽지가 있으면 토모가 밝아진다"</i>(PRD 14.5)는 <b>어두운 배경에서만 강력</b>하다. 밝은 배경에선 빛이 잘 보이지 않는다.
+      아래 4칸은 페이지 테마와 무관하게 <b>각 모드의 실제 색을 고정 렌더</b>해 나란히 비교한다.
+    </p>
+
+    <div class="tomo-lab">
+      <div class="tomo-cell forcelight">
+        <div class="mode">LIGHT — 평소</div>
+        <div class="tomo-stage"><span class="tomo"><span class="body"></span><span class="flame"></span><span class="eyes"><i></i><i></i></span></span></div>
+        <div class="state">은은하게 켜짐<br><b>변화 없음</b></div>
+      </div>
+      <div class="tomo-cell forcelight">
+        <div class="mode">LIGHT — 새 쪽지 있음</div>
+        <div class="tomo-stage"><span class="tomo light-alert"><span class="body"></span><span class="flame"></span><span class="eyes"><i></i><i></i></span></span></div>
+        <div class="state">따뜻한 <b>헤일로 링</b><br>+ <b>1.15배 확대</b></div>
+      </div>
+      <div class="tomo-cell forcedark">
+        <div class="mode">DARK — 평소</div>
+        <div class="tomo-stage"><span class="tomo"><span class="body"></span><span class="flame"></span><span class="eyes"><i></i><i></i></span></span></div>
+        <div class="state">은은하게 켜짐<br><b>변화 없음</b></div>
+      </div>
+      <div class="tomo-cell forcedark">
+        <div class="mode">DARK — 새 쪽지 있음</div>
+        <div class="tomo-stage"><span class="tomo dark-alert"><span class="body"></span><span class="flame"></span><span class="eyes"><i></i><i></i></span></span></div>
+        <div class="state"><b>brand-halo 빛 번짐</b><br>(원안 그대로)</div>
+      </div>
+    </div>
+
+    <div class="memo">
+      <span class="label">MEMO</span>
+      배지·빨간 점을 쓰지 않는다는 원칙은 두 모드 모두 유지하고, 라이트에서는 <b>밝기 대신 크기·헤일로</b>로 신호를 만든다.
+      토모는 <b>단일 고정 캐릭터</b>이며 성장하거나 완성되지 않는다(PRD 14.2). 상황별 변화는 소품을 드는 것이 아니라 <b>비추는 대상</b>이 바뀌는 것.
+      <br><b>여기 도형은 전부 placeholder</b>다 — 실제 일러스트는 별도 트랙이며, 이 페이지에서는 <b>밝아짐 신호의 크기·강도</b>만 판단하면 된다.
+    </div>
+    <div class="memo">
+      <span class="label">확정 — 2026-07-21 · 레이아웃 규칙</span>
+      <b>홈 화면의 토모 자리는 1.15배 기준으로 잡고, 평소(1.0배)에는 그 안에서 작게 놓인다.</b> 즉 <b>확대분 여백(약 12%)을 항상 비워둔다</b> —
+      토모가 커질 때 <b>주변 요소가 밀리지 않는다.</b>
+      <br>🔴 <b>이것은 3.2 후리가나 규칙과 정확히 같은 원리다.</b>
+      후리가나도 <i>"루비 공간을 항상 확보해두고 표시 여부만 바꾼다"</i>였다. 여기서도 <i>"최대 크기 공간을 항상 확보해두고 크기만 바꾼다"</i>.
+      <b>토모리의 레이아웃 원칙 = 상태가 바뀌어도 자리는 바뀌지 않는다.</b> 두 사례가 같은 규칙의 두 적용이므로, 앞으로 <b>가변 요소는 전부 최대 크기로 자리를 잡는다.</b>
+      <br>확대는 상태 전이가 아니라 <b>지속 상태</b>다 — 250ms·ease-out 규칙은 <b>"확대되는 순간"에만</b> 적용되고, 확대된 채로 머무는 동안에는 어떤 애니메이션도 돌지 않는다(맥동·펄스 금지).
+      <br>위 4칸에서 <b>LIGHT 평소 / LIGHT 새 쪽지</b> 두 칸의 <b>칸 높이가 동일</b>한 것이 이 규칙이 지켜진 상태다.
+    </div>
+  </section>
+
+  <!-- ==================== 6. 접근성 ==================== -->
+  <section id="s6">
+    <h2 class="sec"><span class="no">08</span> 접근성</h2>
+    <p class="lead">본문 대비 <b>4.5:1 이상</b>, 큰 글자 3:1 (WCAG AA) — 두 모드 모두 검증. 터치 타깃 최소 44×44.</p>
+
+    <h3>코스 5색 — 면(<code>course-*</code>) / 글자(<code>course-*-text</code>) 대비비</h3>
+    <p class="lead" style="margin:4px 0 0">라이트는 <b>두 표면(<code>bg-base #FAF7F3</code> · <code>bg-surface #FFFFFF</code>) 모두</b>를 검증한다. 면 색은 비텍스트 기준 <b>3:1</b>, 글자 색은 본문 기준 <b>4.5:1</b>.</p>
+    <table class="a11y">
+      <thead><tr>
+        <th>코스</th>
+        <th>Light 면</th><th class="ratio">면 vs base</th>
+        <th>Light 글자</th><th class="ratio">글자 vs base / surface</th><th>판정</th>
+        <th>Dark (면=글자)</th><th class="ratio">vs #14110F</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="sq" style="background:#2F6FD0"></span>JLPT</td>
+          <td class="ratio">#2F6FD0</td><td class="ratio">4.57</td>
+          <td class="ratio">#2F6FD0<br><span style="color:var(--text-low)">원색 유지</span></td>
+          <td class="ratio">4.57 / 4.88</td><td><span class="pill pass">AA 통과</span></td>
+          <td class="ratio">#5B9BF5</td><td class="ratio">6.67 <span class="pill pass">AA</span></td>
+        </tr>
+        <tr>
+          <td><span class="sq" style="background:#1F8F76"></span>여행 회화</td>
+          <td class="ratio">#1F8F76</td><td class="ratio">3.75</td>
+          <td class="ratio"><span class="sq" style="background:#1B7E68"></span>#1B7E68</td>
+          <td class="ratio">4.65 / 4.96</td><td><span class="pill pass">AA 통과</span></td>
+          <td class="ratio">#3FC8A8</td><td class="ratio">8.99 <span class="pill pass">AA</span></td>
+        </tr>
+        <tr>
+          <td><span class="sq" style="background:#6B45C4"></span>비즈니스</td>
+          <td class="ratio">#6B45C4</td><td class="ratio">6.01</td>
+          <td class="ratio">#6B45C4<br><span style="color:var(--text-low)">원색 유지</span></td>
+          <td class="ratio">6.01 / 6.42</td><td><span class="pill pass">AA 통과</span></td>
+          <td class="ratio">#9B72F0</td><td class="ratio">5.43 <span class="pill pass">AA</span></td>
+        </tr>
+        <tr>
+          <td><span class="sq" style="background:#C84870"></span>뉴스·시사</td>
+          <td class="ratio">#C84870</td><td class="ratio">4.26</td>
+          <td class="ratio"><span class="sq" style="background:#C53E68"></span>#C53E68</td>
+          <td class="ratio">4.61 / 4.93</td><td><span class="pill pass">AA 통과</span></td>
+          <td class="ratio">#F2789E</td><td class="ratio">7.12 <span class="pill pass">AA</span></td>
+        </tr>
+        <tr>
+          <td><span class="sq" style="background:#55913A"></span>전래동화</td>
+          <td class="ratio">#55913A</td><td class="ratio">3.58</td>
+          <td class="ratio"><span class="sq" style="background:#497D32"></span>#497D32</td>
+          <td class="ratio">4.61 / 4.93</td><td><span class="pill pass">AA 통과</span></td>
+          <td class="ratio">#7FBF5A</td><td class="ratio">8.51 <span class="pill pass">AA</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="memo">
+      <span class="label">해결 — 2026-07-21 확정</span>
+      기존에 라이트 <b>여행 회화(3.75)·전래동화(3.58)·뉴스·시사(4.26)</b>가 본문 4.5:1에 미달했다.
+      <b><code>course-*-text</code> 5색을 신설</b>해 해소했다(2.3b 참조) — 색상(hue)·채도는 유지하고 <b>명도만 낮춰</b> 두 표면 모두 4.5:1을 넘긴다.
+      <br><b>면 값은 그대로 둔다</b>: 태그 배경·테두리·진행바 채움은 비텍스트 UI 요소(3:1 기준)라 원색으로 통과하며, 원색을 바꾸면 코스 정체성이 흐려진다.
+      <br>JLPT·비즈니스는 원색이 이미 통과하므로 값을 바꾸지 않았지만, <b>토큰은 5개 전부 정의</b>해 컴포넌트가 예외 없이 <code>course-*-text</code>만 참조하도록 했다.
+    </div>
+
+    <h3>텍스트 · 브랜드 · 상태색 대비비</h3>
+    <table class="a11y">
+      <thead><tr><th>토큰</th><th>Light</th><th class="ratio">비율</th><th>Dark</th><th class="ratio">비율</th></tr></thead>
+      <tbody>
+        <tr><td><code>text-high</code></td><td class="ratio">#1A1613</td><td class="ratio">16.83:1 <span class="pill pass">AAA</span></td><td class="ratio">#F5F1EC</td><td class="ratio">16.72:1 <span class="pill pass">AAA</span></td></tr>
+        <tr><td><code>text-mid</code></td><td class="ratio">#6B6259</td><td class="ratio">5.59:1 <span class="pill pass">AA</span></td><td class="ratio">#B5ADA4</td><td class="ratio">8.49:1 <span class="pill pass">AA</span></td></tr>
+        <tr><td><code>text-low</code></td><td class="ratio">#9C948B</td><td class="ratio">2.80:1 <span class="pill warn">비활성 전용</span></td><td class="ratio">#7D766E</td><td class="ratio">4.20:1 <span class="pill warn">비활성 전용</span></td></tr>
+        <tr><td><code>brand</code> (면)</td><td class="ratio">#F5B942</td><td class="ratio">글자 #1A1613 얹어 10.19:1 <span class="pill pass">AAA</span></td><td class="ratio">#F5B942</td><td class="ratio">동일</td></tr>
+        <tr><td><code>brand-text</code> (글자)</td><td class="ratio"><span class="sq" style="background:#8F5E08"></span>#8F5E08<br><span style="color:var(--text-low)">구 #A06A0A</span></td><td class="ratio">5.21:1(bg-base) / 5.57:1(흰 카드) <span class="pill pass">AA</span></td><td class="ratio">#F5B942</td><td class="ratio">10.55:1 <span class="pill pass">AAA</span></td></tr>
+        <tr><td><code>success</code></td><td class="ratio">#2E7D4F</td><td class="ratio">4.72:1 <span class="pill pass">AA</span></td><td class="ratio">#5FD08A</td><td class="ratio">9.74:1 <span class="pill pass">AA</span></td></tr>
+        <tr><td><code>error</code></td><td class="ratio"><span class="sq" style="background:#B5533D"></span>#B5533D<br><span style="color:var(--text-low)">구 #C05B45</span></td><td class="ratio">4.61:1 <span class="pill pass">AA</span></td><td class="ratio">#E8705F</td><td class="ratio">6.19:1 <span class="pill pass">AA</span></td></tr>
+        <tr><td><code>info</code></td><td class="ratio">#2F6FD0</td><td class="ratio">4.57:1 <span class="pill pass">AA</span></td><td class="ratio">#6FA8DC</td><td class="ratio">7.44:1 <span class="pill pass">AA</span></td></tr>
+      </tbody>
+    </table>
+    <div class="memo">
+      <span class="label">해결 — 2026-07-21 확정</span>
+      ① <code>brand-text</code> <b>#A06A0A → #8F5E08</b>. 구 값은 흰 카드 위 4.60:1로 겨우 통과했지만 <b>앱 배경 #FAF7F3 위에서는 4.31:1로 미달</b>했다.
+      탭 라벨·링크는 카드가 아니라 배경 위에 직접 놓이는 경우가 많으므로 <b>더 나쁜 쪽 표면을 기준으로</b> 잡았다. 새 값은 5.21 / 5.57로 두 표면 모두 통과.
+      <br>② 라이트 <code>error</code> <b>#C05B45 → #B5533D</b> (4.08 → 4.61). <b>명도만 4% 낮추고 색상(H 10.7°→11.0°)·채도(S .494→.496)는 그대로</b> 유지했다 —
+      "채도를 낮춘 부드러운 톤으로 죄책감을 유발하지 않는다"(PRD 1.3·14.4)는 의도가 훼손되지 않도록, <b>붉은 기를 더하지 않고 어둡게만</b> 했다. 여전히 강한 빨강이 아닌 <b>차분한 테라코타</b>다.
+      <br>③ <code>text-low</code>는 두 모드 모두 본문 기준 미달이지만 <b>조정하지 않는다</b> — 사양대로 <b>비활성·힌트 전용</b>으로만 쓰면 문제없다(WCAG는 비활성 요소를 대비 요건에서 제외). 힌트를 본문처럼 쓰지 않는 것이 규칙이다.
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="stage">
+        <div class="cap">오답 톤 확인 — 강한 빨강이 되지 않았는지</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+          <span style="width:56px;height:40px;border-radius:8px;background:#C05B45;display:block"></span>
+          <span style="width:56px;height:40px;border-radius:8px;background:#B5533D;display:block"></span>
+          <span style="width:56px;height:40px;border-radius:8px;background:#E5231A;display:block;opacity:.5"></span>
+          <span style="font-size:12px;color:var(--text-mid)">구 / <b>신</b> / (참고: 흔한 경고 빨강 — 쓰지 않는다)</span>
+        </div>
+        <div style="color:var(--error);font-size:15px;font-weight:600">틀렸어요 — 다시 한 번 볼까요</div>
+      </div>
+      <div class="stage">
+        <div class="cap">브랜드 글자 — 두 표면 위 비교</div>
+        <div style="background:var(--bg-base);padding:12px;border-radius:8px;margin-bottom:8px">
+          <span style="color:var(--brand-text);font-weight:700">bg-base 위 · 이어서 학습하기 →</span>
+        </div>
+        <div style="background:var(--bg-surface);border:1px solid var(--border);padding:12px;border-radius:8px">
+          <span style="color:var(--brand-text);font-weight:700">bg-surface 위 · 이어서 학습하기 →</span>
+        </div>
+        <div class="ratio" style="margin-top:10px">라이트 5.21 / 5.57 — 두 표면 모두 AA</div>
+      </div>
+    </div>
+
+    <h3>색만으로 구분하지 않는다 — 라벨 병기</h3>
+    <div class="grid2">
+      <div class="stage">
+        <div class="cap">✕ 색만으로 코스를 구분</div>
+        <div class="tags">
+          <span class="tag c-jlpt colordot"></span>
+          <span class="tag c-travel colordot"></span>
+          <span class="tag c-biz colordot"></span>
+          <span class="tag c-news colordot"></span>
+          <span class="tag c-folk colordot"></span>
+        </div>
+        <div style="font-size:12px;color:var(--text-mid);margin-top:12px">적록색각 이상 사용자에게 <b>여행 회화(#1F8F76)</b>와 <b>전래동화(#55913A)</b>는 거의 같은 색으로 보인다.</div>
+      </div>
+      <div class="stage">
+        <div class="cap">✓ 색 + 텍스트 라벨 병기</div>
+        <div class="tags">
+          <span class="tag c-jlpt"><span class="dot"></span>JLPT</span>
+          <span class="tag c-travel"><span class="dot"></span>여행 회화</span>
+          <span class="tag c-biz"><span class="dot"></span>비즈니스</span>
+          <span class="tag c-news"><span class="dot"></span>뉴스·시사</span>
+          <span class="tag c-folk"><span class="dot"></span>전래동화</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-mid);margin-top:12px">코스 식별은 <b>항상 라벨</b>이 담당하고, 색은 <b>보조 신호</b>다.</div>
+      </div>
+    </div>
+    <div class="memo">
+      <span class="label">원칙</span>
+      코스 5색은 <b>색만으로 구분하지 않는다</b>. 태그·필터·차트·진행바 어디서든 <b>텍스트 라벨(또는 수치)을 반드시 병기</b>한다.
+      터치 타깃은 최소 <b>44×44</b> — 이 페이지의 토글·탭·키보드 키는 모두 이 규격으로 렌더되어 있다.
+    </div>
+  </section>
+
+  <footer style="margin-top:80px;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--text-low)">
+    토모리 디자인 시스템 시각화 v1 · 기준 문서 <code>design_system_spec.md</code> v2 (2026-07-20) · 작성 아토(Product Design)<br>
+    자체 완결형 단일 HTML — 외부 CDN·웹폰트 로드 없음. 폰트는 시스템 폴백 스택으로만 지정.
+  </footer>
+</div>
+
+<script>
+/* ---------- 라이트/다크 토글 (라이트가 기본값) ---------- */
+var root = document.documentElement;
+var btn  = document.getElementById('themeToggle');
+function setTheme(t){
+  root.setAttribute('data-theme', t);
+  btn.textContent = (t === 'dark') ? '☀️ 라이트로 전환' : '🌙 다크로 전환';
+  renderSwatches();
+  var dark = (t === 'dark');
+  document.getElementById('brandTextRatio').innerHTML = dark
+    ? '<code>brand-text</code> = #F5B942 on #1E1A17 = <b>9.79:1</b> — 다크에서는 brand와 동일값'
+    : '#8F5E08 = 5.57:1(흰 카드) / <b>5.21:1</b>(bg-base) — 두 표면 모두 AA 통과';
+  document.getElementById('brandRawRatio').innerHTML = dark
+    ? '#F5B942 on #1E1A17 = <b>9.79:1</b> — <b>다크에서는 통과한다.</b> 그래서 다크에서만 검수하면 이 버그를 못 잡는다.'
+    : '#F5B942 on #FFFFFF = <b>1.76:1</b> — WCAG AA(4.5:1) 미달';
+  document.getElementById('brandBadCard').className = 'demo-card ' + (dark ? 'good' : 'bad');
+  document.getElementById('brandBadVerdict').innerHTML = dark
+    ? '△ 다크 한정 — 다크에서는 <code>brand</code> = <code>brand-text</code>'
+    : '✕ 잘못된 예 — <code>brand</code>를 글자색으로';
+}
+btn.addEventListener('click', function(){
+  setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+// 설정 라디오 3단 (시스템 따름 / 라이트 / 다크)
+document.querySelectorAll('input[name="themepref"]').forEach(function(el){
+  el.addEventListener('change', function(){
+    if(el.value === 'system'){
+      setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } else setTheme(el.value);
+  });
+});
+
+/* ---------- 스와치 렌더 (현재 테마의 실제 토큰값을 읽어 표기) ---------- */
+var TOKENS = {
+  'sw-surface':[
+    ['bg-base','앱 배경'],['bg-surface','카드·시트'],['bg-elevated','모달·팝업(+그림자)'],
+    ['border','구분선'],['border-strong','강조 테두리'],
+    ['text-high','본문·제목'],['text-mid','보조 설명'],['text-low','비활성·힌트']
+  ],
+  'sw-brand':[
+    ['brand','면 — 버튼 배경·진행바 채움'],['brand-text','글자·아이콘·테두리'],['brand-halo','토모 밝아짐']
+  ],
+  'sw-course':[
+    ['course-jlpt','JLPT — 시험·엄정함'],['course-travel','여행 회화 — 하늘·바다, 설렘'],
+    ['course-biz','비즈니스 — 신뢰·격식'],['course-news','뉴스·시사 — 현재성·주목'],
+    ['course-folk','전래동화 — 자연·옛이야기']
+  ],
+  'sw-course-text':[
+    ['course-jlpt-text','JLPT 라벨 — 원색 유지'],['course-travel-text','여행 회화 라벨'],
+    ['course-biz-text','비즈니스 라벨 — 원색 유지'],['course-news-text','뉴스·시사 라벨'],
+    ['course-folk-text','전래동화 라벨']
+  ],
+  'sw-state':[['success','정답·완료'],['error','오답 (채도 낮춘 톤)'],['info','안내']]
+};
+function toHex(v){
+  v = v.trim();
+  if(v.charAt(0) === '#') return v.toUpperCase();
+  var m = v.match(/rgba?\(([^)]+)\)/);
+  if(!m) return v;
+  var p = m[1].split(/[,\s\/]+/).filter(Boolean);
+  if(p.length > 3) return v; // 알파 있는 값은 rgba 그대로 노출
+  return '#' + p.slice(0,3).map(function(n){
+    return ('0'+parseInt(n,10).toString(16)).slice(-2);
+  }).join('').toUpperCase();
+}
+function renderSwatches(){
+  var cs = getComputedStyle(root);
+  Object.keys(TOKENS).forEach(function(id){
+    var host = document.getElementById(id);
+    if(!host) return;
+    host.innerHTML = TOKENS[id].map(function(t){
+      var name = t[0], use = t[1];
+      var val  = cs.getPropertyValue('--' + name);
+      var showChecker = (name === 'brand-halo');
+      return '<div class="sw">'
+        + '<span class="chip' + (showChecker ? ' checker' : '') + '" style="background-color:var(--' + name + ')"></span>'
+        + '<div class="meta"><div class="name">' + name + '</div>'
+        + '<div class="hex">' + toHex(val) + '</div>'
+        + '<div class="use">' + use + '</div></div></div>';
+    }).join('');
+  });
+}
+
+/* ---------- 읽기 도움 토글 2개 (처리가 서로 다르다) ----------
+   후리가나 : visibility  → 공간 유지 → 블록 높이 불변
+   한글 발음 : display     → 공간 회수 → 블록 높이 감소            */
+var passage = document.getElementById('rubyPassage');
+var baseH = 0;
+function bindReadToggle(btnId, stateId, cls){
+  var b = document.getElementById(btnId);
+  b.addEventListener('click', function(){
+    var on = b.getAttribute('aria-checked') === 'true';
+    b.setAttribute('aria-checked', String(!on));
+    passage.classList.toggle(cls, on);
+    document.getElementById(stateId).textContent = on ? 'OFF' : 'ON';
+    updateMeter();
+  });
+}
+bindReadToggle('furiToggle',   'furiState',   'furi-off');
+bindReadToggle('romajiToggle', 'romajiState', 'romaji-off');
+
+function updateMeter(){
+  var h = Math.round(passage.getBoundingClientRect().height);
+  if(!baseH) baseH = h;
+  document.getElementById('hNow').textContent  = h;
+  document.getElementById('hBase').textContent = baseH;
+  var v = document.getElementById('hVerdict');
+  if(h === baseH){
+    v.className = 'chg same';
+    v.textContent = '± 0px — 자리 그대로 (레이아웃 점프 없음)';
+  } else {
+    v.className = 'chg moved';
+    v.textContent = (h - baseH) + 'px — 발음 줄 공간 회수됨';
+  }
+}
+/* 데모용 토글들 */
+document.querySelectorAll('.demo-tg').forEach(function(t){
+  t.addEventListener('click', function(){
+    var on = t.getAttribute('aria-checked') === 'true';
+    t.setAttribute('aria-checked', String(!on));
+    var s = t.parentElement.querySelector('.tgstate');
+    if(s) s.textContent = on ? 'OFF' : 'ON';
+  });
+});
+/* 탭바 데모 */
+document.querySelectorAll('.tabbar .tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.tabbar .tab').forEach(function(x){x.classList.remove('on')});
+    tab.classList.add('on');
+  });
+});
+
+/* ---------- 가나 키보드 10×5 (오른쪽 あ행 → 왼쪽 わ행) ---------- */
+var KANA = [
+  ['わ','ら','や','ま','は','な','た','さ','か','あ'],
+  ['', 'り','', 'み','ひ','に','ち','し','き','い'],
+  ['を','る','ゆ','む','ふ','ぬ','つ','す','く','う'],
+  ['', 'れ','', 'め','へ','ね','て','せ','け','え'],
+  ['ん','ろ','よ','も','ほ','の','と','そ','こ','お']
+];
+document.getElementById('kana').innerHTML = KANA.map(function(row){
+  return row.map(function(k){
+    return k ? '<button class="k">'+k+'</button>' : '<span class="k empty"></span>';
+  }).join('');
+}).join('');
+
+setTheme('light');   // 라이트가 기본값
+updateMeter();       // 기준 높이 기록
+</script>
+</body>
+</html>

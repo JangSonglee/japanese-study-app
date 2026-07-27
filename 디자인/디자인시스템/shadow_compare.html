@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>카드 그림자 비교 — 6안</title>
+<style>
+@font-face{font-family:"Pretendard";src:url("fonts/Pretendard-Regular.woff2")format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Pretendard";src:url("fonts/Pretendard-SemiBold.woff2")format("woff2");font-weight:600;font-display:swap}
+
+:root,[data-theme="light"]{
+  --paper:#FBF8F4; --card:#FFFFFF; --sunk:#F3EDE5;
+  --ink:#1A1613; --ink2:#5D554C; --ink3:#A79E94;
+  --brand:#F5B942; --c:#2F6FD0;
+  --page:#EFE9E1;
+}
+[data-theme="dark"]{
+  --paper:#14110F; --card:#1E1A17; --sunk:#2A2521;
+  --ink:#F5F1EC; --ink2:#B5ADA4; --ink3:#7D766E;
+  --brand:#F5B942; --c:#5B9BF5;
+  --page:#0C0A09;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);
+  font-family:"Pretendard",-apple-system,"Malgun Gothic",sans-serif;font-size:15px;line-height:1.6}
+.wrap{max-width:1280px;margin:0 auto;padding:36px 24px 90px}
+h1{font-size:28px;letter-spacing:-.035em;font-weight:600;margin:0 0 8px}
+.lead{color:var(--ink2);font-size:14.5px;max-width:70ch;margin:0 0 22px;line-height:1.8}
+.bar{display:flex;gap:10px;align-items:center;margin:0 0 28px;flex-wrap:wrap}
+button{font-family:inherit;font-size:13.5px;font-weight:600;border:none;border-radius:999px;
+  padding:10px 18px;cursor:pointer;background:var(--ink);color:var(--paper)}
+button.alt{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px rgba(128,128,128,.28)}
+
+.grid{display:flex;flex-wrap:wrap;gap:26px}
+.col{width:300px}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+  color:var(--ink2);margin:0 0 10px}
+.tag .no{font-family:ui-monospace,Consolas,monospace;font-size:11px;font-weight:700;
+  background:var(--ink);color:var(--paper);border-radius:6px;padding:2px 7px}
+.tag .cur{background:var(--brand);color:#1A1613}
+
+/* 폰 미니 프레임 — 실제 배경 위에 카드가 놓인 상태를 그대로 재현 */
+.phone{background:var(--paper);border-radius:22px;padding:16px 14px 18px;
+  display:flex;flex-direction:column;gap:11px;min-height:430px}
+.card{background:var(--card);border-radius:15px;padding:14px;display:flex;flex-direction:column;gap:9px}
+.card.row{flex-direction:row;align-items:center;justify-content:space-between}
+.card.acc{position:relative;overflow:hidden;padding-left:17px}
+.card.acc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.lbl{font-size:11.5px;font-weight:600;color:var(--ink2)}
+.num{font-size:21px;font-weight:600;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.num .u{font-size:13px;color:var(--ink2);margin-left:2px}
+.prog{height:10px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:999px;background:var(--c)}
+.btn{height:44px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:600;background:var(--ink);color:var(--paper)}
+.duo{display:flex;gap:9px}.duo>*{flex:1}
+
+/* ───── 6안 ───── */
+[data-s="1"] .card{box-shadow:0 1px 1px rgba(26,22,19,.03), 0 3px 10px rgba(26,22,19,.055)}
+[data-s="2"] .card{box-shadow:0 1px 2px rgba(26,22,19,.06)}
+[data-s="3"] .card{box-shadow:0 0 0 1px rgba(26,22,19,.05), 0 1px 2px rgba(26,22,19,.04)}
+[data-s="4"] .card{box-shadow:none}
+[data-s="5"] .card{box-shadow:0 1px 3px rgba(122,84,30,.09)}
+[data-s="6"] .card{box-shadow:0 .5px 1px rgba(26,22,19,.05), 0 2px 5px rgba(26,22,19,.03)}
+/* ★ 7 = 2안(좁은 번짐) + 5안(따뜻한 색) */
+[data-s="7"] .card{box-shadow:0 .5px 1px rgba(122,84,30,.06), 0 1px 2.5px rgba(122,84,30,.085)}
+
+[data-theme="dark"] [data-s="1"] .card{box-shadow:0 1px 2px rgba(0,0,0,.35); border:1px solid #3A332D}
+[data-theme="dark"] [data-s="2"] .card{box-shadow:none; border:1px solid #3A332D}
+[data-theme="dark"] [data-s="3"] .card{box-shadow:0 0 0 1px rgba(255,255,255,.07)}
+[data-theme="dark"] [data-s="4"] .card{box-shadow:none; border:1px solid #332C26}
+[data-theme="dark"] [data-s="5"] .card{box-shadow:0 1px 3px rgba(0,0,0,.5); border:1px solid #3A332D}
+[data-theme="dark"] [data-s="6"] .card{box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 1px 3px rgba(0,0,0,.3)}
+/* 다크에선 따뜻한 그림자가 보이지 않는다 → 테두리가 분리를 맡고, 그림자는 접촉만 */
+[data-theme="dark"] [data-s="7"] .card{box-shadow:0 1px 2px rgba(0,0,0,.4); border:1px solid #3A332D}
+
+.note{font-size:12.5px;color:var(--ink2);line-height:1.7;margin:11px 2px 0}
+.note b{color:var(--ink)}
+.note code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;
+  background:var(--sunk);border-radius:5px;padding:1px 5px}
+footer{margin-top:56px;color:var(--ink3);font-size:13px;line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>카드 그림자 — 6안 비교</h1>
+<p class="lead">현재(1안)는 <b>번짐 10px에 내림 3px</b>이라, 빛이 위에서 오는 게 아니라 <b>사방으로 퍼지는 후광</b>처럼 보입니다. 카드가 세로로 붙어 있으면 후광끼리 겹쳐 화면이 뿌옇게 돼요. 아래에서 골라 주세요.</p>
+
+<div class="bar">
+  <button onclick="t()">🌙 라이트 / 다크 전환</button>
+  <span style="font-size:13px;color:var(--ink2)">같은 화면·같은 색, <b>그림자만</b> 다릅니다</span>
+</div>
+
+<div class="grid" id="g"></div>
+
+<footer>
+  <div>· 다크 모드는 <b>그림자가 분리 수단이 되지 못하므로</b>(사양서 2.8.1) 각 안마다 테두리를 함께 조정했습니다. <b>두 모드를 같이 보고</b> 골라 주세요.</div>
+  <div>· 고르시면 <code>--sh-1</code> 값 하나만 바꿉니다 → <b>77프레임 전체가 한 번에</b> 반영됩니다.</div>
+</footer>
+</div>
+
+<script>
+const OPTS=[
+ {n:1,t:"현재",   d:"<code>0 3px 10px .055</code> — 번짐이 내림의 3배라 <b>사방 후광</b>이 된다. 카드가 붙으면 뿌옇다."},
+ {n:2,t:"딱 붙은 그림자", d:"<code>0 1px 2px .06</code> — 번짐을 거의 없앴다. <b>종이가 살짝 떠 있는</b> 느낌. 가장 담백."},
+ {n:3,t:"헤어라인 + 미세", d:"<code>0 0 0 1px .05</code> + 미세 그림자 — 윤곽이 <b>또렷</b>. 정보 밀도 높은 화면에 강함."},
+ {n:4,t:"그림자 없음",  d:"흰 카드(#FFF)와 배경(#FBF8F4)의 <b>면 차이만</b>으로. 가장 조용하지만 경계가 약할 수 있다."},
+ {n:5,t:"따뜻한 그림자", d:"<code>rgba(122,84,30,.09)</code> — 회색이 아니라 <b>갈색 계열</b>. 앰버·종이 팔레트와 색온도가 맞는다."},
+ {n:6,t:"2단 정밀",   d:"접촉 그림자 + 아주 옅은 확산. <b>1안의 정돈된 버전</b> — 번짐을 10px→5px, 농도도 낮췄다."},
+ {n:7,t:"★ 채택 — 2 + 5", d:"<code>0 .5px 1px rgba(122,84,30,.06)</code> + <code>0 1px 2.5px rgba(122,84,30,.085)</code><br><b>2안의 좁은 번짐 + 5안의 따뜻한 색.</b> 후광이 사라지고, 그림자가 <b>회색 때가 아니라 종이 그늘</b>로 보인다."},
+];
+const CARD=`
+ <div class="card acc"><span class="lbl">JLPT N2 · 12월 7일</span>
+   <span class="num">시험까지 <span style="color:var(--c)">42일</span></span></div>
+ <div class="card"><div style="display:flex;justify-content:space-between">
+     <span class="lbl">오늘의 학습</span><span class="lbl">3 / 5 세션</span></div>
+   <div class="prog"><i style="width:60%"></i></div>
+   <div class="btn" style="margin-top:3px">오늘의 학습 시작</div></div>
+ <div class="card row"><div><span class="lbl">모은 우표</span><div class="num">4<span class="u">/ 7장</span></div></div>
+   <div style="display:flex;gap:4px">
+     <span style="width:20px;height:25px;background:var(--brand);border-radius:3px"></span>
+     <span style="width:20px;height:25px;background:var(--brand);border-radius:3px"></span>
+     <span style="width:20px;height:25px;background:var(--sunk);border-radius:3px"></span></div></div>
+ <div class="duo">
+   <div class="card"><span class="lbl">연속 학습</span><div class="num">12<span class="u">일째</span></div></div>
+   <div class="card"><span class="lbl">N2 진도</span><div class="num" style="color:var(--c)">15<span class="u">%</span></div></div></div>`;
+document.getElementById('g').innerHTML = OPTS.map(o=>`
+ <div class="col">
+   <div class="tag"><span class="no ${o.n===7?'cur':''}">${o.n}</span>${o.t}</div>
+   <div class="phone" data-s="${o.n}">${CARD}</div>
+   <div class="note">${o.d}</div>
+ </div>`).join('');
+function t(){const r=document.documentElement;
+  r.setAttribute('data-theme', r.getAttribute('data-theme')==='dark'?'light':'dark');}
+</script>
+</body>
+</html>

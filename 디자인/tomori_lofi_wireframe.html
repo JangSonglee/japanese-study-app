@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>토모리(Tomori) — Lo-fi 와이어프레임</title>
+<style>
+  :root{
+    --ink:#2b2b2b; --ink-2:#666; --ink-3:#9a9a9a;
+    --line:#c8c8c8; --line-2:#dcdcdc;
+    --fill-0:#ffffff; --fill-1:#f2f2f2; --fill-2:#e6e6e6; --fill-3:#d7d7d7;
+    --page:#e4e4e4;
+    --frame-w:300px;
+    --radius:6px;
+    --mono: ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --sans:"Pretendard","Malgun Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--page);color:var(--ink);font-family:var(--sans);
+       -webkit-font-smoothing:antialiased;}
+
+  /* ---------- Document shell ---------- */
+  .doc-head{padding:34px 40px 10px;}
+  .doc-head h1{margin:0 0 6px;font-size:24px;letter-spacing:-.5px;}
+  .doc-head p{margin:2px 0;color:var(--ink-2);font-size:13px;line-height:1.6;}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin:16px 0 0;padding:14px 16px;
+          background:var(--fill-0);border:1px solid var(--line-2);border-radius:8px;
+          font-size:12px;color:var(--ink-2);}
+  .legend b{color:var(--ink);}
+  .legend .sw{display:inline-block;width:26px;height:14px;border-radius:3px;
+              vertical-align:-2px;margin-right:6px;border:1px solid var(--line);}
+
+  .section{padding:22px 40px 8px;}
+  .section h2{font-size:17px;margin:26px 0 2px;letter-spacing:-.3px;
+              border-left:5px solid var(--ink);padding-left:10px;}
+  .section .sub{color:var(--ink-2);font-size:12.5px;margin:4px 0 0 15px;}
+
+  .grid{display:flex;flex-wrap:wrap;gap:30px 22px;padding:18px 40px 10px;align-items:flex-start;}
+
+  /* ---------- Phone frame ---------- */
+  .screen{width:var(--frame-w);}
+  .cap{font-size:12.5px;color:var(--ink-2);margin:9px 2px 0;line-height:1.4;}
+  .cap b{color:var(--ink);font-size:13px;}
+  .num{display:inline-block;min-width:20px;padding:1px 6px;margin-right:5px;
+       background:var(--ink);color:#fff;border-radius:4px;font-size:11px;
+       font-family:var(--mono);text-align:center;}
+  .frame{width:var(--frame-w);height:600px;background:var(--fill-0);
+         border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;
+         display:flex;flex-direction:column;position:relative;}
+
+  /* memo (설명·예시는 프레임 밖) */
+  .memo{margin-top:8px;font-size:11.5px;color:var(--ink-2);background:#fbfbfb;
+        border:1px solid var(--line-2);border-left:3px solid var(--ink-3);
+        border-radius:6px;padding:9px 11px;line-height:1.6;}
+  .memo .mh{font-size:10px;letter-spacing:.5px;color:var(--ink-3);
+            font-family:var(--mono);text-transform:uppercase;margin-bottom:4px;}
+  .memo ul{margin:0;padding-left:15px;}
+  .memo li{margin:3px 0;}
+  .memo b{color:var(--ink);}
+  .memo .ex{color:var(--ink-3);}
+
+  /* status bar */
+  .status{height:22px;flex:0 0 auto;display:flex;align-items:center;
+          justify-content:space-between;padding:0 12px;font-size:9px;
+          color:var(--ink-3);font-family:var(--mono);}
+  .status .dots{letter-spacing:1px;}
+
+  /* app bar */
+  .appbar{height:42px;flex:0 0 auto;display:flex;align-items:center;gap:8px;
+          padding:0 12px;border-bottom:1px solid var(--line-2);font-size:13px;font-weight:600;}
+  .appbar .back{font-size:19px;color:var(--ink-2);width:16px;}
+  .appbar .grow{flex:1;}
+  .appbar .act{font-size:11px;color:var(--ink-2);font-weight:500;}
+  .appbar.center{justify-content:center;position:relative;}
+  .appbar.center .back{position:absolute;left:12px;}
+  .appbar.center .act{position:absolute;right:12px;}
+
+  /* body */
+  .body{flex:1 1 auto;overflow:hidden;padding:14px;display:flex;flex-direction:column;gap:12px;}
+  .body.pad0{padding:0;}
+  .body.center{justify-content:center;align-items:center;text-align:center;}
+
+  /* placeholder primitives */
+  .ph{background:var(--fill-1);border:1px solid var(--line-2);border-radius:var(--radius);
+      display:flex;align-items:center;justify-content:center;text-align:center;
+      color:var(--ink-3);font-size:10.5px;padding:6px;line-height:1.3;}
+  .ph.dash{border-style:dashed;background:repeating-linear-gradient(45deg,#f6f6f6,#f6f6f6 6px,#efefef 6px,#efefef 12px);}
+  .ph.solid{background:var(--fill-2);color:var(--ink-2);}
+  .lbl{font-size:10px;color:var(--ink-3);}   /* 프레임 내 최소 구역 라벨 */
+  .avatar{width:46px;height:46px;border-radius:50%;flex:0 0 auto;}
+  .thumb{width:42px;height:42px;flex:0 0 auto;border-radius:6px;}
+
+  /* text lines (내용 자리표시) */
+  .t{height:9px;background:var(--fill-2);border-radius:3px;}
+  .t.sm{height:7px;} .t.lg{height:13px;background:var(--fill-3);}
+  .w90{width:90%;}.w80{width:80%;}.w70{width:70%;}.w60{width:60%;}
+  .w50{width:50%;}.w40{width:40%;}.w30{width:30%;}.w25{width:25%;}
+  .stack{display:flex;flex-direction:column;gap:7px;}
+  .row{display:flex;gap:8px;align-items:center;}
+  .between{justify-content:space-between;}
+  .wrap{flex-wrap:wrap;}
+  .grow{flex:1;}
+
+  /* buttons */
+  .btn{height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+       font-size:12px;font-weight:600;}
+  .btn.pri{background:var(--ink);color:#fff;}
+  .btn.sec{background:var(--fill-2);color:var(--ink);border:1px solid var(--line);}
+  .btn.ghost{background:transparent;color:var(--ink-3);border:1px dashed var(--line);}
+  .btn.sm{height:32px;font-size:11px;padding:0 12px;}
+  .btn.block{width:100%;}
+
+  /* cards / lists */
+  .card{border:1px solid var(--line-2);border-radius:8px;padding:11px;background:var(--fill-0);
+        display:flex;flex-direction:column;gap:8px;}
+  /* .card 는 column 이 기본. .row 를 함께 쓴 카드만 가로로 눕힌다.
+     (구버전은 .card 의 column 이 .row 를 덮어써서, 가로 의도 카드가 세로로 쌓이고
+      .row 의 align-items:center 가 '가운데 정렬'처럼 보이는 증상이 있었다) */
+  .card.row{flex-direction:row;align-items:center;}
+  .card.sel{border:1.5px solid var(--ink);background:var(--fill-1);}
+  .li{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line-2);}
+  .li:last-child{border-bottom:none;}
+
+  /* chips / tags */
+  .tag{font-size:9.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);
+       color:var(--ink-2);background:var(--fill-1);white-space:nowrap;}
+  .tag.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .tag.custom{border-style:dashed;background:transparent;}
+  .tag.plus{border-style:dashed;color:var(--ink-3);}
+  /* 읽기 도움 빠른 토글 칩 (후리가나 / 발음) — appbar 우측 고정 */
+  .tag.rt{padding:4px 8px;}
+  .vsep{width:1px;height:13px;background:var(--line);flex:0 0 auto;margin:0 1px;}
+  /* 문장 끝 「⋯」 = 그 문장 해석 열기.
+     시각 크기는 작게 두되 터치 영역만 44×44 로 확장(투명 패딩). 가로 8px 간격 확보. */
+  .tapdot{position:relative;flex:0 0 auto;margin-left:8px;
+          width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;
+          font-size:10px;line-height:1;color:var(--ink-3);}
+  .tapdot::after{content:"";position:absolute;left:50%;top:50%;
+                 transform:translate(-50%,-50%);width:44px;height:44px;}
+
+  /* progress / toggle */
+  .prog{height:8px;border-radius:20px;background:var(--fill-2);overflow:hidden;}
+  .prog > i{display:block;height:100%;background:var(--ink-3);border-radius:20px;}
+  .toggle{width:34px;height:19px;border-radius:20px;background:var(--fill-3);position:relative;flex:0 0 auto;}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;
+                 border-radius:50%;background:#fff;box-shadow:0 0 0 1px var(--line);}
+  .toggle.on{background:var(--ink);}
+  .toggle.on::after{left:17px;}
+
+  /* tab bar */
+  .tabbar{height:48px;flex:0 0 auto;border-top:1px solid var(--line-2);display:flex;}
+  .tabbar .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+               gap:4px;font-size:8.5px;color:var(--ink-3);}
+  .tabbar .tab .ic{width:19px;height:19px;border-radius:5px;background:var(--fill-2);}
+  .tabbar .tab.on{color:var(--ink);}
+  .tabbar .tab.on .ic{background:var(--ink);}
+
+  /* overlays */
+  .dim{position:absolute;inset:0;background:rgba(20,20,20,.35);}
+  .modal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+         width:82%;background:#fff;border-radius:12px;border:1.5px solid var(--ink);
+         padding:15px;display:flex;flex-direction:column;gap:11px;}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;
+         border-top:1.5px solid var(--ink);border-radius:16px 16px 0 0;
+         padding:15px;display:flex;flex-direction:column;gap:11px;max-height:72%;}
+  .sheet .grip{width:38px;height:4px;background:var(--fill-3);border-radius:4px;align-self:center;}
+  /* 사양서 4.6 — 액션(보기) 버튼이 있으므로 Toast가 아니라 Snackbar다. */
+  .snackbar{position:absolute;left:12px;right:12px;bottom:64px;background:var(--ink);color:#fff;
+         border-radius:10px;padding:11px 12px;font-size:11px;display:flex;gap:10px;align-items:center;}
+  .snackbar .t{background:#5a5a5a;}
+
+  .kbd{font-family:var(--mono);font-size:9px;color:var(--ink-3);
+       border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;}
+  .badge{position:absolute;top:6px;right:6px;font-size:8px;color:var(--ink-3);
+         border:1px dashed var(--line);border-radius:4px;padding:1px 5px;background:#fff;}
+  footer{padding:30px 40px 60px;color:var(--ink-3);font-size:12px;line-height:1.7;}
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <h1>토모리 (Tomori) · Lo-fi 와이어프레임</h1>
+  <p>일본어 학습 앱 — 레이아웃/정보위계 검토용 그레이스케일 와이어프레임 · 총 <b>52개 화면</b> (A→J, 사용자 여정 순서)</p>
+  <p><b>2026-07-22 누락 화면 보강</b> — 결정은 됐으나 프레임이 없던 6장을 추가. ① <b>11 여행회화 변형</b>(상황 8카테고리 + TIP 필터) ② <b>11 읽기형 목록 변형</b>("N회 읽음", 프로그레스바 미사용) ③ <b>19 오프라인 우표(도착 예정)</b> ④ <b>28 오프라인 촬영 대기열</b> ⑤ <b>51 오프라인 진입</b> ⑥ <b>52 콘텐츠 미리 받기</b>.
+    <span style="color:var(--ink-3)">①②는 11번 memo에 <i>"타 코스 변형"</i>이라고 글로만 적혀 있었고, ⑤는 화면 목록(handoff)에만 있고 프레임이 없었다. ③④⑥은 <b>오프라인 학습에도 우표를 지급</b>하기로 한 2026-07-22 결정의 산물.</span></p>
+  <p><b>2026-07-20 플로우 검토 반영</b> — 기존 화면 8·11·12·13·14·16·17·18·20·21·35 개편, 추가 승인 화면 45~49 신설(기존 번호 유지). <b>2차 수정 7건 · 3차 수정 4건 반영 완료</b>.</p>
+  <p><b>2026-07-20 브랜드 개편 반영</b> — 서비스명 <b>토모리(トモリ/Tomori)</b> · 캐릭터 <b>토모(とも, 작은 등불)</b> · 리워드 <b>우표(切手)</b> · 사용처 <b>편지</b>. <span style="color:var(--ink-3)">とも = 友(친구) + 灯す(불을 켜다)의 어간 / トモリ(灯り) = "불이 켜짐" + "토모와 함께" (PRD 14.0)</span></p>
+  <p><b>2026-07-21 PRD 8.4 개정 반영</b> — 읽기 도움 토글을 <b>[후리가나] [발음] 2개로 분리</b>(수명이 다른 도구라 함께 끄면 안 됨). 대상 화면 12·12b·13·14·17·22·24·25·26·35·45·47.
+    <b>해석은 토글이 아니라 문장 끝 <span class="kbd">⋯</span> 탭</b>으로 변경 — 단어 탭 팝업과 같은 패턴. <span style="color:var(--ink-3)">기본값은 온보딩 Q2 연동(완전 초보=둘 다 ON / 그 외=후리가나만 ON), 35번 memo 참조.</span></p>
+  <p><b>2026-07-21 3차 반영</b> — ① 읽기 도움 빠른 토글 <b>위치를 appbar 우측으로 전 화면 통일</b>(본문 상단에 두면 스크롤 시 사라져 "자주 토글한다"는 전제와 어긋남. 17번은 appbar가 없어 고정 헤더 줄에 배치).
+    ② <span class="kbd">⋯</span> <b>터치 타깃 44×44 확장</b>(투명 패딩, 가로 8px 간격 · 겹침 실측은 Hi-fi로 이관).
+    ③ <b><code>.card.row</code> 정렬 버그 수정</b> — 가로 의도 카드가 세로로 쌓이던 증상을 규칙 1줄로 정상화(<code>.card</code> 기본 동작은 불변).</p>
+  <p>프레임 안에는 <b>레이아웃/구조만</b> 표현하고, 설명·예시 문구는 각 프레임 <b>아래 「메모」</b>로 분리했습니다. (색상/실제 카피/캐릭터는 Hi-fi 단계 반영)</p>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--fill-1)"></span><b>구역/콘텐츠 영역</b></span>
+    <span><span class="sw" style="background:var(--fill-2)"></span><b>텍스트 라인 자리표시</b></span>
+    <span><span class="sw dash" style="background:repeating-linear-gradient(45deg,#f6f6f6,#f6f6f6 4px,#efefef 4px,#efefef 8px)"></span><b>이미지/일러스트 자리</b></span>
+    <span><span class="sw" style="background:var(--ink);border-color:var(--ink)"></span><b>주요 액션(Primary)</b></span>
+    <span><span class="kbd">점선 태그</span> = 커스텀 태그</span>
+  </div>
+</div>
+
+<!-- ============================================================= A. 온보딩 ============================================================= -->
+<div class="section">
+  <h2>A. 온보딩 (7)</h2>
+  <div class="sub">스플래시 → 앱 소개 → 회원가입 → 진단 테스트(4문항) → 추천 결과 → 레벨 테스트 → 첫 학습 시작</div>
+</div>
+<div class="grid">
+
+  <!-- 1 스플래시 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body center">
+        <div class="ph dash" style="width:100px;height:100px;border-radius:24px">로고</div>
+        <div class="t w50" style="margin:16px auto 0"></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">1</span><b>스플래시</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>브랜드 로고 중앙 배치, 자동 전환(1~2초) → 앱 소개로.</li>
+    </ul></div>
+  </div>
+
+  <!-- 2 앱 소개 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body">
+        <div class="row between"><span class="lbl">앱 소개</span><span class="lbl">건너뛰기</span></div>
+        <div class="ph dash" style="height:180px">소개 일러스트</div>
+        <div class="stack"><div class="t lg w70"></div><div class="t w90"></div><div class="t w60"></div></div>
+        <div class="row" style="justify-content:center;gap:6px">
+          <span style="width:16px;height:6px;border-radius:6px;background:var(--ink)"></span>
+          <span style="width:6px;height:6px;border-radius:6px;background:var(--fill-3)"></span>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">가입하기</div>
+        <div class="row" style="justify-content:center"><span class="lbl">로그인</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">2</span><b>앱 소개</b> — 슬라이드 + 하단 가입</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>1~2장 슬라이드로 핵심 가치 압축 전달.</li>
+      <li class="ex">1장: "목적에 맞는 일본어 학습" (코스별 커리큘럼)</li>
+      <li class="ex">2장: "강제 결제 없이, 원하는 만큼" (핵심 철학)</li>
+      <li>스플래시 직후 바로 가입 요구 시 이탈 방지용.</li>
+    </ul></div>
+  </div>
+
+  <!-- 3 회원가입/로그인 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body">
+        <div class="ph dash" style="width:66px;height:66px;border-radius:16px;margin:24px auto 0">로고</div>
+        <div class="t lg w60" style="margin:10px auto 0"></div>
+        <div class="grow"></div>
+        <div class="btn sec block">Google 로그인</div>
+        <div class="btn sec block">Apple 로그인</div>
+        <div class="btn sec block">이메일로 계속하기</div>
+        <div class="row" style="justify-content:center"><span class="lbl">약관 · 개인정보 동의</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">3</span><b>회원가입 · 로그인</b> — 소셜 로그인</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>소셜 로그인 중심(Google / Apple / 이메일).</li>
+      <li>약관·개인정보 처리방침 동의 링크.</li>
+    </ul></div>
+  </div>
+
+  <!-- 4 진단 테스트 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar center"><span class="back">‹</span><span>진단 테스트</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:25%"></i></div>
+        <div class="stack" style="margin-top:6px"><div class="t lg w80"></div><div class="t w50"></div></div>
+        <div class="stack" style="gap:11px;margin-top:8px">
+          <div class="card row"><span class="thumb ph solid"></span><div class="t w60"></div></div>
+          <div class="card row"><span class="thumb ph solid"></span><div class="t w50"></div></div>
+          <div class="card row"><span class="thumb ph solid"></span><div class="t w60"></div></div>
+          <div class="card row"><span class="thumb ph solid"></span><div class="t w40"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">4</span><b>진단 테스트</b> — 문항(4문항 공통 템플릿)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>4문항 공통 템플릿 1개, 진행바로 Q1~Q4 구분(약 40초).</li>
+      <li>Q1 목적 → 메인 코스 / Q2 수준 / Q3 시간 / Q4 동기유형(위젯 순서).</li>
+      <li class="ex">Q1 옵션 예: 여행✈️ / 시험📝 / 업무💼 / 문화·뉴스🎌</li>
+    </ul></div>
+  </div>
+
+  <!-- 5 추천 결과 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar center"><span>추천 결과</span></div>
+      <div class="body">
+        <span class="lbl">메인 코스</span>
+        <div class="card sel" style="position:relative">
+          <span class="badge">토모</span>
+          <div class="row"><span class="thumb ph solid"></span><div class="stack grow"><div class="t lg w70"></div><div class="t sm w50"></div></div></div>
+          <div class="t w90"></div>
+        </div>
+        <span class="lbl">서브 코스 제안</span>
+        <div class="row" style="gap:8px">
+          <div class="card grow"><div class="t w60"></div><div class="t sm w80"></div></div>
+          <div class="card grow"><div class="t w50"></div><div class="t sm w70"></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">이 코스로 시작하기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">5</span><b>추천 결과</b> — 메인 + 서브 코스 제안</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>메인 코스 1개를 크게, 서브 코스를 작게 함께 제안(복수 목적 대응).</li>
+      <li>"언제든 퀵메뉴로 코스 전환 가능" 명시적 안내.</li>
+    </ul></div>
+  </div>
+
+  <!-- 6 레벨 테스트 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar center"><span class="back">‹</span><span>레벨 테스트</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:40%"></i></div>
+        <div class="ph" style="height:76px;margin-top:6px">지문 / 문제 영역</div>
+        <div class="stack" style="gap:10px">
+          <div class="card"><div class="t w70"></div></div>
+          <div class="card"><div class="t w50"></div></div>
+          <div class="card"><div class="t w60"></div></div>
+          <div class="card"><div class="t w40"></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">다음</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">6</span><b>레벨 테스트</b> — 시작 난이도 정교화</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>진단 테스트(Q2)로 잡은 수준을 정식 레벨 테스트로 보정.</li>
+    </ul></div>
+  </div>
+
+  <!-- 7 첫 학습 시작 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body center">
+        <div class="ph dash" style="width:120px;height:120px;border-radius:20px">토모(등불)<br>+ 코스 소품</div>
+        <div class="t lg w60" style="margin:16px auto 0"></div>
+        <div class="t w80" style="margin:0 auto"></div>
+        <div class="card" style="width:100%;margin-top:14px">
+          <span class="lbl">레슨 1과</span><div class="t w70"></div><div class="t sm w50"></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">첫 학습 시작하기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">7</span><b>첫 학습 시작</b> — 레슨 1과 진입</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>토모(작은 등불)</b> + 코스 소품 + 레슨 1과 진입 카드. 자리만 표시(일러스트는 Hi-fi).</li>
+      <li><b>소품 규칙(브랜드 개편)</b>: 토모는 소품을 <b>드는 게 아니라 "비춘다"</b>.<br>
+        · 여행=캐리어를 비춤 / 비즈니스=서류가방 / JLPT=연필 / <b>뉴스=신문</b> / <b>전래동화=책</b> / 오답=안경(또는 틀린 자리를 낮게 비춤)</li>
+      <li><b>감정은 밝기로 표현</b>: 기본=은은히 / 재접속=반짝 밝아짐 / 오답=차분히 아래를 비춤 / 복귀=<b>그대로 켜져 있음</b>.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= B. 홈 ============================================================= -->
+<div class="section">
+  <h2>B. 메인 탭 — 홈 (2)</h2>
+  <div class="sub">코스 퀵메뉴 전환 + D-day 고정 위젯(JLPT·여행) + 스트릭·오늘의 학습·진도·우표 위젯 · 8번은 D-day 설정/미설정 2상태</div>
+</div>
+<div class="grid">
+
+  <!-- 8 홈 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span><span class="grow"></span><span class="ph dash" style="width:30px;height:30px;border-radius:50%;font-size:8px">토모</span><span class="thumb ph solid" style="width:28px;height:28px;border-radius:50%"></span></div>
+      <div class="body">
+        <div class="row wrap" style="gap:6px"><span class="tag on">현재 코스 ▾</span><span class="tag">코스</span><span class="tag">코스</span><span class="tag">···</span></div>
+        <div class="card row between" style="border:1.5px solid var(--ink)"><div class="stack grow"><span class="lbl">D-day (고정)</span><div class="t lg w40"></div></div><span class="kbd">D-42</span><span class="lbl">✕</span></div>
+        <div class="card row between"><div class="stack"><span class="lbl">스트릭</span><div class="t lg" style="width:60px"></div></div><span class="thumb ph solid"></span></div>
+        <div class="card"><div class="row between"><span class="lbl">오늘의 학습</span><span class="kbd">3/5</span></div><div class="prog"><i style="width:60%"></i></div><div class="btn pri sm block">오늘의 학습 시작</div></div>
+        <div class="row" style="gap:8px">
+          <div class="card grow"><span class="lbl">진도율</span><div class="t lg w50"></div></div>
+          <div class="card grow"><span class="lbl">우표</span><div class="t lg w40"></div></div>
+        </div>
+      </div>
+      <div class="tabbar"><div class="tab on"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">8</span><b>홈</b> — D-day 설정됨(기본 상태)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>상단 코스 퀵메뉴 바로 다른 코스 즉시 전환.</li>
+      <li><b>D-day 고정 위젯</b>: JLPT(시험일) · 여행회화(출발일) 컨텍스트에서만 최상단 고정. 다른 코스로 전환하면 사라짐.</li>
+      <li>Q4 개인화 대상 위젯(스트릭/진도율/우표)의 <b>노출 순서와는 별개</b>로 항상 최상단.</li>
+      <li><b>닫기(✕) 정책 확정(2차)</b>: 닫으면 <b>홈에서 영구 숨김</b>. 단 닫는 순간 안내를 반드시 노출 — <span class="ex">"홈에서 숨겼어요. MY › 설정에서 다시 켤 수 있어요"</span></li>
+      <li>⚠️ <b>"영구 숨김이지만 언제든 재노출 가능"</b>하다는 점을 사용자에게 반드시 알려야 함(모르면 되돌릴 수 없다고 오해). 재진입 경로 = <b>35번 설정의 「D-day 위젯 표시」 토글</b>.</li>
+      <li>홈에서 숨겨도 <b>11번 코스 상세에는 D-day가 계속 노출</b>된다.</li>
+      <li><b>토모(등불) 진입점</b>: 앱바 우측에 토모를 배치하고 <b>탭 가능</b>하게 함 → <b>50번 토모의 쪽지</b>. 평소에는 <b>은은히</b> 켜져 있는 기본 상태.</li>
+    </ul></div>
+  </div>
+
+  <!-- 8b 홈 — D-day 미설정 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span><span class="grow"></span><span class="ph dash" style="width:30px;height:30px;border-radius:50%;font-size:8px">토모</span><span class="thumb ph solid" style="width:28px;height:28px;border-radius:50%"></span></div>
+      <div class="body">
+        <div class="row wrap" style="gap:6px"><span class="tag on">현재 코스 ▾</span><span class="tag">코스</span><span class="tag">코스</span><span class="tag">···</span></div>
+        <div class="card row between" style="border-style:dashed"><div class="stack grow"><span class="lbl">D-day 미설정</span><div class="t sm w60"></div></div><div class="btn sec sm">D-day 설정하기</div></div>
+        <div class="card row between"><div class="stack"><span class="lbl">스트릭</span><div class="t lg" style="width:60px"></div></div><span class="thumb ph solid"></span></div>
+        <div class="card"><div class="row between"><span class="lbl">오늘의 학습</span><span class="kbd">3/5</span></div><div class="prog"><i style="width:60%"></i></div><div class="btn pri sm block">오늘의 학습 시작</div></div>
+        <div class="row" style="gap:8px">
+          <div class="card grow"><span class="lbl">진도율</span><div class="t lg w50"></div></div>
+          <div class="card grow"><span class="lbl">우표</span><div class="t lg w40"></div></div>
+        </div>
+      </div>
+      <div class="tabbar"><div class="tab on"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">8</span><b>홈</b> — D-day 미설정 상태</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>미설정 시 같은 자리에 <b>"D-day 설정하기" CTA</b>만 노출 → 46번 소형 입력 모달로 진입.</li>
+      <li>⚠️ <b>D-day는 선택적 동기 장치이지 학습 전제조건이 아님.</b> 입력하지 않아도 오늘의 학습·코스·퀴즈 등 <b>모든 기능이 그대로 동작</b>하며 어떤 흐름도 막지 않는다.</li>
+      <li>CTA는 반복 강권하지 않음(닫으면 조용히 유지) — 14.4 과묵한 관찰자 톤.</li>
+    </ul></div>
+  </div>
+
+  <!-- 8c 홈 — 새 쪽지 있음 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span><span class="grow"></span><span class="ph dash" style="width:34px;height:34px;border-radius:50%;font-size:8px;border-color:var(--ink);border-width:1.5px">토모 ✨</span><span class="thumb ph solid" style="width:28px;height:28px;border-radius:50%"></span></div>
+      <div class="body">
+        <div class="row wrap" style="gap:6px"><span class="tag on">현재 코스 ▾</span><span class="tag">코스</span><span class="tag">코스</span><span class="tag">···</span></div>
+        <div class="card row between" style="border-style:dashed"><div class="stack grow"><span class="lbl">토모의 쪽지</span><div class="t sm w70"></div></div><span class="lbl">›</span></div>
+        <div class="card row between" style="border:1.5px solid var(--ink)"><div class="stack grow"><span class="lbl">D-day (고정)</span><div class="t lg w40"></div></div><span class="kbd">D-42</span><span class="lbl">✕</span></div>
+        <div class="card row between"><div class="stack"><span class="lbl">스트릭</span><div class="t lg" style="width:60px"></div></div><span class="thumb ph solid"></span></div>
+        <div class="card"><div class="row between"><span class="lbl">오늘의 학습</span><span class="kbd">3/5</span></div><div class="prog"><i style="width:60%"></i></div><div class="btn pri sm block">오늘의 학습 시작</div></div>
+      </div>
+      <div class="tabbar"><div class="tab on"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">8</span><b>홈</b> — 새 쪽지 있음(토모 밝아짐)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>새 쪽지가 있으면 <b>토모(등불)가 살짝 밝아진다(✨)</b>. 탭 → <b>50번 토모의 쪽지</b>.</li>
+      <li>⚠️ <b>배지·빨간 점 같은 압박 장치 금지.</b> 알림은 <b>등불이 밝아지는 것으로만</b> 한다 — 캐릭터 컨셉(14.2 밝기=표정)을 그대로 UI 신호로 쓰므로 <b>홈에 상시 요소가 늘지 않는다</b>.</li>
+      <li>보조로 얇은 안내 줄을 둘 수 있으나 <b>새 쪽지가 있을 때만</b> 나타나고 평소엔 없다. <span class="ex">문구 예: "토모가 쪽지를 두고 갔어요."</span></li>
+      <li>이 줄은 <b>진도·보상과 무관</b>하므로 Q4 개인화 위젯 순서 계산에 넣지 않는다.</li>
+      <li>이 경로의 목적: 지금은 앱에 들어오려면 학습 세션을 해야 함 → <b>학습하지 않는 날의 재방문 경로</b>를 만든다.</li>
+      <li class="ex">이 프레임은 쪽지 신호에 집중하려고 하단 진도율·우표 위젯을 생략했을 뿐, 실제 홈에는 8번 기본 상태와 동일하게 모두 존재한다.</li>
+    </ul></div>
+  </div>
+
+  <!-- 9 코스 퀵메뉴 시트 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span></div>
+      <div class="body" style="opacity:.4"><div class="row wrap" style="gap:6px"><span class="tag on">코스 ▾</span><span class="tag">···</span></div><div class="card"><div class="t w70"></div></div></div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="grip"></div>
+        <span class="lbl">코스 전환</span>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w50 grow"></div><span class="tag on">선택</span></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w60 grow"></div></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w50 grow"></div></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w40 grow"></div></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w60 grow"></div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">9</span><b>코스 퀵메뉴 전환</b> — 바텀시트</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>5개 코스 목록, 현재 코스 선택 표시. 탭 한 번으로 전환.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= C. 학습 ============================================================= -->
+<div class="section">
+  <h2>C. 메인 탭 — 학습 (8)</h2>
+  <div class="sub">코스 목록 → 코스 상세(코스별 변형) → 레슨(형식별) → 단어 팝업 → 퀴즈(<b>6유형</b>) → 정답·오답 피드백(<b>3상태</b>) · 문서 템플릿형·대화 시뮬레이션형은 I 섹션(48·49)</div>
+</div>
+<div class="grid">
+
+  <!-- 10 코스 목록 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>코스</span></div>
+      <div class="body">
+        <div class="card row" style="position:relative"><span class="badge">토모</span><span class="thumb ph solid"></span><div class="stack grow"><div class="t w60"></div><div class="t sm w80"></div></div><span class="lbl">›</span></div>
+        <div class="card row"><span class="thumb ph solid"></span><div class="stack grow"><div class="t w50"></div><div class="t sm w70"></div></div><span class="lbl">›</span></div>
+        <div class="card row"><span class="thumb ph solid"></span><div class="stack grow"><div class="t w70"></div><div class="t sm w60"></div></div><span class="lbl">›</span></div>
+        <div class="card row"><span class="thumb ph solid"></span><div class="stack grow"><div class="t w50"></div><div class="t sm w80"></div></div><span class="lbl">›</span></div>
+        <div class="card row"><span class="thumb ph solid"></span><div class="stack grow"><div class="t w60"></div><div class="t sm w60"></div></div><span class="lbl">›</span></div>
+      </div>
+      <div class="tabbar"><div class="tab"><span class="ic"></span>홈</div><div class="tab on"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">10</span><b>코스 목록</b> — 5개 코스 카드</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li class="ex">JLPT / 여행 회화 / 비즈니스 / 뉴스·시사 / 전래동화</li>
+    </ul></div>
+  </div>
+
+  <!-- 11 코스 상세 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>코스 상세 · JLPT</span></div>
+      <div class="body" style="gap:10px">
+        <div class="card row between"><div class="stack"><span class="lbl">D-day</span><div class="t lg" style="width:44px"></div></div><div class="stack" style="align-items:flex-end"><span class="lbl">목표 급수</span><span class="kbd">N2</span></div></div>
+        <span class="lbl">급수 선택 (잠금 없음)</span>
+        <div class="row wrap" style="gap:5px"><span class="tag">N5</span><span class="tag">N4</span><span class="tag">N3</span><span class="tag on">N2 추천</span><span class="tag">N1 도전</span></div>
+        <div class="stack" style="gap:9px">
+          <div class="card" style="gap:5px;padding:9px"><div class="row between"><span class="lbl">단어·어휘</span><span class="kbd">30% ›</span></div><div class="prog"><i style="width:30%"></i></div><div class="t sm w50"></div></div>
+          <div class="card" style="gap:5px;padding:9px"><div class="row between"><span class="lbl">문법 · 1회독째</span><span class="kbd">10% ›</span></div><div class="prog"><i style="width:10%"></i></div></div>
+          <div class="card sel" style="gap:5px;padding:9px"><div class="row between"><span class="lbl">독해 · 1회독 완료</span><span class="kbd">100% ›</span></div><div class="prog"><i style="width:100%"></i></div><div class="btn sec sm block">2회독 시작하기</div></div>
+          <div class="card" style="gap:5px;padding:9px"><div class="row between"><span class="lbl">청해 · 1회독째</span><span class="kbd">20% ›</span></div><div class="prog"><i style="width:20%"></i></div></div>
+        </div>
+        <div class="li" style="border-top:1px solid var(--line-2)"><div class="lbl grow">오답노트 모아보기</div><span class="lbl">›</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">11</span><b>코스 상세 — JLPT 변형(영역별 진행률 허브)</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>11번은 <b>코스마다 형태가 달라지는 화면</b>. JLPT 버전은 커리큘럼 목차가 아니라 <b>급수 × 4영역 진행률 허브</b>.</li>
+      <li><b>D-day는 홈(8) + 코스 상세(11) 둘 다 노출.</b> 홈에서 ✕로 <b>숨긴 경우에도 이 화면에는 계속 노출</b>된다 — 코스 맥락 안에서의 <b>자연스러운 2차 확인 경로</b>이자, 홈에서 숨겨도 정보가 사라지지 않는다는 안심 장치. (다시 켜기는 35번 설정 토글)</li>
+      <li>JLPT는 "과(課)"가 없고 <b>세션</b> 단위 → "다음 레슨"이 아니라 <b>"다음 세션"</b>. 진도도 "3/12과"가 아니라 "340/2,250단어"·"2회독째".</li>
+      <li><b>급수 잠금(🔒) 없음</b> — 상위 급수도 진입 가능. 현재 수준에 <span class="kbd">추천</span>, 상위에 <span class="kbd">도전</span> 라벨 + "레벨 테스트 해보기" 유도. (PRD 1.3·12장)</li>
+      <li>진행률 성격 2종: <b>단어·어휘 = 수집형 %</b>(예: N3 340/2,250단어) / <b>문법·독해·청해 = 회독형</b>("1회독째", 완료 회독은 도장·배지로 누적).</li>
+      <li>100% 달성 항목은 <b>"2회독 시작하기"</b>로 자연 전환.</li>
+      <li>각 영역 탭 → 14번 레슨의 해당 탭으로 <b>바로 세션 시작</b>. 하단 항목 → 47번 오답노트 모아보기.</li>
+      <li><b>비즈니스 코스도 이 허브를 축 이름만 바꿔 재사용</b>: 급수 → 난이도(입문~고급), 4영역 → 경어/이메일·보고서/전화/회의·접대.</li>
+      <li class="ex">타 코스 변형: 여행회화 = 상황 8카테고리 / 뉴스·전래동화 = 목록 + "N회 읽음 · 최근 읽은 날짜"(프로그레스바 미사용)</li>
+    </ul></div>
+  </div>
+
+  <!-- 11b 코스 상세 — 여행회화 변형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>코스 상세 · 여행 회화</span></div>
+      <div class="body" style="gap:9px">
+        <div class="card row between"><div class="stack"><span class="lbl">출발까지</span><div class="t lg" style="width:44px"></div></div><div class="stack" style="align-items:flex-end"><span class="lbl">표현 수집</span><span class="kbd">86 / 240</span></div></div>
+        <div class="row between"><span class="lbl">상황 카테고리 · 여행 동선 순서</span><span class="tag custom">TIP만 보기</span></div>
+        <div class="stack" style="gap:6px">
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">① 공항·입국심사</span><span class="kbd">100% ›</span></div><div class="prog"><i style="width:100%"></i></div></div>
+          <div class="card sel" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">② 교통·길찾기</span><span class="kbd">60% ›</span></div><div class="prog"><i style="width:60%"></i></div></div>
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">③ 숙소 체크인</span><span class="kbd">25% ›</span></div><div class="prog"><i style="width:25%"></i></div></div>
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">④ 식당·주문</span><span class="kbd">0% ›</span></div><div class="prog"><i style="width:0%"></i></div></div>
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">⑤ 쇼핑·계산</span><span class="kbd">0% ›</span></div><div class="prog"><i style="width:0%"></i></div></div>
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">⑥ 편의점·약국</span><span class="kbd">0% ›</span></div><div class="prog"><i style="width:0%"></i></div></div>
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">⑦ 온천·료칸</span><span class="kbd">0% ›</span></div><div class="prog"><i style="width:0%"></i></div></div>
+          <div class="card" style="gap:4px;padding:8px"><div class="row between"><span class="lbl">⑧ 긴급상황 대처</span><span class="kbd">0% ›</span></div><div class="prog"><i style="width:0%"></i></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">11</span><b>코스 상세 — 여행회화 변형(상황 8카테고리)</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>JLPT 변형의 <b>급수 셀렉트 자리에 상황 8카테고리</b>가 들어간다. 축만 바뀌고 <b>허브 구조는 동일</b>(코스별 검토 5번).</li>
+      <li>배열은 <b>여행 동선 순서</b>(공항→교통→숙소→식당→쇼핑→편의점→온천→긴급). 학습 난이도 순서가 아니다 — 사용자가 겪는 순서로 놓아야 찾기 쉽다.</li>
+      <li><b>잠금 없음</b> — "여행이 코앞이면 식당부터" 고를 수 있어야 한다(급수 잠금 폐기 원칙과 동일).</li>
+      <li>진행률은 <b>표현 수집형</b>(카테고리별 표현 N개 중 M개). <b>회독형을 쓰지 않는다</b> — 상황 표현은 반복 정독보다 "쓸 수 있는 표현이 늘어나는 것"이 목표(코스별 검토 2번).</li>
+      <li>우상단 <span class="kbd">TIP만 보기</span> = PRD 4.1 옵션 B′. TIP은 <b>각 카테고리 안에 섞여</b> 있고 라벨만 유지되므로, 일상표현에만 관심 있는 사용자를 위한 <b>필터</b>가 여기에 필요하다.</li>
+      <li>상단 D-day는 <b>여행 출발일</b>(46번 모달 재사용). ⚠️ <b>미입력이어도 학습에 전혀 지장 없음</b> — 카드 자리에 설정 CTA만 남는다.</li>
+      <li class="ex">비즈니스 변형은 별도 프레임 없음 — JLPT 허브에서 <b>축 이름만 교체</b>(급수→난이도 입문~고급 / 4영역→경어·이메일보고서·전화·회의접대).</li>
+    </ul></div>
+  </div>
+
+  <!-- 11c 코스 상세 — 읽기형 목록 변형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>코스 상세 · 뉴스·시사</span></div>
+      <div class="body" style="gap:10px">
+        <div class="row wrap" style="gap:5px"><span class="tag on">최근 기사</span><span class="tag">읽은 기사</span><span class="tag">난이도 ▾</span></div>
+        <div class="stack" style="gap:0">
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w80"></div><span class="lbl">3회 읽음 · 7/18</span></div><span class="lbl">›</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w70"></div><span class="lbl">1회 읽음 · 7/17</span></div><span class="lbl">›</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w90"></div><span class="lbl">아직 읽지 않음</span></div><span class="lbl">›</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w60"></div><span class="lbl">아직 읽지 않음</span></div><span class="lbl">›</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w80"></div><span class="lbl">5회 읽음 · 7/12</span></div><span class="lbl">›</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w70"></div><span class="lbl">아직 읽지 않음</span></div><span class="lbl">›</span></div>
+        </div>
+        <div class="grow"></div>
+        <span class="lbl" style="align-self:center">더 불러오기</span>
+      </div>
+    </div>
+    <div class="cap"><span class="num">11</span><b>코스 상세 — 읽기형 목록 변형</b> (뉴스·시사 / 전래동화)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>🔴 <b>프로그레스바를 쓰지 않는다.</b> 대신 <b>"N회 읽음 · 최근 읽은 날짜"</b>(코스별 검토 1번).
+        <br>· 뉴스는 콘텐츠가 <b>무한</b>이라 진행률의 <b>분모가 없다</b>.
+        <br>· 읽기는 "끝냈다"가 무의미하다 — 한 번 훑음과 세 번 정독은 다른데 프로그레스바는 구분하지 못한다.
+        <br>· 프로그레스바는 <b>"빨리 채워라"</b> 신호라 <i>끝없는 학습</i> 철학(PRD 14.2)과 충돌한다. <b>회독 수는 깊이를 보여준다.</b></li>
+      <li><b>"최근 읽은 날짜" 병기</b>는 뉴스의 <b>시의성</b>을 보완하기 위한 것(오래된 기사인지 바로 보임).</li>
+      <li><b>항목 UI는 두 코스가 완전히 동일</b>하고, <b>목록 구성만 다르다</b>:
+        <br>· <b>뉴스</b> = 최근 기사 + <span class="kbd">읽은 기사</span> 필터 (무한이라 전체 조망 불가)
+        <br>· <b>전래동화</b> = 전체 이야기 목록 (유한 세트라 조망 가능, 필터 대신 전체 노출)</li>
+      <li><span class="kbd">난이도 ▾</span>는 <b>전래동화의 3단</b>(리라이트 N5~N4 / 표준 N3 / 원문 N2~N1)과 뉴스의 EASY↔원문에 공통으로 쓰인다. 실제 선택은 <b>지문 화면(12·12b) 본문 첫 줄</b>에서도 가능 — 읽기 전 한 번 고르는 값이라 두 곳 모두에 둔다.</li>
+      <li>⚠️ 뉴스·전래동화는 MVP에서 <b>콘텐츠 "곧 열려요" 상태</b>로 출시된다(PRD 11.0). <b>화면은 완성해 두되 목록이 비는 상태</b>를 Hi-fi에서 다뤄야 한다.</li>
+    </ul></div>
+  </div>
+
+  <!-- 12 레슨 읽기형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">읽기형</span><span class="row" style="gap:4px"><span class="tag rt">후리가나</span><span class="tag rt">발음</span></span><span class="kbd">3회</span></div>
+      <div class="body" style="gap:10px">
+        <div class="ph" style="height:38px">제목 영역</div>
+        <span class="lbl">원문 (일본어) — 먼저 노출 · 문장 끝 ⋯ 탭 = 그 문장 해석</span>
+        <div class="stack" style="gap:8px">
+          <div class="row" style="gap:0"><div class="t w90 grow"></div><span class="tapdot">⋯</span></div>
+          <div class="row" style="gap:0"><div class="t w80 grow"></div><span class="tapdot">⋯</span></div>
+          <div class="row" style="gap:0"><div class="t w90 grow"></div><span class="tapdot">⋯</span></div>
+          <div class="row" style="gap:0"><div class="t w70 grow"></div><span class="tapdot">⋯</span></div>
+          <div class="row" style="gap:0"><div class="t w80 grow"></div><span class="tapdot">⋯</span></div>
+        </div>
+        <div class="grow"></div>
+        <span class="lbl" style="text-decoration:underline;align-self:flex-start">전체 해석 보기</span>
+        <div class="row" style="gap:8px"><div class="btn pri grow sm">읽기 완료</div><div class="btn sec grow sm">이해 확인해보기</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">12</span><b>레슨 콘텐츠 — 읽기형</b> (뉴스·시사)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>원문 먼저 노출.</b> 여기서 "원문" = 신문 원문이 아니라 <b>사용자가 고른 난이도의 일본어 텍스트</b>(N4 학습자에겐 EASY판이 그의 원문).</li>
+      <li><b>빠른 토글 [후리가나] [발음] 2개 — 둘 다 기본 OFF.</b> "먼저 스스로 부딪히는 면은 도움 꺼짐"(PRD 8.4). 다른 화면과 <b>완전히 동일한 2개 구성</b>이다.</li>
+      <li>🔴 <b>위치 = appbar 우측 고정 (전 화면 통일).</b> 본문 상단에 두던 것을 옮겼다.
+        <br><b>이유는 스크롤이다.</b> 긴 지문에서 토글이 본문 상단에 있으면 <b>스크롤을 내리는 순간 사라진다</b> — 읽다가 모르는 한자를 만나 후리가나를 켜려면 <b>위로 되돌아가야</b> 한다.
+        이는 우리가 <i>"후리가나는 읽는 중 <b>자주</b> 토글하므로 공간을 유지한다"</i>(PRD 8.4 · 사양서 4.1)고 정한 <b>전제와 정면으로 어긋난다.</b>
+        레이아웃 점프를 막아 놓고 정작 컨트롤을 못 찾게 하면 아무것도 해결되지 않는다. → <b>자주 쓸 컨트롤은 항상 손에 닿아야 한다.</b>
+        <br>· 자리 확보를 위해 타이틀 <span class="kbd">레슨 · 읽기형</span> → <span class="kbd">읽기형</span>, 회독 표기 <span class="kbd">3회 읽음</span> → <span class="kbd">3회</span>로 축약. 둘 다 맥락상 자명한 정보였다.
+        <br>· 12b는 <b>난이도 셀렉터를 본문 첫 줄</b>로 내렸다 — 난이도는 <b>읽기 전에 한 번</b> 고르는 값이라 스크롤과 함께 사라져도 무방하다. <b>같은 기준(자주 쓰는가)으로 갈랐다.</b></li>
+      <li>🔴 <b>해석은 토글이 아니라 「문장 탭」이다.</b> <b>단어 탭 → 뜻 팝업</b>(PRD 7.1)과 <b>같은 패턴</b>을 문장 단위로 확장한 것. 인터랙션 규칙이 <b>"모르면 탭한다"</b> 하나로 통일된다.
+        <br>· <b>왜 토글이 아닌가</b>: 해석 토글은 <b>지문 전체를 한 번에</b> 켠다 → PRD 8.4의 우려(<i>"해석은 읽기를 대신하므로 켜 두면 일본어를 읽지 않게 된다"</i>)가 그대로 발생. <b>막힌 문장만 여는 구조</b>면 의존이 <b>구조적으로</b> 줄어든다 — 사용자 의지가 아니라 형태가 막는다.
+        <br>· 부수 효과로 <b>상단 3개 혼잡이 사라진다</b>. 배치 문제를 배치로 풀지 않고 구조로 푼 것.</li>
+      <li><b>탭 대상은 문장 끝 <span class="kbd">⋯</span> 아이콘만.</b> 단어 위 탭은 기존대로 15번 뜻 팝업 → <b>두 탭이 겹치지 않는다.</b>
+        <br>⚠️ <b>롱프레스는 쓰지 않는다</b> — PRD 7.1에서 <i>"발견성 낮고 모바일 오작동 잦음"</i>으로 이미 기각된 방식이다. 같은 이유가 여기에도 그대로 적용된다.</li>
+      <li>⚠️ <b><span class="kbd">⋯</span> 터치 타깃 조건 (FE 전달용)</b>: 글리프는 작게 두되 <b>터치 영역은 44×44 로 확장</b>한다(투명 패딩 — 사양서 5장).
+        <br>· <b>가로</b>는 인접 단어와 <b>최소 8px 간격</b> 확보 (본 와이어프레임 적용값).
+        <br>· <b>세로</b>는 <code>body-jp</code> 행간 2.0(=36px) 덕에 여유가 있다.
+        <br>· <b>겹침 최종 검증은 Hi-fi 실측으로 넘긴다</b> — 실제 문장 길이·줄바꿈 위치에 따라 달라지므로 lo-fi에서 확정할 수 없다.</li>
+      <li><b>전체 대조 니즈는 하단 텍스트 링크 <span class="kbd">전체 해석 보기</span></b>로 받는다. 상단이 아니라 <b>지문 끝</b>에 두므로 <b>읽는 중에는 눈에 들어오지 않는다</b> — 다 읽고 나서 확인하는 동선.</li>
+      <li><b>버튼 2개 병행</b>: <b>[읽기 완료]</b> → 회독 +1 / <b>[이해 확인해보기]</b> → 퀴즈(오답노트 루프). <b>퀴즈는 강제가 아니라 선택.</b></li>
+      <li>버튼은 지문 <b>맨 아래</b>에 배치 → 끝까지 스크롤해야 눌리므로 별도 읽음 검증 로직 불필요.</li>
+      <li>진행률 프로그레스바 폐기 → 상단 <b>"N회 읽음"</b> + 목록에는 "최근 읽은 날짜" 병기(뉴스 시의성 보완).</li>
+      <li><b>뉴스는 하단 "꼭 알아야 할 단어·문법" 메모 없음</b> — 단어 팝업(15)이 이미 그 역할, 자동 추출은 품질 리스크. 문장 속 단어 탭 → 15번 팝업에서 저장.</li>
+    </ul></div>
+  </div>
+
+  <!-- 12b 읽기형 — 전래동화 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">읽기형</span><span class="row" style="gap:4px"><span class="tag rt">후리가나</span><span class="tag rt">발음</span></span><span class="kbd">5회</span></div>
+      <div class="body" style="gap:9px">
+        <div class="row wrap" style="gap:5px"><span class="tag on">표준(N3) ▾</span><span class="lbl">난이도</span></div>
+        <div class="ph" style="height:32px">제목 영역</div>
+        <span class="lbl">원문 (일본어) — 문장 끝 ⋯ 탭 = 해석</span>
+        <div class="stack" style="gap:8px">
+          <div class="row" style="gap:0"><div class="t w90 grow"></div><span class="tapdot">⋯</span></div>
+          <div class="row" style="gap:0"><div class="t w80 grow"></div><span class="tapdot">⋯</span></div>
+          <div class="row" style="gap:0"><div class="t w70 grow"></div><span class="tapdot">⋯</span></div>
+        </div>
+        <div class="card" style="gap:6px;padding:9px">
+          <span class="lbl">꼭 알아야 할 단어·문법</span>
+          <div class="li" style="padding:5px 0"><span class="t sm w30"></span><span class="t sm w50 grow"></span></div>
+          <div class="li" style="padding:5px 0"><span class="t sm w25"></span><span class="t sm w60 grow"></span></div>
+        </div>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn pri grow sm">읽기 완료</div><div class="btn sec grow sm">이해 확인해보기</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">12</span><b>레슨 콘텐츠 — 읽기형</b> (전래동화 변형)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>구조는 뉴스와 동일. 차이는 <b>하단 「꼭 알아야 할 단어·문법」 메모 영역 제공</b>(고어·문학적 표현 설명이 실제로 필요, 유한 세트라 수작업 가능).</li>
+      <li>appbar는 12번(뉴스)과 <b>완전히 동일</b>(<b>[후리가나] [발음]</b>). 이 화면에만 있는 <b>난이도 셀렉터는 본문 첫 줄</b>에 둔다 —
+        난이도는 <b>읽기 전에 한 번</b> 고르는 값이라 스크롤과 함께 사라져도 무방하다. <b>"읽는 중 자주 쓰는가"라는 같은 기준</b>으로 appbar와 본문을 갈랐다.</li>
+      <li>이야기별 <b>3단 난이도</b> 선택: 리라이트(N5~N4) / 표준(N3) / 원문(N2~N1). ⚠️ 자체 리라이트 승인 대기 중이라 초기엔 일부 이야기만 3단 완비.</li>
+      <li>진행률 표기는 뉴스와 동일한 <b>"N회 읽음"</b> 항목 UI(두 코스 공통).</li>
+    </ul></div>
+  </div>
+
+  <!-- 13 레슨 구문어휘형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">구문·어휘형</span><span class="row" style="gap:4px"><span class="tag rt on">후리가나</span><span class="tag rt">발음</span></span></div>
+      <div class="body" style="gap:10px">
+        <div class="row wrap" style="gap:5px"><span class="tag on">식당·주문</span><span class="tag">쇼핑·계산</span><span class="tag">···</span><span class="tag custom">TIP만 보기</span></div>
+        <div class="card row between" style="padding:9px"><span class="lbl">수집 진행률</span><div class="prog grow" style="margin:0 8px"><i style="width:45%"></i></div><span class="kbd">9/20</span></div>
+        <div class="card" style="gap:7px">
+          <div class="ph solid" style="height:34px">일본어 표현 (문장)</div>
+          <div class="row between"><div class="t sm w50"></div><div class="row" style="gap:6px"><span class="btn sec sm" style="height:30px">🔊 재생</span><span class="btn sec sm" style="height:30px">🔊 느리게</span></div></div>
+        </div>
+        <div class="card" style="gap:7px">
+          <div class="row" style="gap:5px"><span class="tag on">TIP</span><div class="t sm w40"></div></div>
+          <div class="ph solid" style="height:30px">일본어 표현 (문장)</div>
+          <div class="row between"><div class="t sm w40"></div><span class="btn sec sm" style="height:30px">🔊 재생</span></div>
+        </div>
+        <div class="row between"><span class="lbl">‹ 이전</span><span class="kbd">2/8</span><span class="lbl">다음 ›</span></div>
+        <div class="grow"></div>
+        <div class="btn pri block">퀴즈로</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">13</span><b>레슨 콘텐츠 — 구문·어휘형</b> (여행회화 · 비즈니스)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>학습 단위가 단어가 아니라 <b>"상황 + 문장"</b> → <b>음성 재생 비중이 큼</b>. 카드마다 재생/느리게 재생을 1차 액션급으로 배치.</li>
+      <li><b>읽기 도움 빠른 토글 2개</b>(<b>[후리가나] [발음]</b>)를 appbar 우측 칩으로. 자리 확보를 위해 <b>타이틀에서 "레슨 ·" 접두를 뺐다</b> — 이미 레슨 안이라 정보가 중복이었다.
+        기본값은 <b>후리가나 ON / 발음은 온보딩 Q2에 따름</b>(35번 참조). 이 화면은 <i>부딪히는 면</i>이 아니므로 설정값을 그대로 따른다.</li>
+      <li>진행률은 <b>표현 수집형</b>(카테고리별 표현 N개 중 M개 익힘). 회독형 미사용.</li>
+      <li><b>여행회화</b>: 상단 분류축 = 급수가 아니라 <b>상황 8카테고리</b>(공항·입국 → 교통·길찾기 → 숙소 → 식당·주문 → 쇼핑·계산 → 편의점·약국 → 온천·료칸 → 긴급상황), 여행 동선 순서. <b>잠금 없음</b>.</li>
+      <li>일상표현 TIP은 <b>별도 섹션이 아니라 각 카테고리 안에 섞어</b> 배치하되 <b><span class="kbd">TIP</span> 라벨 유지 + "TIP만 보기" 필터</b> 제공. (PRD 4.1 옵션 B → B′ 개정)</li>
+      <li><b>비즈니스</b>: 경어·회의/접대 영역이 이 형식을 사용. 이메일·보고서는 48번, 전화 응대는 49번.</li>
+      <li>해설 축이 JLPT와 다름 — 문법적 정오가 아니라 <b>상황 적절성·정중도</b> 중심. 오답 선택지별 3단 해설은 축소.</li>
+      <li>퀴즈는 <b>스피킹형(16)</b> 우선 적용 코스.</li>
+    </ul></div>
+  </div>
+
+  <!-- 14 레슨 혼합형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">레슨 · 혼합형</span><span class="kbd">3/10</span></div>
+      <div class="body" style="gap:10px">
+        <div class="row wrap" style="gap:5px"><span class="tag on">단어·어휘</span><span class="tag">문법</span><span class="tag">독해</span><span class="tag">청해</span></div>
+        <div class="row between"><span class="tag custom">소스: 급수 단어 ▾</span><span class="lbl">내가 저장한 단어</span></div>
+        <div class="card" style="flex:1;gap:10px;position:relative">
+          <span class="badge">⭐ 별표(즉시저장)</span>
+          <span class="lbl">카드 앞면 — 일본어만</span>
+          <div class="ph solid" style="height:70px;font-size:12px">일본어 단어</div>
+          <div class="row" style="gap:6px"><span class="btn sec grow sm">후리가나 보기</span><span class="btn sec grow sm">발음 보기</span></div>
+          <div class="btn sec block sm">정답 보기 (뜻 공개)</div>
+          <div class="grow"></div>
+          <div class="row" style="gap:8px"><div class="btn pri grow sm">알고있음</div><div class="btn ghost grow sm">모르겠어요</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">14</span><b>레슨 혼합형 — 단어·어휘 탭(카드형)</b> (JLPT)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>기존 2탭 → <b>4탭(단어·어휘 / 문법 / 독해 / 청해)</b>. 청해 갭 해소, 4탭 모두 회독으로 오답률을 낮추는 것이 목표.</li>
+      <li>세션 분량(소량 분할): 단어 <b>10단어</b> / 문법 <b>5문항</b> / 독해 <b>1지문</b> / 청해 <b>3문항</b>.</li>
+      <li><b>카드 앞면은 일본어만</b> — "읽는" 순간이 아니라 "떠올리는" 순간이므로 <b>읽기 도움 미적용</b>(PRD 8.4 예외). 정답면부터 설정값 적용.</li>
+      <li><b>앞면의 두 버튼이 곧 분리된 두 축이다.</b> <b>[후리가나 보기] [발음 보기]</b>를 <b>따로</b> 눌러 필요한 만큼만 힌트를 연다 —
+        후리가나만으로 떠오르는 사용자가 발음까지 억지로 보지 않는다. (구 라벨 "후리가나만/발음만"은 <b>하나를 고르는</b> 뉘앙스라 폐기 — 두 버튼은 <b>독립</b>이다.)</li>
+      <li><b>⭐ 별표는 항상 활성</b> — 카드는 뜻 확인이 구조적 전제라 "뜻 미확인 저장" 우려가 없음(PRD 7.1 원탭 기각의 명문화된 예외).</li>
+      <li><b>소스 선택 셀렉터</b>: <b>급수 단어</b> / <b>내가 저장한 단어</b>. 독해·뉴스 등에서 저장한 단어가 카드 학습으로 회귀하는 유일한 경로(신규 화면 없이 셀렉터만 추가).</li>
+      <li>15번 단어 팝업과 역할 분리: 팝업 = <b>읽다가</b> 만난 단어(뜻이 바로 보임) / 카드 = <b>외우려고</b> 꺼낸 단어(일본어만).</li>
+    </ul></div>
+  </div>
+
+  <!-- 14b 단어 카드 10개 완료 결과 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">단어 세션 결과</span><span class="kbd">10/10</span></div>
+      <div class="body" style="gap:11px">
+        <div class="ph dash" style="height:72px">토모(등불) 자리</div>
+        <div class="row" style="gap:8px">
+          <div class="card grow"><span class="lbl">아는 단어</span><div class="t lg w40"></div></div>
+          <div class="card grow"><span class="lbl">모르는 단어</span><div class="t lg w40"></div></div>
+        </div>
+        <div class="card"><span class="lbl">진행률 (수집형)</span><div class="prog"><i style="width:15%"></i></div><div class="t sm w60"></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block">테스트 시작하기</div>
+        <div class="btn sec block">다시 보기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">14</span><b>레슨 혼합형 — 단어 10개 완료 결과</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>자가판정 집계 → <b>"아는 단어 N개 · 모르는 단어 M개"</b> 표시 후 <b>[테스트 시작하기]</b> / <b>[다시 보기]</b>.</li>
+      <li>테스트 형식: <b>객관식(뜻 고르기) 기본 + "모르겠어요" 표시한 약한 단어만 받아쓰기</b> → 빠른 진행 유지하며 약한 단어만 강하게 훈련.</li>
+      <li>받아쓰기는 JLPT 실제 시험에 없으므로 <b>단어·어휘 학습 테스트 전용</b>. 문법·독해·청해는 실제 시험 유형만 사용.</li>
+      <li>테스트 후 요약에 <b>"안다고 했는데 틀린 단어"</b>를 별도 표시 — 가장 강한 학습 신호(PRD 8.2 오늘의 조언 소재).</li>
+      <li>진행률은 급수별 목표 단어 수 대비 <b>수집형</b>. <span class="ex">예: N3 340 / 2,250단어</span> ⚠️ 분모는 급수별 신규 어휘 기준 대략치 → 공식 대조·일본인 검증 필요.</li>
+    </ul></div>
+  </div>
+
+  <!-- 14c 문법/독해/청해 탭 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">레슨 · 혼합형</span><span class="toggle"></span></div>
+      <div class="body" style="gap:10px">
+        <div class="row wrap" style="gap:5px"><span class="tag">단어·어휘</span><span class="tag">문법</span><span class="tag on">독해</span><span class="tag">청해</span></div>
+        <div class="card row between" style="padding:9px"><span class="lbl">2회독째 · 예상 소요</span><span class="kbd">약 6분</span></div>
+        <div class="prog"><i style="width:35%"></i></div>
+        <span class="lbl">실제 시험 유형 (지문 + 문항)</span>
+        <div class="ph" style="height:96px">지문 영역</div>
+        <div class="stack" style="gap:9px">
+          <div class="card"><div class="t w70"></div></div>
+          <div class="card"><div class="t w50"></div></div>
+          <div class="card"><div class="t w60"></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">확인</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">14</span><b>레슨 혼합형 — 문법·독해·청해 탭</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>3개 탭 모두 <b>실제 시험 문제형</b>으로 제공(공식 샘플 "유형" 기반 자체 제작).</li>
+      <li><b>회독형 진행률</b>: 세트 완주 = 1회독. 회독을 거듭할수록 <b>오답률·소요시간이 줄어드는 것</b>을 보여줘 반복 동기 부여. 완료 회독은 도장/배지로 누적.</li>
+      <li>독해는 급수별 소요시간 편차가 커서 <b>예상 소요시간 표시</b> 권장.</li>
+      <li>오답 처리(전 탭 공통): ① 오답만 다시 → ② <b>2회 연속 오답 시 계속/넘어가기 선택</b>(강제 반복 없음, PRD 1.3) → ③ 넘어가도 <b>오답노트 자동 저장</b>.</li>
+      <li>완료 후 오늘의 학습 요약(20/21) 표시.</li>
+    </ul></div>
+  </div>
+
+  <!-- 15 단어 팝업 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>레슨</span></div>
+      <div class="body" style="opacity:.4"><div class="stack" style="gap:8px"><div class="t w90"></div><div class="t w80"></div><div class="t w70"></div></div></div>
+      <div class="dim"></div>
+      <div class="modal">
+        <div class="row between"><div class="ph solid" style="height:28px;width:60%">단어</div><span class="lbl">✕</span></div>
+        <div class="t sm w40"></div>
+        <div class="t w80"></div>
+        <div class="t sm w60"></div>
+        <div class="btn pri block sm">＋ 단어장에 저장</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">15</span><b>단어 탭 → 뜻 팝업</b> (공통 컴포넌트)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>탭 → 뜻·읽는법 팝업 → 저장 버튼. 뜻 확인+수집을 한 번에.</li>
+      <li>레슨·퀴즈·오답노트·카메라 결과 등 <b>여러 화면에서 재사용</b>.</li>
+      <li>저장 시 현재 코스로 <b>자동 태그</b>(카메라만 예외 → 33).</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-1 퀴즈 객관식 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">3/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:30%"></i></div>
+        <div class="ph" style="height:64px">문제 영역</div>
+        <div class="stack" style="gap:10px">
+          <div class="card"><div class="t w60"></div></div>
+          <div class="card"><div class="t w50"></div></div>
+          <div class="card"><div class="t w70"></div></div>
+          <div class="card"><div class="t w40"></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">확인</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 객관식</b> (유형 1/6)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>퀴즈 <b>6유형</b> 중 하나. 골격은 전 코스 공통.</li>
+      <li>커버 범위: JLPT 문자·어휘(한자읽기/표기/문맥규정/유의어/용법), 문법(문법형식 판단), 독해(지문+객관식).</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-2 퀴즈 받아쓰기 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">4/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:40%"></i></div>
+        <div class="card row"><span class="thumb ph solid">🔊</span><div class="t w50"></div><span class="btn sec sm" style="height:28px">↺</span></div>
+        <div class="ph" style="height:44px">입력 필드</div>
+        <div class="grow"></div>
+        <div class="card" style="gap:4px;padding:8px">
+          <div class="row between"><span class="lbl">앱 내장 가나 키보드 — 50음 전체 표</span><span class="kbd">あ/ア</span></div>
+          <div class="row" style="gap:3px">
+            <span class="ph solid grow" style="height:20px;padding:0">わ</span><span class="ph solid grow" style="height:20px;padding:0">ら</span><span class="ph solid grow" style="height:20px;padding:0">や</span><span class="ph solid grow" style="height:20px;padding:0">ま</span><span class="ph solid grow" style="height:20px;padding:0">は</span><span class="ph solid grow" style="height:20px;padding:0">な</span><span class="ph solid grow" style="height:20px;padding:0">た</span><span class="ph solid grow" style="height:20px;padding:0">さ</span><span class="ph solid grow" style="height:20px;padding:0">か</span><span class="ph solid grow" style="height:20px;padding:0">あ</span>
+          </div>
+          <div class="row" style="gap:3px">
+            <span class="ph grow" style="height:20px;padding:0"></span><span class="ph solid grow" style="height:20px;padding:0">り</span><span class="ph grow" style="height:20px;padding:0"></span><span class="ph solid grow" style="height:20px;padding:0">み</span><span class="ph solid grow" style="height:20px;padding:0">ひ</span><span class="ph solid grow" style="height:20px;padding:0">に</span><span class="ph solid grow" style="height:20px;padding:0">ち</span><span class="ph solid grow" style="height:20px;padding:0">し</span><span class="ph solid grow" style="height:20px;padding:0">き</span><span class="ph solid grow" style="height:20px;padding:0">い</span>
+          </div>
+          <div class="row" style="gap:3px">
+            <span class="ph grow" style="height:20px;padding:0"></span><span class="ph solid grow" style="height:20px;padding:0">る</span><span class="ph solid grow" style="height:20px;padding:0">ゆ</span><span class="ph solid grow" style="height:20px;padding:0">む</span><span class="ph solid grow" style="height:20px;padding:0">ふ</span><span class="ph solid grow" style="height:20px;padding:0">ぬ</span><span class="ph solid grow" style="height:20px;padding:0">つ</span><span class="ph solid grow" style="height:20px;padding:0">す</span><span class="ph solid grow" style="height:20px;padding:0">く</span><span class="ph solid grow" style="height:20px;padding:0">う</span>
+          </div>
+          <div class="row" style="gap:3px">
+            <span class="ph grow" style="height:20px;padding:0"></span><span class="ph solid grow" style="height:20px;padding:0">れ</span><span class="ph grow" style="height:20px;padding:0"></span><span class="ph solid grow" style="height:20px;padding:0">め</span><span class="ph solid grow" style="height:20px;padding:0">へ</span><span class="ph solid grow" style="height:20px;padding:0">ね</span><span class="ph solid grow" style="height:20px;padding:0">て</span><span class="ph solid grow" style="height:20px;padding:0">せ</span><span class="ph solid grow" style="height:20px;padding:0">け</span><span class="ph solid grow" style="height:20px;padding:0">え</span>
+          </div>
+          <div class="row" style="gap:3px">
+            <span class="ph solid grow" style="height:20px;padding:0">を</span><span class="ph solid grow" style="height:20px;padding:0">ろ</span><span class="ph solid grow" style="height:20px;padding:0">よ</span><span class="ph solid grow" style="height:20px;padding:0">も</span><span class="ph solid grow" style="height:20px;padding:0">ほ</span><span class="ph solid grow" style="height:20px;padding:0">の</span><span class="ph solid grow" style="height:20px;padding:0">と</span><span class="ph solid grow" style="height:20px;padding:0">そ</span><span class="ph solid grow" style="height:20px;padding:0">こ</span><span class="ph solid grow" style="height:20px;padding:0">お</span>
+          </div>
+          <div class="row" style="gap:3px;margin-top:2px">
+            <span class="ph solid grow" style="height:22px;padding:0">ん</span><span class="ph solid grow" style="height:22px;padding:0">゛゜</span><span class="ph solid grow" style="height:22px;padding:0">小</span><span class="ph solid grow" style="height:22px;padding:0">ー</span><span class="ph solid grow" style="height:22px;padding:0">⌫</span><span class="ph solid grow" style="height:22px;padding:0">확인</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 받아쓰기</b> (유형 2/6) · 앱 내장 가나 키보드</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>음성 재생(+다시듣기) → 받아쓰기 입력.</li>
+      <li><b>OS 키보드가 아니라 앱 내장 히라가나 50음 그리드 키보드</b>를 사용. <b>일본어 IME 설치 불필요.</b><br>
+        사유: 일본어 IME가 없는 사용자가 다수이고, 설치해도 초보자는 로마자→가나 변환을 모름 → <b>OS 키보드 의존 = 이중 진입장벽</b>.</li>
+      <li><b>50음 전체 표 방식으로 확정(3차)</b> — 행 10 × 단 5(わらやまはなたさかあ × あいうえお)를 한 화면에 펼침. + <b>[あ/ア 가나·가타카나 전환]</b> + 탁점·반탁점(゛゜)·요음(小)·장음(ー)·삭제·확인. <b>한자 입력은 제공하지 않음</b>.</li>
+      <li><b>플릭 입력 미채택</b> — 일본인에겐 익숙하지만 <b>한국인 초보 학습자에겐 또 다른 학습 부담</b>. 전체 표는 입력 수단이면서 <b>가나 배열 자체를 익히는 학습 효과</b>가 있음.</li>
+      <li>や행·わ행의 빈칸(い단·え단)은 <b>비활성 자리로 남겨</b> 50음도 구조를 그대로 보여준다.</li>
+      <li>받아쓰기는 <b>단어·어휘 테스트 전용</b>이라 <b>가나 수준이면 충분</b>(한자 입력 불필요). JLPT는 전 영역 객관식이라 실제 시험에 받아쓰기가 없음 → 암기 강화 목적. 특히 "모르겠어요" 표시한 약한 단어에 적용.</li>
+      <li><b>문장 단위는 받아쓰기 대신 낱말카드 배치</b>로 처리 — 스피킹 대체 모드와 <b>컴포넌트 공유</b>.</li>
+      <li class="ex">프레임의 키 크기·간격은 구조 표현용 placeholder. 터치 타겟 크기는 Hi-fi에서 확정.</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-3 퀴즈 짝맞추기 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">5/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:50%"></i></div>
+        <div class="row" style="gap:10px;align-items:stretch">
+          <div class="stack grow" style="gap:9px"><div class="card"><div class="t w70"></div></div><div class="card"><div class="t w60"></div></div><div class="card"><div class="t w80"></div></div></div>
+          <div class="stack grow" style="gap:9px"><div class="card"><div class="t w60"></div></div><div class="card"><div class="t w70"></div></div><div class="card"><div class="t w50"></div></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">확인</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 짝맞추기</b> (유형 3/6)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>좌/우 항목을 선으로 짝 맞추기. 문자·어휘(유의어·용법) 커버.</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-4 퀴즈 청해형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">6/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:60%"></i></div>
+        <div class="card center" style="align-items:center;gap:10px;padding:14px">
+          <span class="thumb ph solid" style="width:52px;height:52px;border-radius:50%">▶</span>
+          <div class="ph dash" style="height:18px;width:100%">음성 파형 자리</div>
+          <div class="row" style="gap:8px"><span class="btn sec sm">↺ 다시듣기</span><span class="btn sec sm">🐢 느리게</span></div>
+        </div>
+        <div class="stack" style="gap:9px">
+          <div class="card"><div class="t w60"></div></div>
+          <div class="card"><div class="t w50"></div></div>
+          <div class="card"><div class="t w70"></div></div>
+          <div class="card"><div class="t w40"></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">확인</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 청해형</b> (유형 4/6) · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>음성 재생 + 객관식 + 다시듣기.</b> 기존 "받아쓰기"는 <i>쓰는</i> 유형이라 청해를 대체하지 못해 신설.</li>
+      <li>JLPT 청해 출제 유형(과제이해·포인트이해·즉시응답) 대응. 지문 텍스트는 노출하지 않음.</li>
+      <li>오답 시 17번에서 <b>스크립트(전사) 제공</b>.</li>
+      <li>⚠️ 콘텐츠 부담: 모든 청해 음성에 <b>스크립트 텍스트 필수</b> + 음성 자체 제작(성우/TTS) → MVP 범위 산정 시 반영.</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-5 퀴즈 순서배열형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">7/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:70%"></i></div>
+        <span class="lbl">문장 만들기 — 조각을 순서대로</span>
+        <div class="ph" style="height:52px">문제 문장 (빈칸 포함)</div>
+        <span class="lbl">배열 영역</span>
+        <div class="ph dash" style="height:46px">놓인 조각 자리 (1 · 2 · 3 · 4)</div>
+        <span class="lbl">조각 보관함</span>
+        <div class="row wrap" style="gap:6px">
+          <span class="tag">조각</span><span class="tag">조각</span><span class="tag">조각</span><span class="tag">조각</span>
+        </div>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">되돌리기</div><div class="btn pri grow sm">확인</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 순서배열형</b> (유형 5/6) · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>단어 조각을 순서대로 배열해 문장 완성. <b>JLPT 문법 대표 출제 유형(문장 만들기)</b>.</li>
+      <li>조각 탭/드래그로 배열 영역에 배치, [되돌리기]로 되돌림.</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-6 퀴즈 스피킹형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">8/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:80%"></i></div>
+        <div class="card"><span class="lbl">따라 말할 표현</span><div class="ph solid" style="height:34px">일본어 표현</div><div class="row between"><div class="t sm w40"></div><span class="btn sec sm" style="height:30px">🔊 모범 발음</span></div></div>
+        <div class="card" style="gap:8px"><span class="lbl">내 발음 (녹음됨)</span><div class="ph dash" style="height:26px">녹음 파형 자리</div><div class="row" style="gap:8px"><span class="btn sec grow sm">▶ 내 발음 듣기</span><span class="btn sec grow sm">↺ 다시 녹음</span></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block" style="height:46px">🎤 녹음</div>
+        <div class="btn sec block sm">넘어가기</div>
+        <div class="row" style="justify-content:center"><span class="lbl">지금 말할 수 없는 상황이에요</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 스피킹형</b> (유형 6/6) · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>유사도 점수·판정 없음(2차 확정).</b> TTS 발음 비교는 억양·속도·마이크 환경에 따라 오판이 잦고 낮은 점수는 좌절만 남김 → <b>죄책감을 주지 않는 앱 철학</b>(PRD 1.3·14.4)과 충돌.</li>
+      <li>대신 <b>자가판정 구조</b>: <b>[🎤 녹음] → [▶ 내 발음 듣기] / [↺ 다시 녹음] / [넘어가기]</b>. 모범 발음과 <b>본인이 직접 듣고 비교해 만족하면 넘어감</b>.</li>
+      <li>⚠️ 정오 판정이 없으므로 <b>오답노트에 담지 않음</b> — 2회 연속 오답 분기(17)도 <b>미적용</b>.</li>
+      <li>하단 텍스트 버튼 <b>"지금 말할 수 없는 상황이에요"</b> → <b>낱말카드 배치 모드</b>로 전환(지하철·심야 등 실제 모바일 상황 배려).</li>
+      <li><b>마이크 권한 거부 시에도 자동으로 낱말카드 모드로 폴백</b> — 권한 때문에 학습이 막히지 않음.</li>
+      <li>낱말카드 배치 모드는 <b>받아쓰기의 문장 단위 입력과 컴포넌트 공유</b>(16 유형 2 memo 참조).</li>
+      <li><b>여행회화·비즈니스 우선 도입</b>(실제로 말해야 하는 코스). JLPT는 말하기 시험이 없어 미적용. PRD Should 유지.</li>
+    </ul></div>
+  </div>
+
+  <!-- 16-6b 스피킹 대체 — 낱말카드 배치 모드 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">✕</span><span class="grow">퀴즈</span><span class="kbd">8/10</span></div>
+      <div class="body">
+        <div class="prog"><i style="width:80%"></i></div>
+        <span class="lbl">말하기 대신 — 낱말카드 배치</span>
+        <div class="card"><span class="lbl">완성할 표현 (뜻)</span><div class="t w70"></div><div class="row between"><div class="t sm w40"></div><span class="btn sec sm" style="height:30px">🔊 모범 발음</span></div></div>
+        <span class="lbl">배열 영역</span>
+        <div class="ph dash" style="height:46px">놓인 낱말카드 자리 (1 · 2 · 3 · 4)</div>
+        <span class="lbl">낱말카드 보관함</span>
+        <div class="row wrap" style="gap:6px"><span class="tag">낱말</span><span class="tag">낱말</span><span class="tag">낱말</span><span class="tag">낱말</span><span class="tag">낱말</span></div>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">되돌리기</div><div class="btn pri grow sm">다 놓았어요</div></div>
+        <div class="row" style="justify-content:center"><span class="lbl">🎤 지금은 말할 수 있어요</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">16</span><b>퀴즈 — 스피킹형 대체(낱말카드 배치 모드)</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>진입 경로 2가지: ① 사용자가 "지금 말할 수 없는 상황이에요"를 누름 ② <b>마이크 권한 거부 시 자동 폴백</b>.</li>
+      <li>⚠️ <b>정오를 판정하지 않는다(3차 확정).</b> 순서배열형(유형 5)과 달리 채점하지 않고, <b>오답노트에도 담지 않으며</b> 2회 연속 오답 분기도 미적용 — 스피킹형의 대체 모드이고 스피킹은 애초에 판정이 없기 때문.</li>
+      <li>사유: 여기서만 오답 처리하면 <b>"말할 수 없는 상황"을 고른 사용자가 오히려 불리해지는 역설</b>이 생긴다. <b>배려 장치가 페널티가 되면 안 됨.</b></li>
+      <li>따라서 하단 주 버튼은 채점 트리거(<span class="ex">확인</span>)가 아니라 <b>완료 성격(<span class="ex">다 놓았어요</span>)</b>. 누르면 모범 문장을 보여주고 다음으로 넘어간다.</li>
+      <li>모범 발음 재생은 그대로 유지 — 소리를 들을 수 있는 상황(이어폰)까지 막지는 않음.</li>
+      <li>UI 컴포넌트는 <b>순서배열형·받아쓰기 문장 입력과 동일한 것을 재사용</b>하되(제작비 절감) <b>판정 로직만 끈다</b>.</li>
+      <li>상시 복귀 경로("지금은 말할 수 있어요") 제공 — 모드 전환이 잠금이 되지 않게 함.</li>
+    </ul></div>
+  </div>
+
+  <!-- 17 정답/오답 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body pad0" style="display:flex;flex-direction:column">
+        <div class="ph solid" style="flex:0 0 22%;border-radius:0;border:none;flex-direction:column">
+          <div style="font-size:24px">○ / ✕</div><span class="lbl">정답 / 오답 상태</span>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;overflow:hidden">
+          <div class="row between" style="padding-bottom:7px;border-bottom:1px solid var(--line-2);flex:0 0 auto"><span class="lbl">해설 (3단) — 고정 헤더</span><span class="row" style="gap:4px"><span class="tag rt on">후리가나</span><span class="tag rt">발음</span></span></div>
+          <div class="stack grow" style="gap:8px;overflow:hidden">
+            <div class="card" style="padding:8px;gap:5px"><span class="lbl">① 정답</span><div class="t w50"></div></div>
+            <div class="card" style="padding:8px;gap:5px"><span class="lbl">② 왜 정답인지</span><div class="t w90"></div><div class="t w70"></div></div>
+            <div class="card" style="padding:8px;gap:5px"><span class="lbl">③ 오답 선택지가 틀린 이유</span><div class="t sm w80"></div><div class="t sm w70"></div><div class="t sm w60"></div></div>
+            <div class="row" style="gap:6px;align-items:center"><span class="kbd">✎</span><span class="lbl">오답노트에 담김 (인라인)</span></div>
+          </div>
+          <div class="btn pri block">계속하기</div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">17</span><b>정답 · 오답 피드백</b> — 1회 오답 (해설 3단)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>해설 3단</b>: ① 정답 / ② 왜 정답인지(문법=해당 문형, 독해=근거 위치, 어휘=음독·훈독 구분) / ③ 오답 선택지가 왜 틀렸는지(선택지별). 시험 대비 코스는 "왜 이게 답인지"가 학습의 본체 → <b>다른 코스보다 해설 영역을 크게</b> 배치.</li>
+      <li>여행회화·비즈니스는 해설 축이 다름 — <b>상황 적절성·정중도</b> 중심이고 <b>③ 선택지별 이유는 축소</b>(시험이 아니므로 과잉).</li>
+      <li><b>오답노트 담김은 Snackbar가 아니라 인라인</b>으로 조용히 표시. <b>Snackbar</b>는 세션 종료 시 1회만(18).</li>
+      <li>피드백은 정답면 → <b>읽기 도움 적용</b>. 토글 <b>2개(후리가나·발음)</b>이며 기본값은 35번 설정(온보딩 Q2 연동)을 따른다.</li>
+      <li>🔴 <b>이 화면만 appbar가 없다</b>(○/✕ 상태 밴드가 상단을 꽉 채우는 몰입형 구성). 그래서 토글을 <b>「해설 (3단)」 고정 헤더 줄</b>에 둔다.
+        <b>appbar 통일 규칙의 목적(스크롤해도 사라지지 않는다)은 그대로 지켜진다</b> — 해설 카드만 스크롤하고 헤더 줄은 고정이다.
+        여기에 appbar를 새로 만들면 <b>몰입형 피드백 화면의 성격이 깨지므로</b> 형식이 아니라 목적을 따랐다.</li>
+      <li>해설 속 단어도 <b>탭하면 15번 팝업으로 저장 가능</b>(PRD 7.3 적용 범위에 퀴즈·오답노트 포함).</li>
+      <li>캐릭터: <b>토모(등불)가 안경을 비추거나 틀린 자리를 낮게 비추는</b> 연출(14.2) + 관찰자 톤(14.4) — 자리만 표시.</li>
+      <li>오답 상황의 감정 표현 = <b>밝기</b>. 어두워지는 게 아니라 <b>차분히 아래를 비춘다</b>(질책 아님).</li>
+      <li class="ex">복귀 상황 톤 예시: "오랜만이에요. 불은 켜 둔 채였어요."</li>
+      <li>⚠️ 제작비 영향: 문항마다 해설 3종 작성 필요 → MVP 범위 산정 시 반드시 반영.</li>
+    </ul></div>
+  </div>
+
+  <!-- 17b 청해 오답 — 스크립트 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body pad0" style="display:flex;flex-direction:column">
+        <div class="ph solid" style="flex:0 0 18%;border-radius:0;border:none;flex-direction:column">
+          <div style="font-size:22px">✕</div><span class="lbl">청해 오답</span>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;overflow:hidden">
+          <div class="row" style="gap:8px"><span class="btn sec grow sm">↺ 다시듣기</span><span class="btn sec grow sm">🐢 느리게</span></div>
+          <div class="card" style="padding:8px;gap:5px"><span class="lbl">스크립트 (전사)</span><div class="t sm w90"></div><div class="t sm w80"></div><div class="t sm w70"></div><div class="t sm w60"></div></div>
+          <div class="card" style="padding:8px;gap:5px"><span class="lbl">① 정답 / ② 왜 정답인지</span><div class="t w80"></div><div class="t w60"></div></div>
+          <div class="row" style="gap:6px;align-items:center"><span class="kbd">✎</span><span class="lbl">오답노트에 담김 (인라인)</span></div>
+          <div class="grow"></div>
+          <div class="btn pri block">계속하기</div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">17</span><b>정답 · 오답 피드백</b> — 청해 오답(스크립트)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>청해 오답 시 <b>다시듣기 + 스크립트 텍스트</b> 제공. 음성만으로는 학습이 끊기므로 청해 학습의 핵심.</li>
+      <li>스크립트 속 단어도 탭 → 15번 팝업 저장 가능.</li>
+    </ul></div>
+  </div>
+
+  <!-- 17c 2회 연속 오답 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body pad0" style="display:flex;flex-direction:column">
+        <div class="ph solid" style="flex:0 0 20%;border-radius:0;border:none;flex-direction:column">
+          <div style="font-size:22px">✕ ✕</div><span class="lbl">2회 연속 오답</span>
+        </div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;flex:1;overflow:hidden">
+          <div class="card" style="padding:8px;gap:5px"><span class="lbl">① 정답</span><div class="t w50"></div></div>
+          <div class="card" style="padding:8px;gap:5px"><span class="lbl">② 왜 정답인지</span><div class="t w90"></div><div class="t w60"></div></div>
+          <div class="card" style="padding:8px;gap:5px"><span class="lbl">③ 오답 선택지가 틀린 이유</span><div class="t sm w80"></div><div class="t sm w60"></div></div>
+          <div class="row" style="gap:6px;align-items:center"><span class="kbd">✎</span><span class="lbl">오답노트에 담김 (인라인)</span></div>
+          <div class="grow"></div>
+          <div class="row" style="gap:8px"><div class="btn sec grow sm">다시 풀기</div><div class="btn pri grow sm">넘어가기</div></div>
+          <div class="row" style="justify-content:center"><span class="lbl">넘어가도 오답노트에 남아요</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">17</span><b>정답 · 오답 피드백</b> — 2회 연속 오답 분기</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>17번이 <b>상태 2종</b>을 가짐 — [1회 오답] 해설 + [계속하기] / [2회 연속] 해설 + <b>[다시 풀기] [넘어가기]</b>. 별도 화면 만들지 않음.</li>
+      <li><b>강제 반복 없음</b>(PRD 1.3). "넘어가기"를 골라도 오답노트에 자동 저장되어 나중에 다시 만나므로 <b>넘어가는 부담을 제거</b> — 안내 문구를 버튼 바로 아래 상시 노출.</li>
+      <li>이 분기는 <b>퀴즈 6유형 전부·전 코스 공통</b>. 청해도 동일(다시 듣기 후 재시도).</li>
+      <li>오답노트 "졸업" 규칙: <b>2회 연속 정답 시 "이제 알아요"로 이동</b>(삭제하지 않음, 47번 필터 칩으로 재열람) — 오답 분기 기준과 대칭.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= D. 학습 결과 ============================================================= -->
+<div class="section">
+  <h2>D. 학습 결과 (4)</h2>
+  <div class="sub">오답노트 알림(<b>세션 종료 시 1회 요약</b>) → 우표 적립 → 오늘의 학습 요약(PDF 잠금 / 활성) · 요약 화면에 D-day·회독·진행률 추가, <b>PDF에는 제외</b></div>
+</div>
+<div class="grid">
+
+  <!-- 18 오답노트 Snackbar -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">세션 종료</span></div>
+      <div class="body"><div class="ph dash" style="height:70px">토모(등불) 자리</div><div class="card"><span class="lbl">이번 세션 결과</span><div class="t w70"></div><div class="t sm w50"></div></div><div class="card"><span class="lbl">다음 세션</span><div class="t w60"></div></div><div class="grow"></div><div class="btn pri block">다음 세션 시작</div></div>
+      <div class="snackbar"><span class="thumb ph solid" style="width:24px;height:24px;background:#5a5a5a"></span><div class="stack grow" style="gap:4px"><div class="t sm w80"></div><div class="t sm w50"></div></div><span class="lbl" style="color:#ccc">보기</span></div>
+    </div>
+    <div class="cap"><span class="num">18</span><b>오답노트 알림 — 세션 종료 시 1회 요약</b> (<b>Snackbar</b>)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>✅ 용어 정정(2026-07-22): 이건 Toast가 아니라 Snackbar다.</b> 사양서 4.6 기준 — <b>Toast는 알림만 하고 액션이 없다.</b> 이 컴포넌트에는 <span class="ex">보기</span> <b>액션 버튼이 있다</b> → Snackbar.
+        <br>· 이름이 틀리면 <b>FE가 잘못된 컴포넌트를 만든다.</b> 많은 UI 라이브러리에서 Toast는 <b>터치를 받지 않는</b>(pointer-events 없는) 오버레이라, “Toast”로 발주하면 <b>보기 버튼이 눌리지 않는 물건</b>이 나온다.
+        <br>· 접근성도 갈린다 — 액션이 있으면 <b>스크린리더가 읽고 포커스가 닿을 시간</b>이 필요해 자동 소멸 시간이 더 길어야 한다. <b>용어가 곧 사양이다.</b></li>
+      <li><b>변경(2026-07-20)</b>: 문항별 알림 <b>폐지</b> → <b>세션 종료 시 1회 요약</b>. <span class="ex">"오늘 N개가 오답노트에 담겼어요"</span></li>
+      <li>사유: 단어 10개 중 5개 오답이면 알림 5번 → PRD 1.2(흐름 방해)·14.4(과묵한 관찰자)와 충돌. 문항별 저장은 <b>17번에 인라인</b>으로 이미 표시.</li>
+      <li>"보기" → 47번 오답노트 모아보기로 이동.</li>
+      <li><b>중복 해소</b>: 세션 종료 시 <b>오늘의 학습이 남아 있으면</b> 이 Snackbar / <b>오늘의 학습이 끝났으면</b> 생략하고 바로 20·21 요약 화면.</li>
+    </ul></div>
+  </div>
+
+  <!-- 19 우표 적립 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body center">
+        <div class="ph dash" style="width:130px;height:120px;border-radius:16px">토모(등불)가<br>우표 한 장을<br>건네는 구도</div>
+        <div class="t lg w50" style="margin:16px auto 0"></div>
+        <div class="row" style="justify-content:center;gap:6px;margin-top:8px">
+          <span class="thumb ph solid" style="width:20px;height:24px;border-radius:3px"></span>
+          <span class="thumb ph solid" style="width:20px;height:24px;border-radius:3px"></span>
+          <span class="thumb ph solid" style="width:20px;height:24px;border-radius:3px"></span>
+          <span class="thumb ph" style="width:20px;height:24px;border-radius:3px;background:var(--fill-1)"></span>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">오늘의 편지 보기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">19</span><b>우표 적립</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>"오늘의 학습" 1단위 완료 시 <b>우표 1장</b> 적립. 진행 상태(예: 4/7장) 표시 — 원형 칩이 아니라 <b>우표(사각) 형태</b>로 표현.</li>
+      <li>연출 구도: <b>토모(등불)가 우표 한 장을 건넨다.</b> 자리만 표시하고 일러스트는 Hi-fi 단계.</li>
+      <li>⚠️ <b>과한 축하 연출 금지</b> — 폭죽·팡파레 없음. <b>조용한 반짝임</b> 정도로 그친다(과묵한 관찰자 톤).</li>
+      <li>우표 7장이 모이면 <b>오늘의 편지</b>(20·21)를 받을 수 있음.</li>
+    </ul></div>
+  </div>
+
+  <!-- 19b 우표 적립 — 오프라인(도착 예정) -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">✕ ▮</span></div>
+      <div class="body center">
+        <div class="ph dash" style="width:130px;height:120px;border-radius:16px">토모(등불)가<br>우표를 들고<br>기다리는 구도</div>
+        <div class="t lg w50" style="margin:16px auto 0"></div>
+        <div class="t sm w70" style="margin:8px auto 0"></div>
+        <div class="row" style="justify-content:center;gap:6px;margin-top:10px">
+          <span class="thumb ph solid" style="width:20px;height:24px;border-radius:3px"></span>
+          <span class="thumb ph solid" style="width:20px;height:24px;border-radius:3px"></span>
+          <span class="thumb ph solid" style="width:20px;height:24px;border-radius:3px"></span>
+          <span class="thumb ph dash" style="width:20px;height:24px;border-radius:3px;background:transparent"></span>
+        </div>
+        <span class="lbl" style="margin-top:8px">▲ 점선 = 도착 예정 우표</span>
+        <div class="grow"></div>
+        <div class="card row between" style="width:100%"><span class="lbl grow">오늘 배운 내용은 이미 저장됐어요</span><span class="kbd">✓</span></div>
+        <div class="btn sec block" style="margin-top:8px">계속 학습하기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">19</span><b>우표 적립 — 오프라인(도착 예정)</b> · 신규 2026-07-22</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>배경</b>: 미리 받은 레슨(52번)을 <b>오프라인에서 풀어도 우표를 지급</b>하기로 확정(2026-07-22). 안 주면 구독 혜택(미리 받기)이 반쪽이 된다.</li>
+      <li>🔴 <b>핵심 — "받았다"가 아니라 "도착 예정"으로 보여준다.</b> 우표 발급 판정은 <b>서버만</b> 한다(조작 방지). 그런데 이미 받은 것처럼 보였다가 나중에 회수하면 <b>배신감</b>을 준다. → <b>처음부터 "예정"이라고 말하는 것이 유일하게 정직한 방법.</b></li>
+      <li>표현: 받은 우표는 <b>채운 사각</b>, 도착 예정은 <b>점선 사각</b>. 같은 자리에 있어 <b>연결되면 채워진다</b>는 것이 형태로 읽힌다.</li>
+      <li>🔴 <b>학습 기록은 즉시·무조건 반영</b>된다(하단 카드). 우표만 보류될 뿐 <b>학습이 무효가 되지 않는다</b> — 무효화는 PRD 1.3 철학 위반.</li>
+      <li>서버 검증 5규칙(스키마_설계 6.1): ①미리 받은 범위 내 ②서버 시간 기준(<code>monotonic</code> 대조) ③하루 1장 상한(<b>온라인과 동일 규칙</b>) ④세션 최소 소요시간 ⑤소급 최대 7일.</li>
+      <li>온라인 복귀 시 <b>18번 Snackbar 패턴 재사용</b>("우표 3장이 도착했어요"). ⚠️ <b>전면 화면 금지</b> — 여행 내내 오프라인일 수 있어 반복 안내는 그 자체가 방해(PRD 5.5 원칙 3).</li>
+      <li class="ex">상태바 아이콘이 <span class="kbd">✕ ▮</span>(연결 없음)로 바뀐 것 외에 <b>19번 원본과 레이아웃이 같다</b> — 오프라인이 "다른 앱"처럼 느껴지지 않게.</li>
+    </ul></div>
+  </div>
+
+  <!-- 20 요약 PDF 잠금 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar center"><span>오늘의 편지</span><span class="act">✕</span></div>
+      <div class="body">
+        <div class="row" style="gap:8px">
+          <div class="card grow row between" style="padding:8px"><span class="lbl">D-day</span><span class="kbd">D-42</span></div>
+          <div class="card grow row between" style="padding:8px"><span class="lbl">회독</span><span class="kbd">2회독째</span></div>
+        </div>
+        <div class="card" style="padding:9px;gap:5px"><span class="lbl">진행률 변화</span><div class="row" style="gap:6px;align-items:center"><div class="prog grow"><i style="width:52%"></i></div><span class="kbd">45→50</span></div></div>
+        <div class="card row between"><span class="lbl">우표</span><div class="prog grow" style="margin:0 8px"><i style="width:57%"></i></div><span class="kbd">4/7</span></div>
+        <div class="card"><span class="lbl">오늘 배운 단어</span><div class="li" style="padding:6px 0"><span class="t w60 grow"></span></div><div class="li" style="padding:6px 0"><span class="t w50 grow"></span></div></div>
+        <div class="card"><span class="lbl">오답노트에 추가됨</span><div class="t w70"></div></div>
+        <div class="card"><span class="lbl">오늘의 조언</span><div class="t w80"></div></div>
+        <div class="grow"></div>
+        <div class="btn ghost block">🔒 우표 더 모으면 받기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">20</span><b>오늘의 편지(학습 요약) — 우표 부족</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>명칭(브랜드 개편)</b>: 이 화면의 결과물을 <b>"오늘의 편지"</b>로 표기. 우표를 모아 <b>편지를 받는</b> 구조. ⚠️ <b>편지 은유는 여기와 27번(편지함)에만</b> 적용 — 오답노트(45)·단어장(25)·독해(26) PDF는 <b>그대로 "PDF"</b>로 둔다(전부 편지로 부르면 은유가 흐려짐).</li>
+      <li><b>화면 추가 항목(2026-07-20)</b>: <b>회독·진행률 변화</b>(<span class="ex">"N3 문법 45→50문형, 2회독째"</span>), <b>D-day</b>, 오늘의 조언 강화.</li>
+      <li>조언 소재: <span class="ex">"조사 문제에 오답이 몰렸어요" / "안다고 했는데 틀린 단어 3개"</span></li>
+      <li>🔴 <b>PDF에는 진행률·D-day·우표 제외</b> (PRD 8.2.1). <b>화면 표시 항목 ≠ PDF 포함 항목.</b><br>
+        · PDF 포함 = 오늘 배운 단어 / 오답노트 추가분 / 오늘의 조언 — <b>"다시 볼 학습 내용"만</b><br>
+        · PDF 제외 = 회독·진행률, D-day, 우표 진행바 등 <b>앱 내 상태·게임화 요소</b>(종이에선 무의미하고 인쇄 시점에 박제되면 혼란)</li>
+      <li>이 원칙은 요약 PDF뿐 아니라 <b>오답노트·단어장·독해 PDF 전부에 동일 적용</b>.</li>
+      <li>우표 7장 미달 → 다운로드 버튼 비활성("N장 더 모으면 받기").</li>
+      <li>우표 적립 단위 = "오늘의 학습" 1단위. JLPT는 Q3 연동 — 시간 적음 1세션 / 보통 2세션 / 많음 3~4세션.</li>
+    </ul></div>
+  </div>
+
+  <!-- 21 요약 PDF 활성 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar center"><span>오늘의 편지</span><span class="act">✕</span></div>
+      <div class="body">
+        <div class="row" style="gap:8px">
+          <div class="card grow row between" style="padding:8px"><span class="lbl">D-day</span><span class="kbd">D-42</span></div>
+          <div class="card grow row between" style="padding:8px"><span class="lbl">회독</span><span class="kbd">2회독째</span></div>
+        </div>
+        <div class="card" style="padding:9px;gap:5px"><span class="lbl">진행률 변화</span><div class="row" style="gap:6px;align-items:center"><div class="prog grow"><i style="width:52%"></i></div><span class="kbd">45→50</span></div></div>
+        <div class="card row between"><span class="lbl">우표</span><div class="prog grow" style="margin:0 8px"><i style="width:100%"></i></div><span class="kbd">7/7</span></div>
+        <div class="card"><span class="lbl">오늘 배운 단어</span><div class="li" style="padding:6px 0"><span class="t w60 grow"></span></div><div class="li" style="padding:6px 0"><span class="t w50 grow"></span></div></div>
+        <div class="card"><span class="lbl">오답노트에 추가됨</span><div class="t w70"></div></div>
+        <div class="card"><span class="lbl">오늘의 조언</span><div class="t w80"></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block">⤓ 오늘의 편지 받기 (우표 7장)</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">21</span><b>오늘의 편지(학습 요약) — 받기 활성</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>우표 7/7 달성 → <b>[오늘의 편지 받기]</b> 활성. 구독자는 매달 우표 대량 증정(약 350장)으로 사실상 매일 받음.</li>
+      <li>🔴 <b>PDF에는 진행률·D-day·우표 제외</b>(PRD 8.2.1). 점선 카드 3블록(오늘 배운 단어 / 오답노트 추가분 / 오늘의 조언)<b>만</b> PDF에 들어감 — 상단 D-day·회독·진행률·우표 진행바는 <b>화면 전용</b>.</li>
+      <li>PDF 버튼은 화면별로 <b>자기 결과물만</b> 내려받게 분리: 20·21 요약(오늘의 편지) = 우표 7장 / 47 오답노트 PDF = 우표 5장 / 25 단어장 추가 1회권 = 우표 10장.</li>
+      <li>화면상 <b>어떤 블록이 PDF에 들어가는지는 UI로 구분하지 않는다</b>(프레임 안은 레이아웃만). 포함/제외 판정은 PDF 생성 로직에서 처리.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= E. 단어장 ============================================================= -->
+<div class="section">
+  <h2>E. 메인 탭 — 단어장 (6)</h2>
+  <div class="sub">통합 저장 + 태그 필터(기본 5 + 커스텀). 상세 재분류 · PDF 2종 · 학습 기록</div>
+</div>
+<div class="grid">
+
+  <!-- 22 단어장 목록 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>단어장</span><span class="grow"></span><span class="row" style="gap:4px"><span class="tag rt on">후리가나</span><span class="tag rt">발음</span></span></div>
+      <div class="body">
+        <div class="row wrap" style="gap:6px"><span class="tag on">전체</span><span class="tag">JLPT</span><span class="tag">여행</span><span class="tag">비즈</span><span class="tag">뉴스</span><span class="tag">전래</span><span class="tag custom">커스텀</span><span class="tag plus">＋</span></div>
+        <div class="li"><span class="ph solid" style="width:28px;height:28px;border-radius:5px"></span><div class="stack grow"><div class="t w40"></div><div class="t sm w70"></div></div><span class="tag">여행 📷</span></div>
+        <div class="li"><span class="ph solid" style="width:28px;height:28px;border-radius:5px"></span><div class="stack grow"><div class="t w50"></div><div class="t sm w60"></div></div><span class="tag">JLPT</span></div>
+        <div class="li"><span class="ph solid" style="width:28px;height:28px;border-radius:5px"></span><div class="stack grow"><div class="t w40"></div><div class="t sm w80"></div></div><span class="tag custom">커스텀</span></div>
+      </div>
+      <div class="tabbar"><div class="tab"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab on"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">22</span><b>단어장 전체 목록</b> — 태그 필터</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>모든 경로의 저장 단어가 한 단어장에 모임 + 태그로 필터.</li>
+      <li>기본 태그 5개 + 커스텀 태그(점선). 카메라 저장 단어는 📷 표시.</li>
+      <li>appbar 우측 <b>읽기 도움 빠른 토글 2개</b>. 목록에서는 <b>발음 줄이 회수되면 한 화면에 보이는 단어 수가 늘어난다</b> — 발음을 <code>display:none</code>으로 처리한 이득이 가장 큰 화면(사양서 4.1).</li>
+    </ul></div>
+  </div>
+
+  <!-- 23 커스텀 태그 추가 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>단어장</span></div>
+      <div class="body" style="opacity:.4"><div class="row wrap" style="gap:6px"><span class="tag on">전체</span><span class="tag">JLPT</span><span class="tag plus">＋</span></div></div>
+      <div class="dim"></div>
+      <div class="modal">
+        <span class="lbl">새 커스텀 태그 만들기</span>
+        <div class="ph" style="height:38px;justify-content:flex-start;padding-left:10px">태그 이름 입력…</div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">취소</div><div class="btn pri grow sm">추가</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">23</span><b>커스텀 태그 추가</b> — 입력창</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>사용자가 직접 이름 지어 태그 추가.</li>
+      <li class="ex">예) "출장 필수표현", "헷갈리는 단어"</li>
+    </ul></div>
+  </div>
+
+  <!-- 24 단어 상세 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">단어 상세</span><span class="row" style="gap:4px"><span class="tag rt on">후리가나</span><span class="tag rt">발음</span></span><span class="act">🔊</span></div>
+      <div class="body">
+        <div class="ph solid" style="height:52px">단어</div>
+        <div class="t sm w40"></div>
+        <div class="card"><span class="lbl">뜻</span><div class="t w80"></div></div>
+        <div class="card"><span class="lbl">예문</span><div class="t w90"></div><div class="t w60"></div></div>
+        <span class="lbl">태그 (재분류 가능)</span>
+        <div class="row wrap" style="gap:6px"><span class="tag on">여행 ✓</span><span class="tag">JLPT</span><span class="tag">비즈</span><span class="tag custom">커스텀</span><span class="tag plus">＋</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">24</span><b>단어 상세</b> — 재분류 · 태그 변경</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>어떤 단어든 태그를 언제든 다른 태그로 변경(단일 선택).</li>
+      <li><b>읽기 도움 빠른 토글 2개 신설</b> — 22번 목록에서 들어오는 화면인데 여기만 토글이 없어 <b>목록에서 끈 발음이 상세에서 되살아나는</b> 단절이 있었다. 22↔24는 같은 상태를 공유한다.</li>
+    </ul></div>
+  </div>
+
+  <!-- 25 단어장 PDF -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>단어장 PDF</span></div>
+      <div class="body">
+        <span class="lbl">내보낼 범위</span>
+        <div class="row wrap" style="gap:6px"><span class="tag on">전체</span><span class="tag">여행</span><span class="tag">JLPT</span><span class="tag custom">커스텀</span></div>
+        <div class="ph dash" style="height:130px">PDF 미리보기</div>
+        <div class="card" style="gap:7px"><div class="row between"><span class="lbl">후리가나 반영</span><span class="toggle on"></span></div><div class="row between"><span class="lbl">한글 발음 반영</span><span class="toggle"></span></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block">⤓ PDF 다운로드</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">25</span><b>단어장 전체 PDF 다운로드</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>필터 상태로 PDF 생성(예: 이번 주 여행 회화 단어만).</li>
+      <li>무료 월 3회 / 구독 무제한. 다운로드 시점 토글 상태 캡처 — <b>토글이 2개로 분리되면서 「후리가나만 있는 PDF」가 가능해졌다.</b> 발음을 뗀 사용자가 후리가나는 남긴 인쇄물을 받을 수 있다(구 단일 토글로는 불가능했던 조합).</li>
+    </ul></div>
+  </div>
+
+  <!-- 26 독해/전래동화 PDF -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>독해·전래동화 PDF</span></div>
+      <div class="body">
+        <span class="lbl">콘텐츠 선택</span>
+        <div class="li"><span class="thumb ph solid">📄</span><div class="t w60 grow"></div><span class="tag on">선택</span></div>
+        <div class="li"><span class="thumb ph solid">📄</span><div class="t w50 grow"></div></div>
+        <div class="li"><span class="thumb ph solid">📄</span><div class="t w70 grow"></div></div>
+        <div class="card" style="gap:7px"><div class="row between"><span class="lbl">후리가나 반영</span><span class="toggle on"></span></div><div class="row between"><span class="lbl">한글 발음 반영</span><span class="toggle"></span></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block">⤓ PDF 다운로드</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">26</span><b>장문 독해·전래동화 PDF 다운로드</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>무료 월 3회 / 구독 무제한.</li>
+    </ul></div>
+  </div>
+
+  <!-- 27 학습 기록 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>편지함</span></div>
+      <div class="body">
+        <span class="lbl">지난 편지 모아보기</span>
+        <div class="card row between"><div class="stack grow"><div class="t sm w30"></div><div class="t w60"></div></div><span class="lbl">›</span></div>
+        <div class="card row between"><div class="stack grow"><div class="t sm w30"></div><div class="t w50"></div></div><span class="lbl">›</span></div>
+        <div class="card row between"><div class="stack grow"><div class="t sm w30"></div><div class="t w70"></div></div><span class="lbl">›</span></div>
+        <div class="card row between"><div class="stack grow"><div class="t sm w30"></div><div class="t w50"></div></div><span class="lbl">›</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">27</span><b>편지함</b> — 지난 편지(일별 요약) 목록</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>명칭 변경(브랜드 개편)</b>: "학습 기록" → <b>"편지함"</b>. 매일 받은 <b>오늘의 편지</b>(20·21)가 쌓이는 곳이라는 은유가 그대로 성립.</li>
+      <li>MY 탭 연동. 항목 탭 시 해당 날짜 편지(20/21 화면)가 그대로 열림.</li>
+      <li>34번 MY 홈의 "학습 기록" 메뉴명도 <b>"편지함"</b>으로 함께 갱신.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= F. 번역 ============================================================= -->
+<div class="section">
+  <h2>F. 메인 탭 — 번역(카메라) (6)</h2>
+  <div class="sub">랜딩 → 촬영 → OCR·번역 처리 → 인식 결과(매칭됨 / 없음) → 저장 위치 선택</div>
+</div>
+<div class="grid">
+
+  <!-- 28 번역 랜딩 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>번역</span></div>
+      <div class="body">
+        <div class="ph dash" style="height:120px">촬영 안내 / 예시</div>
+        <div class="btn pri block">📷 카메라로 촬영하기</div>
+        <span class="lbl">최근 인식 기록</span>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w60 grow"></div><span class="lbl">›</span></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="t w50 grow"></div><span class="lbl">›</span></div>
+      </div>
+      <div class="tabbar"><div class="tab"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab on"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">28</span><b>번역 탭 랜딩</b> — 촬영 버튼 + 최근 기록</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>메뉴판·표지판·안내문을 촬영해 OCR·번역.</li>
+    </ul></div>
+  </div>
+
+  <!-- 28b 번역 랜딩 — 오프라인(촬영 대기열) -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">✕ ▮</span></div>
+      <div class="appbar"><span class="grow">번역</span><span class="kbd">연결 없음</span></div>
+      <div class="body">
+        <div class="ph dash" style="height:96px">토모 + "찍어두면<br>나중에 챙겨둘게요"</div>
+        <div class="btn pri block">📷 찍어두기</div>
+        <div class="row between"><span class="lbl">챙겨둔 사진</span><span class="kbd">3장 대기 중</span></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="stack grow" style="gap:5px"><div class="t w60"></div><span class="lbl">연결되면 처리돼요</span></div></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="stack grow" style="gap:5px"><div class="t w50"></div><span class="lbl">연결되면 처리돼요</span></div></div>
+        <div class="li"><span class="thumb ph solid"></span><div class="stack grow" style="gap:5px"><div class="t w70"></div><span class="lbl">연결되면 처리돼요</span></div></div>
+      </div>
+      <div class="tabbar"><div class="tab"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab on"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">28</span><b>번역 랜딩 — 오프라인(촬영 대기열)</b> · 신규 2026-07-22</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>PRD 5.5 <b>오프라인 촬영</b>의 착지 화면. 오프라인에선 OCR을 <b>실행하지 않고</b> 로컬 대기열에만 보관한다.</li>
+      <li>🔴 <b>버튼 문구가 "촬영하기"가 아니라 "찍어두기"</b>인 이유 — 지금 결과가 나오지 않는다는 걸 <b>버튼이 스스로 말해야</b> 한다. "촬영하기"를 누르고 결과가 안 나오면 고장으로 읽힌다.</li>
+      <li>🔴 <b>온라인 복귀 시 조용히 자동 처리</b>한다. 사용자가 다시 챙길 필요가 없고, <b>완료 알림도 띄우지 않는다</b>(PRD 5.5 원칙 2 + 14.4 과묵한 톤). 결과는 번역 탭에 그냥 쌓여 있다.</li>
+      <li><b>무료·구독 모두 허용</b>(PRD 5.6 ②). 여기서 막으면 5.5의 의미가 없다 — 앱 철학의 핵심이라 <b>구독 검사를 넣지 않는다</b>.</li>
+      <li>문구는 <b>시스템 메시지 톤 금지</b>. "데이터가 연결되어 있지 않습니다" ❌ → <b>토모 톤</b> ✅ (PRD 5.5 원칙 1).</li>
+      <li class="ex">데이터 모델: <code>offline_captures</code> — <b>로컬이 원본, 서버가 사본</b>(오프라인에서 찍히므로 서버 행이 나중에 생긴다).</li>
+    </ul></div>
+  </div>
+
+  <!-- 29 카메라 촬영 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status" style="color:#bbb"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body pad0" style="background:#3a3a3a;color:#ccc;flex-direction:column;justify-content:space-between;padding:0">
+        <div style="padding:12px;font-size:11px;color:#ddd">✕ &nbsp; 카메라 뷰파인더</div>
+        <div class="ph dash" style="width:75%;height:84px;margin:0 auto;background:transparent;border-color:#888;color:#ccc">인식 가이드 프레임</div>
+        <div style="padding:18px;display:flex;justify-content:center;align-items:center;gap:28px">
+          <span style="font-size:11px;color:#bbb">🖼</span>
+          <span style="width:54px;height:54px;border-radius:50%;background:#fff;border:3px solid #888"></span>
+          <span style="font-size:11px;color:#bbb">⚡</span>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">29</span><b>카메라 촬영</b> — 뷰파인더 + 셔터</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>가이드 프레임 안에 문구를 맞추고 촬영.</li>
+    </ul></div>
+  </div>
+
+  <!-- 30 OCR 처리 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body center" style="background:#f7f7f7">
+        <div class="ph" style="width:140px;height:96px">촬영 이미지</div>
+        <div class="ph dash" style="width:42px;height:42px;border-radius:50%;margin:18px auto 0"></div>
+        <div class="t w60" style="margin:14px auto 0"></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">30</span><b>OCR·번역 처리 중</b> — 로딩</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>외부 API(예: Vision + Translate) 연동 처리.</li>
+    </ul></div>
+  </div>
+
+  <!-- 31 인식결과 매칭됨 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>인식 결과</span></div>
+      <div class="body">
+        <div class="ph" style="height:74px">촬영 이미지 (인식 영역 표시)</div>
+        <div class="card"><div class="ph solid" style="height:30px">인식된 문구</div><div class="t w80"></div></div>
+        <div class="card sel"><span class="lbl">🎓 학습 연계 알림</span><div class="t w90"></div><div class="t sm w50"></div></div>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">다시 촬영</div><div class="btn pri grow sm">단어 저장</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">31</span><b>인식 결과 — 학습 매칭됨</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>인식 표현을 학습 콘텐츠와 매칭해 연계 알림 노출.</li>
+      <li class="ex">"이 표현, 여행 회화 3과에서 배운 표현이에요"</li>
+    </ul></div>
+  </div>
+
+  <!-- 32 인식결과 매칭없음 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>인식 결과</span></div>
+      <div class="body">
+        <div class="ph" style="height:74px">촬영 이미지 (인식 영역 표시)</div>
+        <div class="card"><div class="ph solid" style="height:30px">인식된 문구</div><div class="t w80"></div></div>
+        <span class="lbl">매칭된 학습 콘텐츠 없음 — 번역만</span>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">다시 촬영</div><div class="btn pri grow sm">단어 저장</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">32</span><b>인식 결과 — 매칭 없음</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>매칭되는 학습 콘텐츠가 없으면 번역 결과만 표시.</li>
+    </ul></div>
+  </div>
+
+  <!-- 33 저장 위치 선택 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>인식 결과</span></div>
+      <div class="body" style="opacity:.4"><div class="ph" style="height:64px">인식 결과</div></div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="grip"></div>
+        <span class="lbl">저장 위치(태그) 선택 · 1개</span>
+        <div class="row wrap" style="gap:6px"><span class="tag">JLPT</span><span class="tag on">여행 ✓</span><span class="tag">비즈</span><span class="tag">뉴스</span><span class="tag">전래</span><span class="tag custom">커스텀</span><span class="tag plus">＋ 새 태그</span></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">계속 촬영</div><div class="btn pri grow sm">저장 후 단어장</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">33</span><b>저장 위치 선택</b> — 태그 수동 지정</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>카메라는 코스 맥락이 없어 예외적으로 태그를 직접 선택(단일).</li>
+      <li>새 커스텀 태그도 이 화면에서 바로 생성. "태그는 나중에 변경 가능" 안내.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= G. MY ============================================================= -->
+<div class="section">
+  <h2>G. 메인 탭 — MY (6)</h2>
+  <div class="sub">MY 홈 → 설정(화면 표시 · 구독관리) · 학습 통계 · 알림 설정 · 계정 설정</div>
+</div>
+<div class="grid">
+
+  <!-- 34 MY 홈 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>MY</span></div>
+      <div class="body">
+        <div class="card row"><span class="avatar ph solid"></span><div class="stack grow"><div class="t w50"></div><div class="t sm w70"></div></div><span class="tag">무료</span></div>
+        <div class="li"><span class="thumb ph solid" style="width:24px;height:24px"></span><div class="lbl grow">학습 통계</div><span class="lbl">›</span></div>
+        <div class="li"><span class="thumb ph solid" style="width:24px;height:24px"></span><div class="lbl grow">편지함</div><span class="lbl">›</span></div>
+        <div class="li"><span class="thumb ph solid" style="width:24px;height:24px"></span><div class="lbl grow">설정</div><span class="lbl">›</span></div>
+        <div class="li"><span class="thumb ph solid" style="width:24px;height:24px"></span><div class="lbl grow">구독 관리</div><span class="lbl">›</span></div>
+        <div class="li"><span class="thumb ph solid" style="width:24px;height:24px"></span><div class="lbl grow">알림 설정</div><span class="lbl">›</span></div>
+        <div class="li"><span class="thumb ph solid" style="width:24px;height:24px"></span><div class="lbl grow">계정 설정</div><span class="lbl">›</span></div>
+      </div>
+      <div class="tabbar"><div class="tab"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab on"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">34</span><b>MY 홈</b> — 프로필 요약 + 메뉴</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>프로필 요약(플랜 상태) + 하위 메뉴 진입점.</li>
+    </ul></div>
+  </div>
+
+  <!-- 35 설정 화면 표시 (읽기 도움 2토글 · D-day) -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>설정 · 화면 표시</span></div>
+      <div class="body">
+        <span class="lbl">읽기 도움 (2개 · 따로 켜고 끕니다)</span>
+        <div class="card row between" style="padding:9px"><div class="stack grow" style="gap:5px"><span style="font-size:12px;font-weight:600">후리가나</span><div class="t sm w80"></div></div><span class="toggle on"></span></div>
+        <div class="card row between" style="padding:9px"><div class="stack grow" style="gap:5px"><span style="font-size:12px;font-weight:600">한글 발음</span><div class="t sm w90"></div></div><span class="toggle"></span></div>
+        <div class="card" style="padding:9px">
+          <span class="lbl">적용 범위 (두 토글 공통)</span>
+          <div class="li" style="padding:6px 0"><div class="lbl grow">레슨 본문</div><span class="kbd">따름</span></div>
+          <div class="li" style="padding:6px 0"><div class="lbl grow">단어장</div><span class="kbd">따름</span></div>
+          <div class="li" style="padding:6px 0"><div class="lbl grow">오답노트</div><span class="kbd">따름</span></div>
+          <div class="li" style="padding:6px 0"><div class="t w40 grow">PDF</div><span class="kbd">캡처</span></div>
+        </div>
+        <span class="lbl">D-day 위젯</span>
+        <div class="card row between"><div class="stack grow"><div class="lbl">D-day 위젯 표시</div><div class="t sm w80"></div></div><span class="toggle on"></span></div>
+        <div class="card row between" style="border-style:dashed"><div class="stack grow"><div class="lbl">D-day 위젯 표시</div><div class="t sm w70"></div></div><div class="btn sec sm">D-day 설정하기</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">35</span><b>설정 — 화면 표시</b> (읽기 도움 · D-day 위젯)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>화면명 확장(3차)</b>: "설정 — 읽기 도움" → <b>"설정 — 화면 표시"</b>. 읽기 도움과 D-day 위젯을 <b>한 지붕</b>에 둔다(새 화면을 만드는 것보다 저렴). appbar 타이틀·캡션 일괄 갱신.</li>
+      <li>🔴 <b>읽기 도움 = 토글 2개로 분리(PRD 8.4 개정).</b> 구 "후리가나+한글 발음" 단일 토글 폐기.
+        <br><b>분리 이유 — 두 도구의 수명이 다르다.</b> 후리가나는 N2까지 쓰지만 <b>한글 발음은 빨리 떼야 하는 보조바퀴</b>다
+        (<span class="kbd">つ</span> <span class="kbd">ざ</span> <span class="kbd">ん</span> 등은 한글로 정확히 못 적어, 계속 의존하면 <b>틀린 발음이 굳는다</b>).
+        묶어 두면 <b>발음을 떼려는 순간 후리가나까지 사라져</b> 초급을 막 벗어나는 사용자에게 잘못된 선택을 강요한다.</li>
+      <li><b>기본값 — 온보딩 Q2(현재 수준) 연동</b>. 켜고 끄는 부담을 처음부터 지우지 않는다.
+        <table style="border-collapse:collapse;margin:5px 0 2px;font-size:11px">
+          <tr><td style="padding:3px 10px 3px 0;color:var(--ink-3)">Q2 응답</td><td style="padding:3px 10px;border-left:1px solid var(--line)"><b>후리가나</b></td><td style="padding:3px 10px;border-left:1px solid var(--line)"><b>한글 발음</b></td></tr>
+          <tr><td style="padding:3px 10px 3px 0">완전 초보</td><td style="padding:3px 10px;border-left:1px solid var(--line)">ON</td><td style="padding:3px 10px;border-left:1px solid var(--line)">ON</td></tr>
+          <tr><td style="padding:3px 10px 3px 0">조금 안다 이상</td><td style="padding:3px 10px;border-left:1px solid var(--line)">ON</td><td style="padding:3px 10px;border-left:1px solid var(--line)"><b>OFF</b></td></tr>
+        </table>
+        <span class="ex">프레임의 토글 상태가 "조금 안다 이상" 케이스다.</span></li>
+      <li><b>레이아웃 처리가 서로 다르다</b>(디자인 시스템 사양서 3.2·4.1): <b>후리가나 = 공간 항상 확보</b>(읽는 중 자주 토글 → 점프하면 읽기가 끊김) / <b>한글 발음 = 공간 회수</b>(한 번 끄면 계속 끄는 사실상의 설정 → 빈 줄을 남길 이유가 없음).</li>
+      <li>단, <b>학습 카드 앞면·읽기형 지문 첫 노출은 설정과 무관하게 기본 OFF</b>(먼저 스스로 부딪히는 면에서는 도움이 꺼져 있고, 도움은 사용자가 켠다 — PRD 8.4 통합 원칙).</li>
+      <li><b>「해석」은 여기 없다</b> — 토글이 아니라 <b>문장 끝 <span class="kbd">⋯</span> 탭</b>으로 문장 단위 제공(12번 참조). 설정으로 켜 두는 값이 아니므로 이 화면에 항목을 만들지 않는다.</li>
+      <li><b>「D-day 위젯 표시」</b>는 8번 홈에서 ✕로 닫은 D-day를 <b>다시 켜는 재진입 경로</b>.</li>
+      <li><b>하나의 항목이 상태에 따라 두 역할(3차 확정)</b>:<br>
+        · <b>D-day 설정됨</b> → 홈 표시 <b>on/off 토글</b>로 동작 (프레임 위쪽 항목)<br>
+        · <b>D-day 미설정</b> → 토글 대신 <b>"D-day 설정하기" CTA</b>가 놓이고 탭 시 <b>46번 모달</b> 진입 (프레임 아래 점선 항목)</li>
+      <li class="ex">프레임에는 두 상태를 나란히 그려 비교했을 뿐, 실제로는 <b>같은 자리에 한 항목</b>만 노출된다.</li>
+      <li>미설정 사용자에게 켤 대상이 없는 토글을 보여주면 무의미하므로, <b>설정 유도로 자연스럽게 전환</b>되게 한다.</li>
+    </ul></div>
+  </div>
+
+  <!-- 36 구독 관리 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>구독 관리</span></div>
+      <div class="body">
+        <div class="card"><span class="lbl">현재 플랜</span><div class="row between"><div class="t lg w40"></div><span class="tag">배너광고</span></div></div>
+        <div class="card"><span class="lbl">구독 시 혜택</span><div class="t w80"></div><div class="t w70"></div><div class="t w60"></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block">구독 전환하기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">36</span><b>설정 — 구독 관리</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>월 1,900원 / 연 20,900원. 광고 제거 + PDF·통계·오프라인 확대.</li>
+      <li>무료 유지 시 설정에서 언제든 전환 가능.</li>
+    </ul></div>
+  </div>
+
+  <!-- 37 학습 통계 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">학습 통계</span><span class="tag">구독</span></div>
+      <div class="body">
+        <div class="row" style="gap:8px"><div class="card grow"><span class="lbl">총 학습일</span><div class="t lg w50"></div></div><div class="card grow"><span class="lbl">저장 단어</span><div class="t lg w40"></div></div></div>
+        <div class="card"><span class="lbl">주간 학습 세션</span><div class="ph dash" style="height:84px">막대 그래프</div></div>
+        <div class="card"><span class="lbl">코스별 진도</span><div class="prog" style="margin-bottom:6px"><i style="width:70%"></i></div><div class="prog"><i style="width:35%"></i></div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">37</span><b>학습 통계</b> — 구독자용 상세</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>구독자 전용 상세 통계(세션·진도 등).</li>
+    </ul></div>
+  </div>
+
+  <!-- 38 알림 설정 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>알림 설정</span></div>
+      <div class="body">
+        <div class="card row between"><div class="lbl grow">학습 리마인드</div><span class="toggle on"></span></div>
+        <div class="card row between"><div class="stack grow"><div class="lbl">리마인드 시간</div><div class="t sm w30"></div></div><span class="lbl">›</span></div>
+        <div class="card row between"><div class="lbl grow">스트릭 알림</div><span class="toggle on"></span></div>
+        <div class="card row between"><div class="lbl grow">마케팅 알림</div><span class="toggle"></span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">38</span><b>알림 설정</b> — 푸시 리마인드</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>Q3(학습 강도) 응답에 따라 알림 빈도 조정.</li>
+    </ul></div>
+  </div>
+
+  <!-- 39 계정 설정 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>계정 설정</span></div>
+      <div class="body">
+        <div class="li"><div class="lbl grow">이메일 / 연결 계정</div><span class="lbl">›</span></div>
+        <div class="li"><div class="lbl grow">비밀번호 변경</div><span class="lbl">›</span></div>
+        <div class="li"><div class="lbl grow">언어 설정</div><span class="lbl">›</span></div>
+        <div class="li"><div class="lbl grow">약관 · 개인정보</div><span class="lbl">›</span></div>
+        <div class="grow"></div>
+        <div class="btn sec block">로그아웃</div>
+        <div class="row" style="justify-content:center"><span class="lbl">회원 탈퇴</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">39</span><b>계정 설정</b> — 표준 항목</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>로그아웃 · 회원 탈퇴 등 표준 계정 항목.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= H. 구독 전환 ============================================================= -->
+<div class="section">
+  <h2>H. 구독 전환 (5)</h2>
+  <div class="sub">D6 알림 배너 → 플랜 선택 → 결제 진행 → 구독 완료 / 무료 유지 확인</div>
+</div>
+<div class="grid">
+
+  <!-- 40 D6 배너 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span></div>
+      <div class="body">
+        <div class="card row between" style="border:1.5px solid var(--ink);background:var(--fill-1)">
+          <div class="stack grow"><div class="t w70"></div><div class="t sm w50"></div></div>
+          <div class="btn pri sm">플랜 보기</div><span class="lbl">✕</span>
+        </div>
+        <div class="card"><div class="row between"><span class="lbl">오늘의 학습</span><span class="kbd">2/5</span></div><div class="prog"><i style="width:40%"></i></div></div>
+        <div class="row" style="gap:8px"><div class="card grow"><div class="t w50"></div></div><div class="card grow"><div class="t w40"></div></div></div>
+      </div>
+      <div class="tabbar"><div class="tab on"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div><div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div><div class="tab"><span class="ic"></span>MY</div></div>
+    </div>
+    <div class="cap"><span class="num">40</span><b>D6 알림 배너</b> — 홈 상단 오버레이</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>7일 체험 종료 직전(D6) 홈 상단 배너로 플랜 선택 유도.</li>
+    </ul></div>
+  </div>
+
+  <!-- 41 플랜 선택 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar center"><span>플랜 선택</span><span class="act">✕</span></div>
+      <div class="body">
+        <div class="row" style="gap:8px;align-items:stretch">
+          <div class="card grow"><span class="lbl">무료</span><div class="t lg w60"></div><div class="t sm w80"></div><div class="t sm w70"></div><div class="t sm w60"></div></div>
+          <div class="card sel grow"><span class="lbl">구독 · 추천</span><div class="t lg w60"></div><div class="t sm w80"></div><div class="t sm w70"></div><div class="t sm w60"></div></div>
+        </div>
+        <div class="card row between"><div class="lbl">월 요금</div><span class="tag on">선택</span></div>
+        <div class="card row between"><div class="lbl">연 요금</div><span class="tag">할인</span></div>
+        <div class="grow"></div>
+        <div class="btn pri block">구독 시작하기</div>
+        <div class="row" style="justify-content:center"><span class="lbl">무료로 계속하기</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">41</span><b>플랜 선택</b> — 무료 vs 구독 비교</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>무료(콘텐츠 무제한+광고, PDF 월3회) vs 구독(광고 제거, PDF 무제한).</li>
+      <li class="ex">월 1,900원 / 연 20,900원</li>
+    </ul></div>
+  </div>
+
+  <!-- 42 결제 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>결제</span></div>
+      <div class="body">
+        <div class="card"><span class="lbl">선택한 플랜</span><div class="row between"><div class="t w50"></div><span class="lbl">변경</span></div></div>
+        <div class="ph dash" style="height:160px">PG사 표준 결제 UI 영역</div>
+        <div class="grow"></div>
+        <div class="btn pri block">결제하기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">42</span><b>구독 결제 진행</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>결제 수단 입력은 PG사 표준 UI → 별도 와이어프레임 불필요(자리만 표시).</li>
+    </ul></div>
+  </div>
+
+  <!-- 43 구독 완료 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body center">
+        <div class="ph dash" style="width:100px;height:100px;border-radius:50%">완료</div>
+        <div class="t lg w60" style="margin:16px auto 0"></div>
+        <div class="t w80" style="margin:0 auto"></div>
+        <div class="card" style="width:100%;margin-top:14px"><span class="lbl">이용 가능해진 혜택</span><div class="t sm w70"></div><div class="t sm w50"></div></div>
+        <div class="grow"></div>
+        <div class="btn pri block">학습 계속하기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">43</span><b>구독 완료</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>구독 완료 안내 + 새로 열린 혜택 요약.</li>
+    </ul></div>
+  </div>
+
+  <!-- 44 무료 유지 확인 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="body" style="opacity:.4"><div class="row" style="gap:8px"><div class="card grow"><div class="t w60"></div></div><div class="card grow"><div class="t w60"></div></div></div></div>
+      <div class="dim"></div>
+      <div class="modal">
+        <div class="t lg w70" style="margin:0 auto"></div>
+        <div class="card"><span class="lbl">계속 유지되는 것</span><div class="t sm w80"></div><div class="t sm w60"></div></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">구독 다시 보기</div><div class="btn pri grow sm">무료로 계속</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">44</span><b>무료 플랜 유지 확인</b></div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>무료 유지해도 전체 콘텐츠 학습 무제한 + 언제든 구독 전환 가능 안내.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= I. 추가 승인 화면 ============================================================= -->
+<div class="section">
+  <h2>I. 추가 승인 화면 (6) — 2026-07-20 대표 승인</h2>
+  <div class="sub">기존 1~44번 번호를 유지하기 위해 <b>뒤에 이어붙임</b>(재번호 금지) · 오답노트 PDF · D-day 설정 모달 · 오답노트 모아보기 · 레슨 형식 2종(비즈니스) · <b>토모의 쪽지(50, 신규 승인 · PRD 14.5 Should)</b></div>
+</div>
+<div class="grid">
+
+  <!-- 45 오답노트 PDF -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span>오답노트 PDF</span></div>
+      <div class="body">
+        <span class="lbl">내보낼 범위</span>
+        <div class="row wrap" style="gap:6px"><span class="tag on">전체</span><span class="tag">JLPT</span><span class="tag">여행</span><span class="tag">비즈</span><span class="tag">뉴스</span><span class="tag">전래</span></div>
+        <div class="row wrap" style="gap:6px"><span class="tag custom">N3 ▾</span><span class="tag">단어</span><span class="tag on">문법</span><span class="tag">독해</span><span class="tag">청해</span></div>
+        <div class="ph dash" style="height:118px">PDF 미리보기</div>
+        <div class="card" style="gap:7px"><div class="row between"><span class="lbl">후리가나 반영</span><span class="toggle on"></span></div><div class="row between"><span class="lbl">한글 발음 반영</span><span class="toggle"></span></div></div>
+        <div class="card row between" style="border:1.5px solid var(--ink)"><span class="lbl">보유 우표</span><div class="prog grow" style="margin:0 8px"><i style="width:100%"></i></div><span class="kbd">5장 필요</span></div>
+        <div class="grow"></div>
+        <div class="btn pri block">⤓ PDF 다운로드 (우표 5장)</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">45</span><b>오답노트 PDF 다운로드</b> · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>25·26번 PDF 화면 패턴 재사용 — 범위 선택 → 미리보기 → <b>읽기 도움 2토글(후리가나·발음)</b> → 다운로드.</li>
+      <li><b>우표 5장 = PDF 1부</b>(PRD 12.2). 3개 소비처 중 <b>가장 저렴</b> — 학습 효과가 커 복습을 장려하기 위한 의도적 가격 차등(요약 7장 / 오답노트 5장 / 단어장 추가권 10장).</li>
+      <li>47번 하단 [PDF] 버튼에서 진입.</li>
+      <li>🔴 PDF에는 <b>진행률·D-day·우표 등 앱 상태 요소 제외</b> — 오답 문항·정답·해설 등 "다시 볼 학습 내용"만(PRD 8.2.1 전 PDF 공통 원칙).</li>
+      <li>우표 부족 시 20번처럼 <b>잠금 상태 버튼</b>("N장 더 모으면 받기")으로 표시.</li>
+    </ul></div>
+  </div>
+
+  <!-- 46 D-day 설정 모달 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span></div>
+      <div class="body" style="opacity:.4">
+        <div class="row wrap" style="gap:6px"><span class="tag on">현재 코스 ▾</span><span class="tag">코스</span></div>
+        <div class="card row between" style="border-style:dashed"><div class="t sm w50 grow"></div><div class="btn sec sm">D-day 설정</div></div>
+        <div class="card"><div class="t w60"></div></div>
+      </div>
+      <div class="dim"></div>
+      <div class="modal">
+        <div class="row between"><span class="lbl">D-day 설정</span><span class="lbl">✕</span></div>
+        <div class="t sm w80"></div>
+        <div class="ph" style="height:40px;justify-content:flex-start;padding-left:10px">날짜 선택 (달력)</div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">나중에</div><div class="btn pri grow sm">저장</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">46</span><b>D-day 설정 모달</b> · 신규 (소형 입력 모달)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>JLPT 시험일 ↔ 여행 출발일 공용</b> 모달. 라벨만 컨텍스트에 따라 바뀌고 구조는 동일(제작비 절감).</li>
+      <li>진입: 8번 홈의 "D-day 설정하기" CTA / 11번 코스 상세 상단 요약.</li>
+      <li>⚠️ <b>"나중에" 옵션 필수</b> — <b>D-day를 입력하지 않아도 학습에 전혀 지장이 없어야 함.</b> D-day는 <b>선택적 동기 장치이지 학습 전제조건이 아님</b>(JLPT·여행회화 동일 적용).</li>
+      <li>"나중에"를 눌러도 학습 흐름은 그대로 이어지고, 위젯 자리에는 CTA만 조용히 남는다.</li>
+    </ul></div>
+  </div>
+
+  <!-- 47 오답노트 모아보기 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">오답노트</span><span class="row" style="gap:4px"><span class="tag rt on">후리가나</span><span class="tag rt">발음</span></span></div>
+      <div class="body" style="gap:9px">
+        <div class="row wrap" style="gap:5px"><span class="tag on">전체</span><span class="tag">JLPT</span><span class="tag">여행</span><span class="tag">비즈</span><span class="tag">뉴스</span><span class="tag">전래</span></div>
+        <div class="row wrap" style="gap:5px"><span class="tag custom">N3 ▾</span><span class="tag">단어</span><span class="tag on">문법</span><span class="tag">독해</span><span class="tag">청해</span></div>
+        <div class="row wrap" style="gap:5px"><span class="tag">전체</span><span class="tag on">아직 헷갈려요</span><span class="tag">이제 알아요</span></div>
+        <div class="row between"><span class="lbl">정렬: 틀린 횟수 많은 순</span><span class="kbd">최근순 ▾</span></div>
+        <div class="li"><span class="kbd">✕3</span><div class="stack grow"><div class="t w60"></div><div class="t sm w80"></div></div><span class="btn sec sm" style="height:28px">다시풀기</span></div>
+        <div class="li"><span class="kbd">✕2</span><div class="stack grow"><div class="t w50"></div><div class="t sm w70"></div></div><span class="btn sec sm" style="height:28px">다시풀기</span></div>
+        <div class="li"><span class="kbd">⤼</span><div class="stack grow"><div class="t w60"></div><div class="t sm w60"></div></div><span class="btn sec sm" style="height:28px">다시풀기</span></div>
+        <div class="li"><span class="kbd">⤼</span><div class="stack grow"><div class="t w40"></div><div class="t sm w70"></div></div><span class="btn sec sm" style="height:28px">다시풀기</span></div>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn pri grow sm">전체 다시 풀기</div><div class="btn sec grow sm">⤓ PDF (우표 5장)</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">47</span><b>오답노트 모아보기</b> · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>신설 사유: 기존 44개에 <b>누적 오답을 앱에서 볼 화면이 없었음</b>(18 Snackbar / 20·21 요약 / 27 날짜별 기록뿐) → 45번 PDF만 만들면 "앱에선 못 보는데 PDF로는 받는" 모순.</li>
+      <li>22번 단어장 목록 패턴 재사용. 상단 <b>코스 태그 필터</b> + JLPT 선택 시 <b>급수·영역 하위 필터</b>.</li>
+      <li>급수는 <b>태그가 아니라 속성(메타데이터)</b>으로 저장 — 태그 단일 선택 규칙(PRD 6.1)을 지키기 위해 <span class="ex">JLPT+N3 복수 태그</span>를 쓰지 않고 하위 필터로 처리.</li>
+      <li><b>구분 표시</b>: <span class="kbd">✕3</span> = 틀린 횟수 / <span class="kbd">⤼</span> = 넘어감. 성격이 다름(틀림 vs 미해결 보류).</li>
+      <li>정렬 기본 = <b>틀린 횟수 많은 순</b>(약한 것부터), 최근순 토글 제공.</li>
+      <li>읽기 도움 <b>기본 ON</b>(PRD 8.4가 오답노트를 명시) — <b>후리가나·발음 2개 모두</b> 35번 설정값을 따른다. "몰랐던 것을 다시 보는" 공간이라 도움을 끄고 시작할 이유가 없다.</li>
+      <li><b>용어 변경(2차)</b>: "익힘" 폐기 — 만들어낸 말이라 뜻이 모호함. 상태 필터 칩을 <b>[전체] [아직 헷갈려요] [이제 알아요]</b>로 사용자 언어로 교체.</li>
+      <li>졸업 규칙: <b>2회 연속 정답 시 "이제 알아요"로 이동</b>(<b>삭제 아님</b>). 오답 분기 기준(2회 연속 오답)과 대칭이라 규칙을 하나로 기억.</li>
+      <li>→ 이동된 항목은 <b>"이제 알아요" 칩으로 언제든 다시 열람·재학습</b> 가능. 별도 재열람 진입점을 만들지 않고 필터 칩으로 해결.</li>
+    </ul></div>
+  </div>
+
+  <!-- 48 문서 템플릿형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">레슨 · 문서 템플릿형</span><span class="toggle on"></span></div>
+      <div class="body" style="gap:9px">
+        <div class="row wrap" style="gap:5px"><span class="tag on">이메일</span><span class="tag">보고서</span><span class="tag custom">고급 · J2~ 목표 ▾</span></div>
+        <div class="card" style="gap:6px;padding:9px">
+          <div class="row between"><span class="lbl">① 서두 (인사·소속)</span><span class="kbd">문례 3</span></div>
+          <div class="ph solid" style="height:28px">선택된 문례</div>
+          <div class="row wrap" style="gap:5px"><span class="tag on">문례 A</span><span class="tag">문례 B</span><span class="tag">문례 C</span></div>
+        </div>
+        <div class="card" style="gap:6px;padding:9px">
+          <div class="row between"><span class="lbl">② 본문 (용건)</span><span class="kbd">문례 4</span></div>
+          <div class="ph solid" style="height:34px">선택된 문례</div>
+          <div class="row wrap" style="gap:5px"><span class="tag">문례 A</span><span class="tag on">문례 B</span><span class="tag">문례 C</span></div>
+        </div>
+        <div class="card" style="gap:6px;padding:9px">
+          <div class="row between"><span class="lbl">③ 맺음 (마무리·서명)</span><span class="kbd">문례 3</span></div>
+          <div class="ph solid" style="height:26px">선택된 문례</div>
+        </div>
+        <div class="grow"></div>
+        <div class="row" style="gap:8px"><div class="btn sec grow sm">전체 문서 보기</div><div class="btn pri grow sm">퀴즈로</div></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">48</span><b>레슨 콘텐츠 — 문서 템플릿형</b> (비즈니스 이메일·보고서) · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>신설 사유: <b>표현 카드(13번)로는 긴 문서 작성을 다룰 수 없음.</b></li>
+      <li><b>템플릿 구조(서두 / 본문 / 맺음)</b>를 뼈대로 두고, 각 블록마다 <b>문례를 선택</b>해 문서를 조립하는 방식.</li>
+      <li>[전체 문서 보기] = 선택한 문례를 이어붙인 완성 문서 확인.</li>
+      <li>해설 축은 상황 적절성·<b>정중도</b> 중심(사내/사외, 손윗사람 여부에 따른 문례 차이). <b>BJT를 도입해도 이 축은 바꾸지 않는다</b>(PRD 4.2.6).</li>
+      <li><b>2026-07-22 BJT 정합 반영</b> — 난이도 칩에 <b>J 라벨 병기</b>. 🔴 <b>「J2 상당」이 아니라 「J2~ 목표」</b>로 약하게 쓴다(PRD 4.2.3): BJT 레벨은 <b>응시자 점수 구간</b>이지 콘텐츠 등급이 아니므로, 임의 매핑은 <b>그 자체가 미검증 주장</b>이 된다. 감수 확보 후 표기 강화.</li>
+      <li><b>🆕 자료 기반 문항의 그릇</b> — BJT 総合聴読解 유형(견적서·결산표·<b>이메일 화면</b>을 보며 음성 듣고 답하기). <b>신규 화면·신규 퀴즈 유형 없음</b> — 기존 청해형에 자료 이미지가 붙는 형태(<code>questions.asset_url</code> 컬럼 1개).</li>
+      <li><b>메일 작성은 자유 작문이 아니다.</b> 작문 채점은 MVP에서 불가능 → <b>기존 퀴즈 3유형으로 구성</b>: 빈칸 채우기 · 문형 선택 · <b>순서 배열형</b>(인사→용건→맺음).</li>
+      <li>⚠️ 비즈니스 전 영역이 슈슈 리서치에서 <b>검증필요</b> 처리됨(현지 실사용·세대/업계 적합성 미검증) → 일본인 감수 전 확정·출시 금지.</li>
+    </ul></div>
+  </div>
+
+  <!-- 49 대화 시뮬레이션형 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">레슨 · 대화 시뮬레이션형</span><span class="toggle on"></span></div>
+      <div class="body" style="gap:9px">
+        <div class="card row between" style="padding:8px"><span class="lbl">상황: 전화 응대</span><span class="kbd">3/6턴</span></div>
+        <div class="row" style="gap:7px;align-items:flex-start">
+          <span class="thumb ph solid" style="width:26px;height:26px;border-radius:50%"></span>
+          <div class="card grow" style="padding:9px;gap:5px"><div class="t w80"></div><div class="t sm w50"></div><span class="lbl">🔊 재생</span></div>
+        </div>
+        <div class="row" style="gap:7px;align-items:flex-start;flex-direction:row-reverse">
+          <span class="thumb ph solid" style="width:26px;height:26px;border-radius:50%"></span>
+          <div class="card grow" style="padding:9px;gap:5px;background:var(--fill-1)"><div class="t w60"></div></div>
+        </div>
+        <div class="row" style="gap:7px;align-items:flex-start">
+          <span class="thumb ph solid" style="width:26px;height:26px;border-radius:50%"></span>
+          <div class="card grow" style="padding:9px;gap:5px"><div class="t w70"></div><span class="lbl">🔊 재생</span></div>
+        </div>
+        <div class="grow"></div>
+        <span class="lbl">내 차례 — 응답 선택</span>
+        <div class="stack" style="gap:7px">
+          <div class="card" style="padding:9px"><div class="t w70"></div></div>
+          <div class="card" style="padding:9px"><div class="t w60"></div></div>
+          <div class="card" style="padding:9px"><div class="t w50"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">49</span><b>레슨 콘텐츠 — 대화 시뮬레이션형</b> (비즈니스 전화 응대) · 신규</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>신설 사유: 전화 응대는 <b>주고받는 흐름</b>이라 카드형(13번)으로 표현 불가.</li>
+      <li>상대 말풍선(좌·음성 재생) ↔ 내 말풍선(우)이 누적되는 <b>대화 흐름</b> + 하단 <b>내 차례 선택지</b>.</li>
+      <li>선택 결과에 따라 다음 턴이 이어지고, 부적절한 선택은 17번 피드백에서 <b>정중도·상황 적절성</b> 관점으로 설명.</li>
+      <li>스피킹형 퀴즈(16)와 연결 — 말해야 하는 코스이므로 우선 도입 대상.</li>
+      <li>⚠️ 비즈니스 <b>검증필요</b> 대상(특히 접대·교섭 고급 표현) — 일본인 감수 전 확정 금지.</li>
+    </ul></div>
+  </div>
+
+  <!-- 50 토모의 쪽지 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="grow"></span><span class="act">✕</span></div>
+      <div class="body" style="gap:14px">
+        <div class="ph dash" style="height:96px">토모(등불)가<br>쪽지를 건네는 구도</div>
+        <div class="card" style="gap:10px;padding:14px">
+          <span class="lbl">일본어 문장 (후리가나)</span>
+          <div class="ph solid" style="height:56px;font-size:12px">일본어 문장</div>
+          <div class="stack" style="gap:6px"><span class="lbl">해석</span><div class="t w90"></div><div class="t w60"></div></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn sec block">다음 쪽지</div>
+        <div class="row" style="justify-content:center"><span class="lbl">닫기</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">50</span><b>토모의 쪽지</b> · 신규 (PRD 14.5 · Should)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>용기를 주는 일본어 문장을 <b>가볍게 보고 지나가는</b> 콘텐츠. <b>보기 전용</b>(따라 쓰기는 이후 단계), <b>전 코스 동일</b>(코스 무관 공통).</li>
+      <li>왜 만드는가: 제품 철학은 <b>"의지를 꺾지 않고 북돋아 준다"</b>인데 지금까지 설계는 전부 <b>"꺾지 않는다"</b>(강제·마찰 제거)뿐이었고 <b>북돋는 장치가 없었다</b>. 또한 <b>학습하지 않는 날의 재방문 경로</b>가 된다.</li>
+      <li><b>"편지"와 "쪽지"는 다른 것</b> — <b>편지</b> = 학습 요약 PDF(20·21, <b>우표 7장 필요</b>) / <b>쪽지</b> = 격려 문장(<b>그냥 열림</b>). 무게 차이가 성격 차이와 일치한다. <b>우표→편지 리워드 논리(PRD 12.2)를 지키기 위해 격려 콘텐츠에는 "편지"를 쓰지 않는다.</b></li>
+      <li><b>보상 없음(우표 지급 X).</b> 우표를 주면 "용기를 얻으러 여는 것"이 <b>"보상 파밍"</b>이 된다. 보상이 없어야 <b>"학습 실적이 아니라 쉼표"</b>라는 정체성이 지켜진다.</li>
+      <li><b>해석 기본 제공(ON).</b> PRD 8.4는 "스스로 부딪히는 면은 기본 OFF"지만 여기는 <b>부딪히는 자리가 아니라 위로받는 자리</b>다. 못 읽고 좌절하면 목적이 무너진다 → <b>원칙 위반이 아니라 적용 범위 밖</b>.</li>
+      <li>문장 속 단어는 <b>탭해서 저장 가능</b>(15번 팝업 재사용, PRD 7.3 일관성).</li>
+      <li>헤더는 학습 화면처럼 무겁지 않게 <b>닫기(✕)만</b>. <b>진행바·우표·퀴즈·다음 세션 등 진도·보상 요소는 일절 두지 않는다.</b></li>
+      <li>콘텐츠 원천: <b>속담·관용구 / 青空文庫 만료작 / 자체 창작</b>. ⚠️ <b>현대 작가 명언은 저작권 리스크로 미사용</b>.</li>
+      <li>진입: 8번 홈의 토모(등불) 탭. 새 쪽지가 있으면 등불이 살짝 밝아짐(배지·빨간 점 금지).</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ============================================================= J. 오프라인 ============================================================= -->
+<div class="section">
+  <h2>J. 오프라인 (2) — 2026-07-22 대표 승인</h2>
+  <div class="sub">PRD 5.5 · 5.6 — 오프라인 3분할(①열람 ②촬영 = 무료·구독 공통 / ③미리받기 = 구독 전용). 관련 상태 화면은 19·28에 변형으로 추가됨.</div>
+</div>
+<div class="grid">
+
+  <!-- 51 오프라인 진입 화면 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">✕ ▮</span></div>
+      <div class="body">
+        <div class="ph dash" style="height:110px;margin-top:6px">토모(등불)<br>어두워지지 않음<br>평소 밝기 유지</div>
+        <div class="stack" style="gap:6px;margin-top:4px">
+          <div class="t lg w70"></div>
+          <div class="t sm w90"></div>
+        </div>
+        <span class="lbl" style="margin-top:6px">지금 할 수 있는 것</span>
+        <div class="stack" style="gap:0">
+          <div class="li"><span class="thumb ph solid" style="width:26px;height:26px"></span><div class="t w60 grow"></div><span class="lbl">›</span></div>
+          <div class="li"><span class="thumb ph solid" style="width:26px;height:26px"></span><div class="t w70 grow"></div><span class="lbl">›</span></div>
+          <div class="li"><span class="thumb ph solid" style="width:26px;height:26px"></span><div class="t w50 grow"></div><span class="lbl">›</span></div>
+          <div class="li"><span class="thumb ph solid" style="width:26px;height:26px"></span><div class="t w60 grow"></div><span class="lbl">›</span></div>
+        </div>
+        <div class="grow"></div>
+        <div class="btn pri block">📷 찍어두기</div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">51</span><b>오프라인 진입 화면</b> · 신규 (PRD 5.6)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li>🔴 <b>"막힌 걸 알리는 화면"이 아니라 "되는 것을 알리는 화면"</b>(PRD 5.5 원칙 4). 화면 전체를 <b>할 수 있는 것 목록</b>이 차지하고, <b>안 되는 것은 나열하지 않는다.</b></li>
+      <li>목록 4개(PRD 5.6): <b>저장해둔 단어 다시 보기</b> · <b>오답노트 복습</b> · <b>받아둔 편지 열기</b> · <b>미리 받은 레슨</b>(구독자만 노출). 하단 CTA는 <b>📷 찍어두기</b>.</li>
+      <li>문구는 <b>토모 톤</b>: <i>"지금은 연결이 안 되네요. 그래도 이건 지금도 할 수 있어요."</i>
+        <br>⚠️ "데이터가 연결되어 있지 않습니다" 같은 <b>시스템 메시지 톤 금지</b>(PRD 5.5 원칙 1).</li>
+      <li>🔴 <b>토모를 어둡게 만들지 않는다.</b> 토모의 밝기는 <b>학습 상태</b>를 나타내는 신호인데(PRD 14.2), 통신 상태로 어두워지면 <b>"네 잘못"처럼 읽힌다.</b> 연결이 끊긴 건 사용자 탓이 아니다.</li>
+      <li>⚠️ <b>첫 진입 1회만 이 전면 화면</b>, 이후엔 상태바 옆 가벼운 표시로 대체(PRD 5.5 원칙 3). <b>여행 내내 오프라인일 수 있어</b> 매번 띄우면 안내 자체가 방해가 된다.</li>
+      <li>오프라인 3분할(PRD 5.6): <b>①열람 ②촬영은 무료도 전부 가능</b>, ③미리 받기만 구독 전용.
+        <br>· ①은 <i>"내가 이미 가진 걸 오프라인에서 본다"</i> → <b>기능이 아니라 당연한 동작</b>. 안 되면 버그다.</li>
+    </ul></div>
+  </div>
+
+  <!-- 52 콘텐츠 미리 받기 -->
+  <div class="screen">
+    <div class="frame">
+      <div class="status"><span>9:41</span><span class="dots">▮▮▮ ▮</span></div>
+      <div class="appbar"><span class="back">‹</span><span class="grow">미리 받기</span><span class="kbd">구독</span></div>
+      <div class="body" style="gap:10px">
+        <div class="card row between"><div class="stack"><span class="lbl">받아둔 콘텐츠</span><div class="t" style="width:70px"></div></div><span class="kbd">128 MB</span></div>
+        <span class="lbl">코스 선택</span>
+        <div class="row wrap" style="gap:5px"><span class="tag on">JLPT</span><span class="tag">여행 회화</span><span class="tag">비즈니스</span></div>
+        <div class="row wrap" style="gap:5px"><span class="tag">N5</span><span class="tag">N4</span><span class="tag on">N3</span><span class="tag">N2</span><span class="tag">N1</span></div>
+        <div class="stack" style="gap:0">
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w60"></div><span class="lbl">받음 · 12 MB</span></div><span class="kbd">✓</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w70"></div><span class="lbl">받는 중 40%</span></div><span class="lbl">✕</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w50"></div><span class="lbl">18 MB · 청해 음성 포함</span></div><span class="kbd">⤓</span></div>
+          <div class="li"><div class="stack grow" style="gap:5px"><div class="t w80"></div><span class="lbl">9 MB</span></div><span class="kbd">⤓</span></div>
+        </div>
+        <div class="grow"></div>
+        <div class="card row between"><span class="lbl grow">오프라인에서 학습해도 우표는 적립돼요</span><span class="kbd">?</span></div>
+      </div>
+    </div>
+    <div class="cap"><span class="num">52</span><b>콘텐츠 미리 받기</b> · 신규 (구독 전용 · PRD 5.6 ③)</div>
+    <div class="memo"><div class="mh">memo</div><ul>
+      <li><b>신설 사유</b>: PRD 11장 Should · 5.6 ③에 <b>"콘텐츠 미리 받기(구독자용)"</b>가 명시돼 있는데 <b>화면이 아예 없었다.</b> 구독 혜택 4가지 중 하나가 UI 없이 남아 있던 상태.</li>
+      <li>🔴 <b>여기가 유일하게 구독 검사가 붙는 오프라인 기능</b>이다. ①열람·②촬영에는 구독 검사를 <b>넣지 않는다</b>(PRD 5.6). 비구독자 진입 시 41번 플랜 선택으로 보낸다.</li>
+      <li><b>구독 혜택으로 적절한 이유</b>: ①은 <i>"내가 이미 가진 걸 본다"</i>(당연), ③은 <i>"온라인에서 미리 받아둔다"</i>(<b>편의</b>). 돈 주고 사는 건 편의지 학습 접근권이 아니다.</li>
+      <li><b>용량을 반드시 표시</b>한다. 청해 음성이 들어가면 급수 하나가 수십 MB가 된다 — 모르고 받게 하면 데이터·저장공간 사고가 난다. <b>청해 포함 여부를 항목에 명시.</b></li>
+      <li>하단 안내 = <b>2026-07-22 확정 사항</b>. <b>오프라인 학습에도 우표를 지급</b>한다(안 주면 이 기능의 가치가 반토막). 단 발급 판정은 서버가 하며, 학습 중 화면엔 <b>"도착 예정"</b>으로 보인다(19번 변형 참조).</li>
+      <li>⚠️ MVP <b>Should</b>라 출시 직후 추가 대상. 다만 <b>화면을 지금 잡아둬야</b> 구독 플랜 비교표(41번)의 항목과 어긋나지 않는다.</li>
+      <li class="ex">데이터 모델: <code>content_downloads</code>(scope · 용량 · 만료). 오프라인 학습 로그 검증 규칙 ①<b>"미리 받은 범위 안의 콘텐츠만 인정"</b>이 이 테이블을 기준으로 판정한다.</li>
+    </ul></div>
+  </div>
+
+</div>
+
+<footer>
+  <div><b>제작 노트</b></div>
+  <div>· 총 <b>52개 화면</b> (A7 · B2 · C8 · D4 · E6 · F6 · G6 · H5 · I6 · <b>J2</b>) · 프레임 69장. 2026-07-20 플로우 검토 · 브랜드 개편 · <b>2026-07-22 오프라인 보강</b> 반영.</div>
+  <div>· <b>2026-07-22 추가</b>: <b>51 오프라인 진입</b>(되는 것을 알리는 화면) · <b>52 콘텐츠 미리 받기</b>(구독 전용). 변형 4장: <b>11 여행회화</b>(상황 8카테고리+TIP 필터) · <b>11 읽기형 목록</b>(N회 읽음) · <b>19 오프라인 우표</b>(도착 예정) · <b>28 오프라인 촬영 대기열</b>.</div>
+  <div>· <b>오프라인 우표 정책(2026-07-22 확정)</b>: 미리 받은 레슨을 오프라인에서 풀어도 <b>우표를 지급</b>한다. 단 발급 판정은 <b>서버 전용</b>이고 화면엔 <b>"도착 예정"</b>으로 보인다 — 받은 것처럼 보였다가 회수하면 배신감을 주기 때문. <b>검증에 실패해도 학습 기록은 항상 반영</b>한다(우표만 보류).</div>
+  <div>· 퀴즈(16)는 유형 <b>6종</b>(객관식/받아쓰기/짝맞추기/청해형/순서배열형/스피킹형) + 스피킹 대체 모드(낱말카드 배치)를 서브 프레임으로 분해 표시 — 새 번호를 부여하지 않고 16번의 서브 유형으로 편입.</div>
+  <div>· 상태가 여러 개인 화면은 같은 번호로 프레임을 나눠 표시: 8(D-day 설정/미설정/새 쪽지 있음) · 12(뉴스/전래동화) · 14(단어 카드/세션 결과/문법·독해·청해) · 17(1회 오답/청해 오답/2회 연속 오답) · 16(유형 6종 + 대체 모드).</div>
+  <div>· <b>2차 수정(대표님 검토 반영)</b>: 20·21 프레임 내 주석 라벨 제거 / 16 스피킹형 유사도 판정 폐기 → 자가판정 + 낱말카드 대체 모드 / 16 받아쓰기 앱 내장 가나 키보드 / 47 "익힘" → [아직 헷갈려요][이제 알아요] / 8 D-day 닫기 정책 / 35 D-day 위젯 토글 / 11 D-day 노출 규칙.</div>
+  <div>· <b>신규 승인</b>: <b>50. 토모의 쪽지</b>(PRD 14.5 Should) — 격려 문장 보기 전용, 보상 없음, 해석 기본 ON. 진입점은 8번 홈의 토모(등불) 탭. <b>"편지"(우표 7장 필요) ≠ "쪽지"(그냥 열림)</b> 구분 유지.</div>
+  <div>· <b>브랜드 개편 반영</b>: 쿠니토→<b>토모리</b> / 쿠니→<b>토모(작은 등불)</b> / 쿠키→<b>우표</b>(단위 "장") / 요약 PDF→<b>오늘의 편지</b>(20·21), 학습 기록→<b>편지함</b>(27). 오답노트(45)·단어장(25)·독해(26) PDF는 <b>의도적으로 "PDF" 유지</b> — 은유 남발 방지.</div>
+  <div>· 토모 소품은 드는 게 아니라 <b>비추는</b> 것(여행=캐리어 / 비즈=서류가방 / JLPT=연필 / 뉴스=신문 / 전래동화=책 / 오답=안경), 감정은 <b>밝기</b>로 표현. 파일명은 <span class="kbd">tomori_lofi_wireframe.html</span>로 변경 완료.</div>
+  <div>· <b>3차 수정</b>: 35 화면명 "설정 — 화면 표시"로 확장 + D-day 항목 2상태(설정됨=토글 / 미설정=46번 모달 CTA) / 16 낱말카드 대체 모드 판정 폐지([다 놓았어요], 오답노트 미적용) / 16 가나 키보드 <b>50음 전체 표</b> 확정(플릭 입력 미채택).</div>
+  <div>· 기존 1~44번 번호는 재번호하지 않고 신규 45~49를 뒤에 이어붙임.</div>
+  <div>· 프레임 안 = 레이아웃/구조만, 설명·예시 = 프레임 아래 「메모」로 분리.</div>
+  <div>· 확정된 플로우를 그대로 따랐고, 화면 목록에 없는 새 화면은 추가하지 않음.</div>
+  <div>· 각 프레임 300×600 고정 → 피그마에서 프레임 단위로 옮기기 용이.</div>
+</footer>
+
+</body>
+</html>

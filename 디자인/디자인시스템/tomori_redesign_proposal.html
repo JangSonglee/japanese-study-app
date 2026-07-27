@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>토모리 — 디자인 개선 제안 (Before / After)</title>
+<style>
+/* ── 번들 폰트 (로컬. 외부 로드 없음) ─────────────────────── */
+@font-face{font-family:"Pretendard";src:url("fonts/Pretendard-Regular.woff2")format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Pretendard";src:url("fonts/Pretendard-SemiBold.woff2")format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Noto Sans JP";src:url("fonts/NotoSansJP-400.woff2")format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Noto Sans JP";src:url("fonts/NotoSansJP-600.woff2")format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Zen Maru Gothic";src:url("fonts/ZenMaruGothic-400.woff2")format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Zen Maru Gothic";src:url("fonts/ZenMaruGothic-700.woff2")format("woff2");font-weight:700;font-display:swap}
+
+/* ══════════════════════════════════════════════════════════
+   문서 셸
+   ══════════════════════════════════════════════════════════ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:#F3EDE5; color:#1A1613;
+  font-family:"Pretendard",-apple-system,"Malgun Gothic",sans-serif;
+  font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:44px 26px 96px}
+
+.masthead{margin:0 0 40px}
+.masthead .eyebrow{
+  font-family:ui-monospace,Consolas,monospace;font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8F5E08;font-weight:700;margin:0 0 10px;
+}
+.masthead h1{
+  font-family:"Pretendard",sans-serif;font-weight:600;
+  font-size:clamp(30px,5vw,44px);line-height:1.15;letter-spacing:-.035em;margin:0 0 14px;
+}
+.masthead p{max-width:64ch;color:#5D554C;margin:0;font-size:15px;line-height:1.8}
+
+h2.sec{
+  font-family:"Pretendard",sans-serif;font-weight:600;
+  font-size:24px;letter-spacing:-.025em;margin:64px 0 6px;
+  display:flex;align-items:baseline;gap:12px;
+}
+h2.sec::before{
+  content:attr(data-n);font-family:ui-monospace,Consolas,monospace;font-size:12px;
+  font-weight:700;color:#B9AFA2;letter-spacing:.1em;
+}
+h2.sec + .subtitle{color:#5D554C;margin:0 0 22px;font-size:14.5px;max-width:70ch}
+
+.panel{background:#FBF8F4;border-radius:16px;padding:22px 24px;
+  box-shadow:0 1px 1px rgba(26,22,19,.03),0 4px 14px rgba(26,22,19,.05)}
+
+/* ── 진단 목록 ─────────────────────────────────────────── */
+.diag{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.diag li{
+  background:#FBF8F4;border-radius:14px;padding:16px 18px 16px 18px;
+  box-shadow:0 1px 1px rgba(26,22,19,.03),0 4px 14px rgba(26,22,19,.05);
+  display:grid;grid-template-columns:30px 1fr;gap:4px 14px;align-items:start;
+}
+.diag .n{
+  font-family:ui-monospace,Consolas,monospace;font-size:12px;font-weight:700;
+  color:#fff;background:#1A1613;border-radius:7px;width:26px;height:26px;
+  display:grid;place-items:center;grid-row:span 2;
+}
+.diag h3{margin:0;font-size:15.5px;font-weight:600;letter-spacing:-.01em;line-height:1.45}
+.diag p{margin:5px 0 0;color:#5D554C;font-size:14px;line-height:1.7}
+.diag .why{color:#8F5E08;font-weight:600}
+.diag code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;
+  background:#F3EDE5;border-radius:5px;padding:1px 6px}
+
+/* ── Before / After 비교 ───────────────────────────────── */
+.compare{display:flex;flex-wrap:wrap;gap:26px;margin-top:20px}
+.side{width:320px}
+.sidehead{display:flex;align-items:center;gap:9px;margin:0 0 12px}
+.pill{
+  font-family:ui-monospace,Consolas,monospace;font-size:10.5px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;padding:4px 10px;border-radius:999px;
+}
+.pill.b{background:#E4DCD1;color:#6B6259}
+.pill.a{background:#1A1613;color:#F5B942}
+.sidehead .lb{font-size:13px;color:#5D554C}
+.notes{margin:14px 0 0;padding:0 0 0 17px;font-size:12.8px;line-height:1.75;color:#5D554C}
+.notes li{margin:5px 0}
+.notes b{color:#1A1613}
+.notes .good{color:#2E7D4F;font-weight:700}
+.notes .bad{color:#B5533D;font-weight:700}
+
+/* ══════════════════════════════════════════════════════════
+   폰 프레임 공통 (구조는 Lo-fi/Hi-fi와 동일)
+   ══════════════════════════════════════════════════════════ */
+.frame{
+  width:320px;height:640px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.status{flex:0 0 auto;height:26px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 15px;font-size:10px;font-family:ui-monospace,Consolas,monospace}
+.appbar{flex:0 0 auto;height:48px;display:flex;align-items:center;gap:8px;padding:0 14px}
+.body{flex:1 1 auto;overflow:hidden;padding:14px;display:flex;flex-direction:column;gap:11px}
+.tabbar{flex:0 0 auto;height:58px;display:flex}
+.tabbar .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9.5px}
+.grow{flex:1}
+.row{display:flex;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.stack{display:flex;flex-direction:column;gap:5px}
+
+/* ══════════════════════════════════════════════════════════
+   ❶ BEFORE — 현재 Hi-fi 토큰 그대로
+   ══════════════════════════════════════════════════════════ */
+.v-old{
+  --bg-base:#FAF7F3;--bg-surface:#FFFFFF;--border:#E8E1D9;--border-strong:#D4C9BC;
+  --text-high:#1A1613;--text-mid:#6B6259;--text-low:#9C948B;
+  --brand:#F5B942;--brand-text:#8F5E08;--on-brand:#1A1613;
+  --c:#2F6FD0;--c-text:#2F6FD0;
+  background:var(--bg-base);color:var(--text-high);
+  border:1px solid var(--border-strong);border-radius:22px;
+  box-shadow:0 6px 20px rgba(26,22,19,.10);
+  font-size:15px;line-height:1.6;
+}
+.v-old .status{color:var(--text-low)}
+.v-old .appbar{border-bottom:1px solid var(--border);font-size:15px;font-weight:700;background:var(--bg-base)}
+.v-old .card{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--bg-surface);
+  display:flex;flex-direction:column;gap:8px}
+.v-old .card.row{flex-direction:row;align-items:center}
+.v-old .lbl{font-size:12px;color:var(--text-mid)}
+.v-old .val{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.v-old .tag{font-size:11.5px;line-height:1;padding:6px 11px;border-radius:999px;white-space:nowrap;
+  border:1px solid var(--border-strong);color:var(--text-mid);background:transparent}
+.v-old .tag.on{background:var(--c);border-color:var(--c);color:#fff;font-weight:700}
+.v-old .tag.course{border-color:var(--c);color:var(--c-text);background:rgba(47,111,208,.12)}
+.v-old .btn{height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700}
+.v-old .btn.sm{height:38px;font-size:13px}
+.v-old .btn.pri{background:var(--brand);color:var(--on-brand)}
+.v-old .prog{height:8px;border-radius:999px;background:var(--border);overflow:hidden}
+.v-old .prog>i{display:block;height:100%;border-radius:999px;background:var(--c)}
+.v-old .kbd{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--text-mid);
+  border:1px solid var(--border);border-radius:4px;padding:1px 5px;background:var(--bg-base)}
+.v-old .stamp{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-size:10px;font-weight:800;border:1.5px dashed var(--border-strong);color:var(--text-low);
+  transform:rotate(-6deg)}
+.v-old .stamp.done{border:1.5px solid var(--brand);background:var(--brand);color:var(--on-brand)}
+.v-old .tabbar{border-top:1px solid var(--border);background:var(--bg-surface)}
+.v-old .tabbar .tab{color:var(--text-low)}
+.v-old .tabbar .tab .ic{width:20px;height:20px;border-radius:6px;background:var(--border)}
+.v-old .tabbar .tab.on{color:var(--brand-text);font-weight:700}
+.v-old .tabbar .tab.on .ic{background:var(--brand)}
+.v-old .avatar{width:28px;height:28px;border-radius:50%;background:var(--border)}
+.v-old .li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.v-old .li:last-child{border-bottom:none}
+
+/* ══════════════════════════════════════════════════════════
+   ❷ AFTER — 개선안
+   원칙 3가지
+   ① 앰버는 「우표·빛」 전용. 액션 버튼은 잉크.
+   ② 테두리 대신 면과 그림자로 구분. 선은 divider에만.
+   ③ radius 3단 / elevation 2단으로 통일.
+   ══════════════════════════════════════════════════════════ */
+.v-new{
+  --paper:#FBF8F4;      /* 배경 = 종이 */
+  --card:#FFFFFF;
+  --sunk:#F3EDE5;       /* 눌린 면 (트랙·비활성) */
+  --ink:#1A1613; --ink-2:#5D554C; --ink-3:#A79E94;
+  --hair:rgba(26,22,19,.07);
+  --brand:#F5B942; --brand-ink:#8F5E08;
+  --c:#2F6FD0; --c-ink:#2F6FD0; --c-wash:rgba(47,111,208,.09);
+  --r-sm:9px; --r-md:15px;
+  --sh-1:0 1px 1px rgba(26,22,19,.03), 0 3px 10px rgba(26,22,19,.055);
+  --sh-2:0 12px 32px rgba(26,22,19,.13);
+  --glow:0 0 0 5px rgba(245,185,66,.16), 0 4px 12px rgba(245,185,66,.32);
+  background:var(--paper);color:var(--ink);
+  border-radius:26px;box-shadow:var(--sh-2);
+  font-size:15px;line-height:1.6;
+}
+.v-new .status{color:var(--ink-3)}
+.v-new .appbar{font-size:17px;font-weight:600;letter-spacing:-.02em}
+
+/* 카드 — 테두리 없음. 흰 면 + 아주 얕은 그림자 */
+.v-new .card{background:var(--card);border-radius:var(--r-md);padding:14px;
+  display:flex;flex-direction:column;gap:9px;box-shadow:var(--sh-1)}
+.v-new .card.row{flex-direction:row;align-items:center}
+/* 코스 표시 = 면 전체가 아니라 왼쪽 4px 액센트. 색이 소리치지 않는다 */
+.v-new .card.accent{position:relative;overflow:hidden;padding-left:17px}
+.v-new .card.accent::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+
+.v-new .lbl{font-size:11.5px;color:var(--ink-2);font-weight:600;letter-spacing:.01em}
+/* 숫자는 이 앱의 동기다 — 전용 스타일로 크게, tabular.
+   ⚠️ Zen Maru Gothic 을 쓰지 않는다: 한글 글리프가 없어 「4장」의 숫자와 단위가
+   서로 다른 폰트로 갈라진다. 실측 확인함(진단 6 참조). */
+.v-new .num{font-family:"Pretendard",sans-serif;font-weight:600;
+  font-size:27px;line-height:1.1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.v-new .num.sm{font-size:20px}
+.v-new .unit{font-size:13px;font-weight:600;color:var(--ink-2);margin-left:2px}
+
+/* 칩 — 선택은 잉크(중립). 코스색을 칩 면으로 쓰지 않는다 */
+.v-new .tag{font-size:12px;line-height:1;padding:7px 12px;border-radius:999px;white-space:nowrap;
+  color:var(--ink-2);background:var(--sunk);font-weight:600}
+.v-new .tag.on{background:var(--ink);color:#fff}
+.v-new .tag.course{background:var(--c-wash);color:var(--c-ink);font-weight:700}
+
+/* 버튼 — Primary = 잉크. 앰버 면 버튼을 없앴다 */
+.v-new .btn{height:48px;border-radius:var(--r-sm);display:flex;align-items:center;
+  justify-content:center;gap:7px;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.v-new .btn.sm{height:40px;font-size:13.5px}
+.v-new .btn.pri{background:var(--ink);color:#FFF9EC}
+.v-new .btn.sec{background:var(--card);color:var(--ink);box-shadow:var(--sh-1)}
+/* 리워드 액션만 앰버 — 「편지 받기」처럼 우표를 쓰는 순간 */
+.v-new .btn.reward{background:var(--brand);color:var(--ink);box-shadow:var(--glow)}
+
+.v-new .prog{height:10px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.v-new .prog>i{display:block;height:100%;border-radius:999px;background:var(--c)}
+.v-new .prog.brand>i{background:var(--brand)}
+
+/* ── 시그니처: 우표(切手) ────────────────────────────────
+   톱니 테두리를 실제로 구현. 적립·진행·PDF 어디서나 같은 형태다.
+   지금은 우표가 그냥 「둥근 배지」라 은유가 보이지 않는다. */
+.v-new .kitte{
+  --d:4.6px; --g:8.4px;
+  width:30px;height:36px;flex:0 0 auto;display:grid;place-items:center;
+  font-family:"Pretendard",sans-serif;font-size:12px;font-weight:600;
+  background:var(--brand);color:var(--ink);
+  -webkit-mask:
+    radial-gradient(circle calc(var(--d)/2) at 50% 0,   #0000 98%,#000) 0 0/var(--g) 100%,
+    radial-gradient(circle calc(var(--d)/2) at 50% 100%,#0000 98%,#000) 0 0/var(--g) 100%,
+    radial-gradient(circle calc(var(--d)/2) at 0 50%,   #0000 98%,#000) 0 0/100% var(--g),
+    radial-gradient(circle calc(var(--d)/2) at 100% 50%,#0000 98%,#000) 0 0/100% var(--g);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+}
+/* 빈 칸 — 종이보다 확실히 어두워야 「톱니 형태」가 읽힌다.
+   (--sunk 로 두면 카드 흰 면 위에서 거의 사라진다) */
+.v-new .kitte.empty{background:#E5DCD0;color:#968D82}
+/* 도착 예정 — 같은 우표에 옅은 앰버. mask 때문에 border/inset-shadow 는 잘려 못 쓴다.
+   면 농도만 낮추면 「받은 것과 같은 형태, 아직 안 채워짐」이 그대로 읽힌다. */
+.v-new .kitte.pending{background:rgba(245,185,66,.36);color:#8F5E08}
+
+/* 탭바 — 회색 네모 대신 실제 아이콘 */
+.v-new .tabbar{background:var(--card);box-shadow:0 -1px 0 var(--hair)}
+.v-new .tabbar .tab{color:var(--ink-3);font-weight:600}
+.v-new .tabbar .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.v-new .tabbar .tab.on{color:var(--ink)}
+.v-new .tabbar .tab.on svg{stroke-width:2.1}
+
+/* 토모 — 등불. 빛이 시각 언어가 된다 */
+.v-new .tomo{--w:30px;width:var(--w);height:calc(var(--w)*1.18);position:relative;flex:0 0 auto}
+.v-new .tomo i.glass{position:absolute;inset:auto 0 0 0;height:72%;border-radius:44% 44% 38% 38%;
+  background:linear-gradient(180deg,#FFE7B4,#F5B942)}
+.v-new .tomo i.fl{position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:38%;height:38%;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;
+  background:#FFD27A;box-shadow:0 0 12px 5px rgba(245,185,66,.55)}
+.v-new .tomo i.ey{position:absolute;bottom:26%;width:3px;height:3px;border-radius:50%;background:#1A1613}
+.v-new .tomo i.ey.l{left:31%} .v-new .tomo i.ey.r{right:31%}
+
+.v-new .li{display:flex;align-items:center;gap:11px;padding:11px 0}
+.v-new .li + .li{box-shadow:inset 0 1px 0 var(--hair)}
+.v-new .avatar{width:30px;height:30px;border-radius:50%;background:var(--sunk)}
+.v-new .jp{font-family:"Noto Sans JP",sans-serif}
+
+/* 토모의 한국어 말 — Pretendard. 🔴 Zen Maru 는 한글이 없다(실측).
+   표정은 폰트가 아니라 크기·자간·줄간으로 만든다. */
+.v-new .voice{font-family:"Pretendard",sans-serif;font-size:16px;font-weight:600;
+  line-height:1.75;letter-spacing:-.025em;color:var(--ink)}
+/* 일본어 브랜드 표정만 Zen Maru — 토모의 쪽지·학습 카드의 일본어 */
+.v-new .voice-jp{font-family:"Zen Maru Gothic","Noto Sans JP",sans-serif;font-weight:400;
+  font-size:19px;line-height:1.7;color:var(--ink)}
+
+/* ── 토큰 표 ─────────────────────────────────────────── */
+.tok{display:grid;grid-template-columns:repeat(auto-fill,minmax(174px,1fr));gap:12px;margin-top:18px}
+.tokitem{background:#FBF8F4;border-radius:12px;padding:12px 13px;
+  box-shadow:0 1px 1px rgba(26,22,19,.03),0 3px 10px rgba(26,22,19,.05)}
+.tokitem .sw{height:38px;border-radius:8px;margin-bottom:9px}
+.tokitem .nm{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;font-weight:700}
+.tokitem .role{font-size:11.5px;color:#5D554C;margin-top:3px;line-height:1.5}
+
+table.rules{width:100%;border-collapse:collapse;margin-top:16px;font-size:13.5px}
+table.rules th,table.rules td{text-align:left;padding:11px 12px;vertical-align:top}
+table.rules thead th{font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:#8F5E08;font-family:ui-monospace,Consolas,monospace;border-bottom:2px solid #E4DCD1}
+table.rules tbody tr + tr td{border-top:1px solid #E9E1D7}
+table.rules td:first-child{font-weight:600;white-space:nowrap}
+table.rules code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;
+  background:#F3EDE5;border-radius:5px;padding:1px 6px}
+
+footer{margin-top:72px;color:#7C736A;font-size:13px;line-height:1.9}
+@media (max-width:760px){ .wrap{padding:30px 16px 70px} .side{width:100%;max-width:340px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="masthead">
+  <p class="eyebrow">Design review · 2026-07-22</p>
+  <h1>왜 투박해 보이는가</h1>
+  <p>색을 바꿔서 생긴 문제가 아닙니다. 확정된 팔레트와 대비 실측값은 그대로 두고, <b>색을 어디에 바르는지</b>·<b>무엇으로 구분하는지</b>·<b>브랜드가 어떤 형태로 나타나는지</b> 세 가지만 바꿉니다. 아래는 원인 7가지와, 같은 토큰으로 다시 그린 화면 3쌍입니다.</p>
+</div>
+
+<h2 class="sec" data-n="01">진단</h2>
+<p class="subtitle">추측이 아니라 <code>tomori_hifi_mockup.html</code>의 실제 CSS에서 나온 것들입니다.</p>
+
+<ol class="diag">
+  <li>
+    <span class="n">1</span>
+    <h3>탭바 아이콘이 아직 회색 네모다</h3>
+    <p><code>.tabbar .tab .ic{width:20px;height:20px;background:var(--border)}</code> — 아이콘 자리가 <b>플레이스홀더 그대로</b>입니다. 프로필 자리도 회색 원이고요. <span class="why">Hi-fi에서 아이콘이 비어 있으면 나머지를 아무리 잘 칠해도 미완성으로 읽힙니다. 촌스러움의 가장 큰 원인.</span></p>
+  </li>
+  <li>
+    <span class="n">2</span>
+    <h3>앰버를 버튼 「면」으로 쓰고 있다</h3>
+    <p><code>.btn.pri{background:#F5B942;color:#1A1613}</code> — #F5B942는 경고색에 가까운 고채도 노랑입니다. 넓은 면으로 칠하고 검은 글자를 얹으면 <b>표지판</b>처럼 보입니다. <span class="why">게다가 앰버는 우표(리워드)의 색인데, 모든 버튼이 앰버면 「우표」라는 의미가 희석됩니다.</span></p>
+  </li>
+  <li>
+    <span class="n">3</span>
+    <h3>모든 것에 테두리가 있다</h3>
+    <p>카드·리스트·앱바·탭바·진행바·칩이 전부 <code>1px solid</code>입니다. 게다가 <code>--border:#E8E1D9</code>는 배경 <code>#FAF7F3</code>과 대비가 낮아 <b>선명한 선도, 없는 것도 아닌 흐린 자국</b>으로 남습니다. <span class="why">칸막이가 많을수록 화면은 좁고 답답해 보입니다.</span></p>
+  </li>
+  <li>
+    <span class="n">4</span>
+    <h3>모서리 반경이 5종 섞여 있다</h3>
+    <p>프레임 22 · 카드 12 · 버튼 10 · memo 8 · 아이콘 6 · 칩 999. <span class="why">기준이 없으면 눈이 「대충 만든 것」으로 읽습니다. 통일감은 이런 데서 나옵니다.</span></p>
+  </li>
+  <li>
+    <span class="n">5</span>
+    <h3>타이포에 대비가 없다</h3>
+    <p>가장 큰 글자가 26px, 그다음이 19px입니다. 게다가 강조는 전부 <code>font-weight:700</code> 하나로만 합니다. <span class="why">320px 화면에서 26px는 「조금 큰 본문」이지 제목이 아닙니다. 위계가 안 보이니 평평해 보입니다.</span></p>
+  </li>
+  <li>
+    <span class="n">6</span>
+    <h3>사양서가 폐기한 명조를 목업이 아직 들고 있다</h3>
+    <p>사양서는 <b>「Zen Maru Gothic 이 명조를 대체한다」(2026-07-22)</b> 로 확정했는데, Hi-fi 목업의 폰트 스택은 <code>--font-ko</code>/<code>--font-jp</code>/<code>--font-jp-serif</code>/<code>--font-mono</code> 4종뿐입니다. <b>Zen Maru는 없고, 대체되기로 한 <code>Noto Serif JP</code>는 그대로 남아 있습니다.</b> <span class="why">2.79MB를 담아두고 화면에는 안 씁니다.</span></p>
+    <p style="margin-top:9px;padding:10px 12px;background:#F3EDE5;border-radius:9px;font-size:13px">
+      🔴 <b>단, Zen Maru Gothic 에는 한글 글리프가 없습니다</b>(실측 확인). 그래서 <b>「토모의 말」에 쓸 수 없습니다</b> — 토모는 한국어로 말하니까요.
+      <b>일본어 콘텐츠 전용</b>으로만 씁니다. 한국어의 표정은 폰트가 아니라 <b>크기·자간·줄간</b>으로 만듭니다.
+    </p>
+  </li>
+  <li>
+    <span class="n">✓</span>
+    <h3>검증 방법 메모 — 폭으로 CJK 폰트를 판별하면 안 된다</h3>
+    <p>위 결론을 낼 때 처음엔 텍스트 <b>폭</b>을 쟀는데, <b>CJK 글자는 어떤 폰트든 정확히 1em</b>이라 폰트가 달라도 폭이 같습니다. 「일본어가 렌더링 안 된다」는 <b>거짓 결론</b>이 나왔었습니다.
+      <span class="why">→ CJK는 반드시 <b>픽셀 비교</b>로 판별하고, <b>반드시 달라야 하는 대조군</b>(고딕 vs 명조)을 함께 넣어 측정 자체가 유효한지 먼저 확인할 것.</span>
+      한글은 폰트마다 폭이 달라 폭 비교가 유효합니다.</p>
+  </li>
+  <li>
+    <span class="n">7</span>
+    <h3>브랜드의 은유가 UI에 없다</h3>
+    <p>우표는 <code>border-radius:50%</code> 짜리 <b>동그란 배지</b>고, 등불의 빛은 문서 헤더에만 있습니다. <span class="why">우표를 모아 편지를 받는다는 이 앱의 핵심 은유가, 정작 화면에서는 보이지 않습니다. 그래서 「그냥 흔한 학습앱」처럼 느껴집니다.</span></p>
+  </li>
+</ol>
+
+<h2 class="sec" data-n="02">고치는 원칙 — 세 가지</h2>
+<p class="subtitle">팔레트 값은 하나도 바꾸지 않습니다. 확정된 <code>#F5B942</code>와 코스 5색, 대비 실측값 모두 그대로입니다.</p>
+
+<table class="rules">
+  <thead><tr><th>원칙</th><th>지금</th><th>바꾼 뒤</th><th>이유</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>① 앰버는 우표·빛 전용</td>
+      <td>모든 Primary 버튼이 앰버 면</td>
+      <td>Primary = <b>잉크</b> 면. 앰버는 <b>우표·리워드·강조</b>에만</td>
+      <td>앰버가 나오면 「우표 관련」이라는 규칙이 생겨 <b>의미가 생긴다</b>. 동시에 화면이 조용해진다</td>
+    </tr>
+    <tr>
+      <td>② 선 대신 면</td>
+      <td>카드마다 <code>1px</code> 테두리</td>
+      <td>흰 면 + <code>--sh-1</code> 아주 얕은 그림자. 선은 <b>리스트 divider에만</b></td>
+      <td>흐린 테두리는 정리돼 보이지 않고 지저분해 보인다. 종이 위에 놓인 카드가 이 앱의 은유에도 맞다</td>
+    </tr>
+    <tr>
+      <td>③ 코스색은 액센트로만</td>
+      <td>칩 면 전체를 코스색으로 채움</td>
+      <td>카드 <b>왼쪽 4px 액센트 바</b> + 텍스트 색. 선택 칩은 <b>잉크</b></td>
+      <td>앰버와 코스색이 같은 세기로 부딪히던 문제가 사라진다. 코스는 <b>맥락</b>이지 주인공이 아니다</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="tok">
+  <div class="tokitem"><div class="sw" style="background:#1A1613"></div><div class="nm">--ink · #1A1613</div><div class="role">Primary 액션 면 · 본문. <b>새 색 아님</b> — 기존 text-high</div></div>
+  <div class="tokitem"><div class="sw" style="background:#F5B942"></div><div class="nm">--brand · #F5B942</div><div class="role">우표 · 빛 · 리워드 <b>전용</b>으로 역할 축소</div></div>
+  <div class="tokitem"><div class="sw" style="background:#FBF8F4;box-shadow:inset 0 0 0 1px rgba(26,22,19,.07)"></div><div class="nm">--paper · #FBF8F4</div><div class="role">배경. 기존 <code>#FAF7F3</code>에서 미세 조정</div></div>
+  <div class="tokitem"><div class="sw" style="background:#F3EDE5"></div><div class="nm">--sunk · #F3EDE5</div><div class="role">🆕 눌린 면 — 진행바 트랙 · 비활성 칩</div></div>
+  <div class="tokitem"><div class="sw" style="background:#fff;box-shadow:0 1px 1px rgba(26,22,19,.03),0 3px 10px rgba(26,22,19,.055)"></div><div class="nm">--sh-1</div><div class="role">카드. 테두리를 대체하는 <b>유일한</b> 구분 수단</div></div>
+  <div class="tokitem"><div class="sw" style="background:#F5B942;box-shadow:0 0 0 5px rgba(245,185,66,.16),0 4px 12px rgba(245,185,66,.32)"></div><div class="nm">--glow</div><div class="role">🆕 등불의 빛. 토모 · 우표 획득 순간</div></div>
+</div>
+
+<h2 class="sec" data-n="03">시그니처 — 우표를 진짜 우표로</h2>
+<p class="subtitle">이 앱이 기억될 형태 하나를 정합니다. 지금 우표는 그냥 동그란 배지라 은유가 안 보입니다. 톱니 테두리(perforation)를 실제로 구현해서, 적립·진행·PDF 어디에 나오든 <b>같은 형태</b>가 되게 합니다.</p>
+
+<div class="panel v-new" style="border-radius:16px;box-shadow:0 1px 1px rgba(26,22,19,.03),0 4px 14px rgba(26,22,19,.05)">
+  <div class="row" style="gap:22px;flex-wrap:wrap;align-items:flex-end">
+    <div class="stack" style="align-items:center;gap:9px">
+      <div class="row" style="gap:5px">
+        <span class="kitte">✓</span><span class="kitte">✓</span><span class="kitte">✓</span>
+        <span class="kitte">✓</span><span class="kitte empty">5</span><span class="kitte empty">6</span><span class="kitte empty">7</span>
+      </div>
+      <span class="lbl">모은 우표 4 / 7</span>
+    </div>
+    <div class="stack" style="align-items:center;gap:9px">
+      <span class="kitte pending">…</span>
+      <span class="lbl">도착 예정 (오프라인)</span>
+    </div>
+    <div class="stack" style="align-items:center;gap:9px">
+      <span class="tomo" style="--w:38px"><i class="glass"></i><i class="fl"></i><i class="ey l"></i><i class="ey r"></i></span>
+      <span class="lbl">토모 — 빛이 상태다</span>
+    </div>
+  </div>
+  <p style="margin:16px 0 0;font-size:13.5px;color:#5D554C;line-height:1.75">
+    빈 우표를 <b>회색 톱니</b>로 두면 「몇 장 더 모으면 되는지」가 형태로 보입니다. 진행바를 따로 그리지 않아도 됩니다.<br>
+    오프라인 「도착 예정」은 <b>테두리만 있는 우표</b> — 받은 것과 형태가 같아서 <b>연결되면 채워진다</b>는 게 설명 없이 읽힙니다.
+  </p>
+</div>
+
+<h2 class="sec" data-n="04">Before / After</h2>
+<p class="subtitle">같은 화면, 같은 정보, 같은 팔레트. 위 3원칙만 적용했습니다.</p>
+
+<!-- ────────── 8. 홈 ────────── -->
+<h3 style="font-size:17px;margin:34px 0 0;font-weight:600">8. 홈</h3>
+<div class="compare">
+
+  <div class="side">
+    <div class="sidehead"><span class="pill b">Before</span><span class="lb">현재 Hi-fi</span></div>
+    <div class="frame v-old">
+      <div class="status"><span>9:41</span><span>▮▮▮ ▮</span></div>
+      <div class="appbar"><span>홈</span><span class="grow"></span><span class="avatar"></span></div>
+      <div class="body" style="gap:10px">
+        <div class="row" style="gap:6px;flex-wrap:wrap">
+          <span class="tag on">JLPT ▾</span><span class="tag">여행 회화</span><span class="tag">비즈니스</span><span class="tag">···</span>
+        </div>
+        <div class="card row between" style="border:1.5px solid var(--c)">
+          <div class="stack grow">
+            <span class="lbl" style="color:var(--c-text);font-weight:700">D-day · JLPT N2</span>
+            <span class="val">12월 7일 시험</span>
+          </div>
+          <span class="tag course">D-42</span>
+        </div>
+        <div class="card row between">
+          <div class="stack"><span class="lbl">연속 학습</span><span class="val">12일째</span></div>
+          <span class="row" style="gap:4px"><span class="stamp done">✓</span><span class="stamp done">✓</span><span class="stamp">3</span></span>
+        </div>
+        <div class="card">
+          <div class="row between"><span class="lbl">오늘의 학습</span><span class="kbd">3/5</span></div>
+          <div class="prog"><i style="width:60%"></i></div>
+          <div class="btn pri sm">오늘의 학습 시작</div>
+        </div>
+        <div class="row" style="gap:8px;align-items:stretch">
+          <div class="card grow"><span class="lbl">진도율</span><span class="val" style="color:var(--c-text)">15%</span></div>
+          <div class="card grow"><span class="lbl">우표</span><span class="val" style="color:var(--brand-text)">4장</span></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab on"><span class="ic"></span>홈</div><div class="tab"><span class="ic"></span>학습</div>
+        <div class="tab"><span class="ic"></span>단어장</div><div class="tab"><span class="ic"></span>번역</div>
+        <div class="tab"><span class="ic"></span>MY</div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li><span class="bad">파란 칩</span> + <span class="bad">파란 테두리 카드</span> + <span class="bad">앰버 버튼</span>이 한 화면에서 셋 다 소리친다</li>
+      <li>카드 5개가 전부 테두리 → 칸막이</li>
+      <li>탭 아이콘 5개가 <b>회색 네모</b></li>
+    </ul>
+  </div>
+
+  <div class="side">
+    <div class="sidehead"><span class="pill a">After</span><span class="lb">개선안</span></div>
+    <div class="frame v-new">
+      <div class="status"><span>9:41</span><span>▮▮▮ ▮</span></div>
+      <div class="appbar">
+        <span>홈</span><span class="grow"></span>
+        <span class="tomo"><i class="glass"></i><i class="fl"></i><i class="ey l"></i><i class="ey r"></i></span>
+        <span class="avatar"></span>
+      </div>
+      <div class="body" style="gap:10px">
+        <div class="row" style="gap:6px;flex-wrap:wrap">
+          <span class="tag on">JLPT ▾</span><span class="tag">여행 회화</span><span class="tag">비즈니스</span><span class="tag">···</span>
+        </div>
+        <div class="card accent row between">
+          <div class="stack grow">
+            <span class="lbl">JLPT N2 · 12월 7일</span>
+            <span class="num sm">시험까지 <span style="color:var(--c-ink)">42일</span></span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row between"><span class="lbl">오늘의 학습</span><span class="lbl">3 / 5 세션</span></div>
+          <div class="prog"><i style="width:60%"></i></div>
+          <div class="btn pri sm" style="margin-top:3px">오늘의 학습 시작</div>
+        </div>
+        <div class="card row between">
+          <div class="stack"><span class="lbl">모은 우표</span><span class="num">4<span class="unit">/ 7장</span></span></div>
+          <div class="row" style="gap:3px">
+            <span class="kitte" style="width:22px;height:27px;font-size:10px">✓</span>
+            <span class="kitte" style="width:22px;height:27px;font-size:10px">✓</span>
+            <span class="kitte empty" style="width:22px;height:27px;font-size:10px">6</span>
+            <span class="kitte empty" style="width:22px;height:27px;font-size:10px">7</span>
+          </div>
+        </div>
+        <div class="row" style="gap:9px;align-items:stretch">
+          <div class="card grow"><span class="lbl">연속 학습</span><span class="num sm">12<span class="unit">일째</span></span></div>
+          <div class="card grow"><span class="lbl">N2 진도</span><span class="num sm" style="color:var(--c-ink)">15<span class="unit">%</span></span></div>
+        </div>
+      </div>
+      <div class="tabbar">
+        <div class="tab on"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/></svg>홈</div>
+        <div class="tab"><svg viewBox="0 0 24 24"><path d="M4 4.5h6a2.5 2.5 0 0 1 2.5 2.5V20a2 2 0 0 0-2-2H4z"/><path d="M20 4.5h-6A2.5 2.5 0 0 0 11.5 7v13a2 2 0 0 1 2-2H20z"/></svg>학습</div>
+        <div class="tab"><svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M7.5 3.5h9"/><path d="M8 11h6"/><path d="M8 14.5h4"/></svg>단어장</div>
+        <div class="tab"><svg viewBox="0 0 24 24"><path d="M3.5 8.5A2 2 0 0 1 5.5 6.5h2l1.5-2h6l1.5 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.2"/></svg>번역</div>
+        <div class="tab"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.8 20c.9-3.8 3.8-5.8 7.2-5.8s6.3 2 7.2 5.8"/></svg>MY</div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>파란색은 <b>왼쪽 4px 바 + 숫자</b>에만. 칩은 잉크로 중립화</li>
+      <li>버튼이 <span class="good">잉크</span>가 되니 앰버가 <b>우표에만</b> 남았다 → 「앰버 = 우표」 규칙 성립</li>
+      <li>테두리 제거, 카드는 <b>흰 면 + 얕은 그림자</b></li>
+      <li>숫자를 키워 위계를 만들었다 (<b>학습 앱에서 숫자는 동기다</b>)</li>
+      <li>탭 아이콘 · 토모(등불) 실제 형태로</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ────────── 11. 코스 상세 ────────── -->
+<h3 style="font-size:17px;margin:44px 0 0;font-weight:600">11. 코스 상세 — JLPT</h3>
+<div class="compare">
+
+  <div class="side">
+    <div class="sidehead"><span class="pill b">Before</span><span class="lb">현재 Hi-fi</span></div>
+    <div class="frame v-old">
+      <div class="status"><span>9:41</span><span>▮▮▮ ▮</span></div>
+      <div class="appbar"><span style="color:var(--text-mid)">‹</span><span>코스 상세 · JLPT</span></div>
+      <div class="body" style="gap:10px">
+        <div class="row" style="gap:5px;flex-wrap:wrap">
+          <span class="tag">N5</span><span class="tag">N4</span><span class="tag">N3</span>
+          <span class="tag on">N2 추천</span><span class="tag">N1 도전</span>
+        </div>
+        <div class="card" style="gap:6px;padding:10px">
+          <div class="row between"><span class="lbl">단어·어휘</span><span class="kbd">30%</span></div>
+          <div class="prog"><i style="width:30%"></i></div>
+        </div>
+        <div class="card" style="gap:6px;padding:10px">
+          <div class="row between"><span class="lbl">문법 · 1회독째</span><span class="kbd">10%</span></div>
+          <div class="prog"><i style="width:10%"></i></div>
+        </div>
+        <div class="card" style="gap:6px;padding:10px;border:1.5px solid var(--c);background:rgba(47,111,208,.07)">
+          <div class="row between"><span class="lbl">독해 · 1회독 완료</span><span class="kbd">100%</span></div>
+          <div class="prog"><i style="width:100%"></i></div>
+          <div class="btn sm" style="background:var(--bg-surface);border:1px solid var(--border-strong)">2회독 시작하기</div>
+        </div>
+        <div class="card" style="gap:6px;padding:10px">
+          <div class="row between"><span class="lbl">청해 · 1회독째</span><span class="kbd">20%</span></div>
+          <div class="prog"><i style="width:20%"></i></div>
+        </div>
+        <div class="li"><span class="lbl grow">오답노트 모아보기</span><span class="lbl">›</span></div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>카드 4장이 똑같이 생겨서 <b>어디를 눌러야 하는지</b> 안 보인다</li>
+      <li>진행률이 <code>30%</code> 회색 <b>kbd 배지</b>에 갇혀 있다</li>
+      <li>「340 / 2,250단어」 같은 <b>실제 숫자</b>가 없다</li>
+    </ul>
+  </div>
+
+  <div class="side">
+    <div class="sidehead"><span class="pill a">After</span><span class="lb">개선안</span></div>
+    <div class="frame v-new">
+      <div class="status"><span>9:41</span><span>▮▮▮ ▮</span></div>
+      <div class="appbar"><span style="color:var(--ink-2)">‹</span><span>JLPT</span></div>
+      <div class="body" style="gap:11px">
+        <div class="row" style="gap:5px;flex-wrap:wrap">
+          <span class="tag">N5</span><span class="tag">N4</span><span class="tag">N3</span>
+          <span class="tag on">N2</span><span class="tag course">N1 도전</span>
+        </div>
+        <div class="card accent">
+          <div class="row between">
+            <span class="lbl">단어 · 어휘</span>
+            <span class="lbl" style="color:var(--c-ink)">수집형</span>
+          </div>
+          <div class="row between" style="align-items:flex-end">
+            <span class="num sm">340<span class="unit">/ 2,250단어</span></span>
+          </div>
+          <div class="prog"><i style="width:15%"></i></div>
+        </div>
+        <div class="card">
+          <div class="row between"><span class="lbl">문법</span><span class="lbl">1회독째</span></div>
+          <div class="row" style="gap:4px">
+            <span class="kitte" style="width:19px;height:23px;font-size:9px;background:var(--c)">1</span>
+            <span class="kitte empty" style="width:19px;height:23px;font-size:9px">2</span>
+            <span class="kitte empty" style="width:19px;height:23px;font-size:9px">3</span>
+          </div>
+          <div class="prog"><i style="width:10%"></i></div>
+        </div>
+        <div class="card" style="box-shadow:var(--sh-2)">
+          <div class="row between"><span class="lbl">독해</span><span class="lbl" style="color:var(--c-ink);font-weight:700">1회독 완료</span></div>
+          <div class="row" style="gap:4px">
+            <span class="kitte" style="width:19px;height:23px;font-size:9px;background:var(--c)">1</span>
+            <span class="kitte empty" style="width:19px;height:23px;font-size:9px">2</span>
+          </div>
+          <div class="btn pri sm">2회독 시작하기</div>
+        </div>
+        <div class="card"><div class="row between"><span class="lbl">청해</span><span class="lbl">1회독째</span></div>
+          <div class="prog"><i style="width:20%"></i></div></div>
+        <div class="li"><span class="lbl grow" style="font-size:13px">오답노트 모아보기</span><span class="lbl">›</span></div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>지금 할 것(독해 2회독)만 <b>그림자를 한 단계 올려</b> 떠오르게 했다 — 색을 더 쓰지 않고 위계를 만든다</li>
+      <li>회독을 <b>우표 형태의 도장</b>으로 → 진행바 없이도 「몇 회독째」가 보인다</li>
+      <li><span class="good">340 / 2,250단어</span> 실제 숫자 노출. 퍼센트만으론 감이 안 온다</li>
+      <li>수집형 / 회독형이 <b>형태로</b> 구분된다 (막대 vs 도장)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ────────── 19. 우표 적립 ────────── -->
+<h3 style="font-size:17px;margin:44px 0 0;font-weight:600">19. 우표 적립</h3>
+<div class="compare">
+
+  <div class="side">
+    <div class="sidehead"><span class="pill b">Before</span><span class="lb">현재 Hi-fi</span></div>
+    <div class="frame v-old">
+      <div class="status"><span>9:41</span><span>▮▮▮ ▮</span></div>
+      <div class="body" style="justify-content:center;align-items:center;text-align:center;gap:14px">
+        <div style="width:120px;height:120px;border-radius:16px;background:var(--border);
+          display:grid;place-items:center;color:var(--text-low);font-size:11px">토모 일러스트</div>
+        <div class="val">우표 한 장을 받았어요</div>
+        <div class="row" style="gap:6px">
+          <span class="stamp done">✓</span><span class="stamp done">✓</span><span class="stamp done">✓</span>
+          <span class="stamp done">✓</span><span class="stamp">5</span>
+        </div>
+        <div class="lbl">4 / 7장</div>
+        <div class="grow"></div>
+        <div class="btn pri" style="width:100%">오늘의 편지 보기</div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>우표가 <b>동그란 배지</b>라 우표로 안 보인다</li>
+      <li>토모가 <b>회색 네모</b></li>
+      <li>앰버 버튼 + 앰버 배지 → 앰버끼리 부딪힌다</li>
+    </ul>
+  </div>
+
+  <div class="side">
+    <div class="sidehead"><span class="pill a">After</span><span class="lb">개선안</span></div>
+    <div class="frame v-new">
+      <div class="status"><span>9:41</span><span>▮▮▮ ▮</span></div>
+      <div class="body" style="justify-content:center;align-items:center;text-align:center;gap:16px">
+        <span class="tomo" style="--w:86px"><i class="glass"></i><i class="fl"></i><i class="ey l"></i><i class="ey r"></i></span>
+        <p class="voice" style="margin:0">오늘 것도 잘 챙겨뒀어요.</p>
+        <p class="voice-jp" style="margin:-6px 0 0">また あした。</p>
+        <div class="row" style="gap:5px">
+          <span class="kitte">✓</span><span class="kitte">✓</span><span class="kitte">✓</span>
+          <span class="kitte" style="box-shadow:var(--glow)">✓</span>
+          <span class="kitte empty">5</span><span class="kitte empty">6</span><span class="kitte empty">7</span>
+        </div>
+        <span class="lbl">3장 더 모으면 편지가 도착해요</span>
+        <div class="grow"></div>
+        <div class="btn sec" style="width:100%">계속 학습하기</div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>우표가 <b>진짜 우표 형태</b>. 방금 받은 한 장만 <span class="good">glow</span></li>
+      <li>한국어는 <b>Pretendard</b>(크기·자간으로 표정), 일본어 한 줄만 <b>Zen Maru Gothic</b> — 번들해둔 폰트가 드디어 화면에 나온다</li>
+      <li>「4/7장」 대신 <b>3장 더 모으면</b> — 남은 것을 말해야 다음 행동이 보인다</li>
+      <li>🔴 <b>과한 축하 연출 금지</b>(PRD 14.4) 준수 — 폭죽 없이 <b>조용한 빛</b> 하나</li>
+      <li>여기 버튼은 <b>보조(sec)</b>다. 편지는 7장을 다 모아야 열리므로 지금 Primary를 줄 이유가 없다</li>
+    </ul>
+  </div>
+</div>
+
+<h2 class="sec" data-n="05">적용하려면</h2>
+<p class="subtitle">전면 재작업이 아닙니다. 토큰과 컴포넌트 CSS만 고치면 25개 화면이 한 번에 바뀝니다.</p>
+
+<table class="rules">
+  <thead><tr><th>순서</th><th>할 일</th><th>범위</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>사양서에 <code>--sunk</code> · <code>--glow</code> · <code>--sh-1/2</code> · radius 3단 추가, <code>on-brand</code> 정식 등록</td><td>사양서 2·3장</td></tr>
+    <tr><td>2</td><td><code>.btn.pri</code> 를 잉크로, <code>.btn.reward</code> 신설</td><td>CSS 2줄</td></tr>
+    <tr><td>3</td><td>카드·리스트·탭바에서 <code>border</code> 제거 → 그림자·divider로 교체</td><td>CSS 6줄</td></tr>
+    <tr><td>4</td><td><b>우표 컴포넌트</b> <code>.kitte</code> 신설 (톱니 마스크)</td><td>신규 컴포넌트 1개</td></tr>
+    <tr><td>5</td><td>탭바 아이콘 5종 SVG · 토모 CSS 정리</td><td>아이콘 5개</td></tr>
+    <tr><td>6</td><td>폰트 스택에 <b>Zen Maru Gothic</b> 추가하고 <code>--font-jp-serif</code> 제거(사양서가 이미 명조를 폐기함). <b>일본어 전용</b> — 한글 글리프 없음</td><td><code>--font-jp-brand</code> 신설</td></tr>
+    <tr><td>7</td><td>타입 스케일 재정의 — display 30 / num 27 / title 18 / body 14.5 / cap 11.5</td><td>사양서 3장</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  <div><b>제안 범위</b> — 확정된 팔레트 값(#F5B942 · 코스 5색)과 대비 실측 결과는 <b>하나도 바꾸지 않았습니다.</b> 바꾼 것은 「어디에 바르는가」뿐입니다.</div>
+  <div>다크 모드는 같은 원칙을 그대로 적용합니다. 단 <b>다크 모달의 테두리 필수 규칙</b>(스크림만으로는 1.39:1이 한계)은 유지 — 거기서는 선이 필요합니다.</div>
+  <div style="margin-top:10px;color:#9C948B">토모리 · 디자인 개선 제안 · 2026-07-22 · 근거 문서: <code>design_system_spec.md</code> · <code>PRD.md</code> 14장</div>
+</footer>
+
+</div>
+</body>
+</html>

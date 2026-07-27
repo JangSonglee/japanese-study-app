@@ -1,0 +1,401 @@
+﻿content_key,level_code,headword,reading,ruby,romaji_ko,pos,conj_type,transitivity,meaning_ko,meaning_ko_alt,example_ja,example_ko,audio_file,source,verify,note
+jlpt.n5.vocab.0001,N5,おはようございます,おはようございます,おはようございます,오하요오고자이마스,expr,-,-,안녕하세요(아침),좋은 아침이에요,おはようございます。{今日|きょう}もいい{天気|てんき}ですね。,안녕하세요. 오늘도 날씨가 좋네요.,jlpt.n5.vocab.0001.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 「おはようございます」 Can-do<1>
+jlpt.n5.vocab.0002,N5,こんにちは,こんにちは,こんにちは,콘니치와,expr,-,-,안녕하세요(낮),-,こんにちは。{今日|きょう}はいい{天気|てんき}ですね。,안녕하세요. 오늘은 날씨가 좋네요.,jlpt.n5.vocab.0002.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<1>; 어말 は→わ 어휘예외
+jlpt.n5.vocab.0003,N5,こんばんは,こんばんは,こんばんは,콤반와,expr,-,-,안녕하세요(저녁),-,こんばんは。{今日|きょう}はさむいですね。,안녕하세요. 오늘은 춥네요.,jlpt.n5.vocab.0003.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<1>; 어말 は→わ 어휘예외; 예문 교정 2026-07-25 — 「おそいですね(늦으시네요)」가 핀잔 톤으로 읽힐 여지 → 날씨 스몰토크로(형제 인사말과 톤 통일, 대표님 지시)
+jlpt.n5.vocab.0004,N5,おやすみなさい,おやすみなさい,おやすみなさい,오야스미나사이,expr,-,-,안녕히 주무세요,잘 자,もうねます。おやすみなさい。,이제 잘게요. 안녕히 주무세요.,jlpt.n5.vocab.0004.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<2>
+jlpt.n5.vocab.0005,N5,さようなら,さようなら,さようなら,사요오나라,expr,-,-,안녕히 가세요,작별 인사,さようなら。お{元気|げんき}で。,안녕히 가세요. 건강히 지내세요.,jlpt.n5.vocab.0005.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<2>; 예문 교정 2026-07-25 — さようなら는 오래/영영 못 볼 때의 최종적 작별이라 「また明日(내일 또)」와 모순 → 「お元気で」로 교체(대표님 지적)
+jlpt.n5.vocab.0006,N5,ありがとうございます,ありがとうございます,ありがとうございます,아리가토오고자이마스,expr,-,-,감사합니다,고맙습니다,{手伝|てつだ}ってくれてありがとうございます。,도와줘서 고맙습니다.,jlpt.n5.vocab.0006.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<3>
+jlpt.n5.vocab.0007,N5,すみません,すみません,すみません,스미마센,expr,-,-,죄송합니다,실례합니다;저기요,すみません。もう{一度|いちど}おねがいします。,죄송합니다. 한 번 더 부탁드려요.,jlpt.n5.vocab.0007.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法·読解 지면
+jlpt.n5.vocab.0008,N5,ごめんなさい,ごめんなさい,ごめんなさい,고멘나사이,expr,-,-,미안합니다,-,おくれてごめんなさい。,늦어서 미안합니다.,jlpt.n5.vocab.0008.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<3>
+jlpt.n5.vocab.0009,N5,はじめまして,はじめまして,はじめまして,하지메마시테,expr,-,-,처음 뵙겠습니다,-,はじめまして。キムです。,처음 뵙겠습니다. 김이라고 합니다.,jlpt.n5.vocab.0009.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제3과 Can-do<8> 자기소개
+jlpt.n5.vocab.0010,N5,よろしくお願いします,よろしくおねがいします,よろしくお{願|ねが}いします,요로시쿠오네가이시마스,expr,-,-,잘 부탁드립니다,-,{今日|きょう}からよろしくおねがいします。,오늘부터 잘 부탁드립니다.,jlpt.n5.vocab.0010.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제3과 과제목 「よろしくお願いします」
+jlpt.n5.vocab.0011,N5,いただきます,いただきます,いただきます,이타다키마스,expr,-,-,잘 먹겠습니다,-,では いただきます。,그럼 잘 먹겠습니다.,jlpt.n5.vocab.0011.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽3 好きな食べ物
+jlpt.n5.vocab.0012,N5,ごちそうさま,ごちそうさま,ごちそうさま,고치소오사마,expr,-,-,잘 먹었습니다,-,おいしかったです。ごちそうさま。,맛있었어요. 잘 먹었습니다.,jlpt.n5.vocab.0012.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽3 好きな食べ物
+jlpt.n5.vocab.0013,N5,いってきます,いってきます,いってきます,잇테키마스,expr,-,-,다녀오겠습니다,-,じゃあ いってきます。,그럼 다녀오겠습니다.,jlpt.n5.vocab.0013.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽5 毎日の生活
+jlpt.n5.vocab.0014,N5,いってらっしゃい,いってらっしゃい,いってらっしゃい,잇테랏샤이,expr,-,-,다녀오세요,-,いってらっしゃい。{気|き}をつけて。,다녀오세요. 조심해서 가세요.,jlpt.n5.vocab.0014.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽5 毎日の生活
+jlpt.n5.vocab.0015,N5,ただいま,ただいま,ただいま,타다이마,expr,-,-,다녀왔습니다,-,ただいま。おそくなりました。,다녀왔습니다. 늦었어요.,jlpt.n5.vocab.0015.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽5 毎日の生活
+jlpt.n5.vocab.0016,N5,おかえりなさい,おかえりなさい,おかえりなさい,오카에리나사이,expr,-,-,어서 오세요(귀가),-,おかえりなさい。ごはんができましたよ。,어서 오세요. 밥 다 됐어요.,jlpt.n5.vocab.0016.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽5 毎日の生活
+jlpt.n5.vocab.0017,N5,いらっしゃいませ,いらっしゃいませ,いらっしゃいませ,이랏샤이마세,expr,-,-,어서 오세요(가게),-,いらっしゃいませ。{何名|なんめい}さまですか。,어서 오세요. 몇 분이세요?,jlpt.n5.vocab.0017.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제6과 飲食店で注文
+jlpt.n5.vocab.0018,N5,おめでとうございます,おめでとうございます,おめでとうございます,오메데토오고자이마스,expr,-,-,축하합니다,-,たんじょうびおめでとうございます。,생일 축하합니다.,jlpt.n5.vocab.0018.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0019,N5,どうぞ,どうぞ,どうぞ,도오조,interj,-,-,자 (권하는 말),여기요,どうぞ。こちらへ。,자 이쪽으로 오세요.,jlpt.n5.vocab.0019.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지
+jlpt.n5.vocab.0020,N5,どうも,どうも,どうも,도오모,adv,-,-,고마워요,정말;어쩐지,どうも ありがとうございます。,정말 고맙습니다.,jlpt.n5.vocab.0020.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 Can-do<3>
+jlpt.n5.vocab.0021,N5,はい,はい,はい,하이,interj,-,-,네,맞아요,はい わかりました。,네 알겠습니다.,jlpt.n5.vocab.0021.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제1과 이하 전 과
+jlpt.n5.vocab.0022,N5,いいえ,いいえ,いいえ,이이에,interj,-,-,아니요,-,いいえ ちがいます。,아니요 아닙니다.,jlpt.n5.vocab.0022.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 대화문
+jlpt.n5.vocab.0023,N5,もしもし,もしもし,もしもし,모시모시,interj,-,-,여보세요,-,もしもし。イムですが。,여보세요. 임입니다만.,jlpt.n5.vocab.0023.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<58> 전화로 위치 전달
+jlpt.n5.vocab.0024,N5,じゃあ,じゃあ,じゃあ,자아,conj,-,-,그럼,그러면,じゃあ また{明日|あした}。,그럼 내일 또 봐요.,jlpt.n5.vocab.0024.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 회화문 상용
+jlpt.n5.vocab.0025,N5,私,わたし,{私|わたし},와타시,pron,-,-,저;나,-,{私|わたし}はかんこくじんです。,저는 한국인입니다.,jlpt.n5.vocab.0025.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 지면 다수; いろどり 제3과 漢字 「私」
+jlpt.n5.vocab.0026,N5,あなた,あなた,あなた,아나타,pron,-,-,당신,-,あなたのかさはどれですか。,당신 우산은 어느 것입니까?,jlpt.n5.vocab.0026.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0027,N5,これ,これ,これ,코레,pron,-,-,이것,-,これはいくらですか。,이것은 얼마입니까?,jlpt.n5.vocab.0027.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 文型 「これ/それ/あれ(は)いくらですか」
+jlpt.n5.vocab.0028,N5,それ,それ,それ,소레,pron,-,-,그것,-,それをください。,그것을 주세요.,jlpt.n5.vocab.0028.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 文型
+jlpt.n5.vocab.0029,N5,あれ,あれ,あれ,아레,pron,-,-,저것,-,あれは{何|なん}ですか。,저것은 무엇입니까?,jlpt.n5.vocab.0029.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 文型
+jlpt.n5.vocab.0030,N5,どれ,どれ,どれ,도레,pron,-,-,어느 것,-,キムさんのかばんはどれですか。,김 씨 가방은 어느 것입니까?,jlpt.n5.vocab.0030.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 지시문 「どれですか」
+jlpt.n5.vocab.0031,N5,ここ,ここ,ここ,코코,pron,-,-,여기,-,ここは{図書館|としょかん}です。,여기는 도서관입니다.,jlpt.n5.vocab.0031.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 文型 「ここは【場所】です」
+jlpt.n5.vocab.0032,N5,そこ,そこ,そこ,소코,pron,-,-,거기,-,そこにおいてください。,거기에 놓아 주세요.,jlpt.n5.vocab.0032.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제8과 文型 「ここ/そこ/あそこ」
+jlpt.n5.vocab.0033,N5,あそこ,あそこ,あそこ,아소코,pron,-,-,저기,-,あそこでバスにのります。,저기에서 버스를 탑니다.,jlpt.n5.vocab.0033.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제8과 文型
+jlpt.n5.vocab.0034,N5,どこ,どこ,どこ,도코,pron,-,-,어디,-,トイレはどこですか。,화장실은 어디입니까?,jlpt.n5.vocab.0034.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 「どこですか」 다수
+jlpt.n5.vocab.0035,N5,だれ,だれ,だれ,다레,pron,-,-,누구,-,あの{人|ひと}はだれですか。,저 사람은 누구입니까?,jlpt.n5.vocab.0035.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 예제 「あの人はだれですか」
+jlpt.n5.vocab.0036,N5,何,なに,{何|なに},나니,pron,-,-,무엇,몇,かばんの{中|なか}に{何|なに}がありますか。,가방 안에 무엇이 있습니까?,jlpt.n5.vocab.0036.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 漢字 「何」
+jlpt.n5.vocab.0037,N5,いつ,いつ,いつ,이츠,pron,-,-,언제,-,たんじょうびはいつですか。,생일은 언제입니까?,jlpt.n5.vocab.0037.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0038,N5,いくら,いくら,いくら,이쿠라,pron,-,-,얼마,-,このぼうしはいくらですか。,이 모자는 얼마입니까?,jlpt.n5.vocab.0038.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 과제목 「これ、いくらですか？」
+jlpt.n5.vocab.0039,N5,この,この,この,코노,prefix,-,-,이,-,このカメラはたかいですね。,이 카메라는 비싸네요.,jlpt.n5.vocab.0039.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예문 「このカメラは…」
+jlpt.n5.vocab.0040,N5,その,その,その,소노,prefix,-,-,그,-,そのナイフでりんごをきってください。,그 칼로 사과를 잘라 주세요.,jlpt.n5.vocab.0040.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예문
+jlpt.n5.vocab.0041,N5,あの,あの,あの,아노,prefix,-,-,저,-,あのたてものは{学校|がっこう}です。,저 건물은 학교입니다.,jlpt.n5.vocab.0041.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 예제
+jlpt.n5.vocab.0042,N5,どの,どの,どの,도노,prefix,-,-,어느,-,どのボタンをおしますか。,어느 버튼을 누릅니까?,jlpt.n5.vocab.0042.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<30> 家電の表示
+jlpt.n5.vocab.0043,N5,さん,さん,さん,산,suffix,-,-,~씨,-,{田中|たなか}さんはどこにいますか。,다나카 씨는 어디에 있습니까?,jlpt.n5.vocab.0043.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 전 지면
+jlpt.n5.vocab.0044,N5,一,いち,{一|いち},이치,noun,-,-,일;하나,-,バスは{一|いち}{時間|じかん}にいっぽんです。,버스는 한 시간에 한 대입니다.,jlpt.n5.vocab.0044.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字 「一〜十」
+jlpt.n5.vocab.0045,N5,二,に,{二|に},니,noun,-,-,이;둘,-,ケーキを{二|に}つください。,케이크를 두 개 주세요.,jlpt.n5.vocab.0045.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0046,N5,三,さん,{三|さん},산,noun,-,-,삼;셋,-,{三|さん}{時|じ}におきました。,세 시에 일어났습니다.,jlpt.n5.vocab.0046.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0047,N5,四,よん,{四|よん},욘,noun,-,-,사;넷,し,{部屋|へや}が{四|よん}つあります。,방이 네 개 있습니다.,jlpt.n5.vocab.0047.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 과제목 「部屋が4つあります」
+jlpt.n5.vocab.0048,N5,五,ご,{五|ご},고,noun,-,-,오;다섯,-,{五|ご}{分|ふん}まってください。,오 분 기다려 주세요.,jlpt.n5.vocab.0048.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0049,N5,六,ろく,{六|ろく},로쿠,noun,-,-,육;여섯,-,{六|ろく}{時|じ}にかえります。,여섯 시에 돌아갑니다.,jlpt.n5.vocab.0049.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0050,N5,七,なな,{七|なな},나나,noun,-,-,칠;일곱,しち,{七|なな}{日|にち}にあいましょう。,칠 일에 만납시다.,jlpt.n5.vocab.0050.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0051,N5,八,はち,{八|はち},하치,noun,-,-,팔;여덟,-,まいあさ{八|はち}{時|じ}にでます。,매일 아침 여덟 시에 나갑니다.,jlpt.n5.vocab.0051.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0052,N5,九,きゅう,{九|きゅう},큐우,noun,-,-,구;아홉,く,{九|きゅう}{時|じ}にはじまります。,아홉 시에 시작합니다.,jlpt.n5.vocab.0052.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0053,N5,十,じゅう,{十|じゅう},주우,noun,-,-,십;열,-,{十|じゅう}{分|ぷん}あるきました。,십 분 걸었습니다.,jlpt.n5.vocab.0053.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제16과 漢字
+jlpt.n5.vocab.0054,N5,百,ひゃく,{百|ひゃく},햐쿠,noun,-,-,백,-,{生徒|せいと}が{百|ひゃく}{人|にん}います。,학생이 백 명 있습니다.,jlpt.n5.vocab.0054.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「百人」
+jlpt.n5.vocab.0055,N5,千,せん,{千|せん},센,noun,-,-,천,-,このほんは{千|せん}{円|えん}です。,이 책은 천 엔입니다.,jlpt.n5.vocab.0055.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제17과 漢字 「百千万」
+jlpt.n5.vocab.0056,N5,万,まん,{万|まん},만,noun,-,-,만,-,かばんは{一|いち}{万|まん}{円|えん}でした。,가방은 만 엔이었습니다.,jlpt.n5.vocab.0056.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제17과 漢字
+jlpt.n5.vocab.0057,N5,ゼロ,ゼロ,ゼロ,제로,noun,-,-,영;제로,-,てんすうはゼロでした。,점수는 영점이었습니다.,jlpt.n5.vocab.0057.m4a,closed_set,draft,수 체계의 닫힌 집합
+jlpt.n5.vocab.0058,N5,人,にん,{人|にん},닌,counter,-,-,~명,-,きょうしつに{五|ご}{人|にん}います。,교실에 다섯 명 있습니다.,jlpt.n5.vocab.0058.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 선택지 「ひとり/ふたり/三人/四人」
+jlpt.n5.vocab.0059,N5,枚,まい,{枚|まい},마이,counter,-,-,~장,-,かみを{三|さん}{枚|まい}ください。,종이를 세 장 주세요.,jlpt.n5.vocab.0059.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 漢字 「～枚」
+jlpt.n5.vocab.0060,N5,本,ほん,{本|ほん},혼,counter,-,-,~자루;~병,-,ペンを{二|に}{本|ほん}かいました。,펜을 두 자루 샀습니다.,jlpt.n5.vocab.0060.m4a,closed_set,draft,조수사 닫힌 집합; いろどり 제11과 漢字 「本」
+jlpt.n5.vocab.0061,N5,台,だい,{台|だい},다이,counter,-,-,~대,-,くるまが{三|さん}{台|だい}あります。,차가 세 대 있습니다.,jlpt.n5.vocab.0061.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「だい」
+jlpt.n5.vocab.0062,N5,冊,さつ,{冊|さつ},사츠,counter,-,-,~권,-,ほんを{五|ご}{冊|さつ}かりました。,책을 다섯 권 빌렸습니다.,jlpt.n5.vocab.0062.m4a,closed_set,draft,조수사 닫힌 집합
+jlpt.n5.vocab.0063,N5,匹,ひき,{匹|ひき},히키,counter,-,-,~마리,-,いぬが{二|に}{匹|ひき}います。,개가 두 마리 있습니다.,jlpt.n5.vocab.0063.m4a,closed_set,draft,조수사 닫힌 집합
+jlpt.n5.vocab.0064,N5,個,こ,{個|こ},코,counter,-,-,~개,-,たまごを{十|じゅっ}{個|こ}かいます。,달걀을 열 개 삽니다.,jlpt.n5.vocab.0064.m4a,closed_set,draft,조수사 닫힌 집합
+jlpt.n5.vocab.0065,N5,回,かい,{回|かい},카이,counter,-,-,~번;~회,-,しゅうに{三|さん}{回|かい}およぎます。,일주일에 세 번 수영합니다.,jlpt.n5.vocab.0065.m4a,closed_set,draft,조수사 닫힌 집합
+jlpt.n5.vocab.0066,N5,階,かい,{階|かい},카이,counter,-,-,~층,-,{服|ふく}は{三|さん}{階|かい}にあります。,옷은 삼 층에 있습니다.,jlpt.n5.vocab.0066.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제15과 漢字 「～階」
+jlpt.n5.vocab.0067,N5,歳,さい,{歳|さい},사이,counter,-,-,~살;~세,さい(才),おとうとは{十|じゅっ}{歳|さい}です。,남동생은 열 살입니다.,jlpt.n5.vocab.0067.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<13> 나이 묻고 답하기
+jlpt.n5.vocab.0068,N5,円,えん,{円|えん},엔,counter,-,-,엔(일본 화폐),-,このかさは{千|せん}{円|えん}です。,이 우산은 천 엔입니다.,jlpt.n5.vocab.0068.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제17과 漢字 「～円」
+jlpt.n5.vocab.0069,N5,時,じ,{時|じ},지,counter,-,-,~시,-,{今|いま}{何|なん}{時|じ}ですか。,지금 몇 시입니까?,jlpt.n5.vocab.0069.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 漢字 「～時」
+jlpt.n5.vocab.0070,N5,分,ふん,{分|ふん},훈,counter,-,-,~분,ぷん,えきまで{十|じゅっ}{分|ぷん}かかります。,역까지 십 분 걸립니다.,jlpt.n5.vocab.0070.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 漢字 「～分」
+jlpt.n5.vocab.0071,N5,時間,じかん,{時間|じ|かん},지칸,counter,-,-,~시간,-,{二|に}{時間|じかん}べんきょうしました。,두 시간 공부했습니다.,jlpt.n5.vocab.0071.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 선택지 「1時間半」
+jlpt.n5.vocab.0072,N5,日,にち,{日|にち},니치,counter,-,-,~일,-,{十|じゅう}{日|にち}にかえります。,십 일에 돌아갑니다.,jlpt.n5.vocab.0072.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～日」
+jlpt.n5.vocab.0073,N5,週間,しゅうかん,{週間|しゅう|かん},슈우칸,counter,-,-,~주일,-,{二|に}{週間|しゅうかん}やすみます。,이 주일 쉽니다.,jlpt.n5.vocab.0073.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「今週」 파생
+jlpt.n5.vocab.0074,N5,か月,かげつ,か{月|げつ},카게츠,counter,-,-,~개월,-,{三|さん}か{月|げつ}ならいました。,삼 개월 배웠습니다.,jlpt.n5.vocab.0074.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～月」 파생
+jlpt.n5.vocab.0075,N5,年,ねん,{年|ねん},넨,counter,-,-,~년,-,{日本|にほん}に{一|いち}{年|ねん}すんでいます。,일본에 일 년 살고 있습니다.,jlpt.n5.vocab.0075.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～年」
+jlpt.n5.vocab.0076,N5,杯,はい,{杯|はい},하이,counter,-,-,~잔,-,コーヒーを{二|に}{杯|はい}のみました。,커피를 두 잔 마셨습니다.,jlpt.n5.vocab.0076.m4a,closed_set,draft,조수사 닫힌 집합
+jlpt.n5.vocab.0077,N5,番,ばん,{番|ばん},반,counter,-,-,~번(순번),-,{二|に}{番|ばん}のバスにのってください。,2번 버스를 타 주세요.,jlpt.n5.vocab.0077.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 「1ばん/2ばん」
+jlpt.n5.vocab.0078,N5,今日,きょう,{今日|きょう},쿄오,noun,-,-,오늘,-,{今日|きょう}はあついですね。,오늘은 덥네요.,jlpt.n5.vocab.0078.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 지문 「今日」
+jlpt.n5.vocab.0079,N5,明日,あした,{明日|あした},아시타,noun,-,-,내일,あす,{明日|あした}のごぜんはひまです。,내일 오전은 한가합니다.,jlpt.n5.vocab.0079.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 지문 「あした」
+jlpt.n5.vocab.0080,N5,昨日,きのう,{昨日|きのう},키노오,noun,-,-,어제,-,{昨日|きのう}は{学校|がっこう}をやすみました。,어제는 학교를 쉬었습니다.,jlpt.n5.vocab.0080.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙·読解 「きのう」
+jlpt.n5.vocab.0081,N5,今,いま,{今|いま},이마,noun,-,-,지금,-,{今|いま}{何|なん}{時|じ}ですか。,지금 몇 시입니까?,jlpt.n5.vocab.0081.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 시간 표현
+jlpt.n5.vocab.0082,N5,朝,あさ,{朝|あさ},아사,noun,-,-,아침,-,{朝|あさ}はいつもパンをたべます。,아침에는 늘 빵을 먹습니다.,jlpt.n5.vocab.0082.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 漢字 「朝」
+jlpt.n5.vocab.0083,N5,昼,ひる,{昼|ひる},히루,noun,-,-,낮;점심,-,{昼|ひる}やすみは{十二|じゅうに}{時|じ}からです。,점심시간은 열두 시부터입니다.,jlpt.n5.vocab.0083.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 과제목 「12時から1時まで昼休みです」
+jlpt.n5.vocab.0084,N5,夜,よる,{夜|よる},요루,noun,-,-,밤,-,{夜|よる}はテレビをみます。,밤에는 텔레비전을 봅니다.,jlpt.n5.vocab.0084.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 漢字 「夜」
+jlpt.n5.vocab.0085,N5,夕方,ゆうがた,{夕方|ゆう|がた},유우가타,noun,-,-,저녁 무렵,-,{朝|あさ}から{夕方|ゆうがた}までサッカーをしました。,아침부터 저녁까지 축구를 했습니다.,jlpt.n5.vocab.0085.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 지문 「朝から夕方まで」
+jlpt.n5.vocab.0086,N5,午前,ごぜん,{午前|ご|ぜん},고젠,noun,-,-,오전,-,{午前|ごぜん}のクラスはありません。,오전 수업은 없습니다.,jlpt.n5.vocab.0086.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 지문 「午前」
+jlpt.n5.vocab.0087,N5,午後,ごご,{午後|ご|ご},고고,noun,-,-,오후,-,{午後|ごご}にびょういんへいきます。,오후에 병원에 갑니다.,jlpt.n5.vocab.0087.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 지문 「午後」
+jlpt.n5.vocab.0088,N5,毎日,まいにち,{毎日|まい|にち},마이니치,noun,-,-,매일,-,{毎日|まいにち}りんごジュースをのみます。,매일 사과 주스를 마십니다.,jlpt.n5.vocab.0088.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 작문 「毎日 飲みます」
+jlpt.n5.vocab.0089,N5,毎朝,まいあさ,{毎朝|まい|あさ},마이아사,noun,-,-,매일 아침,-,{毎朝|まいあさ}{七|しち}{時|じ}にいえをでます。,매일 아침 일곱 시에 집을 나섭니다.,jlpt.n5.vocab.0089.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「毎朝」
+jlpt.n5.vocab.0090,N5,毎週,まいしゅう,{毎週|まい|しゅう},마이슈우,noun,-,-,매주,-,{毎週|まいしゅう}にほんごをならっています。,매주 일본어를 배우고 있습니다.,jlpt.n5.vocab.0090.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「今週」 파생
+jlpt.n5.vocab.0091,N5,今週,こんしゅう,{今週|こん|しゅう},콘슈우,noun,-,-,이번 주,-,{今週|こんしゅう}はとてもいそがしいです。,이번 주는 아주 바쁩니다.,jlpt.n5.vocab.0091.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「今週」
+jlpt.n5.vocab.0092,N5,来週,らいしゅう,{来週|らい|しゅう},라이슈우,noun,-,-,다음 주,-,しゅくだいは{来週|らいしゅう}だしてください。,숙제는 다음 주에 내 주세요.,jlpt.n5.vocab.0092.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「宿題は来週出してください」
+jlpt.n5.vocab.0093,N5,先週,せんしゅう,{先週|せん|しゅう},센슈우,noun,-,-,지난주,-,{先週|せんしゅう}デパートでかばんをかいました。,지난주에 백화점에서 가방을 샀습니다.,jlpt.n5.vocab.0093.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「先週 デパートで」
+jlpt.n5.vocab.0094,N5,今月,こんげつ,{今月|こん|げつ},콩게츠,noun,-,-,이번 달,-,{今月|こんげつ}はやすみがおおいです。,이번 달은 휴일이 많습니다.,jlpt.n5.vocab.0094.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～月」
+jlpt.n5.vocab.0095,N5,来月,らいげつ,{来月|らい|げつ},라이게츠,noun,-,-,다음 달,-,{来月|らいげつ}こくへかえります。,다음 달에 고국에 돌아갑니다.,jlpt.n5.vocab.0095.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「来月」
+jlpt.n5.vocab.0096,N5,先月,せんげつ,{先月|せん|げつ},셍게츠,noun,-,-,지난달,-,{先月|せんげつ}にほんへきました。,지난달에 일본에 왔습니다.,jlpt.n5.vocab.0096.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～月」
+jlpt.n5.vocab.0097,N5,今年,ことし,{今年|ことし},코토시,noun,-,-,올해,-,{今年|ことし}はゆきがすくないです。,올해는 눈이 적습니다.,jlpt.n5.vocab.0097.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～年」
+jlpt.n5.vocab.0098,N5,来年,らいねん,{来年|らい|ねん},라이넨,noun,-,-,내년,-,{来年|らいねん}{日本|にほん}でしごとをします。,내년에 일본에서 일을 합니다.,jlpt.n5.vocab.0098.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～年」
+jlpt.n5.vocab.0099,N5,去年,きょねん,{去年|きょ|ねん},쿄넨,noun,-,-,작년,-,{去年|きょねん}のなつはあつかったです。,작년 여름은 더웠습니다.,jlpt.n5.vocab.0099.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 漢字 「～年」
+jlpt.n5.vocab.0100,N5,月曜日,げつようび,{月曜日|げつ|よう|び},게츠요오비,noun,-,-,월요일,-,{月曜日|げつようび}にかんじのテストがあります。,월요일에 한자 시험이 있습니다.,jlpt.n5.vocab.0100.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 漢字 「月火水木金土日 ～曜日」
+jlpt.n5.vocab.0101,N5,火曜日,かようび,{火曜日|か|よう|び},카요오비,noun,-,-,화요일,-,{明日|あした}は{火曜日|かようび}です。,내일은 화요일입니다.,jlpt.n5.vocab.0101.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「火よう日」
+jlpt.n5.vocab.0102,N5,水曜日,すいようび,{水曜日|すい|よう|び},스이요오비,noun,-,-,수요일,-,{水曜日|すいようび}はぎんこうへいきます。,수요일에는 은행에 갑니다.,jlpt.n5.vocab.0102.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 漢字
+jlpt.n5.vocab.0103,N5,木曜日,もくようび,{木曜日|もく|よう|び},모쿠요오비,noun,-,-,목요일,-,{木曜日|もくようび}のよるはひまです。,목요일 밤은 한가합니다.,jlpt.n5.vocab.0103.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 漢字
+jlpt.n5.vocab.0104,N5,金曜日,きんようび,{金曜日|きん|よう|び},킨요오비,noun,-,-,금요일,-,{金曜日|きんようび}にともだちとあいます。,금요일에 친구와 만납니다.,jlpt.n5.vocab.0104.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 漢字
+jlpt.n5.vocab.0105,N5,土曜日,どようび,{土曜日|ど|よう|び},도요오비,noun,-,-,토요일,-,{土曜日|どようび}はうちにいます。,토요일은 집에 있습니다.,jlpt.n5.vocab.0105.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 漢字
+jlpt.n5.vocab.0106,N5,日曜日,にちようび,{日曜日|にち|よう|び},니치요오비,noun,-,-,일요일,-,{日曜日|にちようび}にともだちとサッカーをしました。,일요일에 친구와 축구를 했습니다.,jlpt.n5.vocab.0106.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「きのうの日曜日」
+jlpt.n5.vocab.0107,N5,誕生日,たんじょうび,{誕生日|たん|じょう|び},탄조오비,noun,-,-,생일,-,{誕生日|たんじょうび}はいつですか。,생일은 언제입니까?,jlpt.n5.vocab.0107.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0108,N5,家族,かぞく,{家族|か|ぞく},카조쿠,noun,-,-,가족,-,{家族|かぞく}は{四|よ}{人|にん}です。,가족은 네 명입니다.,jlpt.n5.vocab.0108.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<12> 家族の紹介
+jlpt.n5.vocab.0109,N5,父,ちち,{父|ちち},치치,noun,-,-,아버지(내),-,{父|ちち}は{毎朝|まいあさ}しんぶんをよみます。,아버지는 매일 아침 신문을 읽습니다.,jlpt.n5.vocab.0109.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「父は 毎朝」
+jlpt.n5.vocab.0110,N5,母,はは,{母|はは},하하,noun,-,-,어머니(내),-,{母|はは}はりょうりがじょうずです。,어머니는 요리를 잘합니다.,jlpt.n5.vocab.0110.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제4과 漢字 「母」
+jlpt.n5.vocab.0111,N5,お父さん,おとうさん,お{父|とう}さん,오토오산,noun,-,-,아버님;아버지(남),-,キムさんのお{父|とう}さんはせんせいです。,김 씨 아버님은 선생님입니다.,jlpt.n5.vocab.0111.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제4과 漢字 「父」
+jlpt.n5.vocab.0112,N5,お母さん,おかあさん,お{母|かあ}さん,오카아산,noun,-,-,어머님;어머니(남),-,お{母|かあ}さんはどこにいますか。,어머님은 어디에 계십니까?,jlpt.n5.vocab.0112.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제4과 漢字 「母」
+jlpt.n5.vocab.0113,N5,兄,あに,{兄|あに},아니,noun,-,-,형;오빠(내),-,{兄|あに}はかいしゃいんです。,형은 회사원입니다.,jlpt.n5.vocab.0113.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<12> 家族の紹介
+jlpt.n5.vocab.0114,N5,姉,あね,{姉|あね},아네,noun,-,-,누나;언니(내),-,{姉|あね}はとうきょうにすんでいます。,누나는 도쿄에 살고 있습니다.,jlpt.n5.vocab.0114.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<12> 家族の紹介
+jlpt.n5.vocab.0115,N5,弟,おとうと,{弟|おとうと},오토오토,noun,-,-,남동생,-,{弟|おとうと}はまだがくせいです。,남동생은 아직 학생입니다.,jlpt.n5.vocab.0115.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<12> 家族の紹介
+jlpt.n5.vocab.0116,N5,妹,いもうと,{妹|いもうと},이모오토,noun,-,-,여동생,-,{妹|いもうと}とえいがをみました。,여동생과 영화를 봤습니다.,jlpt.n5.vocab.0116.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<12> 家族の紹介
+jlpt.n5.vocab.0117,N5,子ども,こども,{子|こ}ども,코도모,noun,-,-,아이,자녀,こうえんに{子|こ}どもがたくさんいます。,공원에 아이가 많이 있습니다.,jlpt.n5.vocab.0117.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제4과 漢字 「子ども」
+jlpt.n5.vocab.0118,N5,男,おとこ,{男|おとこ},오토코,noun,-,-,남자,-,あそこにいる{男|おとこ}の{人|ひと}はだれですか。,저기 있는 남자는 누구입니까?,jlpt.n5.vocab.0118.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0119,N5,女,おんな,{女|おんな},온나,noun,-,-,여자,-,{女|おんな}の{人|ひと}がうけつけにいます。,여자분이 접수처에 있습니다.,jlpt.n5.vocab.0119.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0120,N5,人,ひと,{人|ひと},히토,noun,-,-,사람,-,きょうしつに{人|ひと}がいませんでした。,교실에 사람이 없었습니다.,jlpt.n5.vocab.0120.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「教室で 漢字を 勉強している 人は いませんでした」
+jlpt.n5.vocab.0121,N5,友だち,ともだち,{友|とも}だち,토모다치,noun,-,-,친구,-,{友|とも}だちにしゃしんをおくりました。,친구에게 사진을 보냈습니다.,jlpt.n5.vocab.0121.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙·読解 「友だち」
+jlpt.n5.vocab.0122,N5,先生,せんせい,{先生|せん|せい},센세에,noun,-,-,선생님,-,わからないことばをせんせいにききました。,모르는 단어를 선생님께 물었습니다.,jlpt.n5.vocab.0122.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「せんせいに しつもんしました」
+jlpt.n5.vocab.0123,N5,学生,がくせい,{学生|がく|せい},가쿠세에,noun,-,-,학생,-,わたしはだいがくの{学生|がくせい}です。,저는 대학생입니다.,jlpt.n5.vocab.0123.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「せいと」와 동일 주제군
+jlpt.n5.vocab.0124,N5,名前,なまえ,{名前|な|まえ},나마에,noun,-,-,이름,-,ここに{名前|なまえ}をかいてください。,여기에 이름을 써 주세요.,jlpt.n5.vocab.0124.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제3과 漢字 「名前」 Can-do<9>
+jlpt.n5.vocab.0125,N5,大人,おとな,{大人|おとな},오토나,noun,-,-,어른,-,{大人|おとな}は{千|せん}{円|えん}です。,어른은 천 엔입니다.,jlpt.n5.vocab.0125.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<74> 料金表
+jlpt.n5.vocab.0126,N5,会社員,かいしゃいん,{会社員|かい|しゃ|いん},카이샤인,noun,-,-,회사원,-,{兄|あに}も{会社員|かいしゃいん}です。,형도 회사원입니다.,jlpt.n5.vocab.0126.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제13과 漢字 「会社」
+jlpt.n5.vocab.0127,N5,医者,いしゃ,{医者|い|しゃ},이샤,noun,-,-,의사,-,{医者|いしゃ}にみてもらいました。,의사에게 진찰을 받았습니다.,jlpt.n5.vocab.0127.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do 병원 장면
+jlpt.n5.vocab.0128,N5,ご飯,ごはん,ご{飯|はん},고한,noun,-,-,밥;식사,-,{朝|あさ}ご{飯|はん}をたべてから{学校|がっこう}へいきます。,아침밥을 먹고 나서 학교에 갑니다.,jlpt.n5.vocab.0128.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「ご飯と なっとう」
+jlpt.n5.vocab.0129,N5,パン,パン,パン,판,noun,-,-,빵,-,パンとたまごをたべました。,빵과 달걀을 먹었습니다.,jlpt.n5.vocab.0129.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「パンと たまご」
+jlpt.n5.vocab.0130,N5,水,みず,{水|みず},미즈,noun,-,-,물,-,{水|みず}をください。,물을 주세요.,jlpt.n5.vocab.0130.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제5과 漢字 「水」
+jlpt.n5.vocab.0131,N5,お茶,おちゃ,お{茶|ちゃ},오차,noun,-,-,차,녹차,お{茶|ちゃ}をいれましょうか。,차를 내릴까요?,jlpt.n5.vocab.0131.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<18> 飲み物をすすめられたとき
+jlpt.n5.vocab.0132,N5,コーヒー,コーヒー,コーヒー,코오히이,noun,-,-,커피,-,{父|ちち}はまいあさコーヒーをのみます。,아버지는 매일 아침 커피를 마십니다.,jlpt.n5.vocab.0132.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法·文字語彙 「コーヒー」
+jlpt.n5.vocab.0133,N5,牛乳,ぎゅうにゅう,{牛乳|ぎゅう|にゅう},규우뉴우,noun,-,-,우유,-,{毎朝|まいあさ}{牛乳|ぎゅうにゅう}をのみます。,매일 아침 우유를 마십니다.,jlpt.n5.vocab.0133.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제5과 漢字 「飲みます」 토픽 食生活
+jlpt.n5.vocab.0134,N5,ジュース,ジュース,ジュース,주우스,noun,-,-,주스,-,すきなジュースはりんごジュースです。,좋아하는 주스는 사과 주스입니다.,jlpt.n5.vocab.0134.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 작문 「すきな ジュース」
+jlpt.n5.vocab.0135,N5,ビール,ビール,ビール,비이루,noun,-,-,맥주,-,よるはビールをすこしのみます。,밤에는 맥주를 조금 마십니다.,jlpt.n5.vocab.0135.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 「いっしょに飲みに行きませんか？」
+jlpt.n5.vocab.0136,N5,お酒,おさけ,お{酒|さけ},오사케,noun,-,-,술,-,お{酒|さけ}はあまりのみません。,술은 별로 마시지 않습니다.,jlpt.n5.vocab.0136.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제12과 飲みに行く 장면
+jlpt.n5.vocab.0137,N5,肉,にく,{肉|にく},니쿠,noun,-,-,고기,-,{肉|にく}とやさいをかいました。,고기와 채소를 샀습니다.,jlpt.n5.vocab.0137.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제6과 漢字 「肉」
+jlpt.n5.vocab.0138,N5,魚,さかな,{魚|さかな},사카나,noun,-,-,생선;물고기,-,{魚|さかな}はあまりすきじゃないです。,생선은 별로 좋아하지 않습니다.,jlpt.n5.vocab.0138.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제6과 漢字 「魚」
+jlpt.n5.vocab.0139,N5,野菜,やさい,{野菜|や|さい},야사이,noun,-,-,채소,-,{毎日|まいにち}{野菜|やさい}をたべます。,매일 채소를 먹습니다.,jlpt.n5.vocab.0139.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽3 好きな食べ物
+jlpt.n5.vocab.0140,N5,果物,くだもの,{果物|くだもの},쿠다모노,noun,-,-,과일,-,{果物|くだもの}はりんごがいちばんすきです。,과일은 사과를 가장 좋아합니다.,jlpt.n5.vocab.0140.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽3 好きな食べ物
+jlpt.n5.vocab.0141,N5,りんご,りんご,りんご,링고,noun,-,-,사과,-,そのナイフでりんごをきってください。,그 칼로 사과를 잘라 주세요.,jlpt.n5.vocab.0141.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「りんごを 切って」
+jlpt.n5.vocab.0142,N5,たまご,たまご,たまご,타마고,noun,-,-,달걀,-,たまごを{十|じゅっ}こかいました。,달걀을 열 개 샀습니다.,jlpt.n5.vocab.0142.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「たまごを 食べて」
+jlpt.n5.vocab.0143,N5,塩,しお,{塩|しお},시오,noun,-,-,소금,-,{塩|しお}をとってください。,소금을 집어 주세요.,jlpt.n5.vocab.0143.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽3 食生活
+jlpt.n5.vocab.0144,N5,砂糖,さとう,{砂糖|さ|とう},사토오,noun,-,-,설탕,-,このコーヒーは{砂糖|さとう}がおおいです。,이 커피는 설탕이 많습니다.,jlpt.n5.vocab.0144.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「さとうを たくさん 入れました」
+jlpt.n5.vocab.0145,N5,料理,りょうり,{料理|りょう|り},료오리,noun,suru_noun,vt,요리,-,{母|はは}の{料理|りょうり}はおいしいです。,어머니의 요리는 맛있습니다.,jlpt.n5.vocab.0145.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 주제군
+jlpt.n5.vocab.0146,N5,朝ご飯,あさごはん,{朝|あさ}ご{飯|はん},아사고한,noun,-,-,아침밥,-,{朝|あさ}ご{飯|はん}はパンです。,아침밥은 빵입니다.,jlpt.n5.vocab.0146.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「朝ご飯を 食べました」
+jlpt.n5.vocab.0147,N5,昼ご飯,ひるごはん,{昼|ひる}ご{飯|はん},히루고한,noun,-,-,점심밥,-,{昼|ひる}ご{飯|はん}はしょくどうでたべます。,점심밥은 식당에서 먹습니다.,jlpt.n5.vocab.0147.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 昼休み
+jlpt.n5.vocab.0148,N5,晩ご飯,ばんごはん,{晩|ばん}ご{飯|はん},방고한,noun,-,-,저녁밥,-,{晩|ばん}ご{飯|はん}をたべたあとですぐねました。,저녁밥을 먹은 뒤에 바로 잤습니다.,jlpt.n5.vocab.0148.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「晩ご飯を 食べた あとで」
+jlpt.n5.vocab.0149,N5,弁当,べんとう,{弁当|べん|とう},벤토오,noun,-,-,도시락,-,コンビニで{弁当|べんとう}をかいます。,편의점에서 도시락을 삽니다.,jlpt.n5.vocab.0149.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽8 店で
+jlpt.n5.vocab.0150,N5,カレー,カレー,カレー,카레에,noun,-,-,카레,-,ひるごはんはカレーにします。,점심은 카레로 하겠습니다.,jlpt.n5.vocab.0150.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 선택지 「カレー」
+jlpt.n5.vocab.0151,N5,ケーキ,ケーキ,ケーキ,케에키,noun,-,-,케이크,-,いちごのケーキをふたつください。,딸기 케이크를 두 개 주세요.,jlpt.n5.vocab.0151.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「いちごの ケーキを 二つ」
+jlpt.n5.vocab.0152,N5,お菓子,おかし,お{菓子|か|し},오카시,noun,-,-,과자,-,きのうかったお{菓子|かし}はとてもおいしかったです。,어제 산 과자는 아주 맛있었어요.,jlpt.n5.vocab.0152.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「きのう 買った お菓子」; 예문 교정 2026-07-25 — 「まるかった(둥글었다)」 서술이 뜬금없음 → 맛 서술로(공식샘플 틀 유지, 대표님 지시)
+jlpt.n5.vocab.0153,N5,食べ物,たべもの,{食|た}べ{物|もの},타베모노,noun,-,-,음식,먹을 것,{日本|にほん}の{食|た}べ{物|もの}はすきですか。,일본 음식은 좋아합니까?,jlpt.n5.vocab.0153.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<17> 日本の食べ物
+jlpt.n5.vocab.0154,N5,飲み物,のみもの,{飲|の}み{物|もの},노미모노,noun,-,-,음료,마실 것,すきな{飲|の}み{物|もの}は{何|なん}ですか。,좋아하는 음료는 무엇입니까?,jlpt.n5.vocab.0154.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 작문 제목 「すきな 飲み物」
+jlpt.n5.vocab.0155,N5,メニュー,メニュー,メニュー,메뉴우,noun,-,-,메뉴,-,メニューをみせてください。,메뉴를 보여 주세요.,jlpt.n5.vocab.0155.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<21> ファストフード店のメニュー
+jlpt.n5.vocab.0156,N5,家,いえ,{家|いえ},이에,noun,-,-,집,-,{毎朝|まいあさ}{七|しち}{時|じ}に{家|いえ}をでます。,매일 아침 일곱 시에 집을 나섭니다.,jlpt.n5.vocab.0156.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「家を 出ます」; いろどり 제7과 漢字 「家」
+jlpt.n5.vocab.0157,N5,部屋,へや,{部屋|へ|や},헤야,noun,-,-,방,-,この{部屋|へや}はあついですね。,이 방은 덥네요.,jlpt.n5.vocab.0157.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「この へやは あついですから」
+jlpt.n5.vocab.0158,N5,台所,だいどころ,{台所|だい|どころ},다이도코로,noun,-,-,부엌,-,{台所|だいどころ}でりょうりをします。,부엌에서 요리를 합니다.,jlpt.n5.vocab.0158.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 Can-do<26> 間取り
+jlpt.n5.vocab.0159,N5,トイレ,トイレ,トイレ,토이레,noun,-,-,화장실,-,すみません。トイレはどこですか。,실례합니다. 화장실은 어디입니까?,jlpt.n5.vocab.0159.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<57> トイレやATMの場所
+jlpt.n5.vocab.0160,N5,お風呂,おふろ,お{風呂|ふ|ろ},오후로,noun,-,-,욕조;목욕,-,よるはお{風呂|ふろ}にはいります。,밤에는 목욕을 합니다.,jlpt.n5.vocab.0160.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 Can-do<26> 間取り
+jlpt.n5.vocab.0161,N5,窓,まど,{窓|まど},마도,noun,-,-,창문,-,あついですから{窓|まど}をあけましょう。,더우니까 창문을 엽시다.,jlpt.n5.vocab.0161.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「まど」
+jlpt.n5.vocab.0162,N5,ドア,ドア,ドア,도아,noun,-,-,문,-,ドアをしめてください。,문을 닫아 주세요.,jlpt.n5.vocab.0162.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 Can-do<26> 間取り
+jlpt.n5.vocab.0163,N5,机,つくえ,{机|つくえ},츠쿠에,noun,-,-,책상,-,{机|つくえ}のうえにメモがあります。,책상 위에 메모가 있습니다.,jlpt.n5.vocab.0163.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「机の 上に この メモ」
+jlpt.n5.vocab.0164,N5,いす,いす,いす,이스,noun,-,-,의자,-,このいすはちいさいです。,이 의자는 작습니다.,jlpt.n5.vocab.0164.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「この いすは 小さいです」
+jlpt.n5.vocab.0165,N5,テーブル,テーブル,テーブル,테에부루,noun,-,-,테이블,-,テーブルのしたにかばんがあります。,테이블 밑에 가방이 있습니다.,jlpt.n5.vocab.0165.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「テーブル」
+jlpt.n5.vocab.0166,N5,ベッド,ベッド,ベッド,벳도,noun,-,-,침대,-,{部屋|へや}にベッドがふたつあります。,방에 침대가 두 개 있습니다.,jlpt.n5.vocab.0166.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 Can-do<27> 家に必要なもの
+jlpt.n5.vocab.0167,N5,電話,でんわ,{電話|でん|わ},덴와,noun,suru_noun,vi,전화,-,あとで{電話|でんわ}します。,나중에 전화하겠습니다.,jlpt.n5.vocab.0167.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<58> 電話で伝える
+jlpt.n5.vocab.0168,N5,テレビ,テレビ,テレビ,테레비,noun,-,-,텔레비전,-,よるはテレビをみません。,밤에는 텔레비전을 보지 않습니다.,jlpt.n5.vocab.0168.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 漢字 「見ます」 토픽 自由時間
+jlpt.n5.vocab.0169,N5,時計,とけい,{時計|と|けい},토케에,noun,-,-,시계,-,{時計|とけい}をわすれましたからじかんがわかりません。,시계를 잊고 와서 시간을 모릅니다.,jlpt.n5.vocab.0169.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「とけいを わすれましたから」
+jlpt.n5.vocab.0170,N5,電気,でんき,{電気|でん|き},뎅키,noun,-,-,전등;전기,-,{部屋|へや}の{電気|でんき}をけしました。,방의 불을 껐습니다.,jlpt.n5.vocab.0170.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<30> 家電の操作
+jlpt.n5.vocab.0171,N5,本,ほん,{本|ほん},혼,noun,-,-,책,-,としょかんで{本|ほん}をかりました。,도서관에서 책을 빌렸습니다.,jlpt.n5.vocab.0171.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 漢字 「本」
+jlpt.n5.vocab.0172,N5,新聞,しんぶん,{新聞|しん|ぶん},심분,noun,-,-,신문,-,{父|ちち}はまいあさ{新聞|しんぶん}をよみます。,아버지는 매일 아침 신문을 읽습니다.,jlpt.n5.vocab.0172.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「新聞を 読みます」
+jlpt.n5.vocab.0173,N5,雑誌,ざっし,{雑誌|ざっ|し},잣시,noun,-,-,잡지,-,えきのほんやで{雑誌|ざっし}をかいました。,역 서점에서 잡지를 샀습니다.,jlpt.n5.vocab.0173.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「ざっしを 買いました」
+jlpt.n5.vocab.0174,N5,写真,しゃしん,{写真|しゃ|しん},샤신,noun,-,-,사진,-,{写真|しゃしん}はかばんのしたにありました。,사진은 가방 밑에 있었습니다.,jlpt.n5.vocab.0174.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예제 「しゃしんは かばんの 下に」
+jlpt.n5.vocab.0175,N5,かばん,かばん,かばん,카반,noun,-,-,가방,-,デパートでかばんをかいました。,백화점에서 가방을 샀습니다.,jlpt.n5.vocab.0175.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「かばんや くつなどを 買いました」
+jlpt.n5.vocab.0176,N5,財布,さいふ,{財布|さい|ふ},사이후,noun,-,-,지갑,-,{財布|さいふ}をなくしました。,지갑을 잃어버렸습니다.,jlpt.n5.vocab.0176.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽8 店で 지불 장면
+jlpt.n5.vocab.0177,N5,紙,かみ,{紙|かみ},카미,noun,-,-,종이,-,この{紙|かみ}になまえをかいてください。,이 종이에 이름을 써 주세요.,jlpt.n5.vocab.0177.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「紙を 見ました」
+jlpt.n5.vocab.0178,N5,荷物,にもつ,{荷物|に|もつ},니모츠,noun,-,-,짐,-,ゆうびんきょくのひとに{荷物|にもつ}をもらいます。,우체국 사람에게 짐을 받습니다.,jlpt.n5.vocab.0178.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「荷物を もらいます」
+jlpt.n5.vocab.0179,N5,上,うえ,{上|うえ},우에,noun,-,-,위,-,つくえの{上|うえ}にほんがあります。,책상 위에 책이 있습니다.,jlpt.n5.vocab.0179.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제8과 漢字 「上」
+jlpt.n5.vocab.0180,N5,下,した,{下|した},시타,noun,-,-,아래;밑,-,かばんの{下|した}にしゃしんがありました。,가방 밑에 사진이 있었습니다.,jlpt.n5.vocab.0180.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제8과 漢字 「下」
+jlpt.n5.vocab.0181,N5,中,なか,{中|なか},나카,noun,-,-,안;속,-,しゃしんははこの{中|なか}にあります。,사진은 상자 안에 있습니다.,jlpt.n5.vocab.0181.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「はこの 中に」
+jlpt.n5.vocab.0182,N5,前,まえ,{前|まえ},마에,noun,-,-,앞;전,-,{学校|がっこう}へいく{前|まえ}にあさごはんをたべます。,학교에 가기 전에 아침밥을 먹습니다.,jlpt.n5.vocab.0182.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제14과 漢字 「前」
+jlpt.n5.vocab.0183,N5,後ろ,うしろ,{後|うし}ろ,우시로,noun,-,-,뒤,-,{店|みせ}の{後|うし}ろにこうえんがあります。,가게 뒤에 공원이 있습니다.,jlpt.n5.vocab.0183.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제14과 漢字 「後ろ」
+jlpt.n5.vocab.0184,N5,右,みぎ,{右|みぎ},미기,noun,-,-,오른쪽,-,つぎのしんごうを{右|みぎ}にまがってください。,다음 신호에서 오른쪽으로 도세요.,jlpt.n5.vocab.0184.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「右に 曲がって ください」
+jlpt.n5.vocab.0185,N5,左,ひだり,{左|ひだり},히다리,noun,-,-,왼쪽,-,えきは{左|ひだり}にあります。,역은 왼쪽에 있습니다.,jlpt.n5.vocab.0185.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제14과 位置表現
+jlpt.n5.vocab.0186,N5,外,そと,{外|そと},소토,noun,-,-,밖,-,{外|そと}はさむいですね。,밖은 춥네요.,jlpt.n5.vocab.0186.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제14과 位置表現
+jlpt.n5.vocab.0187,N5,隣,となり,{隣|となり},토나리,noun,-,-,옆;이웃,-,ゆうびんきょくはぎんこうの{隣|となり}です。,우체국은 은행 옆입니다.,jlpt.n5.vocab.0187.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「となり」
+jlpt.n5.vocab.0188,N5,駅,えき,{駅|えき},에키,noun,-,-,역,-,{駅|えき}のほんやでざっしをかいました。,역 서점에서 잡지를 샀습니다.,jlpt.n5.vocab.0188.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法·読解 「駅」 다수
+jlpt.n5.vocab.0189,N5,学校,がっこう,{学校|がっ|こう},각코오,noun,-,-,학교,-,きのうは{学校|がっこう}をやすみました。,어제는 학교를 쉬었습니다.,jlpt.n5.vocab.0189.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「がっこう」
+jlpt.n5.vocab.0190,N5,会社,かいしゃ,{会社|かい|しゃ},카이샤,noun,-,-,회사,-,{家|いえ}から{会社|かいしゃ}まで{一|いち}じかんかかります。,집에서 회사까지 한 시간 걸립니다.,jlpt.n5.vocab.0190.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「かいしゃ」; いろどり 제13과 漢字
+jlpt.n5.vocab.0191,N5,病院,びょういん,{病院|びょう|いん},뵤오인,noun,-,-,병원,-,{病院|びょういん}でくすりをもらいました。,병원에서 약을 받았습니다.,jlpt.n5.vocab.0191.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「びょういんで」
+jlpt.n5.vocab.0192,N5,銀行,ぎんこう,{銀行|ぎん|こう},깅코오,noun,-,-,은행,-,{銀行|ぎんこう}は{午後|ごご}{三|さん}じまでです。,은행은 오후 세 시까지입니다.,jlpt.n5.vocab.0192.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 선택지 「ぎんこう」
+jlpt.n5.vocab.0193,N5,郵便局,ゆうびんきょく,{郵便局|ゆう|びん|きょく},유우빙쿄쿠,noun,-,-,우체국,-,{郵便局|ゆうびんきょく}できってをかいます。,우체국에서 우표를 삽니다.,jlpt.n5.vocab.0193.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「ゆうびんきょくの 人に」
+jlpt.n5.vocab.0194,N5,図書館,としょかん,{図書館|と|しょ|かん},토쇼칸,noun,-,-,도서관,-,{図書館|としょかん}でべんきょうします。,도서관에서 공부합니다.,jlpt.n5.vocab.0194.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 선택지 「としょかん」
+jlpt.n5.vocab.0195,N5,店,みせ,{店|みせ},미세,noun,-,-,가게,-,この{店|みせ}はやすいです。,이 가게는 쌉니다.,jlpt.n5.vocab.0195.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「店の 人」
+jlpt.n5.vocab.0196,N5,スーパー,スーパー,スーパー,스우파아,noun,-,-,슈퍼마켓,-,きのうスーパーで{田中|たなか}さんにあいました。,어제 슈퍼에서 다나카 씨를 만났습니다.,jlpt.n5.vocab.0196.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「スーパーで 田中さんに 会いました」
+jlpt.n5.vocab.0197,N5,デパート,デパート,デパート,데파아토,noun,-,-,백화점,-,デパートはえきのまえにあります。,백화점은 역 앞에 있습니다.,jlpt.n5.vocab.0197.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法·聴解 「デパート」
+jlpt.n5.vocab.0198,N5,コンビニ,コンビニ,コンビニ,콤비니,noun,-,-,편의점,-,コンビニでべんとうをかいました。,편의점에서 도시락을 샀습니다.,jlpt.n5.vocab.0198.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<69> コンビニのレジ
+jlpt.n5.vocab.0199,N5,レストラン,レストラン,レストラン,레스토란,noun,-,-,레스토랑,-,レストランでりょうりをちゅうもんします。,레스토랑에서 요리를 주문합니다.,jlpt.n5.vocab.0199.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 聴解 선택지 「レストラン」
+jlpt.n5.vocab.0200,N5,公園,こうえん,{公園|こう|えん},코오엔,noun,-,-,공원,-,{毎朝|まいあさ}{公園|こうえん}をあるきます。,매일 아침 공원을 걷습니다.,jlpt.n5.vocab.0200.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽7 街を歩く
+jlpt.n5.vocab.0201,N5,空港,くうこう,{空港|くう|こう},쿠우코오,noun,-,-,공항,-,このバスは{空港|くうこう}にいきますか。,이 버스는 공항에 갑니까?,jlpt.n5.vocab.0201.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제13과 과제목 「このバスは空港に行きますか？」
+jlpt.n5.vocab.0202,N5,道,みち,{道|みち},미치,noun,-,-,길,-,この{道|みち}はくるまがおおいです。,이 길은 차가 많습니다.,jlpt.n5.vocab.0202.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예제 「この みちは くるまが 多いです」
+jlpt.n5.vocab.0203,N5,国,くに,{国|くに},쿠니,noun,-,-,나라;고국,-,わたしの{国|くに}はかわがおおいです。,우리 나라는 강이 많습니다.,jlpt.n5.vocab.0203.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「わたしの くには かわが 多いです」
+jlpt.n5.vocab.0204,N5,電車,でんしゃ,{電車|でん|しゃ},덴샤,noun,-,-,전철,-,{電車|でんしゃ}でかいしゃへいきます。,전철로 회사에 갑니다.,jlpt.n5.vocab.0204.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 표 「電車」
+jlpt.n5.vocab.0205,N5,バス,バス,バス,바스,noun,-,-,버스,-,このバスはえきにいきますか。,이 버스는 역에 갑니까?,jlpt.n5.vocab.0205.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「バスてい」
+jlpt.n5.vocab.0206,N5,車,くるま,{車|くるま},쿠루마,noun,-,-,차;자동차,-,{車|くるま}でくうこうまでいきました。,차로 공항까지 갔습니다.,jlpt.n5.vocab.0206.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예제 「くるま」
+jlpt.n5.vocab.0207,N5,自転車,じてんしゃ,{自転車|じ|てん|しゃ},지텐샤,noun,-,-,자전거,-,{自転車|じてんしゃ}でえきまでいきます。,자전거로 역까지 갑니다.,jlpt.n5.vocab.0207.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제13과 交通手段
+jlpt.n5.vocab.0208,N5,タクシー,タクシー,タクシー,타쿠시이,noun,-,-,택시,-,あそこでタクシーにのりました。,저기에서 택시를 탔습니다.,jlpt.n5.vocab.0208.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예제 「タクシーに のりました」
+jlpt.n5.vocab.0209,N5,飛行機,ひこうき,{飛行機|ひ|こう|き},히코오키,noun,-,-,비행기,-,{飛行機|ひこうき}でにほんへきました。,비행기로 일본에 왔습니다.,jlpt.n5.vocab.0209.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제13과 交通手段
+jlpt.n5.vocab.0210,N5,切符,きっぷ,{切符|きっ|ぷ},킵푸,noun,-,-,표;티켓,-,えきで{切符|きっぷ}をかいます。,역에서 표를 삽니다.,jlpt.n5.vocab.0210.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<56> 駅の表示
+jlpt.n5.vocab.0211,N5,教室,きょうしつ,{教室|きょう|しつ},쿄오시츠,noun,-,-,교실,-,{教室|きょうしつ}のまえでよみます。,교실 앞에서 읽습니다.,jlpt.n5.vocab.0211.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「クラスの みんなの 前で」·「教室」
+jlpt.n5.vocab.0212,N5,日本語,にほんご,{日本語|に|ほん|ご},니홍고,noun,-,-,일본어,-,{日本語|にほんご}のクラスははちじからです。,일본어 수업은 여덟 시부터입니다.,jlpt.n5.vocab.0212.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「日本語1」「日本語2」 クラス
+jlpt.n5.vocab.0213,N5,英語,えいご,{英語|えい|ご},에에고,noun,-,-,영어,-,{姉|あね}は{英語|えいご}をおしえています。,누나는 영어를 가르치고 있습니다.,jlpt.n5.vocab.0213.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<6> 日本語やほかのことば
+jlpt.n5.vocab.0214,N5,漢字,かんじ,{漢字|かん|じ},칸지,noun,-,-,한자,-,きのう{学校|がっこう}でたくさん{漢字|かんじ}をおぼえました。,어제 학교에서 한자를 많이 외웠습니다.,jlpt.n5.vocab.0214.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「かんじを おぼえました」
+jlpt.n5.vocab.0215,N5,ひらがな,ひらがな,ひらがな,히라가나,noun,-,-,히라가나,-,ことばをひらがなでかいてください。,단어를 히라가나로 써 주세요.,jlpt.n5.vocab.0215.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 지시문 「ひらがなで どう 書きますか」
+jlpt.n5.vocab.0216,N5,カタカナ,カタカナ,カタカナ,카타카나,noun,-,-,가타카나,-,なまえはカタカナでかきます。,이름은 가타카나로 씁니다.,jlpt.n5.vocab.0216.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제2과 (カタカナ)
+jlpt.n5.vocab.0217,N5,言葉,ことば,{言葉|こと|ば},코토바,noun,-,-,말;단어,-,しらない{言葉|ことば}がありましたからせんせいにききました。,모르는 단어가 있어서 선생님께 물었습니다.,jlpt.n5.vocab.0217.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「知らない ことばが ありましたから」
+jlpt.n5.vocab.0218,N5,授業,じゅぎょう,{授業|じゅ|ぎょう},주교오,noun,-,-,수업,-,{授業|じゅぎょう}はごぜんちゅうです。,수업은 오전 중입니다.,jlpt.n5.vocab.0218.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「じゅぎょう」
+jlpt.n5.vocab.0219,N5,宿題,しゅくだい,{宿題|しゅく|だい},슈쿠다이,noun,-,-,숙제,-,{宿題|しゅくだい}はらいしゅうだしてください。,숙제는 다음 주에 내 주세요.,jlpt.n5.vocab.0219.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「しゅくだいは 来週 出して ください」
+jlpt.n5.vocab.0220,N5,質問,しつもん,{質問|しつ|もん},시츠몬,noun,suru_noun,vi,질문,-,せんせいに{質問|しつもん}しました。,선생님께 질문했습니다.,jlpt.n5.vocab.0220.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「しつもん」
+jlpt.n5.vocab.0221,N5,テスト,テスト,テスト,테스토,noun,suru_noun,vt,시험;테스트,-,あしたかんじのテストがあります。,내일 한자 시험이 있습니다.,jlpt.n5.vocab.0221.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「漢字テスト」
+jlpt.n5.vocab.0222,N5,仕事,しごと,{仕事|し|ごと},시고토,noun,suru_noun,vi,일;업무,-,{仕事|しごと}は{五|ご}{時|じ}におわります。,일은 다섯 시에 끝납니다.,jlpt.n5.vocab.0222.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽4 家と職場
+jlpt.n5.vocab.0223,N5,練習,れんしゅう,{練習|れん|しゅう},렌슈우,noun,suru_noun,vt,연습,-,{毎日|まいにち}かんじを{練習|れんしゅう}します。,매일 한자를 연습합니다.,jlpt.n5.vocab.0223.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「れんしゅう」
+jlpt.n5.vocab.0224,N5,勉強,べんきょう,{勉強|べん|きょう},벵쿄오,noun,suru_noun,vt,공부,-,きょうしつでかんじを{勉強|べんきょう}しました。,교실에서 한자를 공부했습니다.,jlpt.n5.vocab.0224.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「漢字の 勉強」; いろどり 제17과 漢字
+jlpt.n5.vocab.0225,N5,話,はなし,{話|はなし},하나시,noun,-,-,이야기,-,せんせいの{話|はなし}はおもしろかったです。,선생님 이야기는 재미있었습니다.,jlpt.n5.vocab.0225.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽1 言語と文化
+jlpt.n5.vocab.0226,N5,手紙,てがみ,{手紙|て|がみ},테가미,noun,-,-,편지,-,ともだちに{手紙|てがみ}をかきました。,친구에게 편지를 썼습니다.,jlpt.n5.vocab.0226.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 토픽 わたし
+jlpt.n5.vocab.0227,N5,メール,メール,メール,메에루,noun,-,-,메일,-,メールでへんじをおくりました。,메일로 답장을 보냈습니다.,jlpt.n5.vocab.0227.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<51> 誘いのメッセージに返事
+jlpt.n5.vocab.0228,N5,クラス,クラス,クラス,쿠라스,noun,-,-,반;수업,-,にほんごのクラスはにかいです。,일본어 수업은 2층입니다.,jlpt.n5.vocab.0228.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「クラスの みなさんへ」
+jlpt.n5.vocab.0229,N5,大学,だいがく,{大学|だい|がく},다이가쿠,noun,-,-,대학,-,{妹|いもうと}は{大学|だいがく}のがくせいです。,여동생은 대학생입니다.,jlpt.n5.vocab.0229.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「高木大学」
+jlpt.n5.vocab.0230,N5,頭,あたま,{頭|あたま},아타마,noun,-,-,머리,-,{頭|あたま}がいたいですから、きょうはやすみます。,머리가 아파서 오늘은 쉽니다.,jlpt.n5.vocab.0230.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 신체·건강 토픽
+jlpt.n5.vocab.0231,N5,目,め,{目|め},메,noun,-,-,눈,-,ねこの{目|め}はきれいです。,고양이 눈은 아름답습니다.,jlpt.n5.vocab.0231.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「目」
+jlpt.n5.vocab.0232,N5,手,て,{手|て},테,noun,-,-,손,-,ごはんのまえに{手|て}をあらいます。,밥 먹기 전에 손을 씻습니다.,jlpt.n5.vocab.0232.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 せいかつ 토픽
+jlpt.n5.vocab.0233,N5,足,あし,{足|あし},아시,noun,-,-,다리;발,-,たくさんあるきましたから{足|あし}がいたいです。,많이 걸어서 다리가 아픕니다.,jlpt.n5.vocab.0233.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 신체·건강 토픽
+jlpt.n5.vocab.0234,N5,顔,かお,{顔|かお},카오,noun,-,-,얼굴,-,あさおきて{顔|かお}をあらいます。,아침에 일어나서 얼굴을 씻습니다.,jlpt.n5.vocab.0234.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 せいかつ 토픽
+jlpt.n5.vocab.0235,N5,おなか,おなか,おなか,오나카,noun,-,-,배,-,おなかがすきましたからなにかたべましょう。,배가 고프니까 뭔가 먹읍시다.,jlpt.n5.vocab.0235.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「おなかが すいた」
+jlpt.n5.vocab.0236,N5,病気,びょうき,{病気|びょう|き},뵤오키,noun,-,-,병,-,{病気|びょうき}のときはやすんでください。,아플 때는 쉬어 주세요.,jlpt.n5.vocab.0236.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 병원·건강 장면
+jlpt.n5.vocab.0237,N5,薬,くすり,{薬|くすり},쿠스리,noun,-,-,약,-,この{薬|くすり}はしょくじのあとでのみます。,이 약은 식사 후에 먹습니다.,jlpt.n5.vocab.0237.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「くすりを のんで」
+jlpt.n5.vocab.0238,N5,服,ふく,{服|ふく},후쿠,noun,-,-,옷,-,{服|ふく}は{三|さん}かいにあります。,옷은 삼 층에 있습니다.,jlpt.n5.vocab.0238.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<62> 店のフロアガイド
+jlpt.n5.vocab.0239,N5,シャツ,シャツ,シャツ,샤츠,noun,-,-,셔츠,-,しろいシャツをかいました。,흰 셔츠를 샀습니다.,jlpt.n5.vocab.0239.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「ワイシャツ」
+jlpt.n5.vocab.0240,N5,ズボン,ズボン,ズボン,즈본,noun,-,-,바지,-,このズボンはちょっとながいです。,이 바지는 조금 깁니다.,jlpt.n5.vocab.0240.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽8 店で
+jlpt.n5.vocab.0241,N5,靴,くつ,{靴|くつ},쿠츠,noun,-,-,신발;구두,-,デパートでかばんや{靴|くつ}をかいました。,백화점에서 가방이랑 신발을 샀습니다.,jlpt.n5.vocab.0241.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「かばんや くつなど」
+jlpt.n5.vocab.0242,N5,帽子,ぼうし,{帽子|ぼう|し},보오시,noun,-,-,모자,-,あかい{帽子|ぼうし}はだれのですか。,빨간 모자는 누구 것입니까?,jlpt.n5.vocab.0242.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽8 店で
+jlpt.n5.vocab.0243,N5,天気,てんき,{天気|てん|き},텡키,noun,-,-,날씨,-,きょうはいい{天気|てんき}ですね。,오늘은 좋은 날씨네요.,jlpt.n5.vocab.0243.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「てんきが いいですね」
+jlpt.n5.vocab.0244,N5,雨,あめ,{雨|あめ},아메,noun,-,-,비,-,あしたは{雨|あめ}ですか。,내일은 비가 옵니까?,jlpt.n5.vocab.0244.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예제 「あしたは 雨ですか」
+jlpt.n5.vocab.0245,N5,雪,ゆき,{雪|ゆき},유키,noun,-,-,눈,-,ふゆは{雪|ゆき}がたくさんふります。,겨울에는 눈이 많이 내립니다.,jlpt.n5.vocab.0245.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「ゆき」
+jlpt.n5.vocab.0246,N5,風,かぜ,{風|かぜ},카제,noun,-,-,바람,-,つよい{風|かぜ}がふいています。,강한 바람이 불고 있습니다.,jlpt.n5.vocab.0246.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「つよい かぜが ふいて います」
+jlpt.n5.vocab.0247,N5,空,そら,{空|そら},소라,noun,-,-,하늘,-,{空|そら}にほしがひかっています。,하늘에 별이 빛나고 있습니다.,jlpt.n5.vocab.0247.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「そら」
+jlpt.n5.vocab.0248,N5,山,やま,{山|やま},야마,noun,-,-,산,-,{土曜日|どようび}に{山|やま}へいきました。,토요일에 산에 갔습니다.,jlpt.n5.vocab.0248.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「山」
+jlpt.n5.vocab.0249,N5,川,かわ,{川|かわ},카와,noun,-,-,강,-,わたしのくには{川|かわ}がおおいです。,우리 나라는 강이 많습니다.,jlpt.n5.vocab.0249.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「かわが 多いです」
+jlpt.n5.vocab.0250,N5,海,うみ,{海|うみ},우미,noun,-,-,바다,-,なつは{海|うみ}でおよぎます。,여름에는 바다에서 헤엄칩니다.,jlpt.n5.vocab.0250.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「海が きれいで」
+jlpt.n5.vocab.0251,N5,花,はな,{花|はな},하나,noun,-,-,꽃,-,こうえんに{花|はな}がたくさんあります。,공원에 꽃이 많이 있습니다.,jlpt.n5.vocab.0251.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「花」
+jlpt.n5.vocab.0252,N5,木,き,{木|き},키,noun,-,-,나무,-,{学校|がっこう}のまえにおおきい{木|き}があります。,학교 앞에 큰 나무가 있습니다.,jlpt.n5.vocab.0252.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「木」
+jlpt.n5.vocab.0253,N5,犬,いぬ,{犬|いぬ},이누,noun,-,-,개,-,こうえんに{犬|いぬ}がたくさんいますよ。,공원에 개가 많이 있어요.,jlpt.n5.vocab.0253.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「いぬ」
+jlpt.n5.vocab.0254,N5,猫,ねこ,{猫|ねこ},네코,noun,-,-,고양이,-,うちに{猫|ねこ}が{二|に}ひきいます。,집에 고양이가 두 마리 있습니다.,jlpt.n5.vocab.0254.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「ねこ」
+jlpt.n5.vocab.0255,N5,お金,おかね,お{金|かね},오카네,noun,-,-,돈,-,ゆうびんきょくのひとにお{金|かね}をわたします。,우체국 사람에게 돈을 건넵니다.,jlpt.n5.vocab.0255.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「お金を わたします」
+jlpt.n5.vocab.0256,N5,値段,ねだん,{値段|ね|だん},네단,noun,-,-,가격,-,この{値段|ねだん}はやすいですね。,이 가격은 싸네요.,jlpt.n5.vocab.0256.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<67> 店の人に値段を質問
+jlpt.n5.vocab.0257,N5,買い物,かいもの,{買|か}い{物|もの},카이모노,noun,suru_noun,vi,쇼핑;장보기,-,ともだちと{買|か}い{物|もの}にいきました。,친구와 쇼핑하러 갔습니다.,jlpt.n5.vocab.0257.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽8 店で(買い物)
+jlpt.n5.vocab.0258,N5,切手,きって,{切手|きっ|て},킷테,noun,-,-,우표,-,ゆうびんきょくで{切手|きって}をかいました。,우체국에서 우표를 샀습니다.,jlpt.n5.vocab.0258.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 かいもの 토픽
+jlpt.n5.vocab.0259,N5,電池,でんち,{電池|でん|ち},덴치,noun,-,-,건전지,-,この{電池|でんち}はどこにありますか。,이 건전지는 어디에 있습니까?,jlpt.n5.vocab.0259.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제15과 과제목 「電池がほしいんですが…」
+jlpt.n5.vocab.0260,N5,音楽,おんがく,{音楽|おん|がく},옹가쿠,noun,-,-,음악,-,やすみのひは{音楽|おんがく}をききます。,쉬는 날에는 음악을 듣습니다.,jlpt.n5.vocab.0260.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 漢字 「聞きます」 토픽 自由時間
+jlpt.n5.vocab.0261,N5,映画,えいが,{映画|えい|が},에에가,noun,-,-,영화,-,{映画|えいが}をみにいきました。,영화를 보러 갔습니다.,jlpt.n5.vocab.0261.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제17과 과제목 「映画を見に行きました」
+jlpt.n5.vocab.0262,N5,旅行,りょこう,{旅行|りょ|こう},료코오,noun,suru_noun,vi,여행,-,らいげつ{京都|きょうと}へ{旅行|りょこう}します。,다음 달에 교토로 여행합니다.,jlpt.n5.vocab.0262.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제18과 漢字 「旅行します」
+jlpt.n5.vocab.0263,N5,スポーツ,スポーツ,スポーツ,스포오츠,noun,-,-,스포츠,-,スポーツはあまりしません。,스포츠는 별로 하지 않습니다.,jlpt.n5.vocab.0263.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽6 私の好きなこと
+jlpt.n5.vocab.0264,N5,サッカー,サッカー,サッカー,삭카아,noun,-,-,축구,-,にちようびにともだちとサッカーをしました。,일요일에 친구와 축구를 했습니다.,jlpt.n5.vocab.0264.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「友だちと サッカーを しました」
+jlpt.n5.vocab.0265,N5,趣味,しゅみ,{趣味|しゅ|み},슈미,noun,-,-,취미,-,わたしの{趣味|しゅみ}はりょうりです。,제 취미는 요리입니다.,jlpt.n5.vocab.0265.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<44> 趣味について答える
+jlpt.n5.vocab.0266,N5,休み,やすみ,{休|やす}み,야스미,noun,-,-,휴일;쉬는 시간,-,{休|やす}みのひはなにをしますか。,쉬는 날에는 무엇을 합니까?,jlpt.n5.vocab.0266.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제17과 漢字 「休み」 토픽9
+jlpt.n5.vocab.0267,N5,温泉,おんせん,{温泉|おん|せん},온센,noun,-,-,온천,-,{温泉|おんせん}にはいりたいです。,온천에 들어가고 싶습니다.,jlpt.n5.vocab.0267.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제18과 과제목 「温泉に入りたいです」 漢字 「温泉」
+jlpt.n5.vocab.0268,N5,予定,よてい,{予定|よ|てい},요테에,noun,-,-,예정,-,あしたの{予定|よてい}をおしえてください。,내일 예정을 알려 주세요.,jlpt.n5.vocab.0268.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제18과 漢字 「予定」
+jlpt.n5.vocab.0269,N5,行く,いく,{行|い}く,이쿠,verb,g1,vi,가다,-,{学校|がっこう}へ{行|い}きます。,학교에 갑니다.,jlpt.n5.vocab.0269.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「学校へ 行きます」; いろどり 제13과 漢字 「行きます」
+jlpt.n5.vocab.0270,N5,来る,くる,{来|く}る,쿠루,verb,g3_kuru,vi,오다,-,キムさんも{来|き}ませんか。,김 씨도 오지 않겠어요?,jlpt.n5.vocab.0270.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「来ませんか」; いろどり 제13과 漢字 「来ます」
+jlpt.n5.vocab.0271,N5,帰る,かえる,{帰|かえ}る,카에루,verb,g1,vi,돌아가다;귀가하다,-,らいげつくにへ{帰|かえ}ります。,다음 달에 고국으로 돌아갑니다.,jlpt.n5.vocab.0271.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「国へ 帰ります」
+jlpt.n5.vocab.0272,N5,する,する,する,스루,verb,g3_suru,vt,하다,-,にちようびはなにをしますか。,일요일에는 무엇을 합니까?,jlpt.n5.vocab.0272.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<46> 休みの日に何をするか
+jlpt.n5.vocab.0273,N5,見る,みる,{見|み}る,미루,verb,g2,vt,보다,-,このざっしを{見|み}てください。,이 잡지를 봐 주세요.,jlpt.n5.vocab.0273.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「ざっしを 見て ください」
+jlpt.n5.vocab.0274,N5,聞く,きく,{聞|き}く,키쿠,verb,g1,vt,듣다;묻다,-,わからないときはせんせいに{聞|き}きます。,모를 때는 선생님께 묻습니다.,jlpt.n5.vocab.0274.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 漢字 「聞きます」
+jlpt.n5.vocab.0275,N5,話す,はなす,{話|はな}す,하나스,verb,g1,vt,이야기하다,-,{日本語|にほんご}ですこし{話|はな}しました。,일본어로 조금 이야기했습니다.,jlpt.n5.vocab.0275.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<6> ことばができるか質問
+jlpt.n5.vocab.0276,N5,読む,よむ,{読|よ}む,요무,verb,g1,vt,읽다,-,{父|ちち}はしんぶんを{読|よ}みます。,아버지는 신문을 읽습니다.,jlpt.n5.vocab.0276.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「新聞を 読みます」
+jlpt.n5.vocab.0277,N5,書く,かく,{書|か}く,카쿠,verb,g1,vt,쓰다(글씨),-,ここになまえを{書|か}いてください。,여기에 이름을 써 주세요.,jlpt.n5.vocab.0277.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 지시문 「どう 書きますか」
+jlpt.n5.vocab.0278,N5,買う,かう,{買|か}う,카우,verb,g1,vt,사다,-,えきのほんやでざっしを{買|か}いました。,역 서점에서 잡지를 샀습니다.,jlpt.n5.vocab.0278.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「買いました」; いろどり 제17과 漢字
+jlpt.n5.vocab.0279,N5,売る,うる,{売|う}る,우루,verb,g1,vt,팔다,-,この{店|みせ}はきってを{売|う}っています。,이 가게는 우표를 팔고 있습니다.,jlpt.n5.vocab.0279.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 かいもの 토픽
+jlpt.n5.vocab.0280,N5,食べる,たべる,{食|た}べる,타베루,verb,g2,vt,먹다,-,あさごはんにパンとたまごを{食|た}べました。,아침으로 빵과 달걀을 먹었습니다.,jlpt.n5.vocab.0280.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「食べました」; いろどり 제5과 漢字
+jlpt.n5.vocab.0281,N5,飲む,のむ,{飲|の}む,노무,verb,g1,vt,마시다,-,くすりをみずで{飲|の}みます。,약을 물로 마십니다.,jlpt.n5.vocab.0281.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「飲みます」; いろどり 제5과 漢字
+jlpt.n5.vocab.0282,N5,起きる,おきる,{起|お}きる,오키루,verb,g2,vi,일어나다,-,けさは{六|ろく}じに{起|お}きました。,오늘 아침은 여섯 시에 일어났습니다.,jlpt.n5.vocab.0282.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「起きました」
+jlpt.n5.vocab.0283,N5,寝る,ねる,{寝|ね}る,네루,verb,g2,vi,자다,-,ばんごはんをたべたあとですぐ{寝|ね}ました。,저녁밥을 먹은 뒤에 바로 잤습니다.,jlpt.n5.vocab.0283.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「すぐに 寝ました」
+jlpt.n5.vocab.0284,N5,働く,はたらく,{働|はたら}く,하타라쿠,verb,g1,vi,일하다,-,{姉|あね}はぎんこうで{働|はたら}いています。,누나는 은행에서 일하고 있습니다.,jlpt.n5.vocab.0284.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽4 家と職場
+jlpt.n5.vocab.0285,N5,休む,やすむ,{休|やす}む,야스무,verb,g1,vi,쉬다,-,きのうは{学校|がっこう}を{休|やす}みました。,어제는 학교를 쉬었습니다.,jlpt.n5.vocab.0285.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「がっこうを やすみました」
+jlpt.n5.vocab.0286,N5,会う,あう,{会|あ}う,아우,verb,g1,vi,만나다,-,スーパーで{田中|たなか}さんに{会|あ}いました。,슈퍼에서 다나카 씨를 만났습니다.,jlpt.n5.vocab.0286.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「田中さんに 会いました」; いろどり 제18과 漢字
+jlpt.n5.vocab.0287,N5,待つ,まつ,{待|ま}つ,마츠,verb,g1,vt,기다리다,-,ここでちょっと{待|ま}ってください。,여기서 잠깐 기다려 주세요.,jlpt.n5.vocab.0287.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 회화 표현
+jlpt.n5.vocab.0288,N5,使う,つかう,{使|つか}う,츠카우,verb,g1,vt,쓰다;사용하다,-,このへやのエアコンを{使|つか}ってもいいですか。,이 방 에어컨을 써도 됩니까?,jlpt.n5.vocab.0288.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<30> 家電の操作
+jlpt.n5.vocab.0289,N5,作る,つくる,{作|つく}る,츠쿠루,verb,g1,vt,만들다,-,{父|ちち}がばんごはんを{作|つく}りました。,아버지가 저녁밥을 만들었습니다.,jlpt.n5.vocab.0289.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「父が 作りました」
+jlpt.n5.vocab.0290,N5,撮る,とる,{撮|と}る,토루,verb,g1,vt,(사진을) 찍다,-,こうえんでしゃしんを{撮|と}りました。,공원에서 사진을 찍었습니다.,jlpt.n5.vocab.0290.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<20> 食事の写真をSNSに投稿
+jlpt.n5.vocab.0291,N5,洗う,あらう,{洗|あら}う,아라우,verb,g1,vt,씻다,-,ごはんのまえに{手|て}を{洗|あら}います。,밥 먹기 전에 손을 씻습니다.,jlpt.n5.vocab.0291.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「洗わないで ください」
+jlpt.n5.vocab.0292,N5,入る,はいる,{入|はい}る,하이루,verb,g1,vi,들어가다,-,{温泉|おんせん}に{入|はい}りたいです。,온천에 들어가고 싶습니다.,jlpt.n5.vocab.0292.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제18과 漢字 「入ります」
+jlpt.n5.vocab.0293,N5,出る,でる,{出|で}る,데루,verb,g2,vi,나가다;나오다,-,まいあさ{七|しち}じにいえを{出|で}ます。,매일 아침 일곱 시에 집을 나섭니다.,jlpt.n5.vocab.0293.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「家を 出ます」
+jlpt.n5.vocab.0294,N5,出す,だす,{出|だ}す,다스,verb,g1,vt,내다;제출하다,-,しゅくだいはらいしゅう{出|だ}してください。,숙제는 다음 주에 내 주세요.,jlpt.n5.vocab.0294.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「出して ください」
+jlpt.n5.vocab.0295,N5,入れる,いれる,{入|い}れる,이레루,verb,g2,vt,넣다,-,コーヒーにさとうを{入|い}れました。,커피에 설탕을 넣었습니다.,jlpt.n5.vocab.0295.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「さとうを たくさん 入れましたから」
+jlpt.n5.vocab.0296,N5,開ける,あける,{開|あ}ける,아케루,verb,g2,vt,열다,-,あついですからまどを{開|あ}けましょう。,더우니까 창문을 엽시다.,jlpt.n5.vocab.0296.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「まどを 開けましょう」
+jlpt.n5.vocab.0297,N5,閉める,しめる,{閉|し}める,시메루,verb,g2,vt,닫다,-,さむいですからドアを{閉|し}めてください。,추우니까 문을 닫아 주세요.,jlpt.n5.vocab.0297.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 家の中
+jlpt.n5.vocab.0298,N5,開く,あく,{開|あ}く,아쿠,verb,g1,vi,열리다,-,この{店|みせ}は{十|じゅう}じに{開|あ}きます。,이 가게는 열 시에 문을 엽니다.,jlpt.n5.vocab.0298.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<60> 営業時間の掲示
+jlpt.n5.vocab.0299,N5,閉まる,しまる,{閉|し}まる,시마루,verb,g1,vi,닫히다,-,ぎんこうは{三|さん}じに{閉|し}まります。,은행은 세 시에 문을 닫습니다.,jlpt.n5.vocab.0299.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<60> 営業時間の掲示
+jlpt.n5.vocab.0300,N5,始まる,はじまる,{始|はじ}まる,하지마루,verb,g1,vi,시작되다,-,じゅぎょうは{九|く}じに{始|はじ}まります。,수업은 아홉 시에 시작됩니다.,jlpt.n5.vocab.0300.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 スケジュール
+jlpt.n5.vocab.0301,N5,始める,はじめる,{始|はじ}める,하지메루,verb,g2,vt,시작하다,-,にほんごのべんきょうを{始|はじ}めました。,일본어 공부를 시작했습니다.,jlpt.n5.vocab.0301.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 スケジュール
+jlpt.n5.vocab.0302,N5,終わる,おわる,{終|お}わる,오와루,verb,g1,vi,끝나다,-,しごとは{五|ご}じに{終|お}わります。,일은 다섯 시에 끝납니다.,jlpt.n5.vocab.0302.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제9과 スケジュール
+jlpt.n5.vocab.0303,N5,分かる,わかる,{分|わ}かる,와카루,verb,g1,vi,알다;이해하다,-,すみません。よく{分|わ}かりません。,죄송합니다. 잘 모르겠습니다.,jlpt.n5.vocab.0303.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제2과 과제목 「すみません、よくわかりません」
+jlpt.n5.vocab.0304,N5,知る,しる,{知|し}る,시루,verb,g1,vt,알다,-,この{言葉|ことば}を{知|し}っていますか。,이 단어를 알고 있습니까?,jlpt.n5.vocab.0304.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「知らない ことば」
+jlpt.n5.vocab.0305,N5,教える,おしえる,{教|おし}える,오시에루,verb,g2,vt,가르치다;알려주다,-,えきまでのいきかたを{教|おし}えてください。,역까지 가는 길을 알려 주세요.,jlpt.n5.vocab.0305.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<55> 行き方を質問
+jlpt.n5.vocab.0306,N5,習う,ならう,{習|なら}う,나라우,verb,g1,vt,배우다,-,{日本語|にほんご}を{三|さん}かげつ{習|なら}いました。,일본어를 삼 개월 배웠습니다.,jlpt.n5.vocab.0306.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 にほんご 토픽
+jlpt.n5.vocab.0307,N5,覚える,おぼえる,{覚|おぼ}える,오보에루,verb,g2,vt,외우다;기억하다,-,きのうかんじをたくさん{覚|おぼ}えました。,어제 한자를 많이 외웠습니다.,jlpt.n5.vocab.0307.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「かんじを おぼえました」
+jlpt.n5.vocab.0308,N5,忘れる,わすれる,{忘|わす}れる,와스레루,verb,g2,vt,잊다,-,とけいを{忘|わす}れましたからじかんがわかりません。,시계를 잊고 와서 시간을 모릅니다.,jlpt.n5.vocab.0308.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「わすれましたから」
+jlpt.n5.vocab.0309,N5,乗る,のる,{乗|の}る,노루,verb,g1,vi,타다,-,あそこでタクシーに{乗|の}りました。,저기에서 택시를 탔습니다.,jlpt.n5.vocab.0309.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「タクシーに のりました」; いろどり 제13과 漢字
+jlpt.n5.vocab.0310,N5,降りる,おりる,{降|お}りる,오리루,verb,g2,vi,내리다,-,つぎのえきで{降|お}ります。,다음 역에서 내립니다.,jlpt.n5.vocab.0310.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제13과 文型 「【乗り物】を降ります」
+jlpt.n5.vocab.0311,N5,歩く,あるく,{歩|ある}く,아루쿠,verb,g1,vi,걷다,-,えきからだいがくまで{十|じゅっ}ぷん{歩|ある}きます。,역에서 대학까지 십 분 걷습니다.,jlpt.n5.vocab.0311.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 표 「歩く」
+jlpt.n5.vocab.0312,N5,走る,はしる,{走|はし}る,하시루,verb,g1,vi,달리다,-,まいあさこうえんを{走|はし}ります。,매일 아침 공원을 달립니다.,jlpt.n5.vocab.0312.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 やすみのひ 토픽
+jlpt.n5.vocab.0313,N5,泳ぐ,およぐ,{泳|およ}ぐ,오요구,verb,g1,vi,헤엄치다,-,なつやすみはまいにちプールで{泳|およ}ぎました。,여름방학에는 매일 수영장에서 헤엄쳤습니다.,jlpt.n5.vocab.0313.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「プールで およぎました」
+jlpt.n5.vocab.0314,N5,遊ぶ,あそぶ,{遊|あそ}ぶ,아소부,verb,g1,vi,놀다,-,にちようびにともだちと{遊|あそ}びました。,일요일에 친구와 놀았습니다.,jlpt.n5.vocab.0314.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽9 休みの日に
+jlpt.n5.vocab.0315,N5,立つ,たつ,{立|た}つ,타츠,verb,g1,vi,서다,-,ドアのまえに{立|た}ってください。,문 앞에 서 주세요.,jlpt.n5.vocab.0315.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 교실 지시 표현
+jlpt.n5.vocab.0316,N5,座る,すわる,{座|すわ}る,스와루,verb,g1,vi,앉다,-,こちらのいすに{座|すわ}ってください。,이쪽 의자에 앉아 주세요.,jlpt.n5.vocab.0316.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 교실 지시 표현
+jlpt.n5.vocab.0317,N5,住む,すむ,{住|す}む,스무,verb,g1,vi,살다;거주하다,-,{姉|あね}はとうきょうに{住|す}んでいます。,누나는 도쿄에 살고 있습니다.,jlpt.n5.vocab.0317.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제4과 과제목 「東京に住んでいます」
+jlpt.n5.vocab.0318,N5,貸す,かす,{貸|か}す,카스,verb,g1,vt,빌려주다,-,ホチキスを{貸|か}してください。,스테이플러를 빌려 주세요.,jlpt.n5.vocab.0318.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 과제목 「ホチキス貸してください」
+jlpt.n5.vocab.0319,N5,借りる,かりる,{借|か}りる,카리루,verb,g2,vt,빌리다,-,としょかんでほんを{借|か}りました。,도서관에서 책을 빌렸습니다.,jlpt.n5.vocab.0319.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 文型 「N、借りてもいいですか？」
+jlpt.n5.vocab.0320,N5,返す,かえす,{返|かえ}す,카에스,verb,g1,vt,돌려주다,-,かりたほんはあした{返|かえ}します。,빌린 책은 내일 돌려주겠습니다.,jlpt.n5.vocab.0320.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제10과 貸し借り
+jlpt.n5.vocab.0321,N5,持つ,もつ,{持|も}つ,모츠,verb,g1,vt,들다;가지다,-,おおきいかばんを{持|も}っています。,큰 가방을 들고 있습니다.,jlpt.n5.vocab.0321.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「もちました」
+jlpt.n5.vocab.0322,N5,取る,とる,{取|と}る,토루,verb,g1,vt,집다;잡다,-,しおを{取|と}ってください。,소금을 집어 주세요.,jlpt.n5.vocab.0322.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 たべもの 토픽
+jlpt.n5.vocab.0323,N5,置く,おく,{置|お}く,오쿠,verb,g1,vt,놓다;두다,-,にもつはここに{置|お}いてください。,짐은 여기에 놓아 주세요.,jlpt.n5.vocab.0323.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<33> ものの置き場
+jlpt.n5.vocab.0324,N5,送る,おくる,{送|おく}る,오쿠루,verb,g1,vt,보내다,-,ともだちにしゃしんを{送|おく}りました。,친구에게 사진을 보냈습니다.,jlpt.n5.vocab.0324.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<75> メッセージを送る
+jlpt.n5.vocab.0325,N5,もらう,もらう,もらう,모라우,verb,g1,vt,받다,-,ゆうびんきょくのひとににもつをもらいます。,우체국 사람에게 짐을 받습니다.,jlpt.n5.vocab.0325.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「にもつを もらいます」
+jlpt.n5.vocab.0326,N5,あげる,あげる,あげる,아게루,verb,g2,vt,주다,-,パンをはんぶんともだちにあげました。,빵을 반 친구에게 주었습니다.,jlpt.n5.vocab.0326.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「半分 ともだちに あげました」
+jlpt.n5.vocab.0327,N5,言う,いう,{言|い}う,이우,verb,g1,vt,말하다,-,まだ{言|い}わないでください。,아직 말하지 말아 주세요.,jlpt.n5.vocab.0327.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「まだ 言わないで ください」
+jlpt.n5.vocab.0328,N5,思う,おもう,{思|おも}う,오모우,verb,g1,vt,생각하다,-,このかばんはたかいと{思|おも}います。,이 가방은 비싸다고 생각합니다.,jlpt.n5.vocab.0328.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 감상 표현
+jlpt.n5.vocab.0329,N5,歌う,うたう,{歌|うた}う,우타우,verb,g1,vt,노래하다,-,ともだちとうたを{歌|うた}いました。,친구와 노래를 불렀습니다.,jlpt.n5.vocab.0329.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽6 私の好きなこと
+jlpt.n5.vocab.0330,N5,切る,きる,{切|き}る,키루,verb,g1,vt,자르다,-,そのナイフでりんごを{切|き}ってください。,그 칼로 사과를 잘라 주세요.,jlpt.n5.vocab.0330.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「りんごを 切って ください」
+jlpt.n5.vocab.0331,N5,着る,きる,{着|き}る,키루,verb,g2,vt,입다,-,しろいシャツを{着|き}ています。,흰 셔츠를 입고 있습니다.,jlpt.n5.vocab.0331.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 かいもの 토픽
+jlpt.n5.vocab.0332,N5,履く,はく,{履|は}く,하쿠,verb,g1,vt,신다,-,あたらしいくつを{履|は}きました。,새 신발을 신었습니다.,jlpt.n5.vocab.0332.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 かいもの 토픽
+jlpt.n5.vocab.0333,N5,脱ぐ,ぬぐ,{脱|ぬ}ぐ,누구,verb,g1,vt,벗다,-,げんかんでくつを{脱|ぬ}ぎます。,현관에서 신발을 벗습니다.,jlpt.n5.vocab.0333.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽4 家の中
+jlpt.n5.vocab.0334,N5,呼ぶ,よぶ,{呼|よ}ぶ,요부,verb,g1,vt,부르다,-,タクシーを{呼|よ}んでください。,택시를 불러 주세요.,jlpt.n5.vocab.0334.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 토픽7 街を歩く
+jlpt.n5.vocab.0335,N5,ある,ある,ある,아루,verb,g1,vi,있다(사물),-,つくえのうえにメモがあります。,책상 위에 메모가 있습니다.,jlpt.n5.vocab.0335.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 文型 「【場所】にNがあります」
+jlpt.n5.vocab.0336,N5,いる,いる,いる,이루,verb,g2,vi,있다(사람·동물),-,{山田|やまだ}さんはどこにいますか。,야마다 씨는 어디에 있습니까?,jlpt.n5.vocab.0336.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제8과 과제목 「山田さんはどこにいますか？」
+jlpt.n5.vocab.0337,N5,なる,なる,なる,나루,verb,g1,vi,되다,-,{妹|いもうと}はらいねんがくせいになります。,여동생은 내년에 학생이 됩니다.,jlpt.n5.vocab.0337.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 わたし 토픽
+jlpt.n5.vocab.0338,N5,疲れる,つかれる,{疲|つか}れる,츠카레루,verb,g2,vi,지치다;피곤하다,-,あさからゆうがたまでしましたからとても{疲|つか}れました。,아침부터 저녁까지 해서 아주 피곤했습니다.,jlpt.n5.vocab.0338.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「とても つかれました」
+jlpt.n5.vocab.0339,N5,大きい,おおきい,{大|おお}きい,오오키이,i_adj,i_adj,-,크다,-,{学校|がっこう}のまえに{大|おお}きいたてものがあります。,학교 앞에 큰 건물이 있습니다.,jlpt.n5.vocab.0339.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제14과 漢字 「大きい」 과제목 「大きな建物ですね」
+jlpt.n5.vocab.0340,N5,小さい,ちいさい,{小|ちい}さい,치이사이,i_adj,i_adj,-,작다,-,このいすは{小|ちい}さいです。,이 의자는 작습니다.,jlpt.n5.vocab.0340.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「この いすは 小さいです」
+jlpt.n5.vocab.0341,N5,新しい,あたらしい,{新|あたら}しい,아타라시이,i_adj,i_adj,-,새롭다,-,このカメラは{新|あたら}しいですね。,이 카메라는 새것이네요.,jlpt.n5.vocab.0341.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「新しい」; いろどり 제7과 漢字
+jlpt.n5.vocab.0342,N5,古い,ふるい,{古|ふる}い,후루이,i_adj,i_adj,-,오래되다;낡다,-,この{家|いえ}はちょっと{古|ふる}いです。,이 집은 조금 낡았습니다.,jlpt.n5.vocab.0342.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 漢字 「古い」
+jlpt.n5.vocab.0343,N5,高い,たかい,{高|たか}い,타카이,i_adj,i_adj,-,비싸다;높다,-,このカメラは{高|たか}いですね。,이 카메라는 비싸네요.,jlpt.n5.vocab.0343.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「この カメラは 高いですね」
+jlpt.n5.vocab.0344,N5,安い,やすい,{安|やす}い,야스이,i_adj,i_adj,-,싸다,-,この{店|みせ}のやさいは{安|やす}いです。,이 가게 채소는 쌉니다.,jlpt.n5.vocab.0344.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 선택지 「安い」; いろどり 제15과 漢字
+jlpt.n5.vocab.0345,N5,長い,ながい,{長|なが}い,나가이,i_adj,i_adj,-,길다,-,このズボンはちょっと{長|なが}いです。,이 바지는 조금 깁니다.,jlpt.n5.vocab.0345.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 かいもの 토픽
+jlpt.n5.vocab.0346,N5,短い,みじかい,{短|みじか}い,미지카이,i_adj,i_adj,-,짧다,-,かみを{短|みじか}くしました。,머리를 짧게 했습니다.,jlpt.n5.vocab.0346.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 かいもの 토픽
+jlpt.n5.vocab.0347,N5,早い,はやい,{早|はや}い,하야이,i_adj,i_adj,-,이르다;빠르다,-,けさは{早|はや}くおきました。,오늘 아침은 일찍 일어났습니다.,jlpt.n5.vocab.0347.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 せいかつ 토픽
+jlpt.n5.vocab.0348,N5,遅い,おそい,{遅|おそ}い,오소이,i_adj,i_adj,-,늦다,-,きょうはすこし{遅|おそ}いですね。,오늘은 조금 늦으시네요.,jlpt.n5.vocab.0348.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 せいかつ 토픽
+jlpt.n5.vocab.0349,N5,暑い,あつい,{暑|あつ}い,아츠이,i_adj,i_adj,-,덥다(날씨),-,このへやは{暑|あつ}いですからまどをあけましょう。,이 방은 더우니까 창문을 엽시다.,jlpt.n5.vocab.0349.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「この へやは あついですから」
+jlpt.n5.vocab.0350,N5,寒い,さむい,{寒|さむ}い,사무이,i_adj,i_adj,-,춥다,-,きょうは{寒|さむ}くないです。,오늘은 춥지 않습니다.,jlpt.n5.vocab.0350.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「さむくないです」
+jlpt.n5.vocab.0351,N5,熱い,あつい,{熱|あつ}い,아츠이,i_adj,i_adj,-,뜨겁다,-,このおちゃは{熱|あつ}いです。,이 차는 뜨겁습니다.,jlpt.n5.vocab.0351.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 たべもの 토픽
+jlpt.n5.vocab.0352,N5,冷たい,つめたい,{冷|つめ}たい,츠메타이,i_adj,i_adj,-,차갑다,-,{冷|つめ}たいみずをください。,차가운 물을 주세요.,jlpt.n5.vocab.0352.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 たべもの 토픽
+jlpt.n5.vocab.0353,N5,忙しい,いそがしい,{忙|いそが}しい,이소가시이,i_adj,i_adj,-,바쁘다,-,とても{忙|いそが}しいあさでした。,아주 바쁜 아침이었습니다.,jlpt.n5.vocab.0353.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「とても いそがしい 朝でした」
+jlpt.n5.vocab.0354,N5,楽しい,たのしい,{楽|たの}しい,타노시이,i_adj,i_adj,-,즐겁다,-,スキーは{楽|たの}しかったです。,스키는 즐거웠습니다.,jlpt.n5.vocab.0354.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「楽しかったです」
+jlpt.n5.vocab.0355,N5,面白い,おもしろい,{面白|おもしろ}い,오모시로이,i_adj,i_adj,-,재미있다,-,このほんはとても{面白|おもしろ}いです。,이 책은 아주 재미있습니다.,jlpt.n5.vocab.0355.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 感想表現
+jlpt.n5.vocab.0356,N5,おいしい,おいしい,おいしい,오이시이,i_adj,i_adj,-,맛있다,-,せんしゅうもらったこうちゃはとてもおいしかったです。,지난주에 받은 홍차는 아주 맛있었습니다.,jlpt.n5.vocab.0356.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「とても おいしかったです」
+jlpt.n5.vocab.0357,N5,難しい,むずかしい,{難|むずか}しい,무즈카시이,i_adj,i_adj,-,어렵다,-,かんじのテストは{難|むずか}しかったです。,한자 시험은 어려웠습니다.,jlpt.n5.vocab.0357.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 にほんご 토픽
+jlpt.n5.vocab.0358,N5,多い,おおい,{多|おお}い,오오이,i_adj,i_adj,-,많다,-,このみちはくるまが{多|おお}いです。,이 길은 차가 많습니다.,jlpt.n5.vocab.0358.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 예제 「くるまが 多いです」
+jlpt.n5.vocab.0359,N5,少ない,すくない,{少|すく}ない,스쿠나이,i_adj,i_adj,-,적다,-,ことしはゆきが{少|すく}ないです。,올해는 눈이 적습니다.,jlpt.n5.vocab.0359.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 数量表現
+jlpt.n5.vocab.0360,N5,いい,いい,いい,이이,i_adj,i_adj,-,좋다,よい,きょうはいいてんきですね。,오늘은 좋은 날씨네요.,jlpt.n5.vocab.0360.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 전 지면 「いちばん いい ものを」
+jlpt.n5.vocab.0361,N5,悪い,わるい,{悪|わる}い,와루이,i_adj,i_adj,-,나쁘다,-,きのうはてんきが{悪|わる}かったです。,어제는 날씨가 나빴습니다.,jlpt.n5.vocab.0361.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 감상 표현
+jlpt.n5.vocab.0362,N5,近い,ちかい,{近|ちか}い,치카이,i_adj,i_adj,-,가깝다,-,うちはえきに{近|ちか}いですからべんりです。,집은 역에서 가까워서 편리합니다.,jlpt.n5.vocab.0362.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「うちは えきに ちかいですから」
+jlpt.n5.vocab.0363,N5,遠い,とおい,{遠|とお}い,토오이,i_adj,i_adj,-,멀다,-,くうこうはここからちょっと{遠|とお}いです。,공항은 여기서 조금 멉니다.,jlpt.n5.vocab.0363.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 まち 토픽
+jlpt.n5.vocab.0364,N5,広い,ひろい,{広|ひろ}い,히로이,i_adj,i_adj,-,넓다,-,この{部屋|へや}はとても{広|ひろ}いですね。,이 방은 아주 넓네요.,jlpt.n5.vocab.0364.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제7과 漢字 「広い」
+jlpt.n5.vocab.0365,N5,好き,すき,{好|す}き,스키,na_adj,na_adj,-,좋아하다,-,うどんが{好|す}きです。,우동을 좋아합니다.,jlpt.n5.vocab.0365.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제5과 과제목 「うどんが好きです」 漢字 「好き（な）」
+jlpt.n5.vocab.0366,N5,嫌い,きらい,{嫌|きら}い,키라이,na_adj,na_adj,-,싫어하다,-,さかなは{嫌|きら}いじゃないです。,생선은 싫어하지 않습니다.,jlpt.n5.vocab.0366.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<16> 食べ物の好き嫌い
+jlpt.n5.vocab.0367,N5,上手,じょうず,{上手|じょう|ず},조오즈,na_adj,na_adj,-,잘하다;능숙하다,-,{母|はは}はりょうりが{上手|じょうず}です。,어머니는 요리를 잘합니다.,jlpt.n5.vocab.0367.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 わたし 토픽
+jlpt.n5.vocab.0368,N5,下手,へた,{下手|へ|た},헤타,na_adj,na_adj,-,서투르다,-,わたしはうたが{下手|へた}です。,저는 노래를 못합니다.,jlpt.n5.vocab.0368.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 わたし 토픽
+jlpt.n5.vocab.0369,N5,元気,げんき,{元気|げん|き},겡키,na_adj,na_adj,-,건강하다;잘 지내다,활기차다,おかげさまで{元気|げんき}です。,덕분에 잘 지냅니다.,jlpt.n5.vocab.0369.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 문자어휘 주제군; まるごと A1 わたし
+jlpt.n5.vocab.0370,N5,便利,べんり,{便利|べん|り},벤리,na_adj,na_adj,-,편리하다,-,うちはえきにちかいですから{便利|べんり}です。,집은 역에서 가까워서 편리합니다.,jlpt.n5.vocab.0370.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙 「べんり」
+jlpt.n5.vocab.0371,N5,有名,ゆうめい,{有名|ゆう|めい},유우메에,na_adj,na_adj,-,유명하다,-,この{店|みせ}のカレーは{有名|ゆうめい}です。,이 가게 카레는 유명합니다.,jlpt.n5.vocab.0371.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 まち 토픽
+jlpt.n5.vocab.0372,N5,静か,しずか,{静|しず}か,시즈카,na_adj,na_adj,-,조용하다,-,みなみまちはうみがきれいで{静|しず}かです。,미나미마치는 바다가 아름답고 조용합니다.,jlpt.n5.vocab.0372.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「きれいで、静かです」
+jlpt.n5.vocab.0373,N5,にぎやか,にぎやか,にぎやか,니기야카,na_adj,na_adj,-,번화하다;북적이다,-,このまちはとてもにぎやかです。,이 동네는 아주 북적입니다.,jlpt.n5.vocab.0373.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 まち 토픽
+jlpt.n5.vocab.0374,N5,きれい,きれい,きれい,키레에,na_adj,na_adj,-,예쁘다;깨끗하다,-,みなみまちはうみがきれいです。,미나미마치는 바다가 아름답습니다.,jlpt.n5.vocab.0374.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「海が きれいで」
+jlpt.n5.vocab.0375,N5,大丈夫,だいじょうぶ,{大丈夫|だい|じょう|ぶ},다이조오부,na_adj,na_adj,-,괜찮다,-,じかんはまだありますから{大丈夫|だいじょうぶ}です。,시간은 아직 있으니까 괜찮습니다.,jlpt.n5.vocab.0375.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 회화 표현
+jlpt.n5.vocab.0376,N5,大切,たいせつ,{大切|たい|せつ},타이세츠,na_adj,na_adj,-,소중하다;중요하다,-,これは{大切|たいせつ}なしゃしんです。,이것은 소중한 사진입니다.,jlpt.n5.vocab.0376.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<40> 大切な点を確認
+jlpt.n5.vocab.0377,N5,簡単,かんたん,{簡単|かん|たん},칸탄,na_adj,na_adj,-,간단하다;쉽다,-,この{料理|りょうり}は{簡単|かんたん}です。,이 요리는 간단합니다.,jlpt.n5.vocab.0377.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<26> 簡単な説明
+jlpt.n5.vocab.0378,N5,暇,ひま,{暇|ひま},히마,na_adj,na_adj,-,한가하다,-,あしたのごぜんは{暇|ひま}です。,내일 오전은 한가합니다.,jlpt.n5.vocab.0378.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 Can-do<38> 都合をたずね合う
+jlpt.n5.vocab.0379,N5,とても,とても,とても,토테모,adv,-,-,아주;매우,-,このこうちゃはとてもおいしいです。,이 홍차는 아주 맛있습니다.,jlpt.n5.vocab.0379.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 「とても おいしかったです」
+jlpt.n5.vocab.0380,N5,あまり,あまり,あまり,아마리,adv,-,-,별로 (부정과 함께),-,さかなはあまりたべません。,생선은 별로 먹지 않습니다.,jlpt.n5.vocab.0380.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지 「あまり」; いろどり 제5과 文型
+jlpt.n5.vocab.0381,N5,よく,よく,よく,요쿠,adv,-,-,자주;잘,-,よくえいがをみにいきます。,자주 영화를 보러 갑니다.,jlpt.n5.vocab.0381.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제5과 文型 「いつも/よくV-ます」
+jlpt.n5.vocab.0382,N5,全然,ぜんぜん,{全然|ぜん|ぜん},젠젠,adv,-,-,전혀 (부정과 함께),-,おさけは{全然|ぜんぜん}のみません。,술은 전혀 마시지 않습니다.,jlpt.n5.vocab.0382.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 文型 「あまり/ぜんぜんV-ません」
+jlpt.n5.vocab.0383,N5,いつも,いつも,いつも,이츠모,adv,-,-,항상;늘,-,あさはいつもパンをたべます。,아침에는 늘 빵을 먹습니다.,jlpt.n5.vocab.0383.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제5과 文型 「いつも/よくV-ます」
+jlpt.n5.vocab.0384,N5,時々,ときどき,{時々|とき|どき},토키도키,adv,-,-,가끔,-,{時々|ときどき}ともだちとあいます。,가끔 친구와 만납니다.,jlpt.n5.vocab.0384.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제11과 文型 「ときどきV-ます」
+jlpt.n5.vocab.0385,N5,もう,もう,もう,모오,adv,-,-,이미;벌써,-,じゅぎょうはもうはじまりました。,수업은 이미 시작되었습니다.,jlpt.n5.vocab.0385.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지 「もう」
+jlpt.n5.vocab.0386,N5,まだ,まだ,まだ,마다,adv,-,-,아직,-,{妹|いもうと}はまだがくせいです。,여동생은 아직 학생입니다.,jlpt.n5.vocab.0386.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지 「まだ」
+jlpt.n5.vocab.0387,N5,すぐ,すぐ,すぐ,스구,adv,-,-,곧;바로,-,ばんごはんのあとすぐねました。,저녁밥 뒤에 바로 잤습니다.,jlpt.n5.vocab.0387.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「すぐに 寝ました」
+jlpt.n5.vocab.0388,N5,ちょっと,ちょっと,ちょっと,촛토,adv,-,-,조금;잠깐,-,ちょっとまってください。,잠깐 기다려 주세요.,jlpt.n5.vocab.0388.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지 「ちょっと」; いろどり 제5과 「Nはちょっと…」
+jlpt.n5.vocab.0389,N5,たくさん,たくさん,たくさん,타쿠산,adv,-,-,많이,-,こうえんにいぬがたくさんいますよ。,공원에 개가 많이 있어요.,jlpt.n5.vocab.0389.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文字語彙·文法 「たくさん」
+jlpt.n5.vocab.0390,N5,少し,すこし,{少|すこ}し,스코시,adv,-,-,조금,-,にほんごが{少|すこ}しわかります。,일본어를 조금 압니다.,jlpt.n5.vocab.0390.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제2과 「よくわかりません」 관련
+jlpt.n5.vocab.0391,N5,一番,いちばん,{一番|いち|ばん},이치반,adv,-,-,가장;제일,-,くだものはりんごが{一番|いちばん}すきです。,과일은 사과를 가장 좋아합니다.,jlpt.n5.vocab.0391.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 지시문 「いちばん いい ものを」
+jlpt.n5.vocab.0392,N5,また,また,また,마타,adv,-,-,또;다시,-,またらいしゅうきてください。,또 다음 주에 와 주세요.,jlpt.n5.vocab.0392.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지 「また」
+jlpt.n5.vocab.0393,N5,ゆっくり,ゆっくり,ゆっくり,육쿠리,adv,-,-,천천히,-,すみません。ゆっくりはなしてください。,죄송합니다. 천천히 말씀해 주세요.,jlpt.n5.vocab.0393.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제2과 聞き返す
+jlpt.n5.vocab.0394,N5,だんだん,だんだん,だんだん,단단,adv,-,-,점점,-,だんだんさむくなりました。,점점 추워졌습니다.,jlpt.n5.vocab.0394.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 文法 선택지 「だんだん」
+jlpt.n5.vocab.0395,N5,そして,そして,そして,소시테,conj,-,-,그리고,-,あさごはんをたべました。そしてがっこうへいきました。,아침밥을 먹었습니다. 그리고 학교에 갔습니다.,jlpt.n5.vocab.0395.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 문장 연결
+jlpt.n5.vocab.0396,N5,それから,それから,それから,소레카라,conj,-,-,그러고 나서,-,かおをあらいました。それからあさごはんをたべました。,얼굴을 씻었습니다. 그러고 나서 아침밥을 먹었습니다.,jlpt.n5.vocab.0396.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「それから、すぐ」; いろどり 제18과 文型
+jlpt.n5.vocab.0397,N5,でも,でも,でも,데모,conj,-,-,하지만,-,さかなはすきです。でもにくはあまりたべません。,생선은 좋아합니다. 하지만 고기는 별로 먹지 않습니다.,jlpt.n5.vocab.0397.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제18과 文型 「S1。でも、S2。」
+jlpt.n5.vocab.0398,N5,しかし,しかし,しかし,시카시,conj,-,-,그러나,-,きょうしつへいきました。しかしだれもいませんでした。,교실에 갔습니다. 그러나 아무도 없었습니다.,jlpt.n5.vocab.0398.m4a,ref_only:jlpt_n5_sample,draft,jlpt.jp N5 공식샘플 2018 読解 「しかし、きょうしつで」
+jlpt.n5.vocab.0399,N5,だから,だから,だから,다카라,conj,-,-,그래서,-,あたまがいたいです。だからきょうはやすみます。,머리가 아픕니다. 그래서 오늘은 쉽니다.,jlpt.n5.vocab.0399.m4a,ref_only:jf_marugoto_a1,draft,まるごと入門A1 이유 표현
+jlpt.n5.vocab.0400,N5,それに,それに,それに,소레니,conj,-,-,게다가,-,この{店|みせ}はやすいです。それにおいしいです。,이 가게는 쌉니다. 게다가 맛있습니다.,jlpt.n5.vocab.0400.m4a,ref_only:jf_irodori_a1,draft,いろどり入門 제18과 文型 「S1。それに、S2。」

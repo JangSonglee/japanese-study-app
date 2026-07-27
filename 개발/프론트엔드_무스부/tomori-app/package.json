@@ -1,0 +1,22 @@
+{
+  "name": "tomori-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "토모리 FE 수직 슬라이스 — JLPT 단어 카드 + 후리가나 렌더러 (Expo 이식 대상). 브라우저 검증은 Vite + react-native-web.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 5599",
+    "build": "vite build",
+    "preview": "vite preview --port 5599"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.8",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native-web": "0.19.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11"
+  }
+}

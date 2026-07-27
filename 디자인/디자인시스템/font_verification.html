@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>토모리 — 폰트 검증 (a) Pretendard JP 자형 / (b) Zen Maru Gothic</title>
+<style>
+/* ============================================================
+   토큰 — design_system_spec.md v2. 원시 hex는 이 블록에만 존재한다.
+   ============================================================ */
+:root, [data-theme="light"]{
+  --bg-base:#FAF7F3; --bg-surface:#FFFFFF; --bg-elevated:#FFFFFF;
+  --elevated-shadow:0 6px 20px rgba(26,22,19,.10);
+  --border:#E8E1D9; --border-strong:#D4C9BC;
+  --text-high:#1A1613; --text-mid:#6B6259; --text-low:#9C948B;
+  --brand:#F5B942; --brand-text:#8F5E08; --brand-halo:rgba(245,185,66,.28);
+  --on-brand:#1A1613;
+  --scrim:rgba(26,22,19,.44);
+  --success:#2E7D4F; --error:#B5533D; --info:#2F6FD0;
+  --course-folk:#55913A; --course-folk-text:#497D32;
+}
+[data-theme="dark"]{
+  --bg-base:#14110F; --bg-surface:#1E1A17; --bg-elevated:#2A2521;
+  --elevated-shadow:0 6px 20px rgba(0,0,0,.45);
+  --border:#3A332D; --border-strong:#544A41;
+  --text-high:#F5F1EC; --text-mid:#B5ADA4; --text-low:#7D766E;
+  --brand:#F5B942; --brand-text:#F5B942; --brand-halo:rgba(245,185,66,.18);
+  --on-brand:#1A1613;
+  --scrim:rgba(0,0,0,.60);
+  --success:#5FD08A; --error:#E8705F; --info:#6FA8DC;
+  --course-folk:#7FBF5A; --course-folk-text:#7FBF5A;
+}
+
+/* ============================================================
+   3.2.1 폰트 번들 — 폰트 파일을 프로젝트에 내려받아 self-host 한다.
+   ------------------------------------------------------------
+   ⚠️ 정정(2026-07-22): 처음엔 「시스템 설치 폰트만 참조」로 만들었는데, 그러면
+      검증이 「보는 PC에 그 폰트가 깔려 있는가」에 종속된다. 대표님 PC에 후보가 없으면
+      비교 자체가 성립하지 않는다 — 검증 도구가 검증을 못 하는 상태였다.
+   → 폰트 파일을 ./fonts/ 에 내려받아 @font-face 로 직접 로드한다.
+      원본은 전부 SIL Open Font License(Pretendard/JP = orioncactus/pretendard,
+      나머지 = Google Fonts). 「런타임에 외부 CDN을 때리지 않는다」는 원칙은 그대로 지킨다.
+   → 웨이트는 사양서 3.2.1 대로 Regular 400 · SemiBold 600 2종만.
+      (예외 1건: Zen Maru Gothic 은 600 이 존재하지 않는다 — 아래 c장 참조)
+   ============================================================ */
+@font-face{font-family:"TM Pretendard";src:url("./fonts/Pretendard-Regular.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"TM Pretendard";src:url("./fonts/Pretendard-SemiBold.woff2") format("woff2");
+  font-weight:600;font-style:normal;font-display:swap}
+
+@font-face{font-family:"TM Pretendard JP";src:url("./fonts/PretendardJP-Regular.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"TM Pretendard JP";src:url("./fonts/PretendardJP-SemiBold.woff2") format("woff2");
+  font-weight:600;font-style:normal;font-display:swap}
+
+@font-face{font-family:"TM Noto Sans JP";src:url("./fonts/NotoSansJP-400.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"TM Noto Sans JP";src:url("./fonts/NotoSansJP-600.woff2") format("woff2");
+  font-weight:600;font-style:normal;font-display:swap}
+
+@font-face{font-family:"TM Noto Serif JP";src:url("./fonts/NotoSerifJP-400.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"TM Noto Serif JP";src:url("./fonts/NotoSerifJP-600.woff2") format("woff2");
+  font-weight:600;font-style:normal;font-display:swap}
+
+@font-face{font-family:"TM Zen Maru Gothic";src:url("./fonts/ZenMaruGothic-400.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"TM Zen Maru Gothic";src:url("./fonts/ZenMaruGothic-700.woff2") format("woff2");
+  font-weight:700;font-style:normal;font-display:swap}
+
+/* ⚠️ 「TM 」 접두사를 붙인 이유: 보는 PC에 같은 이름의 폰트가 설치돼 있으면
+   @font-face 로 받은 파일 대신 그쪽이 잡힐 수 있다. 이름을 겹치지 않게 해서
+   「지금 화면에 보이는 것이 확실히 우리가 번들한 파일」이 되게 만든다. */
+
+:root{
+  --font-ko: "TM Pretendard", -apple-system, BlinkMacSystemFont,
+             "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+}
+.f-pretendard{font-family:"TM Pretendard"}
+.f-pretendard-jp{font-family:"TM Pretendard JP"}
+.f-noto-jp{font-family:"TM Noto Sans JP"}
+.f-ref-jp{font-family:"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","MS PGothic"}
+.f-noto-serif-jp{font-family:"TM Noto Serif JP"}
+.f-zenmaru{font-family:"TM Zen Maru Gothic"}
+.f-ref-mincho{font-family:"Yu Mincho","YuMincho","Hiragino Mincho ProN","MS Mincho"}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-base);color:var(--text-high);
+  font-family:var(--font-ko);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .25s ease-out,color .25s ease-out}
+
+header.top{position:sticky;top:0;z-index:50;background:var(--bg-base);
+  border-bottom:1px solid var(--border);padding:12px 28px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header.top .mk{width:20px;height:20px;border-radius:50% 50% 46% 46%;
+  background:var(--brand);box-shadow:0 0 0 6px var(--brand-halo)}
+header.top h1{font-size:16px;margin:0;letter-spacing:-.01em}
+header.top .sub{font-size:12px;color:var(--text-mid);margin-right:auto}
+.themebtn{font-family:inherit;font-size:13px;font-weight:700;min-height:44px;padding:0 18px;
+  border-radius:999px;cursor:pointer;border:none;background:var(--brand);color:var(--on-brand)}
+
+main{max-width:1180px;margin:0 auto;padding:24px 28px 96px}
+h2.sec{font-size:20px;line-height:1.4;letter-spacing:-.015em;margin:44px 0 6px;
+  display:flex;align-items:center;gap:10px}
+h2.sec .no{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;
+  background:var(--brand);color:var(--on-brand);font-size:13px;font-weight:800}
+.secsub{color:var(--text-mid);font-size:13px;margin:0 0 18px}
+h3{font-size:15px;margin:26px 0 8px;letter-spacing:-.01em}
+
+.card{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+.memo{margin-top:10px;background:var(--bg-surface);border:1px solid var(--border);
+  border-left:3px solid var(--brand);border-radius:10px;padding:12px 14px}
+.memo .mh{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--brand-text);margin-bottom:6px}
+.memo ul{margin:0;padding-left:18px}
+.memo li{font-size:13px;line-height:1.65;color:var(--text-mid);margin-bottom:5px}
+.memo li b{color:var(--text-high)}
+.memo li.warn{color:var(--text-high)}
+.memo li.warn::marker{color:var(--error)}
+ruby rt{font-size:.5em;line-height:1;color:var(--text-mid);font-weight:400}
+code{font-family:var(--font-mono);font-size:12px;background:var(--bg-base);
+  border:1px solid var(--border);border-radius:4px;padding:1px 5px}
+
+/* 상태 배너 — 상태색 틴트 배경 위 「작은 글자」 금지 규칙 준수:
+   본문은 text-high/text-mid, 상태색은 큰 글리프·테두리에만 쓴다. */
+.banner{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:14px 16px;
+  border:1px solid var(--border-strong);background:var(--bg-surface);margin:12px 0}
+.banner .glyph{font-size:30px;line-height:1;flex:0 0 auto}
+.banner.ok{border-color:var(--success)} .banner.ok .glyph{color:var(--success)}
+.banner.bad{border-color:var(--error)} .banner.bad .glyph{color:var(--error)}
+.banner.info{border-color:var(--info)} .banner.info .glyph{color:var(--info)}
+.banner h4{margin:0 0 4px;font-size:15px;color:var(--text-high)}
+.banner p{margin:0;font-size:13px;color:var(--text-mid);line-height:1.6}
+
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--bg-surface);
+  border:1px solid var(--border);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:12px;color:var(--text-mid);font-weight:700;background:var(--bg-base)}
+tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;
+  padding:2px 9px;border:1px solid var(--border-strong);color:var(--text-mid)}
+.pill.yes{border-color:var(--success);color:var(--success)}
+.pill.no{border-color:var(--error);color:var(--error)}
+
+/* ---- (a) 자형 비교 그리드 ---- */
+/* ============================================================
+   자형 비교 — 190px 이상. 「작게 보면 인간의 눈으로 판별이 불가능하다」가
+   실제로 확인됐다(대표님: "넷이 다 똑같아 보인다"). 획 하나의 방향을 봐야 하므로
+   크기를 줄이는 대신 글자 수를 줄인다.
+   ============================================================ */
+.charblock{border:1px solid var(--border);border-radius:14px;background:var(--bg-surface);
+  margin-top:16px;overflow:hidden}
+.charblock > .chead{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg-base);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.charblock > .chead .big{font-size:32px;line-height:1;font-weight:700}
+.charblock > .chead .look{font-size:13px;color:var(--text-mid);line-height:1.5}
+.charblock > .chead .look b{color:var(--text-high)}
+.charblock > .chead .vd{margin-left:auto;font-size:12px;font-weight:800}
+.charrow{display:grid;grid-template-columns:repeat(4,minmax(214px,1fr));gap:1px;background:var(--border)}
+.cell{background:var(--bg-surface);padding:10px 8px 14px;text-align:center;position:relative}
+.cell .cl{font-size:11px;font-weight:800;color:var(--text-mid);margin-bottom:4px}
+.cell .cl small{display:block;font-weight:600;color:var(--text-low);font-size:10px}
+.cell.kr{background:color-mix(in srgb,var(--info) 5%,var(--bg-surface))}
+.cell.jp{background:color-mix(in srgb,var(--success) 5%,var(--bg-surface))}
+.glyphbox{position:relative;width:190px;height:190px;margin:0 auto;display:grid;place-items:center}
+.glyphbox .gl{font-size:190px;line-height:1;color:var(--text-high);display:block}
+/* 🔴 차이 나는 획을 지목하는 링 — 「보면 안다」가 아니라 「여기를 보라」 */
+.anno{position:absolute;border:3px solid var(--brand);border-radius:50%;
+  width:58px;height:58px;transform:translate(-50%,-50%);pointer-events:none;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 28%,transparent)}
+.anno::after{content:"";position:absolute;inset:-3px;border-radius:50%}
+.annooff .anno{display:none}
+.cell .tail{font-size:11.5px;color:var(--text-mid);margin-top:8px;line-height:1.45;min-height:32px}
+.cell .tail b{color:var(--text-high)}
+@media (max-width:980px){
+  .charrow{grid-template-columns:repeat(2,minmax(190px,1fr))}
+}
+
+.glyphgrid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;grid-template-columns:150px repeat(4,1fr)}
+.glyphgrid > div{background:var(--bg-surface);padding:10px 6px;text-align:center}
+.glyphgrid .hd{background:var(--bg-base);font-size:11px;font-weight:800;color:var(--text-mid);
+  line-height:1.35;padding:10px 4px}
+.glyphgrid .hd small{display:block;font-weight:600;color:var(--text-low);font-size:10px}
+.glyphgrid .rowlbl{background:var(--bg-base);display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:center;gap:4px;text-align:left;padding:10px 12px}
+.glyphgrid .rowlbl .rc{font-size:26px;line-height:1;color:var(--text-high);font-weight:700}
+.glyphgrid .rowlbl .rl{font-size:11px;line-height:1.45;color:var(--text-mid);font-weight:600}
+.glyphgrid .rowlbl .rl b{color:var(--text-high)}
+.gl{font-size:76px;line-height:1.15;color:var(--text-high);font-feature-settings:normal}
+.miss .gl{opacity:.38}
+.missmark{display:block;font-size:10px;color:var(--error);font-weight:800;margin-top:2px}
+
+/* ---- 픽셀 자동 판정 ---- */
+.diffwrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:12px}
+.diffcard{border:1px solid var(--border);border-radius:10px;padding:10px;background:var(--bg-surface)}
+.diffcard .ch{font-size:22px;font-weight:800}
+.bar{height:8px;border-radius:999px;background:var(--border);overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;background:var(--brand)}
+.diffcard .val{font-size:12px;line-height:1.5;color:var(--text-mid)}
+.diffcard .val b{color:var(--text-high)}
+/* 4.3 인터랙션 4상태 — normal / pressed(선택) / focused / disabled */
+.choices{display:flex;flex-direction:column;gap:6px}
+.choices button{font-family:inherit;font-size:12px;font-weight:700;text-align:left;
+  min-height:36px;padding:0 12px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--border-strong);background:var(--bg-surface);color:var(--text-mid)}
+.choices button:hover{border-color:var(--text-low)}
+.choices button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.choices button[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+
+/* ---- (b) 지문 비교 ---- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:860px){.two{grid-template-columns:1fr} .glyphgrid{grid-template-columns:112px repeat(4,1fr)} .gl{font-size:44px}}
+.spec{border:1px solid var(--border);border-radius:12px;background:var(--bg-surface);overflow:hidden}
+.spec .sh{background:var(--bg-base);border-bottom:1px solid var(--border);padding:8px 12px;
+  font-size:12px;font-weight:800;color:var(--text-mid);display:flex;gap:8px;align-items:center}
+.spec .sb{padding:14px 16px}
+/* ⚠️ 실사용 크기는 body-jp 18px 이지만, 여기서는 「인상 비교」가 목적이라 30px 로 키운다.
+   18px 로는 획 끝의 둥글기·세리프 유무가 보이지 않아 「넷이 다 똑같아 보인다」가 된다.
+   실제 크기 감각은 아래 「실사용 크기 대조」 블록에서 따로 확인한다. */
+.jp-read{font-size:30px;line-height:1.9;color:var(--text-high)}
+.jp-read-real{font-size:18px;line-height:2.0;color:var(--text-high)}
+.jp-note{font-size:30px;line-height:1.9;color:var(--text-high)}
+.ko-note{font-size:15px;line-height:1.65;color:var(--text-mid);font-family:var(--font-ko);margin-top:6px}
+
+/* 작업 3 — 마지막 어절 + ⋯ 를 묶어 ⋯ 만 홀로 떨어지는 것을 막는다 */
+.nb{white-space:nowrap}
+.tapdot{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;
+  margin-left:8px;font-size:11px;color:var(--text-low);border:none;background:transparent;
+  vertical-align:middle;font-family:inherit;padding:0}
+
+/* 토모 쪽지 카드 */
+.notecard{border:1px solid var(--border);border-radius:12px;background:var(--bg-surface);
+  padding:16px;position:relative}
+.notecard::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;
+  border-radius:999px;background:var(--brand)}
+.notecard .in{padding-left:14px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="mk"></span>
+  <div>
+    <h1>토모리 — 폰트 검증</h1>
+    <div class="sub">(a) Pretendard JP 한·일 자형 &nbsp;·&nbsp; (b) Zen Maru Gothic 이 명조를 대체할 수 있는가 &nbsp;·&nbsp; 아토 / 2026-07-21</div>
+  </div>
+  <button class="themebtn" id="tbtn" type="button">다크로 보기</button>
+</header>
+
+<main>
+
+<!-- ==================== 자가진단 ==================== -->
+<div id="selfcheck"></div>
+
+<h2 class="sec"><span class="no">✓</span> 자가진단 — 이 페이지의 결과를 믿어도 되는가</h2>
+<p class="secsub">이 페이지는 <b>자기 자료가 유효한지 스스로 검사한 뒤</b> 결과를 보여 준다. 검사 방법은 <b>대조군</b>이다 — <b>반드시 달라야 하는 두 폰트</b>를 픽셀로 비교해서, 그것들이 <b>같게 나오면 폰트가 로드되지 않은 것</b>이다.</p>
+<table id="ctrltable">
+  <thead><tr><th style="width:40%">대조군 (반드시 달라야 함)</th><th style="width:16%">픽셀 차이</th><th style="width:14%">판정</th><th>이 쌍을 고른 이유</th></tr></thead>
+  <tbody></tbody>
+</table>
+
+<div class="memo"><div class="mh">memo — 왜 자가진단이 필요한가 (실제로 일어난 사고)</div><ul>
+  <li class="warn"><b>실화다.</b> 이 페이지를 처음 측정할 때 <b>폰트 패밀리명을 틀리게 넣었다</b> — <code>"Pretendard JP"</code> 라고 썼는데 실제 이름은 <code>"TM Pretendard JP"</code> 였다. 전부 <b>시스템 폴백으로 떨어졌고</b>, 그 결과 <b>“Pretendard JP = Noto Sans JP, 차이 0%”</b> 라는 <b>정반대의 가짜 결과</b>가 나왔다. <b>옳은 결론을 뒤집을 뻔했다.</b></li>
+  <li><b>이 사고의 무서운 점</b>: 잘못된 측정이 <b>에러를 내지 않았다는 것</b>이다. 폰트 폴백은 <b>조용히</b> 일어나고, 화면에는 여전히 글자가 멀쩡히 그려진다. <b>“화면이 나온다”가 “측정이 맞다”를 뜻하지 않는다.</b></li>
+  <li><b>그래서 대조군을 쓴다.</b> <b>명조(Noto Serif JP)와 고딕(Noto Sans JP)</b> 은 누가 봐도 다른 서체다. 이 둘이 <b>같게 측정되면</b> 측정계가 고장 난 것이지 폰트가 같은 게 아니다. — <b>계측기는 자기가 고장 났는지 알 수 있어야 한다.</b></li>
+  <li><b>앞으로 만드는 모든 검증 자료에 이 원칙을 적용한다</b>: ① <b>판단해야 할 사람이 판단할 수 있는 크기·표시</b>로 보여줄 것 ② <b>스스로 신뢰성을 증명</b>할 것.</li>
+</ul></div>
+
+<!-- ==================== 0. 환경 진단 ==================== -->
+<h2 class="sec"><span class="no">0</span> 로드 진단 — 번들한 폰트가 실제로 적용됐는가</h2>
+<p class="secsub">이 페이지는 후보 폰트 <b>5종을 <code>./fonts/</code> 에 번들</b>해 <code>@font-face</code> 로 직접 로드한다. 보는 PC에 무엇이 설치돼 있든 <b>같은 화면이 나온다.</b> 아래 표는 <code>document.fonts.check()</code> 로 실제 적용 여부를, 그리고 각 파일의 <b>실측 용량</b>을 함께 보여 준다 — <b>폰트 선택은 자형만이 아니라 용량 대비 가치 판단</b>이기 때문이다.</p>
+
+<div id="envbanner"></div>
+<table id="envtable">
+  <thead><tr><th style="width:26%">폰트</th><th style="width:12%">로드</th><th style="width:18%">역할</th>
+    <th style="width:12%">400</th><th style="width:12%">600</th><th>합계</th></tr></thead>
+  <tbody></tbody>
+</table>
+
+<div class="memo"><div class="mh">memo — 왜 번들로 바꿨나 (지시 정정 반영)</div><ul>
+  <li><b>처음 만든 버전은 시스템 설치 폰트만 참조했다.</b> 그 결과 이 PC에서 <b>Pretendard JP·Noto Sans JP·Noto Serif JP·Zen Maru Gothic 이 전부 「없음」</b>으로 나왔고, <b>검증 도구가 검증을 못 하는 상태</b>가 됐다. 폰트 파일을 받아 self-host 하는 것으로 정정했다.</li>
+  <li><b>「외부 CDN 금지」는 지켜진다.</b> 금지의 대상은 <b>런타임에 남의 서버를 때리는 것</b>이지 파일을 프로젝트에 넣는 것이 아니다. 5종 모두 <b>SIL Open Font License</b>라 번들·재배포에 문제가 없다.</li>
+  <li>이건 검증 페이지만의 사정이 아니라 <b>제품 방침과 같다</b>(사양서 3.2.1) — 앱도 폰트를 전부 번들한다. <b>사용자에게 폰트 설치를 요구하지 않는다.</b> 시스템 폰트에 기대면 기기마다 자형이 달라져 3.1의 한·일 자형 문제를 <b>통제할 수 없게 된다.</b></li>
+  <li class="warn"><b>여기 표기된 용량은 Google 이 배포하는 「japanese 서브셋」 기준</b>이다. 서브셋 없는 원본(Noto Sans JP OTF 등)은 <b>한 벌에 10MB를 훌쩍 넘는다.</b> 즉 아래 숫자는 <b>이미 최선의 압축을 적용한 하한선</b>이고, 여기서 더 줄일 방법은 <b>웨이트를 줄이는 것</b>뿐이다.</li>
+</ul></div>
+
+<!-- ==================== 1. (a) ==================== -->
+<h2 class="sec"><span class="no">a</span> Pretendard JP — 일본식 한자 자형을 내는가</h2>
+<p class="secsub">판정 기준: <b>Pretendard JP 가 Pretendard(한국식)가 아니라 일본어 시스템 폰트(일본식)에 가까운 자형</b>을 내는가. 통과 시 한 패밀리로 통일, 실패 시 일본어 본문용을 따로 둔다.</p>
+
+<h3>글자별 판정표 — 7글자가 한눈에</h3>
+<p class="secsub">아래 큰 비교에서 읽어낸 결과다. <b>종합 결론은 이 표에서 도출된다</b> — 결론을 먼저 쓰고 근거를 나중에 붙이지 않는다.</p>
+<table id="verdicttable">
+  <thead><tr><th style="width:8%">글자</th><th style="width:9%">판별력</th><th style="width:26%">차이가 나는 지점</th>
+    <th style="width:16%">한국식 (Pretendard)</th><th style="width:16%">일본식 (Noto Sans JP)</th>
+    <th>Pretendard JP 는?</th></tr></thead>
+  <tbody></tbody>
+</table>
+<div id="verdictsum"></div>
+
+<h3>자형 비교 — 190px <span style="font-weight:400;color:var(--text-mid);font-size:13px">· 차이 나는 획에 링을 얹었다</span></h3>
+<p class="secsub"><b>작게 보면 판별이 불가능하다.</b> 자형 차이는 <b>획 하나의 방향</b>이라 16px에서는 네 폰트가 전부 같아 보인다 — 실제로 그런 보고를 받았다. 그래서 <b>글자 수를 줄이는 대신 크기를 키웠고</b>, <b>어디를 봐야 하는지 링으로 지목</b>한다.</p>
+<div style="display:flex;gap:10px;align-items:center;margin:10px 0 4px;flex-wrap:wrap">
+  <button class="themebtn" id="annobtn" type="button" style="min-height:36px;font-size:12px;padding:0 14px">링 끄기</button>
+  <span style="font-size:12px;color:var(--text-mid)">링을 끄면 <b>선입견 없이</b> 다시 볼 수 있다. 켜고 끄며 확인하라.</span>
+</div>
+<div id="charblocks"></div>
+
+<div class="memo"><div class="mh">memo — 왜 이 글자들인가</div><ul>
+  <li><code>直 骨 次 海 器 令 敢</code> 는 한국 활자와 일본 활자의 <b>골격 자체가 다른</b> 대표 사례다.</li>
+  <li><b>이건 취향 문제가 아니다.</b> 일본어 학습 앱에서 일본어가 한국식 자형으로 렌더되면 <b>학습자가 시험장에서 못 알아보는 글자를 외우게 된다.</b> 폰트 통일(미관)보다 자형 정확성(기능)이 우선한다 — 그래서 이 검증이 최우선이다.</li>
+  <li><b>4열(일본어 시스템 폰트)은 교차 확인용</b>이다. 3열(Noto Sans JP)과 4열이 <b>같은 쪽으로 갈리면</b> “이게 일본식이다”가 한 폰트의 개성이 아니라 <b>일본 활자의 공통 관행</b>임이 확인된다.</li>
+  <li class="warn"><b>링은 「여기를 보라」이지 「여기가 틀렸다」가 아니다.</b> 같은 위치에 링이 있어도 1·2열과 3·4열의 <b>획 방향이 갈리는지</b>를 직접 봐야 한다. 판단을 대신하지 않는다.</li>
+</ul></div>
+
+<h3>글리프 커버리지 — 이 열은 정말 그 폰트가 그린 것인가</h3>
+<p class="secsub">폰트에 그 글자가 없으면 브라우저는 <b>글자 단위로</b> 다른 폰트에 넘긴다. 폰트가 “설치됨”이어도 <b>그 글자만은 남의 것</b>일 수 있다. 글자별로 <code>"후보",serif</code> 와 <code>serif</code> 의 폭을 비교해 가려낸다.</p>
+<table id="covtable">
+  <thead><tr><th style="width:16%">글자</th><th>Pretendard</th><th>Pretendard JP</th><th>Noto Sans JP</th><th>일본어 시스템</th></tr></thead>
+  <tbody></tbody>
+</table>
+
+<div class="banner bad" style="margin-top:18px">
+  <span class="glyph">✕</span>
+  <div>
+    <h4>(a) 판정 결과 — <b>실패</b>. Pretendard JP 는 <b>일본식 한자 자형을 내지 않는다</b> <span style="font-weight:400;color:var(--text-mid);font-size:13px">(2026-07-22, 아토 · 번들 폰트로 실측)</span></h4>
+    <p>
+      <b>결정적 증거는 <span lang="ja">骨</span> 과 <span lang="ja">海</span> 다.</b><br>
+      · <b><span lang="ja">骨</span></b> — 위 네모 안쪽 획이 <b>Pretendard·Pretendard JP 는 오른쪽</b>(한국식), <b>Noto Sans JP·일본어 시스템 폰트는 왼쪽</b>(일본식). <b>Pretendard JP 는 한국식 쪽에 붙어 있다.</b><br>
+      · <b><span lang="ja">海</span></b> — 우측 부수가 <b>Pretendard·Pretendard JP 는 每</b>(점 두 개), <b>일본어 폰트들은 毎</b>(가로획). 역시 갈린다.<br>
+      · 1열과 2열은 <b>이 7글자 전부에서 같은 골격</b>이다. <b>Pretendard JP 가 추가한 것은 가나이지 한자가 아니다.</b>
+    </p>
+    <p style="margin-top:8px">
+      <b>→ 결론: 한 패밀리 통일은 불가. <code>Noto Sans JP</code> 분리 유지.</b>
+      가나만 일본식인 폰트는 <b>가장 나쁜 종류의 오류</b>를 만든다 — 화면이 “일본어답게” 보이므로 <b>틀렸다는 사실 자체가 감춰진다.</b>
+      전부 한국식이면 오히려 금방 들통난다.
+    </p>
+    <p style="margin-top:8px">
+      <b>용량으로도 진다.</b> Pretendard JP 는 2웨이트 <b>3.92MB</b> 로 <code>Pretendard(1.48) + Noto Sans JP(2.18) = 3.66MB</code> 보다 <b>오히려 크다</b>(아래 c장 ③).
+      즉 <b>자형·용량 두 축 모두에서 지는 선택지</b>라 논쟁의 여지가 없다.
+    </p>
+  </div>
+</div>
+
+<h3>재검증용 체크리스트 — 눈으로 보고 기록한다</h3>
+<p class="secsub">위 판정은 아래 절차로 내렸다. <b>다른 사람이 같은 절차를 다시 밟아 확인할 수 있게</b> 도구를 남겨 둔다 — 결론만 적어 두면 나중에 뒤집을 근거도 없어진다.</p>
+<div id="judgeA"></div>
+<p class="secsub">각 글자마다 <b>2열(Pretendard JP)이 1열과 같은가, 4열과 같은가</b> 를 골라라. 7글자를 다 고르면 아래에 판정이 뜬다. <b>이 페이지는 판정을 대신해 주지 않고, 판정을 강제하고 기록한다.</b></p>
+<div class="diffwrap" id="checklist"></div>
+<div id="verdictA"></div>
+
+<div class="memo"><div class="mh">memo — 픽셀 자동 판정을 폐기한 이유 (실측 기록)</div><ul>
+  <li>처음엔 <b>두 폰트로 렌더한 글자를 겹쳐 어긋난 픽셀 비율</b>을 재는 자동 판정을 넣었다. <b>폐기했다.</b></li>
+  <li><b>실측 1 — 겹쳐 그리기(정규화 없음)</b>: 한국 폰트끼리(Pretendard↔Noto Sans KR) <b>77.6%</b>, 한↔일(Pretendard↔Yu Gothic) <b>81.0%</b>. 차이가 <b>4%p</b>뿐이다. 재고 있던 것은 자형이 아니라 <b>획 굵기와 폭</b>이었다.</li>
+  <li><b>실측 2 — 잉크 바운딩박스로 크롭·정규화 후</b>: 한↔한 <b>8.7%</b>, 한↔일 <b>9.0%</b>. <b>0.3%p</b>. 크기 노이즈를 걷어내도 <b>판별력이 남지 않는다.</b></li>
+  <li><b>결론</b>: 전역 픽셀 차이는 “글자가 다르다”와 “서체 스타일이 다르다”를 구분하지 못한다. 구분해야 할 것은 <b>획 하나의 방향</b>인데, 그건 전체 면적의 2~3%라 서체 스타일 차이에 묻힌다. <b>계측이 판정을 흉내 내면 틀린 판정을 자신 있게 내놓는다</b> — 자동 판정을 지우고, 대신 <b>무엇을 볼지 지정한 육안 체크리스트</b>로 바꿨다. 자동화할 수 없는 것을 자동화한 척하지 않는 것도 설계다.</li>
+  <li>계측이 유효한 부분은 남겼다 — <b>폰트 설치 여부</b>와 <b>글자별 커버리지</b>는 폭 비교로 확실히 잡힌다. 이건 “있냐 없냐”라 이진 판정이기 때문이다.</li>
+</ul></div>
+
+<!-- ==================== 2. (b) ==================== -->
+<h2 class="sec"><span class="no">b</span> Zen Maru Gothic — 명조를 대체할 수 있는가</h2>
+<p class="secsub">현재 사양서는 <b>정서용 = Noto Serif JP(명조)</b>다. 이걸 <b>Zen Maru Gothic(둥근 고딕, SIL OFL)</b> 로 바꾸면 어떤 대가와 이득이 있는지, 실제 문장을 <b>세 맥락</b>에 얹어 본다.</p>
+
+<div class="banner info">
+  <span class="glyph">◇</span>
+  <div>
+    <h4>전제 — 일본어 폰트는 2개가 상한이다</h4>
+    <p>일본어 폰트는 한 벌에 3~8MB다. 쪽지 콘텐츠가 계속 늘어 <b>서브셋(사용 글자만 잘라내기)도 성립하지 않는다</b> — 내일 쓸 글자를 오늘 알 수 없기 때문이다. 그래서 <b>본문용 1 + 정서용 1</b>로 못박는다. 이 절에서 고르는 것은 “정서용 1” 자리다.</p>
+  </div>
+</div>
+
+<div class="memo"><div class="mh">읽는 법 — 무엇을 보아야 하는가</div><ul>
+  <li>아래 지문은 <b>30px</b> 로 키웠다. 실사용 크기(<code>body-jp</code> 18px)로는 <b>획 끝의 둥글기·세리프 유무가 보이지 않아</b> 두 폰트가 같아 보인다 — (a)에서 겪은 것과 같은 문제다.</li>
+  <li><b>보아야 할 곳</b>: ① <b>가로획의 끝</b>(명조는 삼각형 맺음 <i>세리프</i>가 있고, 마루고딕은 <b>동그랗게</b> 끝난다) ② <b>세로획과 가로획의 굵기 차</b>(명조는 크고 마루고딕은 거의 없다) ③ <b>꺾이는 모서리</b>(명조는 뾰족, 마루고딕은 둥글다).</li>
+  <li><b>판정 순서</b>: ① <b>맥락 3(쪽지)</b> 에서 마루고딕이 더 다정한가 → ② <b>맥락 1(리라이트본)</b> 에서 읽기 피로가 늘지 않는가 → ③ <b>가나 혼동쌍</b> 이 뭉개지지 않는가. <b>맥락 2(고전 원문투)의 손실은 감수 항목</b>이지 탈락 사유가 아니다.</li>
+</ul></div>
+
+<h3>맥락 1 — 전래동화 <b>리라이트본</b> (N5~N4, 주력 콘텐츠)</h3>
+<div class="two">
+  <div class="spec"><div class="sh"><span class="pill">현행</span> Noto Serif JP <span style="color:var(--text-low);font-weight:600">(명조)</span></div>
+    <div class="sb"><div class="jp-read f-noto-serif-jp" lang="ja">
+      むかし むかし、<ruby>山<rt>やま</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に <ruby>小<rt>ちい</rt></ruby>さな <ruby>村<rt>むら</rt></ruby>が ありました。<ruby>村<rt>むら</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>たちは まいにち <ruby>元気<rt>げんき</rt></ruby>に <span class="nb">はたらいて いました。<button class="tapdot" type="button" aria-label="이 문장 해석">⋯</button></span>
+    </div></div></div>
+  <div class="spec"><div class="sh"><span class="pill">후보</span> Zen Maru Gothic <span style="color:var(--text-low);font-weight:600">(둥근 고딕)</span></div>
+    <div class="sb"><div class="jp-read f-zenmaru" lang="ja">
+      むかし むかし、<ruby>山<rt>やま</rt></ruby>の <ruby>中<rt>なか</rt></ruby>に <ruby>小<rt>ちい</rt></ruby>さな <ruby>村<rt>むら</rt></ruby>が ありました。<ruby>村<rt>むら</rt></ruby>の <ruby>人<rt>ひと</rt></ruby>たちは まいにち <ruby>元気<rt>げんき</rt></ruby>に <span class="nb">はたらいて いました。<button class="tapdot" type="button" aria-label="이 문장 해석">⋯</button></span>
+    </div></div></div>
+</div>
+
+<h3>맥락 2 — <b>고전 원문투</b> (N2~N1, 青空文庫 계열)</h3>
+<div class="two">
+  <div class="spec"><div class="sh"><span class="pill">현행</span> Noto Serif JP</div>
+    <div class="sb"><div class="jp-read f-noto-serif-jp" lang="ja">
+      <ruby>深<rt>ふか</rt></ruby>き<ruby>山<rt>やま</rt></ruby>のおくに、ひとつの<ruby>村<rt>むら</rt></ruby>ありき。<ruby>人<rt>ひと</rt></ruby>みな<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>くより<ruby>野<rt>の</rt></ruby>に<ruby>出<rt>い</rt></ruby>でて、<ruby>日<rt>ひ</rt></ruby>の<ruby>暮<rt>く</rt></ruby>るるまで<span class="nb"><ruby>働<rt>はたら</rt></ruby>きけり。<button class="tapdot" type="button" aria-label="이 문장 해석">⋯</button></span>
+    </div></div></div>
+  <div class="spec"><div class="sh"><span class="pill">후보</span> Zen Maru Gothic</div>
+    <div class="sb"><div class="jp-read f-zenmaru" lang="ja">
+      <ruby>深<rt>ふか</rt></ruby>き<ruby>山<rt>やま</rt></ruby>のおくに、ひとつの<ruby>村<rt>むら</rt></ruby>ありき。<ruby>人<rt>ひと</rt></ruby>みな<ruby>朝<rt>あさ</rt></ruby><ruby>早<rt>はや</rt></ruby>くより<ruby>野<rt>の</rt></ruby>に<ruby>出<rt>い</rt></ruby>でて、<ruby>日<rt>ひ</rt></ruby>の<ruby>暮<rt>く</rt></ruby>るるまで<span class="nb"><ruby>働<rt>はたら</rt></ruby>きけり。<button class="tapdot" type="button" aria-label="이 문장 해석">⋯</button></span>
+    </div></div></div>
+</div>
+
+<h3>맥락 3 — <b>토모의 쪽지</b> (50번 화면 · 격려 콘텐츠)</h3>
+<div class="two">
+  <div class="spec"><div class="sh"><span class="pill">현행</span> Noto Serif JP</div>
+    <div class="sb"><div class="notecard"><div class="in">
+      <div class="jp-note f-noto-serif-jp" lang="ja">きのうより ひとつ、ことばが ふえました。<br>ゆっくりで だいじょうぶ。</div>
+      <div class="ko-note">어제보다 하나, 말이 늘었어요. 천천히 해도 괜찮아요.</div>
+    </div></div></div></div>
+  <div class="spec"><div class="sh"><span class="pill">후보</span> Zen Maru Gothic</div>
+    <div class="sb"><div class="notecard"><div class="in">
+      <div class="jp-note f-zenmaru" lang="ja">きのうより ひとつ、ことばが ふえました。<br>ゆっくりで だいじょうぶ。</div>
+      <div class="ko-note">어제보다 하나, 말이 늘었어요. 천천히 해도 괜찮아요.</div>
+    </div></div></div></div>
+</div>
+
+<div id="judgeB"></div>
+
+<div class="memo"><div class="mh">memo — 판정 논거 (폰트 유무와 무관하게 유효한 부분)</div><ul>
+  <li><b>마루고딕이 유리한 근거</b>: 일본 아동 도서·교재의 관용 서체이고 인상이 <b>부드럽고 다정하다</b>. 쪽지는 격려 콘텐츠라 명조의 <b>격식·거리감</b>보다 맞고, 무엇보다 <b>토모가 둥근 등불(플랫 블롭)</b> 이라 <b>조형 어휘가 일치</b>한다 — 둥근 캐릭터 옆에 날카로운 세리프 획이 붙으면 브랜드가 두 갈래로 읽힌다.</li>
+  <li><b>전래동화 주력은 리라이트본(N5~N4)</b> 이다. 즉 “옛이야기 원전의 무게”보다 <b>“읽을 수 있는 옛이야기”</b> 가 제품의 실제 얼굴이다. 맥락 1의 비중이 맥락 2보다 압도적으로 크다.</li>
+  <li class="warn"><b>대가</b>: 맥락 2(고전 원문투)에서 <b>시대감이 죽는다.</b> 둥근 획은 “옛 문헌”이 아니라 “동화책”으로 읽히게 만든다. 다만 이 손실은 <b>N2~N1 상급 사용자에게만</b> 발생하고, 그 층은 서체가 아니라 원문 자체에서 고전감을 얻는다.</li>
+  <li><b>가나 판독</b>은 특히 확인할 것 — 마루고딕은 획 끝이 둥글어 <code>さ / ち</code>, <code>ソ / ン</code>, <code>シ / ツ</code> 처럼 <b>초급자가 가장 자주 혼동하는 쌍</b>의 획 각도가 무뎌질 수 있다. 학습 대상 텍스트에 쓰는 서체라 <b>미관보다 판독이 먼저</b>다. → 아래 판독 테스트.</li>
+</ul></div>
+
+<h3>실사용 크기 대조 — <span style="font-weight:400;color:var(--text-mid);font-size:13px">위 30px 은 「비교용 확대」다. 실제로는 이 크기로 읽힌다</span></h3>
+<div class="two">
+  <div class="spec"><div class="sh">Noto Serif JP <span style="color:var(--text-low);font-weight:600">· body-jp 18/2.0</span></div>
+    <div class="sb"><div class="jp-read-real f-noto-serif-jp" lang="ja">
+      むかし むかし、山の 中に 小さな 村が ありました。村の 人たちは まいにち 元気に はたらいて いました。
+    </div></div></div>
+  <div class="spec"><div class="sh">Zen Maru Gothic <span style="color:var(--text-low);font-weight:600">· body-jp 18/2.0</span></div>
+    <div class="sb"><div class="jp-read-real f-zenmaru" lang="ja">
+      むかし むかし、山の 中に 小さな 村が ありました。村の 人たちは まいにち 元気に はたらいて いました。
+    </div></div></div>
+</div>
+<div class="memo"><div class="mh">memo — 두 크기를 다 보여 주는 이유</div><ul>
+  <li><b>확대는 판별을 위해 필요하고, 실사용 크기는 판단을 위해 필요하다.</b> 30px에서 “명조가 더 고급스럽다”는 인상이 나와도, <b>18px에서 그 차이가 사라진다면 그 이득은 존재하지 않는 이득</b>이다.</li>
+  <li>반대로 <b>단점은 작은 크기에서 오히려 커진다</b> — 마루고딕의 둥근 획 끝은 18px에서 <b>획이 뭉개져 보일 위험</b>이 있다. 그래서 아래 혼동쌍 테스트가 필요하다.</li>
+</ul></div>
+
+<h3>가나 혼동쌍 판독 테스트</h3>
+<p class="secsub">초급자 혼동 빈도 상위 쌍. 획 각도·시작점이 뭉개지면 <b>학습 대상 텍스트로는 부적격</b>이다.</p>
+<div class="two">
+  <div class="spec"><div class="sh">Noto Serif JP</div><div class="sb" style="font-size:76px;line-height:1.5;letter-spacing:.06em" lang="ja"><div class="f-noto-serif-jp">さ ち &nbsp; ソ ン &nbsp; シ ツ &nbsp; わ ね れ</div></div></div>
+  <div class="spec"><div class="sh">Zen Maru Gothic</div><div class="sb" style="font-size:76px;line-height:1.5;letter-spacing:.06em" lang="ja"><div class="f-zenmaru">さ ち &nbsp; ソ ン &nbsp; シ ツ &nbsp; わ ね れ</div></div></div>
+</div>
+
+<!-- ==================== 3. 폰트 예산 ==================== -->
+<h2 class="sec"><span class="no">c</span> 최종 조합 — 일본어 폰트 2개 상한</h2>
+<table>
+  <thead><tr><th style="width:18%">자리</th><th style="width:26%">권고</th><th style="width:22%">쓰이는 곳</th><th>근거</th></tr></thead>
+  <tbody>
+    <tr><td><b>한국어 UI</b><br><span style="color:var(--text-low);font-size:12px">(예산 외)</span></td>
+        <td><b>Pretendard</b></td>
+        <td>모든 한국어 라벨·설명·버튼</td>
+        <td>이미 확정. 한글 전용이라 일본어 예산에 포함되지 않는다.</td></tr>
+    <tr><td><b>일본어 본문 ①</b></td>
+        <td><b>Noto Sans JP</b> <span class="pill yes">확정</span></td>
+        <td>지문·단어카드·퀴즈·루비 등 <b>학습 대상 텍스트 전부</b></td>
+        <td>자형 정확성이 최우선. <b>(a) 실패로 Pretendard JP 안은 폐기</b>됐다 — 한자가 한국식이고 용량도 더 크다.</td></tr>
+    <tr><td><b>일본어 정서 ②</b></td>
+        <td><b>Zen Maru Gothic</b></td>
+        <td>토모의 쪽지 · 전래동화 지문 · 우표/편지 문구</td>
+        <td>둥근 등불 캐릭터와 조형 일치, 아동 도서 관용, SIL OFL 무료. 명조를 대체하므로 <b>총량은 여전히 2개</b>.</td></tr>
+    <tr><td><span style="color:var(--text-low)">탈락</span></td>
+        <td><span style="color:var(--text-low)">Noto Serif JP</span></td>
+        <td>—</td>
+        <td>세 번째 일본어 폰트가 되면 예산 초과. 고전 원문투(N2~N1)에서만 이득이 있는데 그 비중이 가장 작다.</td></tr>
+  </tbody>
+</table>
+
+<h3>예상 번들 증가량 — 실측 파일 기준</h3>
+<p class="secsub">아래 숫자는 이 페이지가 실제로 번들해 쓰고 있는 <b>woff2 파일의 실측 합계</b>다(웨이트 2종 기준, 사양서 3.2.1). 추정치가 아니다.</p>
+<table id="budget">
+  <thead><tr><th style="width:20%">조합</th><th style="width:34%">구성</th>
+    <th style="width:12%">일본어 폰트</th><th style="width:14%">폰트 총량</th><th>현행 대비</th></tr></thead>
+  <tbody></tbody>
+</table>
+
+<div class="memo"><div class="mh">memo — 예산을 지키는 실무 규칙</div><ul>
+  <li><b>Weight 도 예산이다.</b> 폰트 “2개”는 <b>패밀리 2개</b>가 아니라 <b>실제 번들되는 파일 수</b>로 센다. 사양서 3.2.1대로 <b>패밀리당 Regular 400 + SemiBold 600 2종</b>만 쓴다. Light·Medium·Black은 쓰지 않고, 더 필요한 위계는 <b>크기·색</b>으로 만든다(3.3 스케일이 이미 그 역할을 한다).</li>
+  <li class="warn"><b>예외 발견 — Zen Maru Gothic 에는 600 이 없다.</b> 배포 웨이트가 300·400·500·700·900 이라 SemiBold 자리가 비어 있다. <b>700(Bold)로 대체</b>했다. 500(Medium)이 600에 더 가깝지만 쓰지 않는다 — <b>15~20px에서 400과 500은 눈으로 구분되지 않아</b> 웨이트를 하나 더 실어도 하는 일이 없기 때문이다. <b>웨이트는 「보이게 다를 때만」 값을 한다.</b></li>
+  <li class="warn"><b>서브셋팅은 절감 수단이 아니다.</b> 단어장·기사·전래동화가 계속 추가되므로 <b>내일 어떤 한자가 나올지 오늘 알 수 없다.</b> 위 숫자는 이미 Google 이 만든 japanese 서브셋(JIS 기반) 기준이고 — <b>서브셋 없는 원본은 한 벌 10MB 이상</b>이다. 즉 <b>남은 절감 수단은 웨이트 제한과 「일본어 2개 상한」뿐</b>이다.</li>
+  <li><b>가변 폰트(Variable)를 우선</b> 검토한다. 한 파일로 웨이트 축을 커버하면 2 파일을 1 파일로 줄일 수 있다. 다만 CJK 가변 폰트는 정적 2종보다 오히려 클 때가 있어 <b>반드시 실측하고 결정</b>한다.</li>
+  <li><b>번들 vs 지연 다운로드</b>: 학습 대상 텍스트인 <b>본문 ①은 반드시 번들</b>한다 — 오프라인에서 자형이 틀리면 안 된다. <b>정서 ②는 최초 실행 후 지연 다운로드</b>가 가능하다: 쪽지는 없어도 학습이 막히지 않고, 폴백돼도 <b>“틀린 글자를 가르치는” 사고가 나지 않는다.</b> 이렇게 하면 <b>초기 설치 용량에서 약 1.4MB를 뒤로 미룰 수 있다.</b><br>→ 판별 기준: <b>“이 폰트가 폴백되면 학습이 깨지는가?”</b></li>
+</ul></div>
+
+</main>
+
+<script>
+/* ============================================================
+   1. 로드 진단 — 번들한 @font-face 가 실제로 적용됐는가 + 용량
+   ------------------------------------------------------------
+   폰트를 우리가 직접 번들하므로 「설치 여부」가 아니라 「로드 성공 여부」를 본다.
+   document.fonts.check() 는 로컬 「설치」 폰트에서 오탐이 나지만, 여기서는 패밀리 이름에
+   「TM 」 접두사를 붙여 유일하게 만들어 뒀으므로 true = 우리가 넣은 파일이 적용됐다 로 읽어도 된다.
+   ============================================================ */
+var FONTS = [
+  {name:"TM Pretendard",      label:"Pretendard",      role:"한국어 UI (기준)",     key:"kr",
+   files:{w400:765892,  w600:785856}},
+  {name:"TM Pretendard JP",   label:"Pretendard JP",   role:"(a) 검증 대상",        key:"pjp",
+   files:{w400:2019340, w600:2092880}},
+  {name:"TM Noto Sans JP",    label:"Noto Sans JP",    role:"(a) 대안 · 현행 본문", key:"njp",
+   files:{w400:1131584, w600:1151288}},
+  {name:"TM Noto Serif JP",   label:"Noto Serif JP",   role:"(b) 현행 정서용",      key:"serif",
+   files:{w400:1528760, w600:1549556}},
+  {name:"TM Zen Maru Gothic", label:"Zen Maru Gothic", role:"(b) 검증 대상",        key:"maru",
+   files:{w400:1436272, w700:1492156}, note:"600 없음 → 700 사용"},
+  {name:'"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","MS PGothic"',
+   label:"일본어 시스템 폰트", role:"일본식 자형 정답지(참고)", key:"ref", system:true}
+];
+
+function mb(b){ return (b/1048576).toFixed(2)+" MB"; }
+function totalOf(f){ var t=0; if(f.files){ for(var k in f.files) t+=f.files[k]; } return t; }
+
+var have = {};
+
+function buildEnv(){
+  var tb = document.querySelector("#envtable tbody");
+  tb.innerHTML = "";
+  FONTS.forEach(function(f){
+    var ok = f.system ? document.fonts.check('64px '+f.name)
+                      : document.fonts.check('400 64px "'+f.name+'"');
+    have[f.key] = ok;
+    var c1, c2, tot;
+    if(f.files){
+      c1 = mb(f.files.w400);
+      c2 = f.files.w600 ? mb(f.files.w600)
+                        : mb(f.files.w700)+' <span style="color:var(--text-low)">(700)</span>';
+      tot = '<b>'+mb(totalOf(f))+'</b>';
+    } else {
+      c1 = c2 = '<span style="color:var(--text-low)">시스템</span>';
+      tot = '<span style="color:var(--text-low)">0 · 번들 안 함</span>';
+    }
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><b>'+f.label+'</b>'+(f.note?'<br><span style="color:var(--text-low);font-size:11px">'+f.note+'</span>':'')+'</td>'+
+      '<td><span class="pill '+(ok?'yes':'no')+'">'+(ok?'로드됨':(f.system?'없음':'실패'))+'</span></td>'+
+      '<td>'+f.role+'</td><td>'+c1+'</td><td>'+c2+'</td><td>'+tot+'</td>';
+    tb.appendChild(tr);
+  });
+
+  var fail = FONTS.filter(function(f){ return !f.system && !have[f.key]; })
+                  .map(function(f){ return f.label; });
+  var el = document.getElementById("envbanner");
+  if(fail.length===0){
+    el.innerHTML = '<div class="banner ok"><span class="glyph">✓</span><div>'+
+      '<h4>번들 폰트 5종이 모두 로드됐다 — 아래 비교는 어느 PC에서나 동일하다</h4>'+
+      '<p>화면에 보이는 자형·인상 차이는 <b>실제 폰트 파일의 차이</b>다. 보는 사람의 시스템 설치 여부와 무관하다.</p></div></div>';
+  } else {
+    el.innerHTML = '<div class="banner bad"><span class="glyph">!</span><div>'+
+      '<h4>번들 폰트 로드 실패 — 비교 불가</h4>'+
+      '<p>실패: <b>'+fail.join(" / ")+'</b><br>'+
+      '<code>./fonts/</code> 폴더가 이 HTML 바로 옆에 있는지 확인하라 — <b>HTML만 따로 복사하면 경로가 끊긴다.</b> '+
+      '이 상태에서 보이는 글자는 <b>시스템 폴백</b>이라 “같아 보인다 / 달라 보인다” <b>어느 쪽도 근거가 되지 않는다.</b></p></div></div>';
+  }
+}
+
+/* ============================================================
+   2. (a) 자형 비교 — 190px + 차이 나는 획 지목
+   ------------------------------------------------------------
+   look  : 무엇을 볼 것인가 (한 줄)
+   anno  : 링을 얹을 좌표 (글자 박스 기준 %). 「보면 안다」가 아니라 「여기를 보라」.
+   krForm/jpForm : 그 지점에서 한국식 / 일본식이 각각 어떤 모양인지
+   ============================================================ */
+/* ⚠️ 순서는 「판별력이 센 것부터」다. 글자마다 차이의 크기가 다르고,
+   결론은 「결정적」 글자에서 나온다. 약한 글자를 앞에 두면 「다 비슷한데?」가 되어
+   센 증거까지 같이 묻힌다. — 증거는 강한 순으로 배치한다. */
+var CHARS = [
+  {c:"骨", str:"결정적", look:"위 네모 <b>안쪽 획이 꺾이는 방향</b>",
+   anno:[56,26], krForm:"안쪽 획이 <b>오른쪽</b>으로 꺾인다", jpForm:"안쪽 획이 <b>왼쪽</b>으로 꺾인다"},
+  {c:"海", str:"결정적", look:"우측 부수가 <b>每</b>(점 둘)인가 <b>毎</b>(가로획)인가",
+   anno:[70,47], krForm:"<b>每</b> — 가운데가 <b>점 두 개</b>", jpForm:"<b>毎</b> — 가운데가 <b>가로획 하나</b>"},
+  {c:"直", str:"보조", look:"아래 가로획이 <b>왼쪽으로 얼마나 빠지는가</b>",
+   anno:[26,80], krForm:"왼쪽으로 <b>조금만</b> 나온다", jpForm:"왼쪽으로 <b>길게</b> 빠진다"},
+  {c:"次", str:"보조", look:"좌측 두 점(冫)의 <b>각도와 시작점</b>",
+   anno:[20,44], krForm:"두 점이 나란히 아래를 향한다", jpForm:"아래 점이 위로 튀어 오른다"},
+  {c:"器", str:"약함", look:"가운데가 <b>犬</b>(점 있음)인가 <b>大</b>(점 없음)인가",
+   anno:[50,50], krForm:"가운데 <b>犬</b> — 점이 있다", jpForm:"가운데 <b>大</b> — 점이 없다"},
+  {c:"令", str:"약함", look:"아래가 <b>マ</b>인가 <b>세로획 + 가로획</b>인가",
+   anno:[54,74], krForm:"아래가 <b>세로획 + 가로획</b>", jpForm:"아래가 <b>マ</b> 모양"},
+  {c:"敢", str:"약함", look:"좌측 상단 획의 <b>맺음과 이음</b>",
+   anno:[28,30], krForm:"획이 붙어서 이어진다", jpForm:"획이 떨어져 맺힌다"}
+];
+var COLS = [
+  {label:"Pretendard",    sub:"한국식 (기준)",      cls:"f-pretendard",    key:"kr",  side:"kr",
+   stack:'"TM Pretendard",serif'},
+  {label:"Pretendard JP", sub:"🔴 검증 대상",       cls:"f-pretendard-jp", key:"pjp", side:"",
+   stack:'"TM Pretendard JP",serif'},
+  {label:"Noto Sans JP",  sub:"일본식 (기준)",      cls:"f-noto-jp",       key:"njp", side:"jp",
+   stack:'"TM Noto Sans JP",serif'},
+  {label:"시스템 일본어", sub:"교차 확인 · 번들 아님", cls:"f-ref-jp",     key:"ref", side:"jp",
+   stack:'"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","MS PGothic",serif'}
+];
+
+/* 기록된 판정 (2026-07-22, 아토 — 190px 육안 + 대조군 검증 후).
+   체크리스트로 다시 고르면 이 값 대신 새 판정이 표에 반영된다. */
+var RECORDED = {"直":"kr","骨":"kr","次":"kr","海":"kr","器":"kr","令":"kr","敢":"kr"};
+
+function buildGrid(){
+  var w = document.getElementById("charblocks");
+  var h = "";
+  CHARS.forEach(function(o){
+    h += '<div class="charblock">';
+    h += '<div class="chead"><span class="big" lang="ja">'+o.c+'</span>'+
+         '<span class="pill'+(o.str==="결정적"?" yes":"")+'">'+o.str+'</span>'+
+         '<span class="look">'+o.look+'</span>'+
+         '<span class="vd" id="vd-'+o.c+'"></span></div>';
+    h += '<div class="charrow">';
+    COLS.forEach(function(c){
+      var lost = !have[c.key];
+      h += '<div class="cell '+c.side+'">'+
+           '<div class="cl">'+c.label+'<small>'+c.sub+(lost?' · ⚠ 폴백':'')+'</small></div>'+
+           '<div class="glyphbox">'+
+             '<span class="gl '+c.cls+'" lang="ja">'+o.c+'</span>'+
+             '<span class="anno" style="left:'+o.anno[0]+'%;top:'+o.anno[1]+'%"></span>'+
+           '</div>'+
+           '<div class="tail">'+(c.side==="kr" ? o.krForm : (c.side==="jp" ? o.jpForm :
+              '<b>어느 쪽인가?</b> 좌우를 번갈아 보라'))+'</div>'+
+           '</div>';
+    });
+    h += '</div></div>';
+  });
+  w.innerHTML = h;
+}
+
+/* ---- 글자별 판정표 ---- */
+function buildVerdictTable(){
+  var tb = document.querySelector("#verdicttable tbody");
+  tb.innerHTML = "";
+  var kr=0, jp=0, na=0;
+  CHARS.forEach(function(o){
+    var v = answers[o.c] || RECORDED[o.c];
+    if(v==="kr") kr++; else if(v==="jp") jp++; else na++;
+    var cell = v==="kr" ? '<span class="pill no">한국식 ← 실패</span>'
+             : v==="jp" ? '<span class="pill yes">일본식 ← 통과</span>'
+             : '<span class="pill">판단 불가</span>';
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><span style="font-size:26px;font-weight:700" lang="ja">'+o.c+'</span></td>'+
+      '<td><span class="pill'+(o.str==="결정적"?" yes":"")+'">'+o.str+'</span></td>'+
+      '<td>'+o.look+'</td>'+
+      '<td>'+o.krForm+'</td>'+
+      '<td>'+o.jpForm+'</td>'+
+      '<td>'+cell+'</td>';
+    tb.appendChild(tr);
+    var vd = document.getElementById("vd-"+o.c);
+    if(vd){
+      vd.innerHTML = v==="kr" ? '<span style="color:var(--error)">✕ 한국식</span>'
+                   : v==="jp" ? '<span style="color:var(--success)">✓ 일본식</span>' : '';
+    }
+  });
+
+  var el = document.getElementById("verdictsum");
+  var fail = kr > jp;
+  el.innerHTML = '<div class="banner '+(fail?'bad':'ok')+'"><span class="glyph">'+(fail?'✕':'✓')+'</span><div>'+
+    '<h4>종합 — '+(fail
+      ? '7글자 중 <b>'+kr+'글자가 한국식</b>. Pretendard JP 탈락.'
+      : '7글자 중 <b>'+jp+'글자가 일본식</b>. Pretendard JP 채택 가능.')+'</h4>'+
+    '<p>한국식 <b>'+kr+'</b> / 일본식 <b>'+jp+'</b> / 판단 불가 <b>'+na+'</b>'+
+    '<br><b>결론은 「결정적」 두 글자에서 나온다.</b> <span lang="ja">骨</span>(안쪽 획 방향)과 <span lang="ja">海</span>(每/毎)는 '+
+    '<b>차이가 크고 방향이 명확</b>해서 다른 해석이 불가능하다. 나머지 다섯은 <b>같은 결론을 뒷받침할 뿐</b>이고, '+
+    '「약함」으로 표시한 셋은 <b>확대해도 판별이 어렵다</b> — <b>약한 증거를 센 증거처럼 세지 않는다.</b>'+
+    (kr>0 && jp>0 ? '<br><b>혼재는 실패로 본다.</b> 일부만 일본식인 폰트는 “가끔 틀린 글자를 가르치는” 폰트라 <b>전부 틀리는 것보다 발견이 어려워 더 나쁘다.</b>' : '')+
+    '</p></div></div>';
+}
+
+/* ============================================================
+   3. (a) 글자별 글리프 커버리지
+   ------------------------------------------------------------
+   ⚠️ 폭 비교는 여기서 쓸 수 없다 — 실측으로 확인한 함정(2026-07-21).
+      처음엔 measureText 폭 비교로 짰는데 7글자 전부 「폴백」으로 나왔다.
+      Yu Gothic 이 直骨次海器令敢 을 당연히 갖고 있는데도 그랬던 이유:
+      ▶ CJK 글자는 폰트와 무관하게 폭이 정확히 1em 이다. 「폭이 같다」가 「폴백됐다」의 증거가 못 된다.
+        (0장의 폰트 존재 여부 판정이 폭으로 됐던 건 프로브에 라틴 문자가 섞여 있어서였다.)
+      ▶ 대신 래스터를 「완전 일치」로 비교한다. 폴백되면 후보를 앞에 둔 스택과 폴백 단독 스택이
+        픽셀까지 똑같이 나온다. 「얼마나 다른가」(측정 불가)가 아니라 「같은가 다른가」(이진)라 신뢰할 수 있다.
+   ============================================================ */
+var _cv2 = document.createElement("canvas"), _cx2 = _cv2.getContext("2d");
+_cv2.width = _cv2.height = 96;
+function raster(stack, ch){
+  _cx2.clearRect(0,0,96,96);
+  _cx2.fillStyle="#000"; _cx2.textAlign="center"; _cx2.textBaseline="middle";
+  _cx2.font = '64px ' + stack;
+  _cx2.fillText(ch, 48, 48);
+  var d = _cx2.getImageData(0,0,96,96).data, s = "";
+  for(var i=3;i<d.length;i+=4) s += d[i]>60 ? "1" : "0";
+  return s;
+}
+function hasGlyph(stack, ch){
+  var bases = ["serif","monospace"];
+  var head = stack.replace(/,\s*(serif|monospace|sans-serif)\s*$/, "");
+  for(var i=0;i<bases.length;i++){
+    if(raster(head+","+bases[i], ch) !== raster(bases[i], ch)) return true;
+  }
+  return false;
+}
+var coverage = {};
+function buildCoverage(){
+  var tb = document.querySelector("#covtable tbody");
+  tb.innerHTML = "";
+  COLS.forEach(function(c){ coverage[c.key] = {}; });
+  CHARS.forEach(function(o){
+    var tr = document.createElement("tr");
+    var html = '<td><span style="font-size:22px" lang="ja">'+o.c+'</span></td>';
+    COLS.forEach(function(c){
+      var ok = have[c.key] && hasGlyph(c.stack, o.c);
+      coverage[c.key][o.c] = ok;
+      html += '<td>'+(!have[c.key]
+        ? '<span class="pill">로드 안 됨</span>'
+        : (ok ? '<span class="pill yes">폰트가 그림</span>'
+              : '<span class="pill no">폴백 — 남의 글자</span>'))+'</td>';
+    });
+    tr.innerHTML = html;
+    tb.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   4. (a) 육안 체크리스트 — 판정을 강제하고 기록한다
+   ============================================================ */
+var answers = {};
+function buildChecklist(){
+  var wrap = document.getElementById("checklist");
+  var judge = document.getElementById("judgeA");
+  wrap.innerHTML = "";
+
+  if(!have.pjp){
+    judge.innerHTML = '<div class="banner bad"><span class="glyph">!</span><div>'+
+      '<h4>(a) 판정 불가 — Pretendard JP 가 로드되지 않았다</h4>'+
+      '<p>2열은 <b>Pretendard JP 가 아니라 시스템 폴백</b>이 그린 것이다. 이 상태의 “같아 보인다/달라 보인다”는 '+
+      '<b>어느 쪽도 근거가 되지 않는다.</b> 체크리스트를 <b>잠가</b> 뒀다 — <code>./fonts/</code> 경로부터 확인하라.</p></div></div>';
+  } else {
+    judge.innerHTML = '<div class="banner ok"><span class="glyph">✓</span><div>'+
+      '<h4>(a) 판정 가능 — Pretendard JP 가 로드됐다</h4>'+
+      '<p>위 그리드 <b>2열</b>이 <b>1열(한국식)</b> 과 같은지 <b>3열(일본식 · Noto Sans JP)</b> 과 같은지, '+
+      '각 행의 “무엇을 볼 것인가”만 보고 고르면 된다.</p></div></div>';
+  }
+
+  CHARS.forEach(function(o){
+    var covOK = have.pjp && coverage.pjp[o.c];
+    var d = document.createElement("div");
+    d.className = "diffcard";
+    d.innerHTML =
+      '<div class="ch" lang="ja">'+o.c+'</div>'+
+      '<div class="val" style="margin-bottom:8px">'+o.look+'</div>'+
+      (covOK
+        ? '<div class="choices" data-ch="'+o.c+'">'+
+            '<button type="button" data-v="kr">한국식 · 1열과 같음</button>'+
+            '<button type="button" data-v="jp">일본식 · 3열과 같음</button>'+
+            '<button type="button" data-v="na">판단 불가</button>'+
+          '</div>'
+        : '<div class="val" style="color:var(--text-low)">'+
+            (!have.pjp ? '폰트 로드 실패 — 비교 불가' : '이 글자는 Pretendard JP 에 없다 — 폴백이라 비교 불가')+
+          '</div>');
+    wrap.appendChild(d);
+  });
+  renderVerdict();
+}
+
+function renderVerdict(){
+  var verdict = document.getElementById("verdictA");
+  var kr=0, jp=0, na=0, done=0;
+  CHARS.forEach(function(o){
+    var v = answers[o.c];
+    if(!v) return;
+    done++;
+    if(v==="kr") kr++; else if(v==="jp") jp++; else na++;
+  });
+  var target = CHARS.filter(function(o){ return have.pjp && coverage.pjp[o.c]; }).length;
+  if(!target || done < target){
+    verdict.innerHTML = target
+      ? '<div class="banner info"><span class="glyph">◇</span><div><h4>판정 대기 — '+done+' / '+target+' 글자</h4>'+
+        '<p>남은 글자를 마저 고르면 결론이 나온다.</p></div></div>'
+      : '';
+    return;
+  }
+  var pass = jp > kr;
+  verdict.innerHTML = '<div class="banner '+(pass?'ok':'bad')+'"><span class="glyph">'+(pass?'✓':'✕')+'</span><div>'+
+    '<h4>(a) 판정 — '+(pass
+      ? '통과: Pretendard JP 는 일본식 한자 자형을 낸다'
+      : '실패: Pretendard JP 의 한자 자형은 한국식이다')+'</h4>'+
+    '<p>일본식 <b>'+jp+'</b> / 한국식 <b>'+kr+'</b> / 판단 불가 <b>'+na+'</b> (총 '+target+'자)<br>'+
+    (pass
+      ? '일본어 본문 폰트를 <b>Pretendard JP 로 통일</b>한다. 자형 문제를 해결하면서 한국어 UI와 시각 일관성까지 얻는다. '+
+        '다만 <b>용량은 오히려 늘어난다</b> — 아래 c장 번들 계산을 함께 볼 것.'
+      : '가나가 일본식이어도 <b>한자 골격이 한국식이면 채택할 수 없다</b>. 학습 대상 텍스트라 <b>자형이 곧 내용</b>이기 때문이다. → <b>Noto Sans JP 분리 유지</b>.')+
+    (kr>0 && jp>0 ? '<br><b>혼재라면 실패로 본다.</b> 일부 글자만 일본식인 폰트는 “가끔 틀린 글자를 가르치는” 폰트다 — 전부 틀리는 것보다 발견이 어려워 더 나쁘다.' : '')+
+    '</p></div></div>';
+}
+
+document.getElementById("checklist").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-v]");
+  if(!b) return;
+  var box = b.parentNode, ch = box.getAttribute("data-ch");
+  answers[ch] = b.getAttribute("data-v");
+  Array.prototype.forEach.call(box.children, function(x){ x.removeAttribute("aria-pressed"); });
+  b.setAttribute("aria-pressed","true");
+  renderVerdict();
+  buildVerdictTable();   /* 체크리스트로 다시 고르면 상단 판정표도 갱신된다 */
+});
+
+/* ============================================================
+   5. (b) 판정 배너
+   ============================================================ */
+function buildB(){
+  var el = document.getElementById("judgeB");
+  if(have.maru && have.serif){
+    el.innerHTML = '<div class="banner ok"><span class="glyph">✓</span><div>'+
+      '<h4>(b) 두 폰트가 모두 로드됐다 — 위 세 맥락을 직접 비교해 판정하라</h4>'+
+      '<p>판정 순서: ① <b>맥락 3(쪽지)</b> 에서 마루고딕이 더 다정한가 → ② <b>맥락 1(리라이트본)</b> 에서 읽기 피로가 늘지 않는가 → '+
+      '③ <b>가나 혼동쌍</b> 이 뭉개지지 않는가. ①②③ 모두 통과면 명조를 대체한다. '+
+      '<b>맥락 2(고전 원문투)의 손실은 감수 항목</b>이지 탈락 사유가 아니다 — 비중이 가장 작기 때문.</p></div></div>';
+  } else {
+    var m=[]; if(!have.serif) m.push("Noto Serif JP"); if(!have.maru) m.push("Zen Maru Gothic");
+    el.innerHTML = '<div class="banner bad"><span class="glyph">!</span><div>'+
+      '<h4>(b) 폰트 로드 실패 — 위 상자들은 모두 같은 폴백 폰트다</h4>'+
+      '<p>실패: <b>'+m.join(" / ")+'</b>. 인상 비교는 <b>로드된 뒤에만</b> 유효하다. '+
+      '단, 아래 memo의 논거(조형 일치·콘텐츠 비중·예산 상한)는 렌더와 무관하게 성립한다.</p></div></div>';
+  }
+}
+
+/* ============================================================
+   6. 번들 용량 계산 — 조합별 예상 증가량
+   ============================================================ */
+function buildBudget(){
+  var by = {};
+  FONTS.forEach(function(f){ if(f.files) by[f.key] = totalOf(f); });
+
+  var combos = [
+    {name:"① 현행 유지",              parts:["kr","njp","serif"],
+     desc:"Pretendard + Noto Sans JP + Noto Serif JP"},
+    {name:"② 정서용만 교체 <b>(권고)</b>", parts:["kr","njp","maru"],
+     desc:"Pretendard + Noto Sans JP + <b>Zen Maru Gothic</b>"},
+    {name:"③ 한 패밀리 통일",          parts:["pjp","maru"],
+     desc:"Pretendard JP(한·일 겸용) + Zen Maru Gothic <span style='color:var(--text-low)'>— (a) 통과 시에만</span>"}
+  ];
+  var base = by.kr + by.njp + by.serif;
+  var tb = document.querySelector("#budget tbody");
+  tb.innerHTML = "";
+  combos.forEach(function(c){
+    var t = 0, jp = 0;
+    c.parts.forEach(function(k){
+      t += by[k];
+      if(k!=="kr") jp += by[k];
+      if(k==="pjp") jp += by[k];   /* Pretendard JP 는 일본어 예산에도 들어간다 */
+    });
+    if(c.parts.indexOf("pjp")>=0) jp = by.pjp + by.maru;
+    var delta = t - base;
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><b>'+c.name+'</b></td><td>'+c.desc+'</td>'+
+      '<td>'+(c.parts.indexOf("pjp")>=0 ? 1 : 2)+'개</td>'+
+      '<td><b>'+mb(t)+'</b></td>'+
+      '<td>'+(delta===0 ? '<span style="color:var(--text-low)">기준</span>'
+              : (delta>0?'+':'−')+mb(Math.abs(delta)))+'</td>';
+    tb.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   7. 부팅 — @font-face 는 비동기다. 먼저 한 번 그리고, 로드 완료 후 다시 그린다.
+   ============================================================ */
+/* ============================================================
+   8. 자가진단 — 대조군으로 「이 페이지를 믿어도 되는가」를 스스로 검사한다
+   ------------------------------------------------------------
+   🔴 실제 사고에서 나온 장치다. 패밀리명을 틀리게 넣어("Pretendard JP" ← 실제 "TM Pretendard JP")
+      전부 폴백으로 떨어졌고 「Pretendard JP = Noto Sans JP, 차이 0%」라는 가짜 결과가 나왔다.
+      무서운 점은 그 잘못된 측정이 에러를 내지 않았다는 것이다 — 폴백은 조용히 일어난다.
+      「화면이 나온다」가 「측정이 맞다」를 뜻하지 않는다.
+   → 반드시 달라야 하는 쌍을 재서, 그것들이 같게 나오면 폰트가 아니라 계측계가 고장 난 것이다.
+   ============================================================ */
+var CTRL_PROBE = "海骨永あ";
+function pixDiffPct(stackA, stackB){
+  var a = raster(stackA, CTRL_PROBE), b = raster(stackB, CTRL_PROBE);
+  var xor=0, uni=0;
+  for(var i=0;i<a.length;i++){
+    if(a[i]!==b[i]) xor++;
+    if(a[i]==="1"||b[i]==="1") uni++;
+  }
+  return uni ? xor/uni*100 : 0;
+}
+
+var CONTROLS = [
+  {a:'"TM Noto Serif JP",serif', b:'"TM Noto Sans JP",serif',
+   an:"Noto Serif JP", bn:"Noto Sans JP",
+   why:"<b>명조 vs 고딕</b>. 누가 봐도 다른 서체다 — 이 둘이 같게 나오면 <b>폰트가 아니라 측정이 고장 난 것</b>이다. 가장 강한 대조군."},
+  {a:'"TM Zen Maru Gothic",serif', b:'"TM Noto Sans JP",serif',
+   an:"Zen Maru Gothic", bn:"Noto Sans JP",
+   why:"<b>둥근 고딕 vs 각진 고딕</b>. (b) 검증이 성립하려면 이 둘이 달라야 한다."},
+  {a:'"TM Pretendard JP",serif', b:'"TM Noto Sans JP",serif',
+   an:"Pretendard JP", bn:"Noto Sans JP",
+   why:"<b>(a) 검증의 핵심 쌍.</b> 실제 사고 때 이 값이 <b>0%</b>로 나와 정반대 결론이 뽑힐 뻔했다."}
+];
+var CTRL_MIN = 12;   /* 서체 계열이 다르면 이 정도는 반드시 벌어진다 */
+
+function buildSelfCheck(){
+  var tb = document.querySelector("#ctrltable tbody");
+  tb.innerHTML = "";
+  var bad = [];
+  CONTROLS.forEach(function(c){
+    var d = pixDiffPct(c.a, c.b);
+    var ok = d >= CTRL_MIN;
+    if(!ok) bad.push(c.an+" ↔ "+c.bn);
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><b>'+c.an+'</b> ↔ <b>'+c.bn+'</b></td>'+
+      '<td><b>'+d.toFixed(1)+'%</b></td>'+
+      '<td><span class="pill '+(ok?'yes':'no')+'">'+(ok?'정상':'⚠ 동일')+'</span></td>'+
+      '<td>'+c.why+'</td>';
+    tb.appendChild(tr);
+  });
+
+  var el = document.getElementById("selfcheck");
+  if(bad.length===0){
+    el.innerHTML = '<div class="banner ok" style="margin:0 0 6px"><span class="glyph">✓</span><div>'+
+      '<h4>자가진단 통과 — 이 페이지의 비교 결과는 유효하다</h4>'+
+      '<p>서로 달라야 할 폰트 쌍이 <b>모두 실제로 다르게</b> 측정됐다. 즉 <b>@font-face 가 정상 적용됐고</b>, '+
+      '아래에서 보이는 자형 차이는 <b>진짜 폰트 파일의 차이</b>다.</p></div></div>';
+  } else {
+    el.innerHTML = '<div class="banner bad" style="margin:0 0 6px;border-width:2px"><span class="glyph" style="font-size:42px">⚠️</span><div>'+
+      '<h4 style="font-size:19px">폰트 로드 실패 — <b>이 페이지의 비교 결과를 신뢰하지 마세요</b></h4>'+
+      '<p><b>달라야 할 폰트가 같게 측정됐다</b>: '+bad.join(" / ")+'<br>'+
+      '이는 해당 폰트가 로드되지 않고 <b>같은 시스템 폴백으로 떨어졌다</b>는 뜻이다. '+
+      '이 상태에서는 <b>“차이가 없다”도 “차이가 있다”도 전부 무의미하다.</b><br>'+
+      '확인할 것: ① <code>./fonts/</code> 폴더가 이 HTML 바로 옆에 있는가(HTML만 복사하면 끊긴다) '+
+      '② <code>file://</code> 로 열었다면 로컬 서버로 열어 볼 것 '+
+      '③ CSS의 패밀리명이 <code>TM </code> 접두사까지 정확한가.</p></div></div>';
+  }
+}
+
+function drawAll(){
+  buildEnv(); buildSelfCheck(); buildGrid(); buildVerdictTable();
+  buildCoverage(); buildChecklist(); buildB(); buildBudget();
+}
+
+/* 링 on/off — 선입견 없이 다시 볼 수 있게 */
+document.getElementById("annobtn").addEventListener("click", function(){
+  var w = document.getElementById("charblocks");
+  var off = w.classList.toggle("annooff");
+  this.textContent = off ? "링 켜기" : "링 끄기";
+});
+drawAll();
+if(document.fonts){
+  Promise.all(FONTS.filter(function(f){ return !f.system; })
+    .map(function(f){ return document.fonts.load('400 64px "'+f.name+'"').catch(function(){}); }))
+    .then(function(){ return document.fonts.ready; })
+    .then(drawAll);
+}
+
+/* 테마 토글 */
+document.getElementById("tbtn").addEventListener("click", function(){
+  var r = document.documentElement;
+  var d = r.getAttribute("data-theme")==="dark";
+  r.setAttribute("data-theme", d?"light":"dark");
+  this.textContent = d?"다크로 보기":"라이트로 보기";
+});
+</script>
+</body>
+</html>
