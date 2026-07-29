@@ -61,6 +61,10 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
     if (ok) setCorrect((c) => c + 1);
     setReaction(ok ? 'correct' : 'wrong');
   }
+  function skip() {
+    if (!q) return;
+    setReaction('unknown');   // 오답과 같이 '못 맞춤'(correct 미증가), selected는 null 유지
+  }
   function toResult() { setReaction(null); setPhase('result'); }
   function next() {
     setReaction(null);
@@ -214,14 +218,24 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
             </View>
 
             {!showAnswers ? (
-              <Pressable
-                style={[S.btnPri, { backgroundColor: selected == null ? t.border : t.brand }]}
-                onPress={submit}
-                disabled={selected == null}
-                accessibilityRole="button"
-              >
-                <Text style={[S.btnPriText, { color: selected == null ? t.textLow : t.onBrand }]}>제출하기</Text>
-              </Pressable>
+              <>
+                <Pressable
+                  style={[S.btnPri, { backgroundColor: selected == null ? t.border : t.brand }]}
+                  onPress={submit}
+                  disabled={selected == null}
+                  accessibilityRole="button"
+                >
+                  <Text style={[S.btnPriText, { color: selected == null ? t.textLow : t.onBrand }]}>제출하기</Text>
+                </Pressable>
+                <Pressable
+                  style={[S.btnGhost, { borderColor: t.borderStrong }]}
+                  onPress={skip}
+                  accessibilityRole="button"
+                  accessibilityLabel="모르겠어요, 해설 보기"
+                >
+                  <Text style={[S.btnGhostText, { color: t.textMid }]}>모르겠어요</Text>
+                </Pressable>
+              </>
             ) : (
               <>
                 {q.explanation ? (
@@ -413,15 +427,20 @@ function ListeningAudio({ t, S, src, scriptBelow = false }) {
 // 토모 반응 모달 — 정답=축하 / 오답=위로. 🔴 밝기 확대는 「새 쪽지」 전용이라 여기선 문구·색으로만.
 function TomoReaction({ t, S, kind, onReview, onNext }) {
   const ok = kind === 'correct';
+  const unknown = kind === 'unknown';
+  const title = ok ? '최고예요!' : unknown ? '솔직하게 말해줘서 좋아요' : '괜찮아요, 같이 봐요';
+  const sub = ok ? '정확해요. 이 기세로 가요.'
+    : unknown ? '모르는 걸 아는 것도 실력이에요. 같이 볼까요?'
+    : '틀린 건 배움의 시작이에요. 해설을 같이 볼까요?';
   return (
     <View style={S.modalOverlay}>
       <View style={[S.modalCard, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }]}>
         <Tomo scale={1.15} showNote={false} />
         <Text style={[S.modalTitle, { color: ok ? t.success : t.textHigh }]}>
-          {ok ? '최고예요!' : '괜찮아요, 같이 봐요'}
+          {title}
         </Text>
         <Text style={[S.modalSub, { color: t.textMid }]}>
-          {ok ? '정확해요. 이 기세로 가요.' : '틀린 건 배움의 시작이에요. 해설을 같이 볼까요?'}
+          {sub}
         </Text>
         <View style={S.modalBtns}>
           {ok ? (
@@ -521,6 +540,8 @@ function makeStyles(t) {
     explainText: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 20 },
     btnPri: { height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 4 },
     btnPriText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    btnGhost: { height: 48, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
+    btnGhostText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
     note: { fontFamily: fonts.ko, fontSize: 13, padding: 12 },
     wordChip: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: radius.sm, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 10, marginBottom: 2 },
     wordChipLabel: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
