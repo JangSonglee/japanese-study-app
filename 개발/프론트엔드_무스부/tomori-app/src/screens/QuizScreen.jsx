@@ -7,7 +7,7 @@ import Tomo from '../components/Tomo';
 import { DoneView } from './WordCardScreen';
 import { loadPassageWords } from '../data/vocab';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 
 // 「이 글의 단어」 급수 정렬 순서. 실데이터는 BE(content_vocab_links) → loadPassageWords 로 온다.
 const WORD_LEVELS = ['N5', 'N4', 'N3', 'N2', 'N1'];
@@ -206,9 +206,9 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
                 const isSel = c.seq === selected;
                 let border; let badgeBg; let badgeOn; let dim = false;
                 if (!showAnswers) {
-                  border = isSel ? t.courseJlpt : t.borderStrong;
-                  badgeBg = isSel ? t.courseJlpt : t.sunk;
-                  badgeOn = isSel ? '#FFF9EC' : t.textMid;
+                  border = isSel ? t.brand : t.borderStrong;
+                  badgeBg = isSel ? t.brand : t.sunk;
+                  badgeOn = isSel ? t.onBrand : t.textMid;
                 } else {
                   border = c.correct ? t.success : (isSel ? t.error : t.border);
                   badgeBg = c.correct ? t.success : (isSel ? t.error : t.sunk);
@@ -262,13 +262,13 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
                 {q.explanation ? (
                   <View style={[S.explain, { backgroundColor: t.sunk }]}>
                     <Text style={[S.lblLow, { color: t.textLow }]}>해설</Text>
-                    <Text style={[S.explainText, { color: t.textMid }]}>{q.explanation}</Text>
+                    <Text style={[S.explainText, { color: t.textMid }, keepAll]}>{q.explanation}</Text>
                   </View>
                 ) : null}
                 {/* TODO: 인증 후 오답노트 저장 배선 — 지금은 안내 문구만 */}
                 {round === 2 && reaction !== 'correct' ? (
                   <>
-                    <Text style={[S.retryNote, { color: t.textMid }]}>넘어가도 오답노트에 남아요.</Text>
+                    <Text style={[S.retryNote, { color: t.textMid }, keepAll]}>넘어가도 오답노트에 남아요.</Text>
                     <View style={S.retryRow}>
                       <Pressable style={[S.btnGhost, { borderColor: t.borderStrong, flex: 1, marginTop: 0 }]} onPress={advance} accessibilityRole="button">
                         <Text style={[S.btnGhostText, { color: t.textMid }]}>넘어가기</Text>
@@ -476,10 +476,10 @@ function TomoReaction({ t, S, kind, onReview, onNext }) {
     <View style={S.modalOverlay}>
       <View style={[S.modalCard, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }]}>
         <Tomo scale={1.15} pose={ok ? 'well-done' : unknown ? 'cheer-up' : 'encouragement'} showNote={false} />
-        <Text style={[S.modalTitle, { color: ok ? t.success : t.textHigh }]}>
+        <Text style={[S.modalTitle, { color: ok ? t.success : t.textHigh }, keepAll]}>
           {title}
         </Text>
-        <Text style={[S.modalSub, { color: t.textMid }]}>
+        <Text style={[S.modalSub, { color: t.textMid }, keepAll]}>
           {sub}
         </Text>
         <View style={S.modalBtns}>
@@ -536,7 +536,7 @@ function makeStyles(t) {
     areaBar: { width: 4, height: 16, borderRadius: radius.full },
     areaLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700' },
     areaHint: { fontFamily: fonts.ko, fontSize: 12 },
-    card: { borderRadius: radius.md, padding: 16, gap: 10 },
+    card: { borderRadius: radius.lg, padding: 16, gap: 10 },
     lblLow: { fontFamily: fonts.ko, fontSize: 13 },
     audioBox: { borderRadius: radius.sm, borderWidth: 1, borderStyle: 'dashed', paddingVertical: 14, paddingHorizontal: 12, alignItems: 'center' },
     audioText: { fontFamily: fonts.ko, fontSize: 12.5 },

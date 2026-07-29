@@ -66,14 +66,29 @@ export const dark = {
   scrim: 'rgba(0,0,0,.60)',
 };
 
-// Radius (사양서 2.9 — 3단 고정)
-export const radius = { sm: 9, md: 15, full: 999 };
+// Radius (사양서 v3.3 — EOND UI 검토 반영 2026-07-30). 6단 위계:
+//   sm=칩·인풋 / md=버튼 / lg=카드 / xl=바텀시트·히어로 / full=pill·점
+export const radius = { sm: 8, md: 12, lg: 16, xl: 24, full: 999 };
 
-// 타이포 스케일 (사양서 3.3). 후리가나 렌더러가 쓰는 값:
-//   body-jp 18 / line-height 2.0 (루비 공간 확보) / ruby = 본문의 50%
+// Spacing — 4px 그리드(EOND UI 계승 2026-07-30). 임의 여백값을 만들지 않는다.
+export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, x2: 24, x3: 32, x4: 40, x5: 48, x6: 64 };
+
+// 조판 — 한국어는 어절 단위 줄바꿈(word-break: keep-all). 한글 Text에 스프레드해서 쓴다.
+export const keepAll = { wordBreak: 'keep-all' };
+
+// 타이포 스케일 (사양서 v3.3 — EOND UI 검토 반영 2026-07-30).
+//   화면 위계용 8단(size·weight) + 후리가나 렌더러가 쓰는 기존 값 유지.
 export const type = {
-  bodyJp: { fontSize: 18, lineHeight: 2.0 },
-  rubyRatio: 0.5, // 사양서 3.2 — 루비 크기 = 본문의 50%
+  hero: { size: 28, weight: '700' },   // 큰 숫자·히어로
+  h1: { size: 22, weight: '700' },     // 화면 제목
+  h2: { size: 19, weight: '700' },     // 히어로 카드 제목
+  h3: { size: 17, weight: '700' },     // 카드 제목
+  body: { size: 15, weight: '400' },   // 본문
+  bodySm: { size: 13, weight: '400' }, // 보조 본문
+  caption: { size: 12, weight: '500' },// 라벨·캡션
+  micro: { size: 11, weight: '500' },  // 최소 캡션·뱃지
+  bodyJp: { fontSize: 18, lineHeight: 2.0 }, // 후리가나 본문(사양서 3.2)
+  rubyRatio: 0.5, // 루비 크기 = 본문의 50%
 };
 
 // 폰트 패밀리 (사양서 3.1.1). 웹은 @font-face(fonts.css)로 로드.

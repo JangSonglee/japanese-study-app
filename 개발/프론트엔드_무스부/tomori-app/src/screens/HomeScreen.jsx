@@ -5,34 +5,42 @@ import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius } from '../theme/tokens';
 
 /**
- * 홈 (기획 8) — 위젯 홈.
+ * 홈 (기획 8) — 위젯 홈. EOND UI 원칙 반영 리디자인(2026-07-30 검토).
  *
- * 🔴 데이터 = 데모 목업(HOME_DEMO). 스트릭·진도·우표·조언은 학습기록(인증·DB), D-day·이어서학습은 로컬 저장 대상.
- *    지금은 슬라이스/데모 단계라 완성형으로 보여준다(대표님 결정 2026-07-30, 기존 "정직한 생략" 원칙 이번 한정 유보).
- *    인증(Google OAuth)·학습기록 DB가 붙으면 위젯별 TODO 지점을 실데이터로 교체.
- *  · 토모 = 평소 밝기·말 없음(밝아짐은 「새 쪽지」 전용, PRD 14.2.1).
+ * 적용 원칙:
+ *  ① 한국어 조판 — 모든 한글에 word-break: keep-all(어절 단위 줄바꿈).
+ *  ② 팔레트 다이어트 — 앰버(brand)를 유일 강조색으로. 파랑(courseJlpt)은 코스 뱃지에만.
+ *     숫자·본문은 뉴트럴(ink/mid), 액션·진행은 앰버.
+ *  ③ 강약 레이아웃 — 「이어서 학습」을 인사 다음 히어로로. 통계는 작은 보조 카드.
+ *  ④ 4px 그리드 여백 · 타입 위계 정리.
+ *
+ * 🔴 데이터 = 데모 목업(HOME_DEMO). 인증·DB 붙으면 위젯별 TODO 지점을 실데이터로 교체.
+ *    토모 = 평소 밝기·말 없음(밝아짐은 「새 쪽지」 전용, PRD 14.2.1).
  */
 const HOME_DEMO = {
   user: '송이',
   streak: { days: 7, week: [true, true, true, true, true, false, false] },
-  dday: { label: 'JLPT N3 시험', d: 42, date: '12월 3일' },
+  dday: { label: 'JLPT N3', d: 42, date: '12월 3일' },
   cont: { course: 'JLPT', level: 'N3', area: '독해', route: 'readingSession', done: 3, total: 12 },
   progress: { level: 'N3', pct: 34 },
   stamp: { have: 12, need: 20 },
   advice: '어제는 동사 활용에서 좀 헤맸어요. 오늘 그 부분 다시 볼까요?',
 };
 
+// 한국어 조판 — 어절 단위 줄바꿈(RN Web에서 CSS로 전달)
+const KEEP = { wordBreak: 'keep-all' };
+
 export default function HomeScreen({ nav }) {
   const { t, mode } = useTheme();
   const S = makeStyles(t);
   const isDark = mode === 'dark';
-  const cardBase = [S.card, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }];
+  const card = [S.card, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }];
   const D = HOME_DEMO;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: t.bgBase }} contentContainerStyle={S.body}>
-      {/* 앱바 — 브랜드 · 코스 전환 · MY */}
+      {/* 앱바 */}
       <View style={S.appbar}>
-        <Text style={[S.brand, { color: t.textHigh }]}>토모리</Text>
+        <Text style={[S.brand, { color: t.textHigh }, KEEP]}>토모리</Text>
         <View style={S.appbarRight}>
           <Pressable onPress={() => nav.push('courses')} style={[S.coursePill, { backgroundColor: t.sunk }]} accessibilityRole="button" accessibilityLabel="코스 전환">
             <Text style={[S.coursePillText, { color: t.textMid }]}>JLPT ▾</Text>
@@ -43,66 +51,68 @@ export default function HomeScreen({ nav }) {
         </View>
       </View>
 
-      {/* 인사 — 토모(shine) + 인사말 */}
+      {/* 인사 */}
       <View style={S.greet}>
-        <Tomo scale={0.62} pose="shine" showNote={false} />
+        <Tomo scale={0.6} pose="shine" showNote={false} />
         <View style={S.greetText}>
-          <Text style={[S.greetTitle, { color: t.textHigh }]}>오늘도 왔네요, {D.user}님</Text>
-          <Text style={[S.greetSub, { color: t.textMid }]}>일곱 밤째 함께 불을 켰어요.</Text>
+          <Text style={[S.greetTitle, { color: t.textHigh }, KEEP]}>오늘도 왔네요, {D.user}님</Text>
+          <Text style={[S.greetSub, { color: t.textMid }, KEEP]}>일곱 밤째 함께 불을 켰어요.</Text>
         </View>
       </View>
 
-      {/* 스트릭 | D-day  · TODO: 실데이터(인증·DB / 시험일 로컬설정) */}
-      <View style={S.row2}>
-        <View style={[cardBase, S.col]}>
-          <Text style={[S.cardLbl, { color: t.textMid }]}>연속 학습</Text>
-          <View style={S.bigRow}><Text style={[S.big, { color: t.brandText }]}>{D.streak.days}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>일</Text></View>
-          <View style={S.dots}>{D.streak.week.map((on, i) => (<View key={i} style={[S.dot, { backgroundColor: on ? t.brand : t.sunk }]} />))}</View>
-        </View>
-        <View style={[cardBase, S.col]}>
-          <Text style={[S.cardLbl, { color: t.textMid }]}>{D.dday.label}</Text>
-          <View style={S.bigRow}><Text style={[S.big, { color: t.courseJlpt }]}>D-{D.dday.d}</Text></View>
-          <Text style={[S.cardSub, { color: t.textLow }]}>{D.dday.date}</Text>
-        </View>
-      </View>
-
-      {/* 이어서 학습 (강조) · TODO: 마지막 학습 위치 로컬 저장 */}
-      <View style={[cardBase, S.contCard, { borderWidth: 1.5, borderColor: t.brand }]}>
+      {/* 이어서 학습 — 히어로(가장 강조) · TODO: 마지막 학습 위치 로컬 저장 */}
+      <Pressable onPress={() => nav.push(D.cont.route, { level: D.cont.level })} style={card} accessibilityRole="button" accessibilityLabel="이어서 학습">
         <View style={S.contHead}>
-          <Text style={[S.contLbl, { color: t.brandText }]}>이어서 학습</Text>
-          <Text style={[S.chev, { color: t.textLow }]}>›</Text>
+          <View style={[S.courseBadge, { backgroundColor: t.courseJlpt }]}>
+            <Text style={[S.courseBadgeText, { color: '#FFF9EC' }]}>{D.cont.course}</Text>
+          </View>
+          <Text style={[S.contLbl, { color: t.textMid }, KEEP]}>이어서 학습</Text>
         </View>
-        <Text style={[S.contTitle, { color: t.textHigh }]}>{D.cont.course} · {D.cont.level} · {D.cont.area}</Text>
+        <Text style={[S.contTitle, { color: t.textHigh }, KEEP]}>{D.cont.level} 독해를 이어서 해요</Text>
         <View style={S.progRow}>
-          <ProgressBar t={t} pct={D.cont.done / D.cont.total} color={t.courseJlpt} />
+          <ProgressBar t={t} pct={D.cont.done / D.cont.total} color={t.brand} />
           <Text style={[S.progText, { color: t.textMid }]}>{D.cont.done} / {D.cont.total}</Text>
         </View>
-        <Pressable onPress={() => nav.push(D.cont.route, { level: D.cont.level })} style={[S.contBtn, { backgroundColor: t.action }]} accessibilityRole="button">
-          <Text style={[S.contBtnText, { color: t.onAction }]}>이어서 하기</Text>
-        </Pressable>
+        <View style={[S.contBtn, { backgroundColor: t.brand }]}>
+          <Text style={[S.contBtnText, { color: t.onBrand }]}>이어서 하기</Text>
+        </View>
+      </Pressable>
+
+      {/* 스트릭 | D-day · TODO: 실데이터 */}
+      <View style={S.row2}>
+        <View style={[card, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>연속 학습</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.streak.days}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>일째</Text></View>
+          <View style={S.dots}>{D.streak.week.map((on, i) => (<View key={i} style={[S.dot, { backgroundColor: on ? t.brand : t.sunk }]} />))}</View>
+        </View>
+        <View style={[card, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>{D.dday.label} 시험</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>D-{D.dday.d}</Text></View>
+          <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>{D.dday.date}</Text>
+        </View>
       </View>
 
-      {/* 진도 | 우표 · TODO: 실데이터(인증·DB) */}
+      {/* 진도 | 우표 · TODO: 실데이터 */}
       <View style={S.row2}>
-        <View style={[cardBase, S.col]}>
-          <Text style={[S.cardLbl, { color: t.textMid }]}>{D.progress.level} 진도</Text>
+        <View style={[card, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>{D.progress.level} 진도</Text>
           <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.progress.pct}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>%</Text></View>
-          <ProgressBar t={t} pct={D.progress.pct / 100} color={t.courseJlpt} />
+          <ProgressBar t={t} pct={D.progress.pct / 100} color={t.brand} />
         </View>
-        <View style={[cardBase, S.col]}>
-          <Text style={[S.cardLbl, { color: t.textMid }]}>우표</Text>
-          <View style={S.bigRow}><Text style={[S.big, { color: t.brandText }]}>{D.stamp.have}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {D.stamp.need}</Text></View>
+        <View style={[card, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>모은 우표</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.stamp.have}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {D.stamp.need}</Text></View>
           <ProgressBar t={t} pct={D.stamp.have / D.stamp.need} color={t.brand} />
-          <Text style={[S.cardSub, { color: t.textLow }]}>다음 편지까지 {D.stamp.need - D.stamp.have}장</Text>
+          <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>다음 편지까지 {D.stamp.need - D.stamp.have}장</Text>
         </View>
       </View>
 
       {/* 오늘의 조언 · TODO: 오답 패턴 기반 실 생성 */}
-      <View style={[cardBase, S.advCard]}>
+      <View style={[card, S.advCard]}>
         <Tomo scale={0.42} pose="intellectual" showNote={false} />
         <View style={S.advText}>
-          <Text style={[S.advLbl, { color: t.brandText }]}>오늘의 조언</Text>
-          <Text style={[S.advBody, { color: t.textMid }]}>{D.advice}</Text>
+          <Text style={[S.advLbl, { color: t.brandText }, KEEP]}>오늘의 조언</Text>
+          <Text style={[S.advBody, { color: t.textMid }, KEEP]}>{D.advice}</Text>
         </View>
       </View>
     </ScrollView>
@@ -120,7 +130,7 @@ function ProgressBar({ t, pct, color }) {
 
 function makeStyles(t) {
   return StyleSheet.create({
-    body: { padding: 16, gap: 12, paddingBottom: 28 },
+    body: { padding: 20, gap: 16, paddingBottom: 32 },
     appbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 44 },
     brand: { fontFamily: fonts.ko, fontSize: 18, fontWeight: '700' },
     appbarRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
@@ -129,31 +139,31 @@ function makeStyles(t) {
     myPill: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.full, borderWidth: 1 },
     myText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
     greet: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
-    greetText: { flex: 1, gap: 2 },
-    greetTitle: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
-    greetSub: { fontFamily: fonts.ko, fontSize: 13 },
+    greetText: { flex: 1, gap: 3 },
+    greetTitle: { fontFamily: fonts.ko, fontSize: 21, fontWeight: '700' },
+    greetSub: { fontFamily: fonts.ko, fontSize: 14 },
     row2: { flexDirection: 'row', gap: 12 },
     col: { flex: 1 },
-    card: { borderRadius: radius.md, padding: 14, gap: 8 },
-    cardLbl: { fontFamily: fonts.ko, fontSize: 12 },
+    card: { borderRadius: radius.lg, padding: 16, gap: 12 },
+    cardLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '500' },
     cardSub: { fontFamily: fonts.ko, fontSize: 11 },
     bigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 3 },
-    big: { fontFamily: fonts.ko, fontSize: 26, fontWeight: '800' },
-    bigUnit: { fontFamily: fonts.ko, fontSize: 14, marginBottom: 3 },
+    big: { fontFamily: fonts.ko, fontSize: 30, fontWeight: '700', letterSpacing: -0.5 },
+    bigUnit: { fontFamily: fonts.ko, fontSize: 14, marginBottom: 4 },
     dots: { flexDirection: 'row', gap: 5, marginTop: 2 },
-    dot: { width: 9, height: 9, borderRadius: 999 },
-    contCard: { gap: 10 },
-    contHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    contLbl: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
-    chev: { fontFamily: fonts.ko, fontSize: 18 },
-    contTitle: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
-    progRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    dot: { width: 8, height: 8, borderRadius: 999 },
+    contHead: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    courseBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.full },
+    courseBadgeText: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '700' },
+    contLbl: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '500' },
+    contTitle: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700', marginTop: 2 },
+    progRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     progText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
-    contBtn: { height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
+    contBtn: { height: 50, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
     contBtnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
-    advCard: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-    advText: { flex: 1, gap: 3 },
+    advCard: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+    advText: { flex: 1, gap: 4 },
     advLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
-    advBody: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
+    advBody: { fontFamily: fonts.ko, fontSize: 13.5, lineHeight: 20 },
   });
 }
