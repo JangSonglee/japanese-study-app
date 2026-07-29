@@ -36,9 +36,12 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
   const [savedWords, setSavedWords] = useState(() => new Set());
   const [words, setWords] = useState([]);        // 이 지문/대본의 단어(급수별) — BE 매핑 실데이터
   const [wordsState, setWordsState] = useState('idle'); // idle|loading|ready|error
+  const [round, setRound] = useState(1);          // 1=전체, 2=오답 재노출
+  const [roundCards, setRoundCards] = useState(cards);  // 현재 라운드가 푸는 목록(원본 cards는 불변)
+  const wrongRef = useRef([]);                     // 1차에서 못 맞춘 카드 누적(오답+모름) → 2차 목록
 
-  const done = idx >= cards.length;
-  const card = done ? null : cards[idx];
+  const done = idx >= roundCards.length;
+  const card = done ? null : roundCards[idx];
   const isReading = kind === 'reading';
   const areaName = isReading ? '독해' : '청해';
   const q = card ? card.question : null;
@@ -58,29 +61,47 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
     if (selected == null || !q) return;
     const chosen = q.choices.find((c) => c.seq === selected);
     const ok = !!(chosen && chosen.correct);
-    if (ok) setCorrect((c) => c + 1);
+    if (ok) {
+      if (round === 1) setCorrect((c) => c + 1);
+    } else if (round === 1) {
+      wrongRef.current.push(card);   // 1차 오답 → 2차 재노출 큐
+    }
     setReaction(ok ? 'correct' : 'wrong');
   }
   function skip() {
     if (!q) return;
-    setReaction('unknown');   // 오답과 같이 '못 맞춤'(correct 미증가), selected는 null 유지
+    if (round === 1) wrongRef.current.push(card);   // 모름도 '못 맞춤' → 재노출
+    setReaction('unknown');
   }
-  function toResult() { setReaction(null); setPhase('result'); }
-  function next() {
-    setReaction(null);
+  function toResult() { setPhase('result'); }   // reaction 유지 → 모달만 닫힘
+  function advance() {
+    const atEnd = idx + 1 >= roundCards.length;
+    if (round === 1 && atEnd && wrongRef.current.length > 0) {
+      setRoundCards(wrongRef.current);   // 2차 진입: 못 맞춘 문제만
+      wrongRef.current = [];
+      setRound(2);
+      setIdx(0);
+    } else {
+      setIdx((i) => i + 1);
+    }
     setPhase('solve');
     setSelected(null);
+    setReaction(null);
     setFuri(false);
     setTrans(false);
     setWordSheet(false);
-    setIdx((i) => i + 1);
+  }
+  function retry() {   // 2연속에서 같은 문제 다시(같은 idx)
+    setPhase('solve');
+    setSelected(null);
+    setReaction(null);
   }
 
   if (done) {
     return (
       <DoneView
         t={t} mode={mode} known={correct} total={cards.length} savedCount={savedWords.size} noun="문제"
-        onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); }}
+        onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); setRound(1); setRoundCards(cards); wrongRef.current = []; }}
         onBack={() => nav && nav.pop()}
       />
     );
@@ -244,24 +265,43 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
                     <Text style={[S.explainText, { color: t.textMid }]}>{q.explanation}</Text>
                   </View>
                 ) : null}
-                <Pressable style={[S.btnPri, { backgroundColor: t.brand }]} onPress={next}>
-                  <Text style={[S.btnPriText, { color: t.onBrand }]}>{idx + 1 < cards.length ? '다음' : '결과 보기'}</Text>
-                </Pressable>
+                {/* TODO: 인증 후 오답노트 저장 배선 — 지금은 안내 문구만 */}
+                {round === 2 && reaction !== 'correct' ? (
+                  <>
+                    <Text style={[S.retryNote, { color: t.textMid }]}>넘어가도 오답노트에 남아요.</Text>
+                    <View style={S.retryRow}>
+                      <Pressable style={[S.btnGhost, { borderColor: t.borderStrong, flex: 1, marginTop: 0 }]} onPress={advance} accessibilityRole="button">
+                        <Text style={[S.btnGhostText, { color: t.textMid }]}>넘어가기</Text>
+                      </Pressable>
+                      <Pressable style={[S.btnPri, { backgroundColor: t.brand, flex: 1, marginTop: 0 }]} onPress={retry} accessibilityRole="button">
+                        <Text style={[S.btnPriText, { color: t.onBrand }]}>다시 풀기</Text>
+                      </Pressable>
+                    </View>
+                  </>
+                ) : (
+                  <Pressable style={[S.btnPri, { backgroundColor: t.brand }]} onPress={advance} accessibilityRole="button">
+                    <Text style={[S.btnPriText, { color: t.onBrand }]}>
+                      {round === 1 && idx + 1 >= roundCards.length && wrongRef.current.length > 0
+                        ? '틀린 문제 다시 보기'
+                        : idx + 1 >= roundCards.length ? '결과 보기' : '계속하기'}
+                    </Text>
+                  </Pressable>
+                )}
               </>
             )}
           </View>
         ) : (
           <View style={cardShadow}>
             <Text style={[S.note, { color: t.textMid }]}>이 지문에 연결된 문항이 없어요.</Text>
-            <Pressable style={[S.btnPri, { backgroundColor: t.brand }]} onPress={next}>
-              <Text style={[S.btnPriText, { color: t.onBrand }]}>{idx + 1 < cards.length ? '다음' : '결과 보기'}</Text>
+            <Pressable style={[S.btnPri, { backgroundColor: t.brand }]} onPress={advance}>
+              <Text style={[S.btnPriText, { color: t.onBrand }]}>{idx + 1 < roundCards.length ? '다음' : '결과 보기'}</Text>
             </Pressable>
           </View>
         )}
       </ScrollView>
 
       {/* 토모 반응 모달 — 제출 직후 */}
-      {reaction ? <TomoReaction t={t} S={S} kind={reaction} onReview={toResult} onNext={next} /> : null}
+      {reaction && phase === 'solve' ? <TomoReaction t={t} S={S} kind={reaction} onReview={toResult} onNext={advance} /> : null}
 
       {/* 이 글의 단어 — 급수별 목록 + 즐겨찾기(내 단어장). 뜻·후리가나 기본 노출(열람면). */}
       <BottomSheet visible={wordSheet} title="이 글의 단어" onClose={() => setWordSheet(false)}>
@@ -542,6 +582,8 @@ function makeStyles(t) {
     btnPriText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
     btnGhost: { height: 48, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
     btnGhostText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+    retryRow: { flexDirection: 'row', gap: 8, marginTop: 4 },
+    retryNote: { fontFamily: fonts.ko, fontSize: 12.5, lineHeight: 18, marginTop: 6 },
     note: { fontFamily: fonts.ko, fontSize: 13, padding: 12 },
     wordChip: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: radius.sm, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 10, marginBottom: 2 },
     wordChipLabel: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
