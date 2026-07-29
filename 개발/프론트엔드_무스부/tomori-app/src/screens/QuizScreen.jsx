@@ -475,7 +475,7 @@ function TomoReaction({ t, S, kind, onReview, onNext }) {
   return (
     <View style={S.modalOverlay}>
       <View style={[S.modalCard, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }]}>
-        <Tomo scale={1.15} showNote={false} />
+        <Tomo scale={1.15} pose={ok ? 'well-done' : unknown ? 'cheer-up' : 'encouragement'} showNote={false} />
         <Text style={[S.modalTitle, { color: ok ? t.success : t.textHigh }]}>
           {title}
         </Text>

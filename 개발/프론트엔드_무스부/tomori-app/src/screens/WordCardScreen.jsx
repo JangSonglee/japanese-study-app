@@ -239,7 +239,7 @@ export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack,
       </Pressable>
 
       {/* 토모 — 평소 밝기, 말 없음(밝아짐은 「새 쪽지」 전용). 실제 아트는 아토 대기 → Tomo 한 곳만 교체 */}
-      <Tomo scale={1} note="토모 — 임시 스탠드인 (평소 밝기)" />
+      <Tomo scale={1} pose={total > 0 && known / total >= 0.7 ? 'well-done' : 'sit'} note="토모" />
 
       <Text style={[doneStyles.title, { color: t.textHigh }]}>{noun} 세션 결과</Text>
 

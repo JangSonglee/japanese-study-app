@@ -1,48 +1,49 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts } from '../theme/tokens';
 
 /**
- * 토모 — 등불(작은 불빛) 임시 스탠드인.
+ * 토모 — 등불 캐릭터. 표정 아트(SVG, public/images/tomo/{pose}.svg).
  *
  * 사양 근거:
- *  · 밝기 = 「학습 상태」 신호. 통신 상태로 어두워지지 않는다(PRD).
- *  · 밝아짐(헤일로 확대)은 「새 쪽지」 전용 — 여기선 평소 밝기·말 없음(PRD 14.2.1).
- *  · 실제 아트는 아토 컴포넌트 대기 → 이 스탠드인 한 곳만 교체하면 홈·세션요약에 동시 반영.
+ *  · 밝기 = 「학습 상태」 신호. 밝아짐(헤일로 확대)은 「새 쪽지」 전용(PRD 14.2.1) — 여기선 표정만.
+ *  · pose 한 곳으로 홈·요약·모달·MY·소개에 동시 반영.
+ *  · 🔴 웹 슬라이스는 <Image>가 <img>로 SVG를 렌더. Expo 정식 이식 땐 expo-image/react-native-svg로 교체.
  *
  * props:
- *   size  = 등불 크기 배율 기준(기본 44 몸통 높이 근사)
- *   note  = 아래 캡션(기본 '토모 — 임시 스탠드인')
- *   showNote = 캡션 표시 여부
+ *   scale = 크기 배율(기본 높이 96px 기준)
+ *   pose  = 표정 키(파일명). 기본 'sit'
+ *   note / showNote = 아래 캡션
  */
-export default function Tomo({ scale = 1, note = '토모 — 임시 스탠드인', showNote = true }) {
+// 표정마다 원본 viewBox 비율(폭/높이)이 달라 pose별로 aspect를 둔다. 높이를 통일하고 폭만 aspect로 맞춰 찌그러짐을 막는다.
+const POSE_ASPECT = {
+  bright: 253 / 258, 'cheer-up': 217 / 272, 'desperate+tears': 188 / 258,
+  encouragement: 215 / 246, intellectual: 188 / 258, read: 192 / 272,
+  resolution: 188 / 258, shine: 312 / 306, shyness: 188 / 258,
+  sit: 248 / 326, surprise: 225 / 258, 'to-wait': 315 / 258,
+  'well-done': 205 / 264, worry: 188 / 258,
+};
+const BASE_H = 96;          // scale 1 기준 높이(px)
+
+export default function Tomo({ scale = 1, pose = 'sit', note = '토모', showNote = true }) {
   const { t } = useTheme();
-  const s = makeStyles(scale);
+  const h = BASE_H * scale;
+  const w = h * (POSE_ASPECT[pose] || 248 / 326);
   return (
-    <View style={s.stage}>
-      <View style={[s.glow, { backgroundColor: t.brand }]} />
-      <View style={[s.body, { backgroundColor: t.brand }]}>
-        <View style={[s.flame, { backgroundColor: t.onBrand }]} />
-      </View>
-      {showNote ? <Text style={[s.note, { color: t.textLow }]}>{note}</Text> : null}
+    <View style={styles.stage}>
+      <Image
+        source={{ uri: `images/tomo/${pose}.svg` }}
+        style={{ width: w, height: h }}
+        resizeMode="contain"
+        accessibilityLabel="토모"
+      />
+      {showNote ? <Text style={[styles.note, { color: t.textLow }]}>{note}</Text> : null}
     </View>
   );
 }
 
-function makeStyles(k) {
-  return StyleSheet.create({
-    stage: { alignItems: 'center', justifyContent: 'center', gap: 6 },
-    glow: { position: 'absolute', top: 6 * k, width: 64 * k, height: 64 * k, borderRadius: 999, opacity: 0.28 },
-    body: {
-      width: 34 * k, height: 44 * k, borderRadius: 17 * k,
-      alignItems: 'center', justifyContent: 'flex-start', paddingTop: 6 * k,
-    },
-    flame: {
-      width: 10 * k, height: 14 * k,
-      borderTopLeftRadius: 8 * k, borderTopRightRadius: 8 * k,
-      borderBottomLeftRadius: 5 * k, borderBottomRightRadius: 5 * k,
-    },
-    note: { fontFamily: fonts.ko, fontSize: 11 },
-  });
-}
+const styles = StyleSheet.create({
+  stage: { alignItems: 'center', justifyContent: 'center', gap: 6 },
+  note: { fontFamily: fonts.ko, fontSize: 11 },
+});

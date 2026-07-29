@@ -31,7 +31,7 @@ export default function AboutScreen({ nav }) {
       <ScrollView contentContainerStyle={S.body}>
         {/* 서비스 개요 */}
         <View style={S.hero}>
-          <Tomo scale={1} showNote={false} />
+          <Tomo scale={1} pose="intellectual" showNote={false} />
           <Text style={[S.brand, { color: t.textHigh }]}>토모리 (Tomori)</Text>
           <Text style={[S.tagline, { color: t.textMid }]}>밝혀주되, 끌지 않아요.</Text>
         </View>

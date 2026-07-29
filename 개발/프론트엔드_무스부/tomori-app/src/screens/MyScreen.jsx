@@ -29,7 +29,7 @@ export default function MyScreen({ nav }) {
         {/* 프로필 요약 — 게스트. 토모(평소 밝기·말 없음)가 곁을 지킨다(MY=쉬는 화면, PRD 14.2.1). */}
         <View style={[S.profile, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }]}>
           <View style={S.tomoWrap}>
-            <Tomo scale={0.7} showNote={false} />
+            <Tomo scale={0.7} pose="bright" showNote={false} />
           </View>
           <View style={S.profileText}>
             <Text style={[S.name, { color: t.textHigh }]}>게스트</Text>

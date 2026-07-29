@@ -35,7 +35,7 @@ export default function HomeScreen({ nav }) {
 
       {/* 가운데 — 토모 + 인사말 */}
       <View style={S.hero}>
-        <Tomo scale={1.25} showNote={false} />
+        <Tomo scale={1.25} pose="shine" showNote={false} />
         <Text style={[S.greet, { color: t.textHigh }]}>오늘도 왔네요.</Text>
         <Text style={[S.sub, { color: t.textMid }]}>작은 불빛 하나, 같이 켜 볼까요.</Text>
       </View>
