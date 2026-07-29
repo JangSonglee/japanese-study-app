@@ -1,0 +1,31 @@
+jlpt.n3.grammar.0001,N3,～たばかり,～たばかり,-,동사 た형 + ばかり,막 ~한 참,어떤 동작이 끝난 직후임을 나타낸다.,今起きたばかりです。,지금 막 일어났습니다.,{今|いま}{起|お}きたばかりです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0002,N3,～ようになる,～ようになる,-,동사 사전형/ない형 + ようになる,~하게 되다,능력이나 습관의 변화를 나타낸다.,日本語が話せるようになりました。,일본어를 말할 수 있게 되었습니다.,{日本語|に|ほん|ご}が{話|はな}せるようになりました。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0003,N3,～ことになる,～ことになる,-,동사 사전형/ない형 + ことになる,~하게 되다,내 의지가 아닌 외부 결정으로 정해짐.,来月引っ越すことになりました。,다음 달 이사하게 되었습니다.,{来月|らい|げつ}{引|ひ}っ{越|こ}すことになりました。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0004,N3,～とても～ない,～とても～ない,-,とても + 동사 가능형 + ない,도저히 ~할 수 없다,강한 불가능을 강조한다.,この問題はとても解けない。,이 문제는 도저히 풀 수 없다.,この{問題|もん|だい}はとても{解|と}けない。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0005,N3,～らしい,～らしい,-,명사/동사·형용사 보통형 + らしい,~인 것 같다,들은 정보에 근거한 추측을 나타낸다.,彼は元気らしい。,그는 잘 지내는 것 같다.,{彼|かれ}は{元気|げん|き}らしい。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0006,N3,～て初めて,～て{初|はじ}めて,-,동사 て형 + 初めて,~하고 나서야 비로소,어떤 경험을 계기로 처음 깨달음.,使ってみて初めて分かった。,써 보고 나서야 비로소 알았다.,{使|つか}ってみて{初|はじ}めて{分|わ}かった。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0007,N3,～によって,～によって,-,명사 + によって,~에 따라/~에 의해,수단이나 차이의 기준을 나타낸다.,人によって考え方が違う。,사람에 따라 생각이 다르다.,{人|ひと}によって{考|かんが}え{方|かた}が{違|ちが}う。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0008,N3,～ば～ほど,～ば～ほど,-,동사 ば형 + 동사 사전형 + ほど,~하면 할수록,정도가 함께 커짐을 나타낸다.,考えれば考えるほど分からなくなる。,생각하면 할수록 모르겠다.,{考|かんが}えれば{考|かんが}えるほど{分|わ}からなくなる。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0009,N3,～ばかり,N+ばかり,-,명사 + ばかり,~만/~뿐,같은 것만 반복함을 나타낸다.,弟はゲームばかりしている。,남동생은 게임만 하고 있다.,{弟|おとうと}はゲームばかりしている。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0010,N3,～で有名,～で{有名|ゆう|めい},-,명사 + で + 有名,~로 유명,무엇으로 유명한지 나타낸다.,この町はお寺で有名です。,이 마을은 절로 유명합니다.,この{町|まち}はお{寺|てら}で{有名|ゆう|めい}です。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0011,N3,～を始め,～を{始|はじ}め,-,명사 + を始め,~을 비롯하여,대표적인 예를 들어 전체를 아우른다.,社長を始めみんなが集まった。,사장을 비롯해 모두가 모였다.,{社長|しゃ|ちょう}を{始|はじ}めみんなが{集|あつ}まった。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0012,N3,～的,～{的|てき},-,명사 + 的,~적,명사를 형용동사처럼 만든다.,彼の説明はとても具体的だ。,그의 설명은 매우 구체적이다.,{彼|かれ}の{説明|せつ|めい}はとても{具体的|ぐ|たい|てき}だ。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0013,N3,～くらいだ,～くらいだ,-,동사·형용사 보통형 + くらいだ,~정도이다,정도를 비유적으로 강조한다.,疲れて立てないくらいだ。,지쳐서 서지 못할 정도이다.,{疲|つか}れて{立|た}てないくらいだ。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0014,N3,～さえ～ば,～さえ～ば,-,명사 + さえ + 동사 ば형,~만 ~하면,그 조건만 갖추면 충분함.,あなたさえいればいい。,당신만 있으면 된다.,あなたさえいればいい。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0015,N3,～ほど,～ほど,-,명사/동사 보통형 + ほど,~정도/~만큼,정도의 기준을 나타낸다.,泣きたいほどうれしい。,울고 싶을 만큼 기쁘다.,{泣|な}きたいほどうれしい。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0016,N3,～まま,～まま,-,동사 た형/ない형 + まま,~한 채로,상태가 그대로 유지됨을 나타낸다.,窓を開けたまま寝てしまった。,창문을 연 채로 잠들어 버렸다.,{窓|まど}を{開|あ}けたまま{寝|ね}てしまった。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0017,N3,わざわざ,わざわざ,-,부사,일부러,수고를 들여 특별히 함을 나타낸다.,わざわざ来てくれてありがとう。,일부러 와 줘서 고마워.,わざわざ{来|き}てくれてありがとう。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0018,N3,～としたら,～としたら,-,보통형 + としたら,~라고 한다면,가정을 세우고 결과를 생각한다.,宝くじが当たったとしたら何を買う。,복권이 당첨된다면 뭘 살래.,{宝|たから}くじが{当|あ}たったとしたら{何|なに}を{買|か}う。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0019,N3,～たものだ,～たものだ,-,동사 た형 + ものだ,~하곤 했다,과거의 습관을 그리며 회상한다.,子供の頃よく川で泳いだものだ。,어릴 적 자주 강에서 헤엄치곤 했다.,{子供|こ|ども}の{頃|ころ}よく{川|かわ}で{泳|およ}いだものだ。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0020,N3,～たて,～たて,-,동사 ます형 어간 + たて,막 ~한,동작 직후의 신선한 상태를 나타낸다.,焼きたてのパンはおいしい。,갓 구운 빵은 맛있다.,{焼|や}きたてのパンはおいしい。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0021,N3,～ぐらい,～ぐらい,-,명사/보통형 + ぐらい,~정도,대략적인 수량이나 정도를 나타낸다.,一時間ぐらい待った。,한 시간 정도 기다렸다.,{一時間|いち|じ|かん}ぐらい{待|ま}った。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0022,N3,かえって,かえって,-,부사,오히려,예상과 반대되는 결과를 나타낸다.,薬を飲んでかえって具合が悪くなった。,약을 먹고 오히려 상태가 나빠졌다.,{薬|くすり}を{飲|の}んでかえって{具合|ぐ|あい}が{悪|わる}くなった。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0023,N3,～に関する,～に{関|かん}する,-,명사 + に関する,~에 관한,어떤 주제와 관련됨을 나타낸다.,環境に関する本を読んだ。,환경에 관한 책을 읽었다.,{環境|かん|きょう}に{関|かん}する{本|ほん}を{読|よ}んだ。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0024,N3,～っぽい,～っぽい,-,명사/동사 ます형 + っぽい,~같다/~스럽다,그런 성질이나 경향이 강함을 나타낸다.,彼は忘れっぽい。,그는 잘 잊는다.,{彼|かれ}は{忘|わす}れっぽい。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0025,N3,まさか,まさか,-,부사,설마,뜻밖의 일에 대한 놀람을 나타낸다.,まさか彼が来るとは思わなかった。,설마 그가 올 줄은 몰랐다.,まさか{彼|かれ}が{来|く}るとは{思|おも}わなかった。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0026,N3,～まい,～まい,-,동사 사전형 + まい,~하지 않겠다,강한 부정 의지나 부정 추측을 나타낸다.,もう二度と行くまい。,이제 두 번 다시 가지 않겠다.,もう{二度|に|ど}と{行|い}くまい。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0027,N3,～きり,～きり,-,동사 た형 + きり,~한 뒤로 그대로,그 뒤로 변화가 없음을 나타낸다.,彼とは去年会ったきりだ。,그와는 작년에 만난 게 마지막이다.,{彼|かれ}とは{去年|きょ|ねん}{会|あ}ったきりだ。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0028,N3,いったい,いったい,-,부사,도대체,의문을 강조하여 묻는다.,いったい何が起きたの。,도대체 무슨 일이 일어난 거야.,いったい{何|なに}が{起|お}きたの。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0029,N3,～ふり,～ふり,-,명사の/동사 보통형 + ふりをする,~인 척,실제와 다르게 가장함을 나타낸다.,彼は知らないふりをした。,그는 모르는 척을 했다.,{彼|かれ}は{知|し}らないふりをした。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0030,N3,どうやら,どうやら,-,부사,아무래도,불확실하지만 그런 것 같다는 추측.,どうやら道に迷ったようだ。,아무래도 길을 잃은 것 같다.,どうやら{道|みち}に{迷|まよ}ったようだ。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문
+jlpt.n3.grammar.0031,N3,おかげで,おかげで,-,명사の/동사 た형 + おかげで,~덕분에,좋은 결과의 원인을 나타낸다.,あなたのおかげで助かった。,당신 덕분에 살았다.,あなたのおかげで{助|たす}かった。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N3 · 자작예문

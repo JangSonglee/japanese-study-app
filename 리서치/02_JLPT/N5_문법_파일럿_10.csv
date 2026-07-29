@@ -1,0 +1,11 @@
+content_key,level_code,pattern,pattern_ruby,romaji_ko,connection,meaning_ko,usage_note,example_ja,example_ko,example_ruby,politeness,source,verify,note
+jlpt.n5.grammar.0001,N5,です,です,-,명사/な형용사 + です,~입니다 (정중한 단정),보통형은 だ. 과거는 でした.,わたしは学生です。,저는 학생입니다.,わたしは{学生|がく|せい}です。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0002,N5,は,は,-,명사 + は,~은/는 (주제 표시),조사 は는 「와」로 읽는다.,わたしは日本人です。,저는 일본인입니다.,わたしは{日本人|に|ほん|じん}です。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0003,N5,を,を,-,명사 + を,~을/를 (목적어),조사 を는 「오」로 읽는다.,水を飲みます。,물을 마십니다.,{水|みず}を{飲|の}みます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0004,N5,～てください,～てください,-,동사 て형 + ください,~해 주세요 (의뢰),정중한 부탁. 부정은 ～ないでください.,ここに名前を書いてください。,여기에 이름을 써 주세요.,ここに{名前|な|まえ}を{書|か}いてください。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0005,N5,～たいです,～たいです,-,동사 ます형 어간 + たいです,~하고 싶습니다 (희망),1인칭 희망. 대상은 が 또는 を.,日本へ行きたいです。,일본에 가고 싶습니다.,{日本|に|ほん}へ{行|い}きたいです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0006,N5,～があります,～があります,-,명사 + があります,~이 있습니다 (무생물 존재),생물은 います. 부정은 ありません.,つくえの上に本があります。,책상 위에 책이 있습니다.,つくえの{上|うえ}に{本|ほん}があります。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0007,N5,～ています,～ています,-,동사 て형 + います,~하고 있습니다 (진행·상태),진행 또는 결과 상태를 나타낸다.,今雨が降っています。,지금 비가 내리고 있습니다.,{今|いま}{雨|あめ}が{降|ふ}っています。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0008,N5,～ませんか,～ませんか,-,동사 ます형 어간 + ませんか,~하지 않겠습니까? (권유),정중한 권유. 승낙은 ええ ～ましょう.,一緒に昼ご飯を食べませんか。,같이 점심을 먹지 않겠습니까?,{一緒|いっ|しょ}に{昼|ひる}ご{飯|はん}を{食|た}べませんか。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0009,N5,～てから,～てから,-,동사 て형 + から,~하고 나서 (동작 순서),앞 동작을 마친 뒤 뒤 동작을 한다.,手を洗ってからご飯を食べます。,손을 씻고 나서 밥을 먹습니다.,{手|て}を{洗|あら}ってからご{飯|はん}を{食|た}べます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0010,N5,～のほうが～より,～のほうが～より,-,명사 + のほうが + 명사 + より,~쪽이 ~보다 (비교),더 ~한 쪽에 のほうが를 붙인다.,電車のほうがバスより速いです。,전철 쪽이 버스보다 빠릅니다.,{電車|でん|しゃ}のほうがバスより{速|はや}いです。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문

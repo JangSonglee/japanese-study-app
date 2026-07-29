@@ -2,51 +2,169 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { ThemeProvider } from './theme/ThemeContext';
 import { getTheme, fonts } from './theme/tokens';
+import { useRouter } from './nav/router';
+import Icon from './components/Icon';
+import HomeScreen from './screens/HomeScreen';
+import CourseListScreen from './screens/CourseListScreen';
+import JlptHubScreen from './screens/JlptHubScreen';
+import MyScreen from './screens/MyScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import AboutScreen from './screens/AboutScreen';
 import WordCardScreen from './screens/WordCardScreen';
-import { loadN5Cards } from './data/vocab';
+import GrammarCardScreen from './screens/GrammarCardScreen';
+import QuizScreen from './screens/QuizScreen';
+import { loadCards, loadGrammar, loadReading, loadListening, loadCardsByKeys, loadImageManifest } from './data/vocab';
 
 /**
- * App — 수직 슬라이스 셸.
- *  · 실제 N5 CSV(public/data/N5_vocab.csv)를 fetch → 10장 카드.
- *  · 폰 프레임(320px) 안에 WordCardScreen. Hi-fi 목업과 폭을 맞춘다.
- *  · 라이트/다크 토글 — 두 테마 모두 눈으로 확인하기 위함.
+ * App — FE 본편 첫 조각(JLPT 단어 수직선)의 셸.
+ *  · 손수 만든 스택 네비(useRouter)로 화면 전환. 하단 5탭 바 없음(이 조각).
+ *  · 라우트: home → courses → jlptHub → wordSession(level) / home → my → settings.
+ *  · 폰 프레임(320px) 안에 현재 화면. 바깥 topbar 는 개발용(라이트/다크 확인).
+ *  · 읽기 도움 설정(settings)은 App 이 보유(localStorage) → 세션·설정 화면에 주입.
  */
 export default function App() {
-  const [cards, setCards] = useState(null);
-  const [err, setErr] = useState('');
   const [mode, setMode] = useState('light');
+  const nav = useRouter('home');
+  const [settings, setSettings] = useState(() => {
+    // MY›설정 읽기 도움 기본값 — localStorage 유지. 없으면 「조금 안다」 기본(후리 ON·발음 OFF).
+    try {
+      const s = JSON.parse(localStorage.getItem('tomori.readAid'));
+      if (s && typeof s.furigana === 'boolean' && typeof s.pron === 'boolean') return s;
+    } catch { /* ignore */ }
+    return { furigana: true, pron: false };
+  });
   const t = getTheme(mode);
 
   useEffect(() => {
-    loadN5Cards(10)
-      .then((cs) => setCards(cs))
-      .catch((e) => setErr(String(e.message || e)));
-  }, []);
+    try { localStorage.setItem('tomori.readAid', JSON.stringify(settings)); } catch { /* ignore */ }
+  }, [settings]);
+
+  const { name, params } = nav.current;
 
   return (
     <View style={styles.stage}>
       <View style={styles.topbar}>
-        <Text style={styles.brand}>토모리 · 단어 카드 (FE 슬라이스)</Text>
+        <Text style={styles.brand}>토모리 · FE 본편 (JLPT 단어 수직선)</Text>
         <Pressable style={styles.modeBtn} onPress={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}>
-          <Text style={styles.modeBtnText}>{mode === 'dark' ? '☀ 라이트' : '🌙 다크'}</Text>
+          <Icon name={mode === 'dark' ? 'sun' : 'moon'} size={15} color="#FFF9EC" />
+          <Text style={styles.modeBtnText}>{mode === 'dark' ? '라이트' : '다크'}</Text>
         </Pressable>
       </View>
 
       <View style={[styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
         <ThemeProvider mode={mode}>
-          {err ? (
-            <Text style={[styles.msg, { color: '#B5533D' }]}>데이터 로드 실패: {err}</Text>
-          ) : !cards ? (
-            <View style={styles.center}><ActivityIndicator /><Text style={[styles.msg, { color: t.textMid }]}>N5 카드 불러오는 중…</Text></View>
-          ) : (
-            <WordCardScreen cards={cards} />
-          )}
+          {name === 'home' ? (
+            <HomeScreen nav={nav} />
+          ) : name === 'courses' ? (
+            <CourseListScreen nav={nav} />
+          ) : name === 'jlptHub' ? (
+            <JlptHubScreen nav={nav} />
+          ) : name === 'wordSession' ? (
+            <WordSession nav={nav} level={params.level || 'N5'} />
+          ) : name === 'grammarSession' ? (
+            <GrammarSession nav={nav} level={params.level || 'N5'} />
+          ) : name === 'readingSession' ? (
+            <QuizSession nav={nav} level={params.level || 'N5'} kind="reading" />
+          ) : name === 'listeningSession' ? (
+            <QuizSession nav={nav} level={params.level || 'N5'} kind="listening" />
+          ) : name === 'my' ? (
+            <MyScreen nav={nav} />
+          ) : name === 'settings' ? (
+            <SettingsScreen settings={settings} onChange={setSettings} onBack={() => nav.pop()} />
+          ) : name === 'about' ? (
+            <AboutScreen nav={nav} />
+          ) : null}
         </ThemeProvider>
       </View>
 
-      <Text style={styles.note}>실 Supabase N5 10장 · 후리가나/발음 토글은 카드 안에서</Text>
+      <Text style={styles.note}>실 Supabase · 스택 네비 · 현재: {name}{params.level ? ` · ${params.level}` : ''}</Text>
     </View>
   );
+}
+
+/**
+ * 단어 세션 로더 — 라우트 진입 시 해당 급수의 공개 단어를 실 Supabase에서 읽는다.
+ * 카드 세트는 급수가 곧 고정이라 key 불필요(진입마다 새 마운트).
+ */
+function WordSession({ nav, level }) {
+  const [cards, setCards] = useState(null);
+  const [err, setErr] = useState('');
+  const t = getTheme('light'); // 메시지 색만 — 실제 화면은 ThemeProvider 하위
+
+  useEffect(() => {
+    let alive = true;
+    setCards(null);
+    setErr('');
+    // 🖼️ 이미지 있는 단어를 세션 앞에 노출(전 급수). manifest.json(optimize 스크립트 생성) 기반.
+    //   급수의 이미지 단어가 없으면 그냥 첫 10개. 이미지가 쌓일수록 자연스럽게 앞에 뜬다.
+    (async () => {
+      try {
+        const prefix = `jlpt.${level.toLowerCase()}.vocab.`;
+        const imagedKeys = (await loadImageManifest()).filter((k) => k.startsWith(prefix));
+        let cards;
+        if (imagedKeys.length) {
+          const imaged = await loadCardsByKeys(imagedKeys);
+          const rest = await loadCards(level, 10);
+          const seen = new Set(imaged.map((c) => c.key));
+          cards = [...imaged, ...rest.filter((c) => !seen.has(c.key))];
+        } else {
+          cards = await loadCards(level, 10);
+        }
+        if (alive) setCards(cards);
+      } catch (e) {
+        if (alive) setErr(String(e.message || e));
+      }
+    })();
+    return () => { alive = false; };
+  }, [level]);
+
+  if (err) return <View style={styles.center}><Text style={[styles.msg, { color: '#B5533D' }]}>데이터 로드 실패: {err}</Text></View>;
+  if (!cards) return <View style={styles.center}><ActivityIndicator /><Text style={[styles.msg, { color: t.textMid }]}>{level} 카드 불러오는 중…</Text></View>;
+  return <WordCardScreen nav={nav} level={level} cards={cards} />;
+}
+
+/** 문법 세션 로더 — 라우트 진입 시 해당 급수의 공개 문법을 실 Supabase에서 읽는다. */
+function GrammarSession({ nav, level }) {
+  const [cards, setCards] = useState(null);
+  const [err, setErr] = useState('');
+  const t = getTheme('light');
+
+  useEffect(() => {
+    let alive = true;
+    setCards(null);
+    setErr('');
+    loadGrammar(level, 12)
+      .then((cs) => { if (alive) setCards(cs); })
+      .catch((e) => { if (alive) setErr(String(e.message || e)); });
+    return () => { alive = false; };
+  }, [level]);
+
+  if (err) return <View style={styles.center}><Text style={[styles.msg, { color: '#B5533D' }]}>데이터 로드 실패: {err}</Text></View>;
+  if (!cards) return <View style={styles.center}><ActivityIndicator /><Text style={[styles.msg, { color: t.textMid }]}>{level} 문법 불러오는 중…</Text></View>;
+  return <GrammarCardScreen nav={nav} level={level} cards={cards} />;
+}
+
+/** 독해·청해 세션 로더 — 실 Supabase에서 공개 지문/대본+문항을 읽는다(kind로 분기). */
+function QuizSession({ nav, level, kind }) {
+  const [cards, setCards] = useState(null);
+  const [err, setErr] = useState('');
+  const t = getTheme('light');
+  const label = kind === 'reading' ? '독해' : '청해';
+
+  useEffect(() => {
+    let alive = true;
+    setCards(null);
+    setErr('');
+    const load = kind === 'reading' ? loadReading : loadListening;
+    load(level, 12)
+      .then((cs) => { if (alive) setCards(cs); })
+      .catch((e) => { if (alive) setErr(String(e.message || e)); });
+    return () => { alive = false; };
+  }, [level, kind]);
+
+  if (err) return <View style={styles.center}><Text style={[styles.msg, { color: '#B5533D' }]}>데이터 로드 실패: {err}</Text></View>;
+  if (!cards) return <View style={styles.center}><ActivityIndicator /><Text style={[styles.msg, { color: t.textMid }]}>{level} {label} 불러오는 중…</Text></View>;
+  return <QuizScreen nav={nav} level={level} kind={kind} cards={cards} />;
 }
 
 const styles = StyleSheet.create({
@@ -57,8 +175,8 @@ const styles = StyleSheet.create({
   topbar: {
     width: 320, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
   },
-  brand: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', color: '#5D554C' },
-  modeBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, backgroundColor: '#1A1613' },
+  brand: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', color: '#5D554C', flex: 1 },
+  modeBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, backgroundColor: '#1A1613' },
   modeBtnText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', color: '#FFF9EC' },
   phone: {
     width: 320, height: 640, borderRadius: 26, borderWidth: 1, overflow: 'hidden',

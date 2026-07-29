@@ -1,0 +1,49 @@
+﻿content_key,level_code,pattern,pattern_ruby,romaji_ko,connection,meaning_ko,usage_note,example_ja,example_ko,example_ruby,politeness,source,verify,note
+jlpt.n5.grammar.0001,N5,です,です,-,명사/な형용사 + です,~입니다 (정중한 단정),보통형은 だ. 과거는 でした.,わたしは学生です。,저는 학생입니다.,わたしは{学生|がく|せい}です。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0002,N5,は,は,-,명사 + は,~은/는 (주제 표시),조사 は는 「와」로 읽는다.,わたしは日本人です。,저는 일본인입니다.,わたしは{日本人|に|ほん|じん}です。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0003,N5,を,を,-,명사 + を,~을/를 (목적어),조사 を는 「오」로 읽는다.,水を飲みます。,물을 마십니다.,{水|みず}を{飲|の}みます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0004,N5,～てください,～てください,-,동사 て형 + ください,~해 주세요 (의뢰),정중한 부탁. 부정은 ～ないでください.,ここに名前を書いてください。,여기에 이름을 써 주세요.,ここに{名前|な|まえ}を{書|か}いてください。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0005,N5,～たいです,～たいです,-,동사 ます형 어간 + たいです,~하고 싶습니다 (희망),1인칭 희망. 대상은 が 또는 を.,日本へ行きたいです。,일본에 가고 싶습니다.,{日本|に|ほん}へ{行|い}きたいです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0006,N5,～があります,～があります,-,명사 + があります,~이 있습니다 (무생물 존재),생물은 います. 부정은 ありません.,つくえの上に本があります。,책상 위에 책이 있습니다.,つくえの{上|うえ}に{本|ほん}があります。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0007,N5,～ています,～ています,-,동사 て형 + います,~하고 있습니다 (진행·상태),진행 또는 결과 상태를 나타낸다.,今雨が降っています。,지금 비가 내리고 있습니다.,{今|いま}{雨|あめ}が{降|ふ}っています。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0008,N5,～ませんか,～ませんか,-,동사 ます형 어간 + ませんか,~하지 않겠습니까? (권유),정중한 권유. 승낙은 ええ ～ましょう.,一緒に昼ご飯を食べませんか。,같이 점심을 먹지 않겠습니까?,{一緒|いっ|しょ}に{昼|ひる}ご{飯|はん}を{食|た}べませんか。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0009,N5,～てから,～てから,-,동사 て형 + から,~하고 나서 (동작 순서),앞 동작을 마친 뒤 뒤 동작을 한다.,手を洗ってからご飯を食べます。,손을 씻고 나서 밥을 먹습니다.,{手|て}を{洗|あら}ってからご{飯|はん}を{食|た}べます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0010,N5,～のほうが～より,～のほうが～より,-,명사 + のほうが + 명사 + より,~쪽이 ~보다 (비교),더 ~한 쪽에 のほうが를 붙인다.,電車のほうがバスより速いです。,전철 쪽이 버스보다 빠릅니다.,{電車|でん|しゃ}のほうがバスより{速|はや}いです。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0011,N5,じゃない／ではない,じゃない／ではない,-,명사 + じゃない／ではない,~이 아니다 (계사 부정),ではない는 문어·정중; じゃない는 회화체.,これは水じゃない。,이것은 물이 아니다.,これは{水|みず}じゃない。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0012,N5,が,が,-,명사 + が,~이/가 (주어); ~지만 (역접),주격을 나타내는 조사; 문장 끝 が는 역접.,犬がいます。,개가 있습니다.,{犬|いぬ}がいます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0013,N5,に,に,-,명사 + に,~에 (시간; 귀착점; 존재 장소),시간·도착점·존재 장소를 나타낸다.,七時に起きます。,7시에 일어납니다.,{七時|しち|じ}に{起|お}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0014,N5,へ,へ,-,명사 + へ,~으로 (방향),방향 조사; へ는 「에」로 읽는다.,学校へ行きます。,학교에 갑니다.,{学校|がっ|こう}へ{行|い}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0015,N5,で,で,-,명사 + で,~에서 (동작 장소); ~으로 (수단),동작 장소·수단·도구를 나타낸다.,家で本を読みます。,집에서 책을 읽습니다.,{家|いえ}で{本|ほん}を{読|よ}みます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0016,N5,と,と,-,명사 + と,~와 (함께); ~라고 (인용),병렬·동반·인용을 나타낸다.,友達と話します。,친구와 이야기합니다.,{友達|とも|だち}と{話|はな}します。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0017,N5,も,も,-,명사 + も,~도,첨가·동류를 나타낸다.,私も行きます。,저도 갑니다.,{私|わたし}も{行|い}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0018,N5,や,や,-,명사 + や + 명사,~(이)나 (비배타 열거),대표 예를 열거한다; など와 자주 쓴다.,本やペンを買います。,책이나 펜을 삽니다.,{本|ほん}やペンを{買|か}います。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0019,N5,か,か,-,문장 + か,~까? (의문); ~인지 (선택),문장 끝 か는 의문; か～か는 선택.,これは何ですか。,이것은 무엇입니까?,これは{何|なん}ですか。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0020,N5,の,の,-,명사 + の + 명사,~의 (소유); 명사화,소유·수식을 나타내며 명사화에도 쓴다.,私の本です。,제 책입니다.,{私|わたし}の{本|ほん}です。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0021,N5,から,から,-,명사 + から; 문장 + から,~부터 (기점); ~니까 (이유),시간·장소의 기점; 이유를 나타낸다.,九時から始まります。,9시부터 시작합니다.,{九時|く|じ}から{始|はじ}まります。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0022,N5,まで,まで,-,명사 + まで,~까지,시간·장소의 도달점·한계.,五時まで働きます。,5시까지 일합니다.,{五時|ご|じ}まで{働|はたら}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0023,N5,だけ,だけ,-,명사 + だけ,~만; ~뿐,한정을 나타낸다.,水だけ飲みます。,물만 마십니다.,{水|みず}だけ{飲|の}みます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0024,N5,ね／よ,ね／よ,-,문장 + ね／よ,~네요; ~요 (종조사),ね는 공감·확인; よ는 정보 전달·강조.,いい天気ですね。,좋은 날씨네요.,いい{天気|てん|き}ですね。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0025,N5,～てもいいです,～てもいいです,-,동사 て형 + もいいです,~해도 됩니다 (허가),허가를 구하거나 준다.,ここに座ってもいいですか。,여기에 앉아도 됩니까?,ここに{座|すわ}ってもいいですか。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0026,N5,～てはいけません,～てはいけません,-,동사 て형 + はいけません,~하면 안 됩니다 (금지),금지를 나타낸다; 회화는 ～ちゃいけない.,ここで写真を撮ってはいけません。,여기서 사진을 찍으면 안 됩니다.,ここで{写真|しゃ|しん}を{撮|と}ってはいけません。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0027,N5,～ないでください,～ないでください,-,동사 ない형 + でください,~하지 마세요 (부정 의뢰),～てください의 부정 표현.,ここに入らないでください。,여기에 들어가지 마세요.,ここに{入|はい}らないでください。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0028,N5,～ないで,～ないで,-,동사 ない형 + で,~하지 않고 (부대상황),어떤 동작을 하지 않은 상태를 나타낸다.,朝ご飯を食べないで学校へ行きました。,아침을 먹지 않고 학교에 갔습니다.,{朝|あさ}ご{飯|はん}を{食|た}べないで{学校|がっ|こう}へ{行|い}きました。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0029,N5,～たことがある,～たことがある,-,동사 た형 + ことがある,~한 적이 있다 (경험),과거 경험; 정중형은 ～たことがあります.,日本へ行ったことがあります。,일본에 간 적이 있습니다.,{日本|に|ほん}へ{行|い}ったことがあります。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0030,N5,～たり～たりする,～たり～たりする,-,동사 た형에서 た→たり,~하거나 ~하거나 하다 (열거),여러 동작을 예로 들어 나열한다.,休みの日は本を読んだり寝たりします。,쉬는 날은 책을 읽거나 자거나 합니다.,{休|やす}みの{日|ひ}は{本|ほん}を{読|よ}んだり{寝|ね}たりします。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0031,N5,～まえに,～まえに,-,동사 사전형 + まえに; 명사 + の + まえに,~하기 전에,동작·시간의 앞을 나타낸다.,寝る前に歯を磨きます。,자기 전에 이를 닦습니다.,{寝|ね}る{前|まえ}に{歯|は}を{磨|みが}きます。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0032,N5,～がほしい,～がほしい,-,명사 + が + ほしい,~을 원하다 (희망),1인칭 희망. 대상은 が.,新しいかばんがほしいです。,새 가방을 원합니다.,{新|あたら}しいかばんがほしいです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0033,N5,～つもりです,～つもりです,-,동사 사전형 + つもりです,~할 생각이다 (의도),계획·의도를 나타낸다.,来週日本へ行くつもりです。,다음 주에 일본에 갈 생각입니다.,{来週|らい|しゅう}{日本|に|ほん}へ{行|い}くつもりです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0034,N5,～のがすきです,～のがすきです,-,동사 사전형 + のが + すきです,~하는 것을 좋아하다,じょうず(잘함)·へた(못함)도 같은 꼴.,私は歌を歌うのが好きです。,저는 노래를 부르는 것을 좋아합니다.,{私|わたし}は{歌|うた}を{歌|うた}うのが{好|す}きです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0035,N5,～ましょう,～ましょう,-,동사 ます형 어간 + ましょう,~합시다 (권유),함께 하자고 권유한다.,一緒に昼ご飯を食べましょう。,같이 점심을 먹읍시다.,{一緒|いっ|しょ}に{昼|ひる}ご{飯|はん}を{食|た}べましょう。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0036,N5,～ましょうか,～ましょうか,-,동사 ます형 어간 + ましょうか,~할까요? (제안),상대를 위한 제안·도움 제의.,窓を開けましょうか。,창문을 열까요?,{窓|まど}を{開|あ}けましょうか。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0037,N5,～のなかで～がいちばん～,～のなかで～がいちばん～,-,명사 + のなかで + 명사 + が + いちばん + 형용사,~중에서 ~이 가장 ~ (최상급),범위 안의 최상급을 나타낸다.,くだものの中でりんごが一番好きです。,과일 중에서 사과가 가장 좋습니다.,くだものの{中|なか}でりんごが{一番|いち|ばん}{好|す}きです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0038,N5,～ほうがいい,～ほうがいい,-,동사 た형 + ほうがいい,~하는 편이 좋다 (충고),조언·충고. 부정은 ないほうがいい.,早く寝たほうがいいです。,일찍 자는 편이 좋습니다.,{早|はや}く{寝|ね}たほうがいいです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0039,N5,～ので,～ので,-,보통형 + ので; 명사·な형용사는 な + ので,~라서 (이유),から보다 부드럽고 정중한 이유.,頭が痛いので休みます。,머리가 아파서 쉽니다.,{頭|あたま}が{痛|いた}いので{休|やす}みます。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0040,N5,～んです,～んです,-,보통형 + んです; 명사·な형용사는 な + んです,~인 것입니다 (설명),이유·사정을 설명하거나 강조한다.,おなかが痛いんです。,배가 아픈 거예요.,おなかが{痛|いた}いんです。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0041,N5,～でしょう,～でしょう,-,보통형 + でしょう; 명사·な형용사는 어간 + でしょう,~겠지요 (추측),말하는 이의 추측. 끝을 올리면 확인.,田中さんも来るでしょう。,다나카 씨도 오겠지요.,{田中|た|なか}さんも{来|く}るでしょう。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0042,N5,～くなる／～になる,～くなる／～になる,-,い형용사 어간 + くなる; な형용사·명사 + になる,~게 되다 / ~이 되다 (변화),상태의 변화를 나타낸다.,春になって暖かくなりました。,봄이 되어 따뜻해졌습니다.,{春|はる}になって{暖|あたた}かくなりました。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0043,N5,～すぎる,～すぎる,-,동사 ます형 어간·형용사 어간 + すぎる,너무 ~하다 (지나침),정도가 지나침. 부정적 뉘앙스.,このコーヒーは熱すぎます。,이 커피는 너무 뜨겁습니다.,このコーヒーは{熱|あつ}すぎます。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0044,N5,～なければなりません,～なければなりません,-,동사 ない형 어간 + なければなりません,~해야 합니다 (의무),의무·필요. 회화체는 なきゃ.,毎日薬を飲まなければなりません。,매일 약을 먹어야 합니다.,{毎日|まい|にち}{薬|くすり}を{飲|の}まなければなりません。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0045,N5,～がいます,～がいます,-,명사(생물) + が + います,~이 있다 (생물의 존재),사람·동물 등 생물. 무생물은 あります.,公園に犬がいます。,공원에 개가 있습니다.,{公園|こう|えん}に{犬|いぬ}がいます。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0046,N5,～にいく,～にいく,-,동사 ます형 어간 + に + いく,~하러 가다 (목적),이동의 목적. くる·かえる도 가능.,デパートへ買い物に行きます。,백화점에 쇼핑하러 갑니다.,デパートへ{買|か}い{物|もの}に{行|い}きます。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0047,N5,まだ～ていません,まだ～ていません,-,まだ + 동사 て형 + いません,아직 ~하지 않았다,미완료. 아직 안 한 상태.,まだ昼ご飯を食べていません。,아직 점심을 먹지 않았습니다.,まだ{昼|ひる}ご{飯|はん}を{食|た}べていません。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0048,N5,どうやって,どうやって,-,どうやって + 동사,어떻게 (수단·방법),수단·방법을 묻는다.,駅までどうやって行きますか。,역까지 어떻게 갑니까?,{駅|えき}までどうやって{行|い}きますか。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문

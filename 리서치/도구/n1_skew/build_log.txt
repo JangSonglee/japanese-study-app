@@ -1,0 +1,104 @@
+[literature] 수집...
+  [aozora] aozora_rashomon: 6,346 chars
+  [aozora] aozora_kokoro: 164,687 chars
+  [aozora] aozora_sangetsuki: 6,261 chars
+  [aozora] aozora_ningen: 75,198 chars
+  [aozora] aozora_ginga: 40,035 chars
+  [aozora] aozora_bocchan: 90,078 chars
+  [aozora] aozora_gongitsune: 5,495 chars
+  [aozora] aozora_kusamakura: 87,254 chars
+  → content tokens 95,852 / unique 10,923 / docs 8
+[opinion] 수집...
+  [kokkai] kokkai_2023-01-23_2023-01-27: 457,708 chars
+  [kokkai] kokkai_2023-03-01_2023-03-03: 409,613 chars
+  [kokkai] kokkai_2022-10-03_2022-10-06: 202,150 chars
+  [kokkai] kokkai_2022-05-16_2022-05-18: 1,009,948 chars
+  [kokkai] kokkai_2022-02-14_2022-02-16: 1,914,845 chars
+  [kokkai] kokkai_2021-06-14_2021-06-16: 184,526 chars
+  [kokkai] kokkai_2021-03-08_2021-03-10: 818,670 chars
+  [kokkai] kokkai_2021-01-25_2021-01-27: 672,262 chars
+  [kokkai] kokkai_2020-01-20_2020-01-23: 227,937 chars
+  [kokkai] kokkai_2020-11-16_2020-11-18: 1,350,646 chars
+  [kokkai] kokkai_2019-11-05_2019-11-08: 876,383 chars
+  [kokkai] kokkai_2019-03-04_2019-03-06: 607,478 chars
+  [kokkai] kokkai_2018-02-05_2018-02-07: 617,230 chars
+  [kokkai] kokkai_2018-11-19_2018-11-21: 988,745 chars
+  [kokkai] kokkai_2017-05-08_2017-05-10: 1,030,143 chars
+  [kokkai] kokkai_2017-01-30_2017-02-01: 443,342 chars
+  [kokkai] kokkai_2016-10-11_2016-10-13: 435,677 chars
+  [kokkai] kokkai_2016-03-07_2016-03-09: 965,504 chars
+  [kokkai] kokkai_2015-06-01_2015-06-03: 1,071,336 chars
+  [kokkai] kokkai_2015-02-16_2015-02-18: 230,264 chars
+  [kokkai] kokkai_2014-10-06_2014-10-08: 394,045 chars
+  [kokkai] kokkai_2013-11-11_2013-11-13: 1,237,276 chars
+  [kokkai] kokkai_2012-03-05_2012-03-07: 2,258,550 chars
+  [kokkai] kokkai_2011-02-14_2011-02-16: 630,116 chars
+  → content tokens 3,998,696 / unique 26,230 / docs 24
+[law] 수집...
+  [law] law_minpo: 300,000 chars
+  [law] law_kaishaho: 300,000 chars
+  [law] law_keiho: 167,621 chars
+  [law] law_roudou: 300,000 chars
+  [law] law_gyousei: 122,211 chars
+  [law] law_minso: 300,000 chars
+  [law] law_keiso: 300,000 chars
+  [law] law_dokkin: 300,000 chars
+  [law] law_tokkyo: 300,000 chars
+  [law] law_shotoku: 300,000 chars
+  [law] law_chihou: 300,000 chars
+  [law] law_koumuin: 276,851 chars
+  [law] law_shohisha: 100,445 chars
+  [law] law_roudoukumi: 97,611 chars
+  → content tokens 333,479 / unique 4,195 / docs 14
+[academic] 수집...
+  [wiki] 123 articles, 1,392,479 chars
+  → content tokens 291,445 / unique 20,553 / docs 123
+[admin] 수집...
+  [hakusho] 58 pages, 715,370 chars
+  → content tokens 171,994 / unique 5,662 / docs 59
+
+=== manifest ===
+{
+  "literature": {
+    "content_tokens": 95852,
+    "unique_lemmas": 10923,
+    "chars": 475361,
+    "n_docs": 8
+  },
+  "opinion": {
+    "content_tokens": 3998696,
+    "unique_lemmas": 26230,
+    "chars": 19034417,
+    "n_docs": 24
+  },
+  "law": {
+    "content_tokens": 333479,
+    "unique_lemmas": 4195,
+    "chars": 3464752,
+    "n_docs": 14
+  },
+  "academic": {
+    "content_tokens": 291445,
+    "unique_lemmas": 20553,
+    "chars": 1392601,
+    "n_docs": 123
+  },
+  "admin": {
+    "content_tokens": 171994,
+    "unique_lemmas": 5662,
+    "chars": 715427,
+    "n_docs": 59
+  },
+  "_meta": {
+    "built": "2026-07-27 17:11:09",
+    "tokenizer": "fugashi + unidic-lite",
+    "note": "PILOT_방법검증_최종아님. 빈도표는 사실 집계이며 원문 재배포 아님.",
+    "sources": {
+      "literature": "青空文庫 PD",
+      "opinion": "国会会議録 NDL API (정부표준이용규약)",
+      "law": "e-Gov 法令 API (著13조 비저작물)",
+      "academic": "Wikipedia日本語 CC BY-SA (빈도만)",
+      "admin": "白書 経済財政/情報通信 (정부표준이용규약, CC BY 호환)"
+    }
+  }
+}

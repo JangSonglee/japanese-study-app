@@ -1,223 +1,171 @@
 {
   "offsets_median": {
     "literature": 0.915,
-    "opinion": 0.482,
+    "opinion": -0.039,
     "law": 0.711,
-    "academic": 0.708
+    "academic": 0.617,
+    "admin": 0.749
   },
   "mad": {
     "literature": 0.585,
-    "opinion": 0.526,
+    "opinion": 0.642,
     "law": 0.648,
-    "academic": 0.521
+    "academic": 0.589,
+    "admin": 0.569
   },
   "n_docs": {
     "literature": 8,
-    "opinion": 5,
+    "opinion": 24,
     "law": 14,
-    "academic": 50
+    "academic": 123,
+    "admin": 59
   },
   "candidates_total": 2887,
   "dup_removed": 230,
-  "ranked": 1514,
-  "no_corpus": 790,
-  "filtered": 583,
-  "quota_cap": 100,
-  "genre_dist_top": {
-    "문학": 71,
-    "논설·행정": 100,
-    "법률": 32,
-    "학술": 47
+  "ranked": 2013,
+  "no_corpus": 575,
+  "filtered": 299,
+  "lit_penalty": 0.8,
+  "genre_dist_top400": {
+    "논설·행정": 246,
+    "학술": 49,
+    "행정백서": 44,
+    "문학": 27,
+    "법률": 34
   },
-  "top40": [
-    {
-      "word": "拵える",
-      "reading": "こしらえる",
-      "z": 4.28,
-      "genre": "literature",
-      "zipf": 1.07
-    },
-    {
-      "word": "仮令",
-      "reading": "たとい",
-      "z": 4.185,
-      "genre": "literature",
-      "zipf": 1.18
-    },
-    {
-      "word": "結び付く",
-      "reading": "むすびつく",
-      "z": 4.115,
-      "genre": "academic",
-      "zipf": 2.35
-    },
-    {
-      "word": "取り組む",
-      "reading": "とりくむ",
-      "z": 4.02,
-      "genre": "opinion",
-      "zipf": 3.73
-    },
+  "genre_dist_all": {
+    "논설·행정": 1294,
+    "학술": 307,
+    "행정백서": 91,
+    "문학": 223,
+    "법률": 98
+  },
+  "top50": [
     {
       "word": "即する",
       "reading": "そくする",
-      "z": 3.994,
+      "z": 4.253,
       "genre": "opinion",
       "zipf": 1.12
     },
     {
+      "word": "結び付く",
+      "reading": "むすびつく",
+      "z": 3.957,
+      "genre": "academic",
+      "zipf": 2.35
+    },
+    {
       "word": "報ずる",
       "reading": "ほうずる",
-      "z": 3.941,
+      "z": 3.915,
       "genre": "opinion",
       "zipf": 1.6
     },
     {
-      "word": "煙る",
-      "reading": "けむる",
-      "z": 3.9,
-      "genre": "literature",
-      "zipf": 1.77
+      "word": "就業",
+      "reading": "しゅうぎょう",
+      "z": 3.905,
+      "genre": "admin",
+      "zipf": 3.54
     },
     {
-      "word": "差し支える",
-      "reading": "さしつかえる",
-      "z": 3.813,
-      "genre": "literature",
-      "zipf": 2.08
+      "word": "取り組む",
+      "reading": "とりくむ",
+      "z": 3.834,
+      "genre": "opinion",
+      "zipf": 3.73
+    },
+    {
+      "word": "仮令",
+      "reading": "たとい",
+      "z": 3.728,
+      "genre": "academic",
+      "zipf": 1.18
     },
     {
       "word": "質疑",
       "reading": "しつぎ",
-      "z": 3.723,
+      "z": 3.7,
       "genre": "opinion",
       "zipf": 3.56
     },
     {
-      "word": "諮る",
-      "reading": "はかる",
-      "z": 3.692,
-      "genre": "opinion",
-      "zipf": 1.95
-    },
-    {
       "word": "申し入れる",
       "reading": "もうしいれる",
-      "z": 3.685,
+      "z": 3.556,
       "genre": "opinion",
       "zipf": 1.95
     },
     {
-      "word": "庶務",
-      "reading": "しょむ",
-      "z": 3.667,
-      "genre": "opinion",
-      "zipf": 2.4
-    },
-    {
-      "word": "顧みる",
-      "reading": "かえりみる",
-      "z": 3.523,
+      "word": "拵える",
+      "reading": "こしらえる",
+      "z": 3.48,
       "genre": "literature",
-      "zipf": 2.19
-    },
-    {
-      "word": "返る",
-      "reading": "かえる",
-      "z": 3.519,
-      "genre": "literature",
-      "zipf": 2.79
-    },
-    {
-      "word": "一向",
-      "reading": "いっこう",
-      "z": 3.463,
-      "genre": "literature",
-      "zipf": 2.51
-    },
-    {
-      "word": "捕らえる",
-      "reading": "とらえる",
-      "z": 3.455,
-      "genre": "academic",
-      "zipf": 3.11
-    },
-    {
-      "word": "取り引き",
-      "reading": "とりひき",
-      "z": 3.449,
-      "genre": "opinion",
-      "zipf": 3.45
-    },
-    {
-      "word": "自ずから",
-      "reading": "おのずから",
-      "z": 3.433,
-      "genre": "literature",
-      "zipf": 1.88
-    },
-    {
-      "word": "詰る",
-      "reading": "なじる",
-      "z": 3.427,
-      "genre": "literature",
-      "zipf": 1.74
-    },
-    {
-      "word": "異議",
-      "reading": "いぎ",
-      "z": 3.409,
-      "genre": "opinion",
-      "zipf": 3.7
-    },
-    {
-      "word": "冷やかす",
-      "reading": "ひやかす",
-      "z": 3.334,
-      "genre": "literature",
-      "zipf": 1.86
-    },
-    {
-      "word": "勤まる",
-      "reading": "つとまる",
-      "z": 3.334,
-      "genre": "literature",
-      "zipf": 1.82
-    },
-    {
-      "word": "結び付ける",
-      "reading": "むすびつける",
-      "z": 3.306,
-      "genre": "academic",
-      "zipf": 2.79
+      "zipf": 1.07
     },
     {
       "word": "財源",
       "reading": "ざいげん",
-      "z": 3.224,
+      "z": 3.353,
       "genre": "opinion",
       "zipf": 3.57
     },
     {
-      "word": "退ける",
-      "reading": "しりぞける",
-      "z": 3.211,
-      "genre": "academic",
-      "zipf": 2.46
+      "word": "動向",
+      "reading": "どうこう",
+      "z": 3.282,
+      "genre": "admin",
+      "zipf": 3.89
     },
     {
-      "word": "慎む",
-      "reading": "つつしむ",
-      "z": 3.193,
+      "word": "取り引き",
+      "reading": "とりひき",
+      "z": 3.278,
+      "genre": "law",
+      "zipf": 3.45
+    },
+    {
+      "word": "受け止める",
+      "reading": "うけとめる",
+      "z": 3.268,
       "genre": "opinion",
-      "zipf": 2.56
+      "zipf": 3.43
     },
     {
-      "word": "定まる",
-      "reading": "さだまる",
-      "z": 3.177,
-      "genre": "academic",
-      "zipf": 2.38
+      "word": "引き下げる",
+      "reading": "ひきさげる",
+      "z": 3.238,
+      "genre": "opinion",
+      "zipf": 2.82
+    },
+    {
+      "word": "捕らえる",
+      "reading": "とらえる",
+      "z": 3.22,
+      "genre": "opinion",
+      "zipf": 3.11
+    },
+    {
+      "word": "諮る",
+      "reading": "はかる",
+      "z": 3.197,
+      "genre": "opinion",
+      "zipf": 1.95
+    },
+    {
+      "word": "寄与",
+      "reading": "きよ",
+      "z": 3.184,
+      "genre": "admin",
+      "zipf": 3.78
+    },
+    {
+      "word": "賃金",
+      "reading": "ちんぎん",
+      "z": 3.173,
+      "genre": "admin",
+      "zipf": 4.1
     },
     {
       "word": "施行",
@@ -227,60 +175,39 @@
       "zipf": 3.96
     },
     {
-      "word": "受け止める",
-      "reading": "うけとめる",
-      "z": 3.157,
+      "word": "慣行",
+      "reading": "かんこう",
+      "z": 3.156,
+      "genre": "admin",
+      "zipf": 2.96
+    },
+    {
+      "word": "煙る",
+      "reading": "けむる",
+      "z": 3.1,
+      "genre": "literature",
+      "zipf": 1.77
+    },
+    {
+      "word": "差し引く",
+      "reading": "さしひく",
+      "z": 3.057,
+      "genre": "admin",
+      "zipf": 2.23
+    },
+    {
+      "word": "図る",
+      "reading": "はかる",
+      "z": 3.03,
       "genre": "opinion",
-      "zipf": 3.43
+      "zipf": 4.03
     },
     {
-      "word": "放り出す",
-      "reading": "ほうりだす",
-      "z": 3.084,
+      "word": "差し支える",
+      "reading": "さしつかえる",
+      "z": 3.013,
       "genre": "literature",
-      "zipf": 2.38
-    },
-    {
-      "word": "草臥れる",
-      "reading": "くたびれる",
-      "z": 3.084,
-      "genre": "literature",
-      "zipf": 0.0
-    },
-    {
-      "word": "結び付き",
-      "reading": "むすびつき",
-      "z": 3.075,
-      "genre": "academic",
-      "zipf": 2.53
-    },
-    {
-      "word": "帯びる",
-      "reading": "おびる",
-      "z": 3.027,
-      "genre": "literature",
-      "zipf": 2.51
-    },
-    {
-      "word": "見合わせる",
-      "reading": "みあわせる",
-      "z": 3.016,
-      "genre": "literature",
-      "zipf": 2.42
-    },
-    {
-      "word": "樹立",
-      "reading": "じゅりつ",
-      "z": 3.007,
-      "genre": "opinion",
-      "zipf": 3.18
-    },
-    {
-      "word": "関税",
-      "reading": "かんぜい",
-      "z": 3.005,
-      "genre": "opinion",
-      "zipf": 3.75
+      "zipf": 2.08
     },
     {
       "word": "議決",
@@ -297,6 +224,13 @@
       "zipf": 1.95
     },
     {
+      "word": "退ける",
+      "reading": "しりぞける",
+      "z": 2.987,
+      "genre": "academic",
+      "zipf": 2.46
+    },
+    {
       "word": "期日",
       "reading": "きじつ",
       "z": 2.978,
@@ -304,11 +238,158 @@
       "zipf": 3.6
     },
     {
-      "word": "禁ずる",
-      "reading": "きんずる",
-      "z": 2.943,
+      "word": "収支",
+      "reading": "しゅうし",
+      "z": 2.977,
+      "genre": "admin",
+      "zipf": 3.61
+    },
+    {
+      "word": "結び付ける",
+      "reading": "むすびつける",
+      "z": 2.972,
+      "genre": "academic",
+      "zipf": 2.79
+    },
+    {
+      "word": "定まる",
+      "reading": "さだまる",
+      "z": 2.957,
+      "genre": "academic",
+      "zipf": 2.38
+    },
+    {
+      "word": "合議",
+      "reading": "ごうぎ",
+      "z": 2.94,
+      "genre": "law",
+      "zipf": 2.8
+    },
+    {
+      "word": "雇用",
+      "reading": "こよう",
+      "z": 2.926,
+      "genre": "admin",
+      "zipf": 4.45
+    },
+    {
+      "word": "心掛ける",
+      "reading": "こころがける",
+      "z": 2.91,
       "genre": "opinion",
-      "zipf": 2.58
+      "zipf": 2.31
+    },
+    {
+      "word": "設ける",
+      "reading": "もうける",
+      "z": 2.875,
+      "genre": "opinion",
+      "zipf": 3.65
+    },
+    {
+      "word": "未だ",
+      "reading": "いまだ",
+      "z": 2.874,
+      "genre": "opinion",
+      "zipf": 4.04
+    },
+    {
+      "word": "均衡",
+      "reading": "きんこう",
+      "z": 2.869,
+      "genre": "academic",
+      "zipf": 3.52
+    },
+    {
+      "word": "幹線",
+      "reading": "かんせん",
+      "z": 2.867,
+      "genre": "opinion",
+      "zipf": 3.28
+    },
+    {
+      "word": "緩やか",
+      "reading": "ゆるやか",
+      "z": 2.865,
+      "genre": "admin",
+      "zipf": 3.64
+    },
+    {
+      "word": "押さえる",
+      "reading": "おさえる",
+      "z": 2.838,
+      "genre": "opinion",
+      "zipf": 3.23
+    },
+    {
+      "word": "財政",
+      "reading": "ざいせい",
+      "z": 2.835,
+      "genre": "opinion",
+      "zipf": 4.22
+    },
+    {
+      "word": "結び付き",
+      "reading": "むすびつき",
+      "z": 2.829,
+      "genre": "academic",
+      "zipf": 2.53
+    },
+    {
+      "word": "生かす",
+      "reading": "いかす",
+      "z": 2.824,
+      "genre": "opinion",
+      "zipf": 3.53
+    },
+    {
+      "word": "審議",
+      "reading": "しんぎ",
+      "z": 2.815,
+      "genre": "opinion",
+      "zipf": 4.18
+    },
+    {
+      "word": "取り締まり",
+      "reading": "とりしまり",
+      "z": 2.801,
+      "genre": "law",
+      "zipf": 3.35
+    },
+    {
+      "word": "原子",
+      "reading": "げんし",
+      "z": 2.792,
+      "genre": "opinion",
+      "zipf": 4.07
+    },
+    {
+      "word": "徐々",
+      "reading": "じょじょ",
+      "z": 2.785,
+      "genre": "admin",
+      "zipf": 3.31
+    },
+    {
+      "word": "任す",
+      "reading": "まかす",
+      "z": 2.782,
+      "genre": "opinion",
+      "zipf": 2.17
+    },
+    {
+      "word": "控除",
+      "reading": "こうじょ",
+      "z": 2.782,
+      "genre": "law",
+      "zipf": 3.53
+    },
+    {
+      "word": "内閣",
+      "reading": "ないかく",
+      "z": 2.777,
+      "genre": "opinion",
+      "zipf": 4.48
     }
   ]
 }

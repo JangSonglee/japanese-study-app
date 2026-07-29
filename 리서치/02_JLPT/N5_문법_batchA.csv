@@ -1,0 +1,19 @@
+jlpt.n5.grammar.0011,N5,じゃない／ではない,じゃない／ではない,-,명사 + じゃない／ではない,~이 아니다 (계사 부정),ではない는 문어·정중; じゃない는 회화체.,これは水じゃない。,이것은 물이 아니다.,これは{水|みず}じゃない。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0012,N5,が,が,-,명사 + が,~이/가 (주어); ~지만 (역접),주격을 나타내는 조사; 문장 끝 が는 역접.,犬がいます。,개가 있습니다.,{犬|いぬ}がいます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0013,N5,に,に,-,명사 + に,~에 (시간; 귀착점; 존재 장소),시간·도착점·존재 장소를 나타낸다.,七時に起きます。,7시에 일어납니다.,{七時|しち|じ}に{起|お}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0014,N5,へ,へ,-,명사 + へ,~으로 (방향),방향 조사; へ는 「에」로 읽는다.,学校へ行きます。,학교에 갑니다.,{学校|がっ|こう}へ{行|い}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0015,N5,で,で,-,명사 + で,~에서 (동작 장소); ~으로 (수단),동작 장소·수단·도구를 나타낸다.,家で本を読みます。,집에서 책을 읽습니다.,{家|いえ}で{本|ほん}を{読|よ}みます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0016,N5,と,と,-,명사 + と,~와 (함께); ~라고 (인용),병렬·동반·인용을 나타낸다.,友達と話します。,친구와 이야기합니다.,{友達|とも|だち}と{話|はな}します。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0017,N5,も,も,-,명사 + も,~도,첨가·동류를 나타낸다.,私も行きます。,저도 갑니다.,{私|わたし}も{行|い}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0018,N5,や,や,-,명사 + や + 명사,~(이)나 (비배타 열거),대표 예를 열거한다; など와 자주 쓴다.,本やペンを買います。,책이나 펜을 삽니다.,{本|ほん}やペンを{買|か}います。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0019,N5,か,か,-,문장 + か,~까? (의문); ~인지 (선택),문장 끝 か는 의문; か～か는 선택.,これは何ですか。,이것은 무엇입니까?,これは{何|なん}ですか。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0020,N5,の,の,-,명사 + の + 명사,~의 (소유); 명사화,소유·수식을 나타내며 명사화에도 쓴다.,私の本です。,제 책입니다.,{私|わたし}の{本|ほん}です。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0021,N5,から,から,-,명사 + から; 문장 + から,~부터 (기점); ~니까 (이유),시간·장소의 기점; 이유를 나타낸다.,九時から始まります。,9시부터 시작합니다.,{九時|く|じ}から{始|はじ}まります。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0022,N5,まで,まで,-,명사 + まで,~까지,시간·장소의 도달점·한계.,五時まで働きます。,5시까지 일합니다.,{五時|ご|じ}まで{働|はたら}きます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0023,N5,だけ,だけ,-,명사 + だけ,~만; ~뿐,한정을 나타낸다.,水だけ飲みます。,물만 마십니다.,{水|みず}だけ{飲|の}みます。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0024,N5,ね／よ,ね／よ,-,문장 + ね／よ,~네요; ~요 (종조사),ね는 공감·확인; よ는 정보 전달·강조.,いい天気ですね。,좋은 날씨네요.,いい{天気|てん|き}ですね。,-,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0025,N5,～てもいいです,～てもいいです,-,동사 て형 + もいいです,~해도 됩니다 (허가),허가를 구하거나 준다.,ここに座ってもいいですか。,여기에 앉아도 됩니까?,ここに{座|すわ}ってもいいですか。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0026,N5,～てはいけません,～てはいけません,-,동사 て형 + はいけません,~하면 안 됩니다 (금지),금지를 나타낸다; 회화는 ～ちゃいけない.,ここで写真を撮ってはいけません。,여기서 사진을 찍으면 안 됩니다.,ここで{写真|しゃ|しん}を{撮|と}ってはいけません。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0027,N5,～ないでください,～ないでください,-,동사 ない형 + でください,~하지 마세요 (부정 의뢰),～てください의 부정 표현.,ここに入らないでください。,여기에 들어가지 마세요.,ここに{入|はい}らないでください。,polite,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0028,N5,～ないで,～ないで,-,동사 ない형 + で,~하지 않고 (부대상황),어떤 동작을 하지 않은 상태를 나타낸다.,朝ご飯を食べないで学校へ行きました。,아침을 먹지 않고 학교에 갔습니다.,{朝|あさ}ご{飯|はん}を{食|た}べないで{学校|がっ|こう}へ{行|い}きました。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문
+jlpt.n5.grammar.0029,N5,～たことがある,～たことがある,-,동사 た형 + ことがある,~한 적이 있다 (경험),과거 경험; 정중형은 ～たことがあります.,日本へ行ったことがあります。,일본에 간 적이 있습니다.,{日本|に|ほん}へ{行|い}ったことがあります。,casual,ref_only:tanos_grammar+official_sample,draft,Tanos:N5 · 자작예문

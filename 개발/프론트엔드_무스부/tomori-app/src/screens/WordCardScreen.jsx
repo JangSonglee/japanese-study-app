@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native';
 import Ruby from '../components/Ruby';
+import Tomo from '../components/Tomo';
+import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius } from '../theme/tokens';
 
@@ -11,32 +13,37 @@ import { fonts, radius } from '../theme/tokens';
  *  · 앞면 = 일본어 표기만. 후리가나·발음 기본 OFF (스스로 부딪히는 면, PRD 8.4).
  *  · 후리가나 토글 / 발음 토글은 「개별」 (PRD 8.4 — 수명이 다르다). 하나로 묶지 않는다.
  *  · 후리가나 = 공간 항상 확보 + 표시만 전환 (점프 금지). 발음 = 공간 회수 (별도 줄).
- *  · 정답면 = 뜻 + 예문. 후리가나/발음 정답면 기본 ON.
- *  · Primary 버튼 = 잉크(action). 앰버는 안 씀(단어 카드엔 우표 없음).
+ *  · 🔴 후리가나·발음·뜻보기 완전 독립 (2026-07-28 3차 개정). 뜻 보기는 뜻·예문만 열고
+ *    후리가나·발음은 절대 건드리지 않는다. 후리가나·발음은 오직 각자 토글로만 켜지고,
+ *    새 카드마다 OFF에서 시작(챌린지). MY›설정 기본값 자동 적용은 폐기.
+ *  · Primary 버튼 = 앰버(brand, 대표님 결정 2026-07-29). 오답(모르겠어요) = 중립 채움(sunk), 점선 아님.
  *  · 카드 = 그림자(sh-1), 테두리 없음.
  */
-export default function WordCardScreen({ cards }) {
+export default function WordCardScreen({ nav, level = '', cards }) {
   const { t, mode } = useTheme();
   const [idx, setIdx] = useState(0);
   const [revealed, setRevealed] = useState(false);
-  const [furi, setFuri] = useState(false); // 후리가나 (앞면 기본 OFF)
-  const [pron, setPron] = useState(false); // 한글 발음 (앞면 기본 OFF)
+  const [furi, setFuri] = useState(false); // 후리가나 — 사용자 토글로만 켜짐
+  const [pron, setPron] = useState(false); // 한글 발음 — 사용자 토글로만 켜짐
   const [saved, setSaved] = useState(() => new Set());
   const [known, setKnown] = useState(0);
+  const [imgFailed, setImgFailed] = useState(false); // 이미지 없으면 플레이스홀더로 폴백
 
   const done = idx >= cards.length;
   const card = done ? null : cards[idx];
 
-  // 정답면으로 넘어가면 후리가나/발음 기본 ON (사양 8.4)
-  useEffect(() => {
-    if (revealed) { setFuri(true); setPron(true); }
-  }, [revealed]);
+  // 🔴 후리가나·한글발음·뜻보기는 완전 독립 (PRD 8.4, 2026-07-28 3차 개정 — 대표님 지시).
+  //  · 뜻 보기(정답면)는 뜻·예문만 연다. 후리가나·발음은 절대 건드리지 않는다.
+  //  · 후리가나·발음은 오직 각자 토글을 눌렀을 때만 켜진다(설정값 자동 적용 폐기).
+  //  · 앞면(부딪히는 면)뿐 아니라 정답면에서도 기본 OFF — 새 카드마다 OFF에서 시작(챌린지).
+  //    (이전 「정답면=MY›설정 기본값 따름」은 뜻 보기가 원치 않은 보조를 얹는다는 지적으로 폐기.)
 
   function next(gotKnown) {
     if (gotKnown) setKnown((k) => k + 1);
     setRevealed(false);
-    setFuri(false);   // 새 카드 앞면 = 기본 OFF
+    setFuri(false);   // 새 카드 = 항상 OFF (챌린지)
     setPron(false);
+    setImgFailed(false);
     setIdx((i) => i + 1);
   }
 
@@ -48,7 +55,7 @@ export default function WordCardScreen({ cards }) {
     });
   }
 
-  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} onRestart={() => { setIdx(0); setKnown(0); }} />;
+  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} onRestart={() => { setIdx(0); setKnown(0); }} onBack={() => nav && nav.pop()} />;
 
   const isSaved = saved.has(card.key);
   const S = makeStyles(t);
@@ -57,8 +64,10 @@ export default function WordCardScreen({ cards }) {
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
       {/* appbar */}
       <View style={[S.appbar, dark(mode) && { borderBottomColor: t.border, borderBottomWidth: 1 }]}>
-        <Text style={[S.back, { color: t.textHigh }]}>‹</Text>
-        <Text style={[S.appTitle, { color: t.textHigh }]}>레슨 · 혼합형</Text>
+        <Pressable onPress={() => nav && nav.pop()} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로">
+          <Icon name="back" size={22} color={t.textHigh} />
+        </Pressable>
+        <Text style={[S.appTitle, { color: t.textHigh }]}>{level ? `${level} · 단어` : '레슨 · 혼합형'}</Text>
         <View style={[S.kbd, { backgroundColor: t.sunk }]}>
           <Text style={[S.kbdText, { color: t.textMid }]}>{idx + 1}/{cards.length}</Text>
         </View>
@@ -74,7 +83,7 @@ export default function WordCardScreen({ cards }) {
               면을 채우면 다크에서 흰 글자 2.82:1로 미달 — 액센트 바+course-text는 두 테마 다 통과. */}
           <View style={[S.areaBar, { backgroundColor: t.courseJlpt }]} />
           <Text style={[S.areaLabel, { color: t.courseJlptText }]}>단어·어휘</Text>
-          <Text style={[S.areaHint, { color: t.textLow }]}>혼합형 · 영역 이동은 ‹ 뒤로</Text>
+          <Text style={[S.areaHint, { color: t.textMid }]}>혼합형 · 영역 이동은 뒤로 버튼</Text>
         </View>
 
         {/* 카드 — 그림자, 테두리 없음(라이트) / 다크는 테두리 */}
@@ -93,30 +102,43 @@ export default function WordCardScreen({ cards }) {
               accessibilityLabel={isSaved ? '저장 해제' : '단어 저장'}
               hitSlop={10}
             >
-              <Text style={[S.saveStar, { color: isSaved ? t.brandText : t.textLow, fontWeight: '700' }]}>
-                {isSaved ? '★' : '☆'}
-              </Text>
+              <Icon name="star" size={24} color={isSaved ? t.brand : t.textLow} filled={isSaved} />
             </Pressable>
           </View>
 
-          {/* 표제어 — 후리가나 렌더러. show=furi 로 점프 없이 전환 */}
+          {/* 표제어 — 좌상단 정렬(레퍼런스 플래시카드). 🔴 폰트 크기는 뜻보기 상태와 동일하게 고정
+              (size 30) — 뜻 보기 시 표제어 크기가 바뀌던 점프를 없앤다(대표님 지시). */}
           <View style={S.wordArea}>
             <Ruby
               base={card.front.base}
               ruby={card.front.ruby}
               show={furi}
-              size={revealed ? 30 : 38}
+              size={30}
               bold
               color={t.textHigh}
             />
-            {/* 한글 발음 — 공간 회수(display none 상당): pron 일 때만 렌더 */}
-            {pron ? (
-              <Text style={[S.romaji, { color: t.textMid }]}>{card.romajiKo}</Text>
-            ) : null}
+            {/* 한글 발음 — 공간 항상 확보 + opacity 전환(점프 금지, PRD 8.4 3차). */}
+            <Text style={[S.romaji, { color: t.textMid, opacity: pron ? 1 : 0 }]}>{card.romajiKo}</Text>
             {card.front.error ? (
-              <Text style={[S.errText, { color: t.error }]}>⚠ 루비 파싱 실패: {card.front.error}</Text>
+              <View style={S.errRow}>
+                <Icon name="warning" size={13} color={t.error} />
+                <Text style={[S.errText, { color: t.error }]}>루비 파싱 실패: {card.front.error}</Text>
+              </View>
             ) : null}
           </View>
+
+          {/* 중간 이미지 슬롯 — content_key 규칙(images/vocab/{content_key}.png, 점→밑줄)으로 자동 로드.
+              🔴 이미지 있으면 표시, 없으면 아무것도 안 보여준다(플레이스홀더 없음 — 대표님 결정 2026-07-29).
+              DB 스키마 변경 불필요(웹 슬라이스). */}
+          {!imgFailed ? (
+            <Image
+              source={{ uri: `images/vocab/${card.key.replace(/\./g, '_')}.png` }}
+              style={S.image}
+              resizeMode="contain"
+              onError={() => setImgFailed(true)}
+              accessibilityLabel={`${card.meaning} 일러스트`}
+            />
+          ) : null}
 
           {/* 정답면 내용 */}
           {revealed ? (
@@ -136,8 +158,8 @@ export default function WordCardScreen({ cards }) {
                     size={17}
                     color={t.textHigh}
                   />
-                  {pron && card.exampleKo ? (
-                    <Text style={[S.exKo, { color: t.textMid }]}>{card.exampleKo}</Text>
+                  {card.exampleKo ? (
+                    <Text style={[S.exKo, { color: t.textMid, opacity: pron ? 1 : 0 }]}>{card.exampleKo}</Text>
                   ) : null}
                 </>
               ) : null}
@@ -160,13 +182,13 @@ export default function WordCardScreen({ cards }) {
             <Text style={[S.btnSecText, { color: t.textHigh }]}>{revealed ? '뜻 끄기' : '뜻 보기'}</Text>
           </Pressable>
 
-          {/* 알고있음 / 모르겠어요 — Primary=action(잉크), 오답은 상태색 아님(ghost) */}
+          {/* 알고있음 / 모르겠어요 — Primary=앰버(brand, 대표님 결정 2026-07-29), 오답은 상태색 아님(ghost) */}
           <View style={S.cta}>
-            <Pressable style={[S.btnPri, { backgroundColor: t.action }]} onPress={() => next(true)}>
-              <Text style={[S.btnPriText, { color: t.onAction }]}>알고있음</Text>
+            <Pressable style={[S.btnPri, { backgroundColor: t.brand }]} onPress={() => next(true)}>
+              <Text style={[S.btnPriText, { color: t.onBrand }]}>알고있음</Text>
             </Pressable>
             <Pressable
-              style={[S.btnGhost, { borderColor: t.borderStrong }]}
+              style={[S.btnGhost, { backgroundColor: t.border }]}
               onPress={() => next(false)}
             >
               <Text style={[S.btnGhostText, { color: t.textMid }]}>모르겠어요</Text>
@@ -208,28 +230,27 @@ function ToggleBtn({ t, on, label, onPress }) {
  *  · CTA 2개 [다시 보기](sec) + [테스트 시작하기](pri). 다시 보기를 지우지 않는다(강제 진행 없음 PRD 1.3).
  *  · 「안다고 했는데 틀린 단어」 lift 카드는 2단계(테스트 후) 전용 — 이 슬라이스엔 테스트가 없어 미표시.
  */
-function DoneView({ t, mode, known, total, savedCount, onRestart }) {
+export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어' }) {
   return (
     <View style={[doneStyles.wrap, { backgroundColor: t.bgBase }]}>
-      {/* 토모 — 평소 밝기, 말 없음. (실제 아트는 아토 컴포넌트 대기 → 임시 스탠드인) */}
-      <View style={doneStyles.tomoStage}>
-        <View style={[doneStyles.tomoGlow, { backgroundColor: t.brand }]} />
-        <View style={[doneStyles.tomoBody, { backgroundColor: t.brand }]}>
-          <View style={[doneStyles.tomoFlame, { backgroundColor: t.onBrand }]} />
-        </View>
-        <Text style={[doneStyles.tomoNote, { color: t.textLow }]}>토모 — 임시 스탠드인 (평소 밝기)</Text>
-      </View>
+      {/* 뒤로 — 세션 요약에서 허브로 나가는 길 */}
+      <Pressable onPress={onBack} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로" style={doneStyles.backBtn}>
+        <Icon name="back" size={22} color={t.textHigh} />
+      </Pressable>
 
-      <Text style={[doneStyles.title, { color: t.textHigh }]}>단어 세션 결과</Text>
+      {/* 토모 — 평소 밝기, 말 없음(밝아짐은 「새 쪽지」 전용). 실제 아트는 아토 대기 → Tomo 한 곳만 교체 */}
+      <Tomo scale={1} note="토모 — 임시 스탠드인 (평소 밝기)" />
+
+      <Text style={[doneStyles.title, { color: t.textHigh }]}>{noun} 세션 결과</Text>
 
       <View style={doneStyles.stats}>
         <View style={[doneStyles.stat, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, dark(mode) && { borderWidth: 1, borderColor: t.border }]}>
           <Text style={[doneStyles.big, { color: t.textHigh }]}>{known}<Text style={[doneStyles.unit, { color: t.textMid }]}>개</Text></Text>
-          <Text style={[doneStyles.statLbl, { color: t.textMid }]}>아는 단어</Text>
+          <Text style={[doneStyles.statLbl, { color: t.textMid }]}>아는 {noun}</Text>
         </View>
         <View style={[doneStyles.stat, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, dark(mode) && { borderWidth: 1, borderColor: t.border }]}>
           <Text style={[doneStyles.big, { color: t.textHigh }]}>{total - known}<Text style={[doneStyles.unit, { color: t.textMid }]}>개</Text></Text>
-          <Text style={[doneStyles.statLbl, { color: t.textMid }]}>모르는 단어</Text>
+          <Text style={[doneStyles.statLbl, { color: t.textMid }]}>모르는 {noun}</Text>
         </View>
       </View>
 
@@ -242,11 +263,14 @@ function DoneView({ t, mode, known, total, savedCount, onRestart }) {
         <View style={[doneStyles.progTrack, { backgroundColor: t.sunk }]}>
           <View style={[doneStyles.progFill, { backgroundColor: t.courseJlpt, width: `${Math.round((known / total) * 100)}%` }]} />
         </View>
-        <Text style={[doneStyles.progNote, { color: t.textLow }]}>누적 수치(N / 급수 총량)는 백엔드 연결 후 표시</Text>
+        <Text style={[doneStyles.progNote, { color: t.textMid }]}>누적 수치(N / 급수 총량)는 백엔드 연결 후 표시</Text>
       </View>
 
       {savedCount > 0 ? (
-        <Text style={[doneStyles.savedNote, { color: t.brandText }]}>★ 저장한 단어 {savedCount}개 · 단어장에 담김</Text>
+        <View style={doneStyles.savedRow}>
+          <Icon name="star" size={14} color={t.brandText} filled />
+          <Text style={[doneStyles.savedNote, { color: t.brandText }]}>저장한 {noun} {savedCount}개 · 단어장에 담김</Text>
+        </View>
       ) : null}
 
       {/* CTA — [다시 보기] sec + [테스트 시작하기] pri (슬라이스엔 테스트 없어 둘 다 재시작으로 연결) */}
@@ -254,8 +278,8 @@ function DoneView({ t, mode, known, total, savedCount, onRestart }) {
         <Pressable style={[doneStyles.btnSec, { borderColor: t.textLow }]} onPress={onRestart}>
           <Text style={[doneStyles.btnSecText, { color: t.textHigh }]}>다시 보기</Text>
         </Pressable>
-        <Pressable style={[doneStyles.btnPri, { backgroundColor: t.action }]} onPress={onRestart}>
-          <Text style={[doneStyles.btnText, { color: t.onAction }]}>테스트 시작하기</Text>
+        <Pressable style={[doneStyles.btnPri, { backgroundColor: t.brand }]} onPress={onRestart}>
+          <Text style={[doneStyles.btnText, { color: t.onBrand }]}>테스트 시작하기</Text>
         </Pressable>
       </View>
     </View>
@@ -279,12 +303,8 @@ const tStyles = StyleSheet.create({
 const doneStyles = StyleSheet.create({
   wrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20, gap: 14 },
 
-  // 토모 임시 스탠드인 — 등불(글로우 + 몸통 + 불꽃)
-  tomoStage: { alignItems: 'center', justifyContent: 'center', height: 96, gap: 6 },
-  tomoGlow: { position: 'absolute', top: 6, width: 64, height: 64, borderRadius: 999, opacity: 0.28 },
-  tomoBody: { width: 34, height: 44, borderRadius: 17, alignItems: 'center', justifyContent: 'flex-start', paddingTop: 6 },
-  tomoFlame: { width: 10, height: 14, borderTopLeftRadius: 8, borderTopRightRadius: 8, borderBottomLeftRadius: 5, borderBottomRightRadius: 5 },
-  tomoNote: { fontFamily: fonts.ko, fontSize: 11 },
+  backBtn: { position: 'absolute', top: 12, left: 12 },
+  back: { fontSize: 26 },
 
   title: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700' },
   stats: { flexDirection: 'row', gap: 10 },
@@ -300,6 +320,7 @@ const doneStyles = StyleSheet.create({
   progFill: { height: 8, borderRadius: radius.full },
   progNote: { fontFamily: fonts.ko, fontSize: 11 },
 
+  savedRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   savedNote: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
 
   cta: { flexDirection: 'row', gap: 8, marginTop: 4 },
@@ -328,8 +349,10 @@ function makeStyles(t) {
     cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     lblLow: { fontFamily: fonts.ko, fontSize: 13 },
     saveStar: { fontFamily: fonts.ko, fontSize: 14 },
-    wordArea: { alignItems: 'center', justifyContent: 'center', paddingVertical: 28, gap: 10 },
+    wordArea: { alignItems: 'flex-start', justifyContent: 'center', paddingVertical: 4, gap: 6 },
     romaji: { fontFamily: fonts.ko, fontSize: 16 },
+    image: { width: '100%', height: 118, borderRadius: radius.md, marginBottom: 16 },
+    errRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     errText: { fontFamily: fonts.ko, fontSize: 12 },
     answer: { gap: 4 },
     divider: { height: 1, marginBottom: 6 },
@@ -344,7 +367,7 @@ function makeStyles(t) {
     btnPri: { flex: 1, height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
     btnPriText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
     btnGhost: {
-      flex: 1, height: 48, borderRadius: radius.sm, borderWidth: 1, borderStyle: 'dashed',
+      flex: 1, height: 48, borderRadius: radius.sm,
       alignItems: 'center', justifyContent: 'center',
     },
     btnGhostText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },

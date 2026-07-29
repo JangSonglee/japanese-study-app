@@ -1,0 +1,10 @@
+=== 전체_검수 헤더(23열) ===
+['content_key', 'level_code', 'headword', 'reading', 'ruby', 'romaji_ko', 'pos', 'conj_type', 'transitivity', 'meaning_ko', 'meaning_ko_alt', 'example_ja', 'example_ko', 'audio_file', 'source', 'verify', 'note', '검수판정', '권장급수', '신뢰도', '검수근거', '권장수정', '참고URL']
+
+급수/판정/비고 컬럼 인덱스: [1, 17, 18] → ['level_code', '검수판정', '권장급수']
+
+headword col=2(headword) reading col=3(reading)
+
+=== 권장급수 != N1 인 행 (전체_검수) ===
+
+비N1 총 0건

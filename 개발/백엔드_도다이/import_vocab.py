@@ -29,7 +29,7 @@ except Exception:
 
 # --- 경로 ---------------------------------------------------------------------
 HERE = os.path.dirname(os.path.abspath(__file__))
-PROJ = os.path.abspath(os.path.join(HERE, '..', '..'))          # Japanese-app/
+PROJ = os.path.abspath(os.path.join(HERE, '..', '..'))          # japanese-study-app/ (프로젝트 루트)
 TOOLS = os.path.join(PROJ, '리서치', '도구')
 DEFAULT_CSV = os.path.join(PROJ, '리서치', '02_JLPT', 'N5_단어_400.csv')
 

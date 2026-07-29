@@ -1,0 +1,56 @@
+미출현(no_corpus): 575  필터탈락: 299  순위대상: 2013
+문학페널티(LIT_PENALTY): 0.8
+top400 장르분포: {'논설·행정': 246, '학술': 49, '행정백서': 44, '문학': 27, '법률': 34}
+전체 장르분포: {'논설·행정': 1294, '학술': 307, '행정백서': 91, '문학': 223, '법률': 98}
+
+=== TOP 50 (편중도 z 내림차순) ===
+ 1 即する        z=+4.25 opinion zipf=1.12
+ 2 結び付く       z=+3.96 academic zipf=2.35
+ 3 報ずる        z=+3.92 opinion zipf=1.6
+ 4 就業         z=+3.90 admin  zipf=3.54
+ 5 取り組む       z=+3.83 opinion zipf=3.73
+ 6 仮令         z=+3.73 academic zipf=1.18
+ 7 質疑         z=+3.70 opinion zipf=3.56
+ 8 申し入れる      z=+3.56 opinion zipf=1.95
+ 9 拵える        z=+3.48 literature zipf=1.07
+10 財源         z=+3.35 opinion zipf=3.57
+11 動向         z=+3.28 admin  zipf=3.89
+12 取り引き       z=+3.28 law    zipf=3.45
+13 受け止める      z=+3.27 opinion zipf=3.43
+14 引き下げる      z=+3.24 opinion zipf=2.82
+15 捕らえる       z=+3.22 opinion zipf=3.11
+16 諮る         z=+3.20 opinion zipf=1.95
+17 寄与         z=+3.18 admin  zipf=3.78
+18 賃金         z=+3.17 admin  zipf=4.1
+19 施行         z=+3.17 law    zipf=3.96
+20 慣行         z=+3.16 admin  zipf=2.96
+21 煙る         z=+3.10 literature zipf=1.77
+22 差し引く       z=+3.06 admin  zipf=2.23
+23 図る         z=+3.03 opinion zipf=4.03
+24 差し支える      z=+3.01 literature zipf=2.08
+25 議決         z=+3.00 law    zipf=3.28
+26 取り調べる      z=+3.00 law    zipf=1.95
+27 退ける        z=+2.99 academic zipf=2.46
+28 期日         z=+2.98 law    zipf=3.6
+29 収支         z=+2.98 admin  zipf=3.61
+30 結び付ける      z=+2.97 academic zipf=2.79
+31 定まる        z=+2.96 academic zipf=2.38
+32 合議         z=+2.94 law    zipf=2.8
+33 雇用         z=+2.93 admin  zipf=4.45
+34 心掛ける       z=+2.91 opinion zipf=2.31
+35 設ける        z=+2.88 opinion zipf=3.65
+36 未だ         z=+2.87 opinion zipf=4.04
+37 均衡         z=+2.87 academic zipf=3.52
+38 幹線         z=+2.87 opinion zipf=3.28
+39 緩やか        z=+2.87 admin  zipf=3.64
+40 押さえる       z=+2.84 opinion zipf=3.23
+41 財政         z=+2.83 opinion zipf=4.22
+42 結び付き       z=+2.83 academic zipf=2.53
+43 生かす        z=+2.82 opinion zipf=3.53
+44 審議         z=+2.81 opinion zipf=4.18
+45 取り締まり      z=+2.80 law    zipf=3.35
+46 原子         z=+2.79 opinion zipf=4.07
+47 徐々         z=+2.79 admin  zipf=3.31
+48 任す         z=+2.78 opinion zipf=2.17
+49 控除         z=+2.78 law    zipf=3.53
+50 内閣         z=+2.78 opinion zipf=4.48

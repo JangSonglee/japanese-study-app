@@ -1,0 +1,17 @@
+﻿{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wireframe",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5500", "--directory", "C:/github/JangSonglee/japanese-study-app"],
+      "port": 5500
+    },
+    {
+      "name": "fe",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5599", "--directory", "C:/github/JangSonglee/japanese-study-app/개발/프론트엔드_무스부/tomori-app/dist"],
+      "port": 5599
+    }
+  ]
+}

@@ -41,8 +41,11 @@ export default function Ruby({
     <View style={[styles.row, style]} accessibilityLabel={base}>
       {segments.map((seg, i) => (
         <View key={i} style={styles.unit}>
-          {/* 루비 슬롯 — 항상 렌더(높이 고정). rt 가 있어도 show=false 면 opacity 0. */}
-          <View style={[styles.rubySlot, { height: rubySlotHeight }]}>
+          {/* 세로 공간 확보 스페이서 — 후리가나는 절대배치(오버행)라 본문을 아래로 밀 자리만 잡는다. */}
+          <View style={{ height: rubySlotHeight }} />
+          {/* 🔴 루비 슬롯 = 절대배치 + 좌우로 넓혀 「글자 위 가운데」에 얹되 본문 폭엔 영향 0.
+              읽기가 본문보다 넓어도(新=あたら) 옆 글자를 밀지 않아 「따로 노는」 여백이 사라진다. */}
+          <View style={[styles.rubySlot, { height: rubySlotHeight }]} pointerEvents="none">
             <Text
               // @ts-ignore RN Web 에서 lang 속성 통과
               lang="ja"
@@ -81,6 +84,15 @@ export default function Ruby({
   );
 }
 
+/**
+ * 루비(후리가나) 슬롯 높이 — 본문 위에 「항상」 확보되는 여백.
+ * Ruby 옆에 놓는 라벨(화자·선택지 번호)을 본문 첫 줄에 눈높이 맞출 때 paddingTop 으로 쓴다.
+ */
+export function rubyTopReserve(size = type.bodyJp.fontSize) {
+  const rubySize = Math.round(size * type.rubyRatio);
+  return Math.ceil(rubySize * 1.35);
+}
+
 /** 좌표 → 세그먼트 배열. 각 세그먼트 = {text, rt|null}. */
 export function buildSegments(base, ruby) {
   const chars = Array.from(base); // 🔴 코드포인트 단위
@@ -112,10 +124,16 @@ const styles = StyleSheet.create({
   unit: {
     alignItems: 'center',   // 본문 글자를 루비 아래 가운데 정렬
     justifyContent: 'flex-end',
+    position: 'relative',   // 절대배치 루비의 기준
   },
   rubySlot: {
+    position: 'absolute',   // 본문 폭에 영향 없이 위로 오버행
+    top: 0,
+    left: -100,             // 좌우로 크게 넓혀 읽기가 넘쳐도 잘리지·줄바꿈 되지 않게(가운데 정렬)
+    right: -100,
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'visible',
   },
   rubyText: {
     fontFamily: fonts.jp,
