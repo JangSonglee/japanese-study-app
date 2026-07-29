@@ -1,73 +1,159 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius } from '../theme/tokens';
 
 /**
- * 홈 (Hi-fi 8) — FE 본편 첫 조각.
+ * 홈 (기획 8) — 위젯 홈.
  *
- * 사양 근거 / 범위 결정(2026-07-28):
- *  · 스트릭·오늘의 학습·진도 위젯은 「그 사용자가 실제로 쓴 기록」이라 로그인 전엔 데이터가 없다
- *    → 가짜 위젯을 두지 않고 정직하게 생략. 로그인이 붙으면 이 자리에 채운다.
+ * 🔴 데이터 = 데모 목업(HOME_DEMO). 스트릭·진도·우표·조언은 학습기록(인증·DB), D-day·이어서학습은 로컬 저장 대상.
+ *    지금은 슬라이스/데모 단계라 완성형으로 보여준다(대표님 결정 2026-07-30, 기존 "정직한 생략" 원칙 이번 한정 유보).
+ *    인증(Google OAuth)·학습기록 DB가 붙으면 위젯별 TODO 지점을 실데이터로 교체.
  *  · 토모 = 평소 밝기·말 없음(밝아짐은 「새 쪽지」 전용, PRD 14.2.1).
- *  · CTA 「오늘의 학습 시작」 = Primary(잉크). 결제·압박 요소 없음(PRD 1.3/12).
- *  · 하단 5탭 바 없음(이 조각). MY 는 우상단 프로필로 진입.
  */
+const HOME_DEMO = {
+  user: '송이',
+  streak: { days: 7, week: [true, true, true, true, true, false, false] },
+  dday: { label: 'JLPT N3 시험', d: 42, date: '12월 3일' },
+  cont: { course: 'JLPT', level: 'N3', area: '독해', route: 'readingSession', done: 3, total: 12 },
+  progress: { level: 'N3', pct: 34 },
+  stamp: { have: 12, need: 20 },
+  advice: '어제는 동사 활용에서 좀 헤맸어요. 오늘 그 부분 다시 볼까요?',
+};
+
 export default function HomeScreen({ nav }) {
-  const { t } = useTheme();
+  const { t, mode } = useTheme();
   const S = makeStyles(t);
+  const isDark = mode === 'dark';
+  const cardBase = [S.card, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }];
+  const D = HOME_DEMO;
   return (
-    <View style={[S.screen, { backgroundColor: t.bgBase }]}>
-      {/* 상단 — 브랜드 + 프로필 진입(MY). 뒤로가기 없음(루트) */}
+    <ScrollView style={{ flex: 1, backgroundColor: t.bgBase }} contentContainerStyle={S.body}>
+      {/* 앱바 — 브랜드 · 코스 전환 · MY */}
       <View style={S.appbar}>
         <Text style={[S.brand, { color: t.textHigh }]}>토모리</Text>
-        <Pressable
-          onPress={() => nav.push('my')}
-          accessibilityRole="button"
-          accessibilityLabel="MY 화면"
-          hitSlop={10}
-          style={[S.profileBtn, { borderColor: t.borderStrong }]}
-        >
-          <Text style={[S.profileText, { color: t.textMid }]}>MY</Text>
+        <View style={S.appbarRight}>
+          <Pressable onPress={() => nav.push('courses')} style={[S.coursePill, { backgroundColor: t.sunk }]} accessibilityRole="button" accessibilityLabel="코스 전환">
+            <Text style={[S.coursePillText, { color: t.textMid }]}>JLPT ▾</Text>
+          </Pressable>
+          <Pressable onPress={() => nav.push('my')} style={[S.myPill, { borderColor: t.borderStrong }]} accessibilityRole="button" accessibilityLabel="MY 화면">
+            <Text style={[S.myText, { color: t.textMid }]}>MY</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* 인사 — 토모(shine) + 인사말 */}
+      <View style={S.greet}>
+        <Tomo scale={0.62} pose="shine" showNote={false} />
+        <View style={S.greetText}>
+          <Text style={[S.greetTitle, { color: t.textHigh }]}>오늘도 왔네요, {D.user}님</Text>
+          <Text style={[S.greetSub, { color: t.textMid }]}>일곱 밤째 함께 불을 켰어요.</Text>
+        </View>
+      </View>
+
+      {/* 스트릭 | D-day  · TODO: 실데이터(인증·DB / 시험일 로컬설정) */}
+      <View style={S.row2}>
+        <View style={[cardBase, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }]}>연속 학습</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.brandText }]}>{D.streak.days}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>일</Text></View>
+          <View style={S.dots}>{D.streak.week.map((on, i) => (<View key={i} style={[S.dot, { backgroundColor: on ? t.brand : t.sunk }]} />))}</View>
+        </View>
+        <View style={[cardBase, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }]}>{D.dday.label}</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.courseJlpt }]}>D-{D.dday.d}</Text></View>
+          <Text style={[S.cardSub, { color: t.textLow }]}>{D.dday.date}</Text>
+        </View>
+      </View>
+
+      {/* 이어서 학습 (강조) · TODO: 마지막 학습 위치 로컬 저장 */}
+      <View style={[cardBase, S.contCard, { borderWidth: 1.5, borderColor: t.brand }]}>
+        <View style={S.contHead}>
+          <Text style={[S.contLbl, { color: t.brandText }]}>이어서 학습</Text>
+          <Text style={[S.chev, { color: t.textLow }]}>›</Text>
+        </View>
+        <Text style={[S.contTitle, { color: t.textHigh }]}>{D.cont.course} · {D.cont.level} · {D.cont.area}</Text>
+        <View style={S.progRow}>
+          <ProgressBar t={t} pct={D.cont.done / D.cont.total} color={t.courseJlpt} />
+          <Text style={[S.progText, { color: t.textMid }]}>{D.cont.done} / {D.cont.total}</Text>
+        </View>
+        <Pressable onPress={() => nav.push(D.cont.route, { level: D.cont.level })} style={[S.contBtn, { backgroundColor: t.action }]} accessibilityRole="button">
+          <Text style={[S.contBtnText, { color: t.onAction }]}>이어서 하기</Text>
         </Pressable>
       </View>
 
-      {/* 가운데 — 토모 + 인사말 */}
-      <View style={S.hero}>
-        <Tomo scale={1.25} pose="shine" showNote={false} />
-        <Text style={[S.greet, { color: t.textHigh }]}>오늘도 왔네요.</Text>
-        <Text style={[S.sub, { color: t.textMid }]}>작은 불빛 하나, 같이 켜 볼까요.</Text>
+      {/* 진도 | 우표 · TODO: 실데이터(인증·DB) */}
+      <View style={S.row2}>
+        <View style={[cardBase, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }]}>{D.progress.level} 진도</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.progress.pct}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>%</Text></View>
+          <ProgressBar t={t} pct={D.progress.pct / 100} color={t.courseJlpt} />
+        </View>
+        <View style={[cardBase, S.col]}>
+          <Text style={[S.cardLbl, { color: t.textMid }]}>우표</Text>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.brandText }]}>{D.stamp.have}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {D.stamp.need}</Text></View>
+          <ProgressBar t={t} pct={D.stamp.have / D.stamp.need} color={t.brand} />
+          <Text style={[S.cardSub, { color: t.textLow }]}>다음 편지까지 {D.stamp.need - D.stamp.have}장</Text>
+        </View>
       </View>
 
-      {/* CTA — 오늘의 학습 시작 → 코스 목록 */}
-      <View style={S.ctaWrap}>
-        <Pressable
-          onPress={() => nav.push('courses')}
-          accessibilityRole="button"
-          style={[S.cta, { backgroundColor: t.action }]}
-        >
-          <Text style={[S.ctaText, { color: t.onAction }]}>오늘의 학습 시작</Text>
-        </Pressable>
-        <Text style={[S.hint, { color: t.textMid }]}>지금은 JLPT 단어·문법부터 열려 있어요.</Text>
+      {/* 오늘의 조언 · TODO: 오답 패턴 기반 실 생성 */}
+      <View style={[cardBase, S.advCard]}>
+        <Tomo scale={0.42} pose="intellectual" showNote={false} />
+        <View style={S.advText}>
+          <Text style={[S.advLbl, { color: t.brandText }]}>오늘의 조언</Text>
+          <Text style={[S.advBody, { color: t.textMid }]}>{D.advice}</Text>
+        </View>
       </View>
+    </ScrollView>
+  );
+}
+
+function ProgressBar({ t, pct, color }) {
+  const p = Math.max(0, Math.min(1, pct || 0));
+  return (
+    <View style={{ height: 8, borderRadius: 999, backgroundColor: t.sunk, overflow: 'hidden', flexGrow: 1, minWidth: 40 }}>
+      <View style={{ width: `${p * 100}%`, height: 8, borderRadius: 999, backgroundColor: color }} />
     </View>
   );
 }
 
 function makeStyles(t) {
   return StyleSheet.create({
-    screen: { flex: 1, paddingHorizontal: 20, paddingBottom: 24 },
-    appbar: { height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    brand: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
-    profileBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.full, borderWidth: 1 },
-    profileText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
-    hero: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
-    greet: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', marginTop: 8 },
-    sub: { fontFamily: fonts.ko, fontSize: 14 },
-    ctaWrap: { gap: 10, alignItems: 'center' },
-    cta: { width: '100%', height: 52, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-    ctaText: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    hint: { fontFamily: fonts.ko, fontSize: 12 },
+    body: { padding: 16, gap: 12, paddingBottom: 28 },
+    appbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 44 },
+    brand: { fontFamily: fonts.ko, fontSize: 18, fontWeight: '700' },
+    appbarRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    coursePill: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.full },
+    coursePillText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
+    myPill: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.full, borderWidth: 1 },
+    myText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
+    greet: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
+    greetText: { flex: 1, gap: 2 },
+    greetTitle: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
+    greetSub: { fontFamily: fonts.ko, fontSize: 13 },
+    row2: { flexDirection: 'row', gap: 12 },
+    col: { flex: 1 },
+    card: { borderRadius: radius.md, padding: 14, gap: 8 },
+    cardLbl: { fontFamily: fonts.ko, fontSize: 12 },
+    cardSub: { fontFamily: fonts.ko, fontSize: 11 },
+    bigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 3 },
+    big: { fontFamily: fonts.ko, fontSize: 26, fontWeight: '800' },
+    bigUnit: { fontFamily: fonts.ko, fontSize: 14, marginBottom: 3 },
+    dots: { flexDirection: 'row', gap: 5, marginTop: 2 },
+    dot: { width: 9, height: 9, borderRadius: 999 },
+    contCard: { gap: 10 },
+    contHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+    contLbl: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
+    chev: { fontFamily: fonts.ko, fontSize: 18 },
+    contTitle: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
+    progRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    progText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
+    contBtn: { height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
+    contBtnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    advCard: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+    advText: { flex: 1, gap: 3 },
+    advLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
+    advBody: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
   });
 }
