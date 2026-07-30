@@ -3,6 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import Ruby from '../components/Ruby';
+import LetterReply from '../components/LetterReply';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll } from '../theme/tokens';
 import { getLetter } from '../data/letters';
@@ -57,6 +58,8 @@ export default function LetterScreen({ nav, id }) {
 
             <Text style={[S.signoff, { color: t.brandText }]} lang="ja">{letter.signoff}</Text>
           </View>
+
+          <LetterReply letterSeq={letter.seq} nav={nav} furi={furi} />
 
           <Pressable style={[S.btn, { backgroundColor: t.brand }]} onPress={() => nav.pop()} accessibilityRole="button" accessibilityLabel="닫기">
             <Text style={[S.btnText, { color: t.onBrand }]}>닫기</Text>
