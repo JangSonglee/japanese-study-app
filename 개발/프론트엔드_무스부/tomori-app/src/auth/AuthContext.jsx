@@ -7,6 +7,13 @@ import { supabase } from '../data/supabaseClient';
  *  · signInWithGoogle: Google OAuth 시작. provider 미설정(GCP 키 전)이면 { ok:false } 로 방어.
  *  · Expo 이식 때 교체 지점이 좁도록 인터페이스를 얇게 유지.
  */
+
+// Google provider가 Supabase에 아직 설정되지 않았다(대표님 GCP 키 대기).
+// 설정 전에 signInWithOAuth를 호출하면 Supabase authorize 에러 페이지로 리다이렉트되어버린다.
+// → 준비되기 전엔 호출하지 않고 즉시 { ok:false }로 돌려보내 「준비 중」 안내만 띄운다.
+// 🔴 대표님이 Google provider를 켠 뒤 이 값을 true로 바꾼다(GOOGLE_OAUTH_설정_체크리스트.md 참조).
+const GOOGLE_AUTH_READY = false;
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
@@ -25,6 +32,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
+    if (!GOOGLE_AUTH_READY) return { ok: false, error: 'provider-not-ready' };
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: window.location.origin },
