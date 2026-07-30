@@ -154,6 +154,6 @@ function makeStyles(t) {
     areaName: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
     areaProg: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
     chev: { fontFamily: fonts.ko, fontSize: 22 },
-    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, marginTop: 6, ...keepAll },
+    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 19, marginTop: 6, ...keepAll },
   });
 }

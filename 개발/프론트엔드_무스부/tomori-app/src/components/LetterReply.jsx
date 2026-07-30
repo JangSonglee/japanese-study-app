@@ -138,7 +138,7 @@ function makeStyles(t) {
     divider: { height: 1, marginBottom: 4 },
     myLabel: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
     ack: { fontFamily: fonts.ko, fontSize: 12 },
-    guide: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
+    guide: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 20 },
     ghostBtn: { alignSelf: 'flex-start', borderWidth: 1, borderRadius: radius.sm, paddingHorizontal: 16, paddingVertical: 9, alignItems: 'center', justifyContent: 'center' },
     ghostText: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
     savedBox: { gap: 6, paddingVertical: 4 },

@@ -107,7 +107,7 @@ function makeStyles(t) {
     date: { fontFamily: fonts.ko, fontSize: 12, marginBottom: 10 },
     lines: { gap: 16, marginTop: 2, alignSelf: 'stretch' },
     lineBlock: { gap: 3 },
-    trans: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
+    trans: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 21 },
     signoff: { fontFamily: fonts.jp, fontSize: 14, fontWeight: '700', alignSelf: 'flex-end', marginTop: 16 },
     btn: { height: 50, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
     btnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },

@@ -91,11 +91,11 @@ function makeStyles(t) {
     },
     rowText: { flex: 1, gap: 3 },
     rowLabel: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
-    rowDesc: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 17, ...keepAll },
+    rowDesc: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, ...keepAll },
     track: {
       width: 48, height: 28, borderRadius: radius.full, borderWidth: 1, padding: 3, justifyContent: 'center',
     },
     thumb: { width: 20, height: 20, borderRadius: radius.full },
-    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, marginTop: 4, ...keepAll },
+    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 19, marginTop: 4, ...keepAll },
   });
 }

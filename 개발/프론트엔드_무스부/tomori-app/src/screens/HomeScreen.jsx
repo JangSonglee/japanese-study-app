@@ -187,6 +187,6 @@ function makeStyles(t) {
     advCard: { flexDirection: 'row', alignItems: 'center', gap: 14 },
     advText: { flex: 1, gap: 4 },
     advLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
-    advBody: { fontFamily: fonts.ko, fontSize: 13.5, lineHeight: 20 },
+    advBody: { fontFamily: fonts.ko, fontSize: 13.5, lineHeight: 21 },
   });
 }

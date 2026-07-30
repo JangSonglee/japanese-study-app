@@ -190,7 +190,7 @@ function makeStyles(t) {
     answer: { gap: 4 },
     divider: { height: 1, marginBottom: 6 },
     meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', ...keepAll },
-    usage: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19, ...keepAll },
+    usage: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 21, ...keepAll },
     exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2, ...keepAll },
     toggleRow: { flexDirection: 'row', gap: 6 },
     btnSec: { height: 44, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
