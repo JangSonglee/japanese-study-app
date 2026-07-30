@@ -25,6 +25,9 @@ const HOME_DEMO = {
   progress: { level: 'N3', pct: 34 },
   // 우표 컬렉션(PRD 12.2 v2.8): 첫 편지=우표 3장, 이후 14장마다 1통. 여기선 2통째 진행 중(다음 편지까지 14장 중 12장).
   stamp: { have: 12, need: 14 },
+  // 편지 도착 데모(우표 목표 도달 순간). 실 트리거는 인증·적립 후. newestLetterId = data/letters.js 최신.
+  letterWaiting: true,
+  newestLetterId: 'l2',
   advice: '어제는 동사 활용에서 좀 헤맸어요. 오늘 그 부분 다시 볼까요?',
 };
 
@@ -103,12 +106,27 @@ export default function HomeScreen({ nav }) {
           <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.progress.pct}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>%</Text></View>
           <ProgressBar t={t} pct={D.progress.pct / 100} color={t.brand} />
         </View>
-        <View style={[card, S.col]}>
-          <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>모은 우표</Text>
-          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.stamp.have}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {D.stamp.need}</Text></View>
-          <ProgressBar t={t} pct={D.stamp.have / D.stamp.need} color={t.brand} />
-          <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>다음 편지까지 {D.stamp.need - D.stamp.have}장</Text>
-        </View>
+        <Pressable
+          onPress={() => (D.letterWaiting ? nav.push('letter', { id: D.newestLetterId }) : nav.push('letterBox'))}
+          style={[card, S.col]}
+          accessibilityRole="button"
+          accessibilityLabel={D.letterWaiting ? '도착한 편지 열기' : '편지함'}
+        >
+          {D.letterWaiting ? (
+            <>
+              <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>토모의 편지</Text>
+              <Text style={[S.letterArrived, { color: t.brandText }, KEEP]}>편지가 도착했어요</Text>
+              <Text style={[S.cardSub, { color: t.textMid }, KEEP]}>열어보기 ›</Text>
+            </>
+          ) : (
+            <>
+              <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>모은 우표</Text>
+              <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.stamp.have}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {D.stamp.need}</Text></View>
+              <ProgressBar t={t} pct={D.stamp.have / D.stamp.need} color={t.brand} />
+              <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>다음 편지까지 {D.stamp.need - D.stamp.have}장</Text>
+            </>
+          )}
+        </Pressable>
       </View>
 
       {/* 오늘의 조언 · TODO: 오답 패턴 기반 실 생성 */}
@@ -151,6 +169,7 @@ function makeStyles(t) {
     card: { borderRadius: radius.lg, padding: 16, gap: 12 },
     cardLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '500' },
     cardSub: { fontFamily: fonts.ko, fontSize: 11 },
+    letterArrived: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', marginTop: 2 },
     bigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 3 },
     big: { fontFamily: fonts.ko, fontSize: 30, fontWeight: '700', letterSpacing: -0.5 },
     bigUnit: { fontFamily: fonts.ko, fontSize: 14, marginBottom: 4 },
