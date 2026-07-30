@@ -23,7 +23,8 @@ const HOME_DEMO = {
   dday: { label: 'JLPT N3', d: 42, date: '12월 3일' },
   cont: { course: 'JLPT', level: 'N3', area: '독해', route: 'readingSession', done: 3, total: 12 },
   progress: { level: 'N3', pct: 34 },
-  stamp: { have: 12, need: 20 },
+  // 우표 컬렉션(PRD 12.2 v2.8): 첫 편지=우표 3장, 이후 14장마다 1통. 여기선 2통째 진행 중(다음 편지까지 14장 중 12장).
+  stamp: { have: 12, need: 14 },
   advice: '어제는 동사 활용에서 좀 헤맸어요. 오늘 그 부분 다시 볼까요?',
 };
 
