@@ -69,7 +69,7 @@ export default function HomeScreen({ nav }) {
         <Tomo scale={0.6} pose="shine" showNote={false} />
         <View style={S.greetText}>
           <Text style={[S.greetTitle, { color: t.textHigh }, KEEP]}>오늘도 왔네요, {D.user}님</Text>
-          <Text style={[S.greetSub, { color: t.textMid }, KEEP]}>일곱 밤째 함께 불을 켰어요.</Text>
+          <Text style={[S.greetSub, { color: t.textMid }, KEEP]}>{streakData.days > 0 ? `${streakData.days}밤째 함께 불을 켰어요.` : '오늘도 함께 불을 켜요.'}</Text>
         </View>
       </View>
 
