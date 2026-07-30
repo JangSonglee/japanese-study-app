@@ -42,7 +42,7 @@ export default function GrammarCardScreen({ nav, level = '', cards }) {
     });
   }
 
-  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} noun="문형" onRestart={() => { setIdx(0); setKnown(0); }} onBack={() => nav && nav.pop()} />;
+  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} noun="문형" onRestart={() => { setIdx(0); setKnown(0); }} onBack={() => nav && nav.pop()} source="grammar" />;
 
   const isSaved = saved.has(card.key);
   const S = makeStyles(t);

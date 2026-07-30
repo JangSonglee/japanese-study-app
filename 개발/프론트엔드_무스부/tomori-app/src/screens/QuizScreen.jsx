@@ -103,6 +103,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
         t={t} mode={mode} known={correct} total={cards.length} savedCount={savedWords.size} noun="문제"
         onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); setRound(1); setRoundCards(cards); wrongRef.current = []; }}
         onBack={() => nav && nav.pop()}
+        source={kind}
       />
     );
   }
