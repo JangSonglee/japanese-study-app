@@ -61,8 +61,8 @@ export default function LetterScreen({ nav, id }) {
 
           <LetterReply letterSeq={letter.seq} nav={nav} furi={furi} />
 
-          <Pressable style={[S.btn, { backgroundColor: t.brand }]} onPress={() => nav.pop()} accessibilityRole="button" accessibilityLabel="닫기">
-            <Text style={[S.btnText, { color: t.onBrand }]}>닫기</Text>
+          <Pressable style={[S.btn, { backgroundColor: t.bgSurface, borderWidth: 1, borderColor: t.borderStrong }]} onPress={() => nav.pop()} accessibilityRole="button" accessibilityLabel="닫기">
+            <Text style={[S.btnText, { color: t.textHigh }]}>닫기</Text>
           </Pressable>
         </ScrollView>
       )}
