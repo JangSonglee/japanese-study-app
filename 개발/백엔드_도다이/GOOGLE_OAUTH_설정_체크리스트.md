@@ -37,6 +37,6 @@
 
 ## 6. 확인
 - 앱에서 MY → "Google로 시작하기" → Google 로그인 → 앱으로 복귀 → MY에 이름·이메일 표시.
-- 첫 로그인 시 `users_profile`·`user_settings` 행이 자동 생성됩니다(handle_new_user 트리거).
+- 첫 로그인 시 `users_profile` 행이 자동 생성됩니다(handle_new_user 트리거).
 
 문제가 생기면 저(클로드)에게 화면 캡처와 함께 알려주세요 — 값은 가리고 보내셔도 됩니다.
