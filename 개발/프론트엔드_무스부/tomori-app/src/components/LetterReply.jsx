@@ -139,6 +139,8 @@ function makeStyles(t) {
     myLabel: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
     ack: { fontFamily: fonts.ko, fontSize: 12 },
     guide: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
+    ghostBtn: { alignSelf: 'flex-start', borderWidth: 1, borderRadius: radius.sm, paddingHorizontal: 16, paddingVertical: 9, alignItems: 'center', justifyContent: 'center' },
+    ghostText: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
     savedBox: { gap: 6, paddingVertical: 4 },
     savedKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2 },
     cards: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
