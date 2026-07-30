@@ -11,6 +11,8 @@ import JlptHubScreen from './screens/JlptHubScreen';
 import MyScreen from './screens/MyScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AboutScreen from './screens/AboutScreen';
+import LetterBoxScreen from './screens/LetterBoxScreen';
+import LetterScreen from './screens/LetterScreen';
 import WordCardScreen from './screens/WordCardScreen';
 import GrammarCardScreen from './screens/GrammarCardScreen';
 import QuizScreen from './screens/QuizScreen';
@@ -75,6 +77,10 @@ export default function App() {
               <SettingsScreen settings={settings} onChange={setSettings} onBack={() => nav.pop()} />
             ) : name === 'about' ? (
               <AboutScreen nav={nav} />
+            ) : name === 'letterBox' ? (
+              <LetterBoxScreen nav={nav} />
+            ) : name === 'letter' ? (
+              <LetterScreen nav={nav} id={params.id} />
             ) : null}
           </ThemeProvider>
         </View>

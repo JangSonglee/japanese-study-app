@@ -65,6 +65,10 @@ export default function MyScreen({ nav }) {
           </>
         ) : null}
 
+        {/* 보관함 — 토모의 편지 컬렉션 */}
+        <Text style={[S.section, { color: t.textLow }]}>보관함</Text>
+        <MenuRow t={t} label="편지함" onPress={() => nav.push('letterBox')} />
+
         {/* 학습 — 코스 전환. IA(03·Core Flows): 코스 전환은 MY·설정에서. */}
         <Text style={[S.section, { color: t.textLow }]}>학습</Text>
         <MenuRow t={t} label="코스 전환" onPress={() => nav.push('courses')} />
