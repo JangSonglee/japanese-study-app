@@ -4,7 +4,7 @@ import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { DoneView } from './WordCardScreen';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 
 /**
  * 문법 카드 화면 (JLPT · 리콜 카드). 단어 카드와 같은 학습 흐름, 필드만 문법용.
@@ -178,20 +178,20 @@ function makeStyles(t) {
     areaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     areaBar: { width: 4, height: 16, borderRadius: radius.full },
     areaLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700' },
-    areaHint: { fontFamily: fonts.ko, fontSize: 12 },
-    card: { flex: 1, borderRadius: radius.md, padding: 16, gap: 12 },
+    areaHint: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    card: { flex: 1, borderRadius: radius.lg, padding: 16, gap: 12 },
     cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     lblLow: { fontFamily: fonts.ko, fontSize: 13 },
     patternArea: { alignItems: 'center', justifyContent: 'center', paddingVertical: 20, gap: 8 },
     romaji: { fontFamily: fonts.ko, fontSize: 15 },
     connRow: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 8 },
     connLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
-    connText: { fontFamily: fonts.ko, fontSize: 13, flex: 1 },
+    connText: { fontFamily: fonts.ko, fontSize: 13, flex: 1, ...keepAll },
     answer: { gap: 4 },
     divider: { height: 1, marginBottom: 6 },
-    meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
-    usage: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
-    exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2 },
+    meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', ...keepAll },
+    usage: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19, ...keepAll },
+    exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2, ...keepAll },
     toggleRow: { flexDirection: 'row', gap: 6 },
     btnSec: { height: 44, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
     btnSecText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },

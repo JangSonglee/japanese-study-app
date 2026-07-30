@@ -554,7 +554,7 @@ function makeStyles(t) {
     timeText: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '600', fontVariant: ['tabular-nums'], minWidth: 30, textAlign: 'center' },
     hint: { fontFamily: fonts.ko, fontSize: 12.5, lineHeight: 18 },
     modalOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)', alignItems: 'center', justifyContent: 'center', padding: 28 },
-    modalCard: { width: '100%', maxWidth: 340, borderRadius: radius.md, paddingVertical: 24, paddingHorizontal: 20, alignItems: 'center', gap: 12 },
+    modalCard: { width: '100%', maxWidth: 340, borderRadius: radius.lg, paddingVertical: 24, paddingHorizontal: 20, alignItems: 'center', gap: 12 },
     modalTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '800', marginTop: 4 },
     modalSub: { fontFamily: fonts.ko, fontSize: 13.5, lineHeight: 20, textAlign: 'center' },
     modalBtns: { flexDirection: 'row', gap: 8, marginTop: 8, alignSelf: 'stretch' },

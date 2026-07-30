@@ -43,8 +43,11 @@ export default function HomeScreen({ nav }) {
       <View style={S.appbar}>
         <Text style={[S.brand, { color: t.textHigh }, KEEP]}>토모리</Text>
         <View style={S.appbarRight}>
-          <Pressable onPress={() => nav.push('courses')} style={[S.coursePill, { backgroundColor: t.sunk }]} accessibilityRole="button" accessibilityLabel="코스 전환">
-            <Text style={[S.coursePillText, { color: t.textMid }]}>JLPT ▾</Text>
+          {/* 활성 코스 = JLPT. 탭하면 코스 허브(단어·문법·독해·청해)로 바로 간다.
+              코스 '전환'(다른 코스 고르기)은 MY로 옮겼다 — IA(03·Core Flows): 학습=활성 코스만, 코스 전환은 MY·설정.
+              코스 선택 자체는 온보딩(관심분야→추천)이 담당하고, 5개 목록은 메인 플로우의 단계가 아니다. */}
+          <Pressable onPress={() => nav.push('jlptHub')} style={[S.coursePill, { backgroundColor: t.sunk }]} accessibilityRole="button" accessibilityLabel="JLPT 학습 메뉴">
+            <Text style={[S.coursePillText, { color: t.textMid }]}>JLPT</Text>
           </Pressable>
           <Pressable onPress={() => nav.push('my')} style={[S.myPill, { borderColor: t.borderStrong }]} accessibilityRole="button" accessibilityLabel="MY 화면">
             <Text style={[S.myText, { color: t.textMid }]}>MY</Text>

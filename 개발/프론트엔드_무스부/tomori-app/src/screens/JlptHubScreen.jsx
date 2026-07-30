@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import BottomSheet from '../components/BottomSheet';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 import { LEVELS } from '../data/vocab';
 
 // 급수별 난이도 라벨 — 0/xxx·0% 같은 사기 저하 숫자 대신 「어디쯤인지」만 담백하게(철학: 북돋는다).
@@ -136,7 +136,7 @@ function makeStyles(t) {
     section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
     select: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
-      borderRadius: radius.md, borderWidth: 1, padding: 12,
+      borderRadius: radius.lg, borderWidth: 1, padding: 12,
     },
     selectText: { flex: 1, gap: 2 },
     selectName: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
@@ -148,12 +148,12 @@ function makeStyles(t) {
     },
     areaCard: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
-      borderRadius: radius.md, padding: 16,
+      borderRadius: radius.lg, padding: 16,
     },
     areaText: { flex: 1, gap: 3 },
     areaName: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    areaProg: { fontFamily: fonts.ko, fontSize: 12 },
+    areaProg: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
     chev: { fontFamily: fonts.ko, fontSize: 22 },
-    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, marginTop: 6 },
+    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, marginTop: 6, ...keepAll },
   });
 }

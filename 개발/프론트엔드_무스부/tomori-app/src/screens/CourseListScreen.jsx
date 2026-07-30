@@ -2,16 +2,22 @@ import React from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 
 /**
- * 코스 목록 (Hi-fi 10) — 5개 코스.
+ * 코스 전환 (Hi-fi 10) — 5개 코스.
+ *
+ * 🔴 역할(2026-07-30 정리): 이 화면은 「코스 *전환*」 화면이다. MY › 「코스 전환」에서 진입한다.
+ *    IA(Figma 03·Core Flows): 학습=활성 코스만, 코스 전환은 MY·설정. 코스 *선택* 자체는
+ *    온보딩(관심분야→추천)이 담당하므로, 5개 목록은 메인 학습 플로우의 단계가 아니다.
+ *    (예전 홈→코스목록→허브 계단식 네비는 하단 탭 이전 수직 슬라이스의 임시 경로였음.)
  *
  * 사양 근거:
  *  · 5개 코스가 있다는 사실은 보여준다 → 미완성 코스는 「곧 열려요」(코스 *단위*엔 허용).
  *    코스 아래 단위(영역·급수)는 아예 노출하지 않는다(진행상태.md 「곧 열려요는 코스 단위에만」).
  *  · 지금 콘텐츠가 있는 건 JLPT 단어뿐 → JLPT만 활성. 나머지 4개는 진입 불가(잠금 아님·미완성).
  *  · 코스색 대면적 배경 금지(사양서 2장) → 4px 액센트 바 + 코스색 글자로만.
+ *  · 🅿️ 실제 '전환' 시맨틱(활성 코스 상태 변경 후 홈 복귀)은 하단 탭·활성코스 상태 도입 시. 지금은 JLPT→허브.
  */
 const COURSES = [
   { key: 'jlpt', name: 'JLPT', desc: '급수별 단어·문법·독해·청해', ready: true },
@@ -30,7 +36,7 @@ export default function CourseListScreen({ nav }) {
         <Pressable onPress={() => nav.pop()} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로">
           <Icon name="back" size={22} color={t.textHigh} />
         </Pressable>
-        <Text style={[S.title, { color: t.textHigh }]}>학습 · 코스</Text>
+        <Text style={[S.title, { color: t.textHigh }]}>코스 전환</Text>
       </View>
 
       <ScrollView contentContainerStyle={S.body}>
@@ -82,12 +88,12 @@ function makeStyles(t) {
     body: { padding: 16, gap: 10 },
     card: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
-      borderRadius: radius.md, padding: 14,
+      borderRadius: radius.lg, padding: 14,
     },
     accent: { width: 4, height: 34, borderRadius: radius.full },
     cardText: { flex: 1, gap: 3 },
     name: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    desc: { fontFamily: fonts.ko, fontSize: 12 },
+    desc: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
     chev: { fontFamily: fonts.ko, fontSize: 22, fontWeight: '400' },
     soon: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.full },
     soonText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },

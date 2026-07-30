@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 
 /**
  * MY 홈 (Hi-fi 34) — 프로필 요약 + 메뉴.
@@ -37,7 +37,12 @@ export default function MyScreen({ nav }) {
           </View>
         </View>
 
-        {/* 메뉴 */}
+        {/* 학습 — 코스 전환. IA(03·Core Flows): 코스 전환은 MY·설정에서. 온보딩 추천으로 정해진 코스를 여기서 바꾼다.
+            (홈 헤더 칩은 '전환'이 아니라 활성 코스 허브로 바로 들어가는 입구 — 역할이 다르다.) */}
+        <Text style={[S.section, { color: t.textLow }]}>학습</Text>
+        <MenuRow t={t} label="코스 전환" onPress={() => nav.push('courses')} />
+
+        {/* 설정 */}
         <Text style={[S.section, { color: t.textLow }]}>설정</Text>
         <MenuRow t={t} label="설정 · 읽기 도움" onPress={() => nav.push('settings')} />
         <MenuRow t={t} label="서비스 정보" onPress={() => nav.push('about')} />
@@ -69,16 +74,16 @@ function makeStyles(t) {
     body: { padding: 16, gap: 10 },
     profile: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
-      borderRadius: radius.md, padding: 16,
+      borderRadius: radius.lg, padding: 16,
     },
     tomoWrap: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
     profileText: { flex: 1, gap: 3 },
     name: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    subtle: { fontFamily: fonts.ko, fontSize: 12 },
+    subtle: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
     section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', marginTop: 6 },
     row: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-      borderRadius: radius.md, padding: 16,
+      borderRadius: radius.lg, padding: 16,
     },
     rowLabel: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
     chev: { fontFamily: fonts.ko, fontSize: 22 },

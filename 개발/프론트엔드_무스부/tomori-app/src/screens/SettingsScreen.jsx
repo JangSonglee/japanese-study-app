@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 
 // 🔴 Tanos CC BY 출처 표기는 「서비스 정보」(AboutScreen)로 옮겼다(2026-07-28, 대표님 결정).
 //    설정 화면엔 두지 않는다 — 출처는 서비스 개요와 함께 About 하단에 보인다.
@@ -87,15 +87,15 @@ function makeStyles(t) {
     section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
     row: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
-      borderRadius: radius.md, padding: 14,
+      borderRadius: radius.lg, padding: 14,
     },
     rowText: { flex: 1, gap: 3 },
     rowLabel: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
-    rowDesc: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 17 },
+    rowDesc: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 17, ...keepAll },
     track: {
-      width: 48, height: 28, borderRadius: 999, borderWidth: 1, padding: 3, justifyContent: 'center',
+      width: 48, height: 28, borderRadius: radius.full, borderWidth: 1, padding: 3, justifyContent: 'center',
     },
-    thumb: { width: 20, height: 20, borderRadius: 999 },
-    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, marginTop: 4 },
+    thumb: { width: 20, height: 20, borderRadius: radius.full },
+    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, marginTop: 4, ...keepAll },
   });
 }

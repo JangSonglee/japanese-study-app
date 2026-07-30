@@ -4,7 +4,7 @@ import Ruby from '../components/Ruby';
 import Tomo from '../components/Tomo';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, keepAll } from '../theme/tokens';
 
 /**
  * 단어 카드 화면 (Hi-fi 14번) — JLPT N5, 10개 세션.
@@ -261,7 +261,7 @@ export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack,
           <Text style={[doneStyles.progKbd, { color: t.textMid, backgroundColor: t.sunk }]}>이번 세션 +{known}</Text>
         </View>
         <View style={[doneStyles.progTrack, { backgroundColor: t.sunk }]}>
-          <View style={[doneStyles.progFill, { backgroundColor: t.courseJlpt, width: `${Math.round((known / total) * 100)}%` }]} />
+          <View style={[doneStyles.progFill, { backgroundColor: t.brand, width: `${Math.round((known / total) * 100)}%` }]} />
         </View>
         <Text style={[doneStyles.progNote, { color: t.textMid }]}>누적 수치(N / 급수 총량)는 백엔드 연결 후 표시</Text>
       </View>
@@ -306,22 +306,22 @@ const doneStyles = StyleSheet.create({
   backBtn: { position: 'absolute', top: 12, left: 12 },
   back: { fontSize: 26 },
 
-  title: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700' },
+  title: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700', ...keepAll },
   stats: { flexDirection: 'row', gap: 10 },
-  stat: { width: 128, borderRadius: radius.md, padding: 14, gap: 4, alignItems: 'flex-start' },
+  stat: { width: 128, borderRadius: radius.lg, padding: 14, gap: 4, alignItems: 'flex-start' },
   big: { fontFamily: fonts.ko, fontSize: 27, fontWeight: '700', fontVariant: ['tabular-nums'] },
   unit: { fontSize: 13, fontWeight: '400' },
-  statLbl: { fontFamily: fonts.ko, fontSize: 13 },
+  statLbl: { fontFamily: fonts.ko, fontSize: 13, ...keepAll },
 
-  progCard: { width: 266, borderRadius: radius.md, padding: 13, gap: 8 },
+  progCard: { width: 266, borderRadius: radius.lg, padding: 13, gap: 8 },
   progHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   progKbd: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.full, overflow: 'hidden', fontVariant: ['tabular-nums'] },
   progTrack: { height: 8, borderRadius: radius.full, overflow: 'hidden' },
   progFill: { height: 8, borderRadius: radius.full },
-  progNote: { fontFamily: fonts.ko, fontSize: 11 },
+  progNote: { fontFamily: fonts.ko, fontSize: 11, ...keepAll },
 
   savedRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  savedNote: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
+  savedNote: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', ...keepAll },
 
   cta: { flexDirection: 'row', gap: 8, marginTop: 4 },
   btnSec: { width: 129, height: 48, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
@@ -344,8 +344,8 @@ function makeStyles(t) {
     areaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     areaBar: { width: 4, height: 16, borderRadius: radius.full },
     areaLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700' },
-    areaHint: { fontFamily: fonts.ko, fontSize: 12 },
-    card: { flex: 1, borderRadius: radius.md, padding: 16, gap: 12 },
+    areaHint: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    card: { flex: 1, borderRadius: radius.lg, padding: 16, gap: 12 },
     cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     lblLow: { fontFamily: fonts.ko, fontSize: 13 },
     saveStar: { fontFamily: fonts.ko, fontSize: 14 },
@@ -356,8 +356,8 @@ function makeStyles(t) {
     errText: { fontFamily: fonts.ko, fontSize: 12 },
     answer: { gap: 4 },
     divider: { height: 1, marginBottom: 6 },
-    meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700' },
-    exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2 },
+    meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', ...keepAll },
+    exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2, ...keepAll },
     toggleRow: { flexDirection: 'row', gap: 6 },
     btnSec: {
       height: 44, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center',
