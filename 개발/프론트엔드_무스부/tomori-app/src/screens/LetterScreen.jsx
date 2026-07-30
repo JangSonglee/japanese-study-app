@@ -55,7 +55,7 @@ export default function LetterScreen({ nav, id }) {
               ))}
             </View>
 
-            <Text style={[S.signoff, { color: t.brandText }]}>{letter.signoff}</Text>
+            <Text style={[S.signoff, { color: t.brandText }]} lang="ja">{letter.signoff}</Text>
           </View>
 
           <Pressable style={[S.btn, { backgroundColor: t.brand }]} onPress={() => nav.pop()} accessibilityRole="button" accessibilityLabel="닫기">
@@ -105,7 +105,7 @@ function makeStyles(t) {
     lines: { gap: 16, marginTop: 2, alignSelf: 'stretch' },
     lineBlock: { gap: 3 },
     trans: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
-    signoff: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700', alignSelf: 'flex-end', marginTop: 16 },
+    signoff: { fontFamily: fonts.jp, fontSize: 14, fontWeight: '700', alignSelf: 'flex-end', marginTop: 16 },
     btn: { height: 50, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
     btnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
   });
