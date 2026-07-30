@@ -162,7 +162,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
               ? card.sentences.map((s) => (
                   <View key={s.seq} style={S.sentence}>
                     <Ruby base={s.front.base} ruby={s.front.ruby} show={showAnswers && furi} size={17} color={t.textHigh} />
-                    {showAnswers && s.ko ? <Text style={[S.transKo, { color: t.textMid, opacity: trans ? 1 : 0 }]}>{s.ko}</Text> : null}
+                    {showAnswers && trans && s.ko ? <Text style={[S.transKo, { color: t.textMid }]}>{s.ko}</Text> : null}
                   </View>
                 ))
               : card.lines.map((l) => (
@@ -170,7 +170,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
                     {l.speaker ? <Text style={[S.speaker, { color: t.courseJlptText }]}>{l.speaker}</Text> : null}
                     <View style={S.lineBody}>
                       <Ruby base={l.front.base} ruby={l.front.ruby} show={furi} size={17} color={t.textHigh} />
-                      {l.ko ? <Text style={[S.transKo, { color: t.textMid, opacity: trans ? 1 : 0 }]}>{l.ko}</Text> : null}
+                      {trans && l.ko ? <Text style={[S.transKo, { color: t.textMid }]}>{l.ko}</Text> : null}
                     </View>
                   </View>
                 ))}
