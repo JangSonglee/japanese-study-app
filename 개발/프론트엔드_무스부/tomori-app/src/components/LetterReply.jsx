@@ -102,7 +102,7 @@ export default function LetterReply({ letterSeq, nav, furi = true }) {
               onPress={() => toggleKey(p.key)}
               accessibilityRole="button"
               accessibilityState={{ selected: on }}
-              style={[S.card, { backgroundColor: on ? t.onBrand : t.bgSurface, borderColor: on ? t.brand : t.border }]}
+              style={[S.card, { backgroundColor: on ? t.sunk : t.bgSurface, borderColor: on ? t.brand : t.border }]}
             >
               <Ruby base={p.base} ruby={p.ruby} show size={15} color={t.textHigh} />
               <Text style={[S.cardKo, { color: t.textMid }, keepAll]}>{p.ko}</Text>
