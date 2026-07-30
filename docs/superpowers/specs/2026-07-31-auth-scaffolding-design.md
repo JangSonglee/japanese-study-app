@@ -62,12 +62,12 @@ auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 ### ② BE (지금 구현, 키 불필요)
 
 **`handle_new_user` 트리거 마이그레이션**
-- `auth.users` INSERT AFTER 트리거 → `public.handle_new_user()` (SECURITY DEFINER)가
-  `users_profile(user_id, nickname)` + `user_settings(user_id, 기본값)` 행 삽입.
+- `auth.users` INSERT AFTER 트리거 → `public.handle_new_user()` (SECURITY DEFINER, `search_path=public`)가
+  `users_profile(user_id, nickname)` 행 삽입(`on conflict do nothing`).
   nickname = `new.raw_user_meta_data->>'name'` (Google 계정명) 또는 이메일 로컬파트 폴백.
-- 🔴 **구현 전 기존 트리거 부재 확인**(Supabase MCP로 `pg_trigger` 조회). 있으면 재사용/갱신.
+- 🔴 **구현 시 확정(2026-07-31)**: 스키마 *설계 문서*엔 `user_settings`가 있으나 **라이브 DB엔 미존재**(테이블 24개, user_settings 없음). 현재 읽기도움 설정은 FE localStorage(`tomori.readAid`)라 실사용이 없으므로 **트리거는 `users_profile`만 생성**하고 user_settings 삽입은 뺐다. 테이블 생성은 실사용 시 후속.
+- 🔴 SECURITY DEFINER 함수의 EXECUTE는 public/anon/authenticated에서 회수(어드바이저 경고 0). 트리거 발화는 내부 호출이라 무관.
 - 실제 발화는 실 가입 시점이지만 미리 심어두면 키 연결 즉시 프로필이 채워진다.
-- user_settings 기본값: theme=light, furigana_default=true, romaji_default=false(PRD 8.4·11장).
 
 ### ③ 대표님 GCP 준비 체크리스트 (문서 산출물)
 
