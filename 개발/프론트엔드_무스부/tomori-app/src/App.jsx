@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import { AuthProvider } from './auth/AuthContext';
 import { ThemeProvider } from './theme/ThemeContext';
 import { getTheme, fonts } from './theme/tokens';
 import { useRouter } from './nav/router';
@@ -42,43 +43,45 @@ export default function App() {
   const { name, params } = nav.current;
 
   return (
-    <View style={styles.stage}>
-      <View style={styles.topbar}>
-        <Text style={styles.brand}>토모리 · FE 본편 (JLPT 단어 수직선)</Text>
-        <Pressable style={styles.modeBtn} onPress={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}>
-          <Icon name={mode === 'dark' ? 'sun' : 'moon'} size={15} color="#FFF9EC" />
-          <Text style={styles.modeBtnText}>{mode === 'dark' ? '라이트' : '다크'}</Text>
-        </Pressable>
-      </View>
+    <AuthProvider>
+      <View style={styles.stage}>
+        <View style={styles.topbar}>
+          <Text style={styles.brand}>토모리 · FE 본편 (JLPT 단어 수직선)</Text>
+          <Pressable style={styles.modeBtn} onPress={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}>
+            <Icon name={mode === 'dark' ? 'sun' : 'moon'} size={15} color="#FFF9EC" />
+            <Text style={styles.modeBtnText}>{mode === 'dark' ? '라이트' : '다크'}</Text>
+          </Pressable>
+        </View>
 
-      <View style={[styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
-        <ThemeProvider mode={mode}>
-          {name === 'home' ? (
-            <HomeScreen nav={nav} />
-          ) : name === 'courses' ? (
-            <CourseListScreen nav={nav} />
-          ) : name === 'jlptHub' ? (
-            <JlptHubScreen nav={nav} />
-          ) : name === 'wordSession' ? (
-            <WordSession nav={nav} level={params.level || 'N5'} />
-          ) : name === 'grammarSession' ? (
-            <GrammarSession nav={nav} level={params.level || 'N5'} />
-          ) : name === 'readingSession' ? (
-            <QuizSession nav={nav} level={params.level || 'N5'} kind="reading" />
-          ) : name === 'listeningSession' ? (
-            <QuizSession nav={nav} level={params.level || 'N5'} kind="listening" />
-          ) : name === 'my' ? (
-            <MyScreen nav={nav} />
-          ) : name === 'settings' ? (
-            <SettingsScreen settings={settings} onChange={setSettings} onBack={() => nav.pop()} />
-          ) : name === 'about' ? (
-            <AboutScreen nav={nav} />
-          ) : null}
-        </ThemeProvider>
-      </View>
+        <View style={[styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
+          <ThemeProvider mode={mode}>
+            {name === 'home' ? (
+              <HomeScreen nav={nav} />
+            ) : name === 'courses' ? (
+              <CourseListScreen nav={nav} />
+            ) : name === 'jlptHub' ? (
+              <JlptHubScreen nav={nav} />
+            ) : name === 'wordSession' ? (
+              <WordSession nav={nav} level={params.level || 'N5'} />
+            ) : name === 'grammarSession' ? (
+              <GrammarSession nav={nav} level={params.level || 'N5'} />
+            ) : name === 'readingSession' ? (
+              <QuizSession nav={nav} level={params.level || 'N5'} kind="reading" />
+            ) : name === 'listeningSession' ? (
+              <QuizSession nav={nav} level={params.level || 'N5'} kind="listening" />
+            ) : name === 'my' ? (
+              <MyScreen nav={nav} />
+            ) : name === 'settings' ? (
+              <SettingsScreen settings={settings} onChange={setSettings} onBack={() => nav.pop()} />
+            ) : name === 'about' ? (
+              <AboutScreen nav={nav} />
+            ) : null}
+          </ThemeProvider>
+        </View>
 
-      <Text style={styles.note}>실 Supabase · 스택 네비 · 현재: {name}{params.level ? ` · ${params.level}` : ''}</Text>
-    </View>
+        <Text style={styles.note}>실 Supabase · 스택 네비 · 현재: {name}{params.level ? ` · ${params.level}` : ''}</Text>
+      </View>
+    </AuthProvider>
   );
 }
 
