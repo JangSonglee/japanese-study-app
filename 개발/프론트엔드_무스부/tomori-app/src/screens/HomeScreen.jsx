@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius } from '../theme/tokens';
+import { loadStreak } from '../data/study';
 
 /**
  * 홈 (기획 8) — 위젯 홈. EOND UI 원칙 반영 리디자인(2026-07-30 검토).
@@ -39,7 +40,12 @@ export default function HomeScreen({ nav }) {
   const S = makeStyles(t);
   const isDark = mode === 'dark';
   const card = [S.card, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }];
+
+  const [streak, setStreak] = useState(null);
+  useEffect(() => { loadStreak().then(setStreak).catch(() => setStreak(null)); }, []);
+
   const D = HOME_DEMO;
+  const streakData = streak || D.streak;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: t.bgBase }} contentContainerStyle={S.body}>
       {/* 앱바 */}
@@ -89,8 +95,8 @@ export default function HomeScreen({ nav }) {
       <View style={S.row2}>
         <View style={[card, S.col]}>
           <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>연속 학습</Text>
-          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.streak.days}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>일째</Text></View>
-          <View style={S.dots}>{D.streak.week.map((on, i) => (<View key={i} style={[S.dot, { backgroundColor: on ? t.brand : t.sunk }]} />))}</View>
+          <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{streakData.days}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>일째</Text></View>
+          <View style={S.dots}>{streakData.week.map((on, i) => (<View key={i} style={[S.dot, { backgroundColor: on ? t.brand : t.sunk }]} />))}</View>
         </View>
         <View style={[card, S.col]}>
           <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>{D.dday.label} 시험</Text>
