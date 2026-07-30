@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
+import { useAuth } from '../auth/AuthContext';
 import { fonts, radius, keepAll } from '../theme/tokens';
 
 /**
  * MY 홈 (Hi-fi 34) — 프로필 요약 + 메뉴.
- *
- * 사양 근거 / 범위(2026-07-28):
- *  · 로그인(Auth) 전이라 프로필은 「게스트」. 로그인이 붙으면 이 자리에 계정·통계가 들어온다.
- *  · 이 조각에서 실동작하는 메뉴는 「설정」(읽기도움 + 크레딧)뿐.
- *    학습통계·구독·알림·계정은 데이터/기능이 없어 노출하지 않는다(미완성 미노출).
+ * 인증 스캐폴드(2026-07-31): 게스트=「Google로 시작하기」, 로그인=닉네임·이메일+로그아웃.
+ *  · 콘텐츠 학습은 게스트도 무제한(PRD 1.3). 로그인은 내 데이터(오답노트·스트릭·진도·우표)를 남기는 선택.
+ *  · 🔴 provider 미설정(GCP 키 전)엔 signInWithGoogle이 에러 → 「준비 중」 안내로 방어(크래시 금지).
  */
 export default function MyScreen({ nav }) {
   const { t } = useTheme();
+  const { user, signInWithGoogle, signOut } = useAuth();
+  const [authMsg, setAuthMsg] = useState('');
   const S = makeStyles(t);
+
+  const nickname = user ? (user.user_metadata?.name || user.email?.split('@')[0] || '학습자') : null;
+
+  async function onGoogle() {
+    setAuthMsg('');
+    const r = await signInWithGoogle();
+    if (!r.ok) setAuthMsg('로그인 준비 중이에요. 곧 열려요.');
+    // 성공 시엔 Google 로 리다이렉트되어 이 화면을 떠난다.
+  }
+
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
       <View style={S.appbar}>
@@ -26,19 +37,35 @@ export default function MyScreen({ nav }) {
       </View>
 
       <ScrollView contentContainerStyle={S.body}>
-        {/* 프로필 요약 — 게스트. 토모(평소 밝기·말 없음)가 곁을 지킨다(MY=쉬는 화면, PRD 14.2.1). */}
+        {/* 프로필 요약 — 게스트/로그인 분기. 토모(평소 밝기·말 없음). */}
         <View style={[S.profile, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }]}>
           <View style={S.tomoWrap}>
             <Tomo scale={0.7} pose="bright" showNote={false} />
           </View>
           <View style={S.profileText}>
-            <Text style={[S.name, { color: t.textHigh }]}>게스트</Text>
-            <Text style={[S.subtle, { color: t.textMid }]}>로그인은 곧 열려요</Text>
+            <Text style={[S.name, { color: t.textHigh }]}>{user ? nickname : '게스트'}</Text>
+            <Text style={[S.subtle, { color: t.textMid }, keepAll]}>
+              {user ? user.email : '로그인하면 오답노트·스트릭·진도가 기기 너머로 이어져요'}
+            </Text>
           </View>
         </View>
 
-        {/* 학습 — 코스 전환. IA(03·Core Flows): 코스 전환은 MY·설정에서. 온보딩 추천으로 정해진 코스를 여기서 바꾼다.
-            (홈 헤더 칩은 '전환'이 아니라 활성 코스 허브로 바로 들어가는 입구 — 역할이 다르다.) */}
+        {/* 로그인 액션 (게스트일 때만) */}
+        {!user ? (
+          <>
+            <Pressable
+              onPress={onGoogle}
+              accessibilityRole="button"
+              accessibilityLabel="Google로 시작하기"
+              style={[S.googleBtn, { backgroundColor: t.brand }]}
+            >
+              <Text style={[S.googleText, { color: t.onBrand }]}>Google로 시작하기</Text>
+            </Pressable>
+            {authMsg ? <Text style={[S.authMsg, { color: t.textMid }, keepAll]}>{authMsg}</Text> : null}
+          </>
+        ) : null}
+
+        {/* 학습 — 코스 전환. IA(03·Core Flows): 코스 전환은 MY·설정에서. */}
         <Text style={[S.section, { color: t.textLow }]}>학습</Text>
         <MenuRow t={t} label="코스 전환" onPress={() => nav.push('courses')} />
 
@@ -46,6 +73,14 @@ export default function MyScreen({ nav }) {
         <Text style={[S.section, { color: t.textLow }]}>설정</Text>
         <MenuRow t={t} label="설정 · 읽기 도움" onPress={() => nav.push('settings')} />
         <MenuRow t={t} label="서비스 정보" onPress={() => nav.push('about')} />
+
+        {/* 계정 (로그인일 때만) */}
+        {user ? (
+          <>
+            <Text style={[S.section, { color: t.textLow }]}>계정</Text>
+            <MenuRow t={t} label="로그아웃" onPress={signOut} />
+          </>
+        ) : null}
       </ScrollView>
     </View>
   );
@@ -80,6 +115,9 @@ function makeStyles(t) {
     profileText: { flex: 1, gap: 3 },
     name: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
     subtle: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    googleBtn: { height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
+    googleText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    authMsg: { fontFamily: fonts.ko, fontSize: 12, textAlign: 'center', ...keepAll },
     section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', marginTop: 6 },
     row: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
