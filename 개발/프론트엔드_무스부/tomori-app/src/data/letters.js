@@ -49,3 +49,7 @@ export const LETTERS = RAW.map((l) => ({
 export function getLetter(id) {
   return LETTERS.find((l) => l.id === id) || null;
 }
+
+export function getLetterBySeq(seq) {
+  return LETTERS.find((l) => l.seq === seq) || null;
+}
