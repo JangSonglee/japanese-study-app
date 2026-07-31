@@ -13,6 +13,7 @@
 - 모든 신규 함수: `SECURITY DEFINER`, `SET search_path TO 'public'`. EXECUTE는 `public`·`anon`에서 revoke, `authenticated`에 grant.
 - 편지 상수: `letters.milestone_first=3`, `letters.milestone_interval=14`, `letters.total_available=2`. `threshold(k)=first+interval*(k-1)` → k=1:3, k=2:17.
 - 적립 멱등: 하루 1키 `'day:'||user||':'||date` + `daily_studies.stamp_granted` 플래그 이중 방어. 같은 날 여러 세션 완료해도 우표 1장.
+- 🔴 `stamp_ledger.reason` CHECK 제약 허용값 = `daily_study`·`daily_study_offline`·`subscription_grant`·`export_summary`·`export_wrongnote`·`export_vocab`. 완료 적립 reason은 **`daily_study`**(그 외 값 넣으면 23514).
 - `app_configs.value`는 jsonb. 정수 추출은 `(value#>>'{}')::int`.
 - FE 게스트/미인증: 데이터 함수는 `null` 반환(또는 no-op) → 화면 데모 폴백. `supabase.auth.getUser()`로 판별(스트릭 `study.js` 패턴).
 - FE 작업 디렉터리: `개발/프론트엔드_무스부/tomori-app`. 빌드 `npm run build`, 프리뷰 포트 5599(HMR 아님).
@@ -147,7 +148,7 @@ begin
 
   -- 우표 적립: 그날 처음 완료 시 1장 + 편지 배달 검사
   if v_is_completed and not v_stamp_granted then
-    perform public.grant_stamp(v_uid, 1, 'daily_complete',
+    perform public.grant_stamp(v_uid, 1, 'daily_study',
       'day:'||v_uid::text||':'||v_today::text, 'daily_studies', v_ds_id);
     update public.daily_studies set stamp_granted = true
       where user_id = v_uid and study_date = v_today;
