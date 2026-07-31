@@ -66,29 +66,34 @@ export const dark = {
   scrim: 'rgba(0,0,0,.60)',
 };
 
-// Radius (사양서 v3.3 — EOND UI 검토 반영 2026-07-30). 6단 위계:
-//   sm=칩·인풋 / md=버튼 / lg=카드 / xl=바텀시트·히어로 / full=pill·점
+// Radius (디자인 토큰 v4 — design_tokens.md 정본). 실제 매핑(코드 기준, 옛 주석 정정):
+//   sm=버튼·칩·인풋·토글 / md=이미지·중첩 블록 / lg=콘텐츠 카드 / xl=바텀시트·대형 / full=pill·원형
 export const radius = { sm: 8, md: 12, lg: 16, xl: 24, full: 999 };
 
-// Spacing — 4px 그리드(EOND UI 계승 2026-07-30). 임의 여백값을 만들지 않는다.
+// Spacing — 4px 그리드(design_tokens.md). 임의 여백값을 만들지 않는다.
+//   판별: 요소 안 ≤12 / 카드 안 16 / 카드 사이 x2(24) / 섹션 x3~x4(32~40) / 화면 좌우 xl(20).
 export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, x2: 24, x3: 32, x4: 40, x5: 48, x6: 64 };
 
 // 조판 — 한국어는 어절 단위 줄바꿈(word-break: keep-all). 한글 Text에 스프레드해서 쓴다.
 export const keepAll = { wordBreak: 'keep-all' };
 
-// 타이포 스케일 (사양서 v3.3 — EOND UI 검토 반영 2026-07-30).
-//   화면 위계용 8단(size·weight) + 후리가나 렌더러가 쓰는 기존 값 유지.
+// 타이포 스케일 (디자인 토큰 v4 — design_tokens.md 정본, 2026-07-31).
+//   각 역할 = size(px)·line(행간 px)·weight·ls(자간 px). 근거: 본문 16 기준·헤딩 1.25~1.5배·행간 본문~1.5/제목~1.2.
+//   🔴 화면들은 아직 개별 fontSize 하드코딩 — 이 스케일로 점진 이관(정합 후속). 지금 값 변경은 화면 무영향.
+//   🔴 bodyJp.fontSize·rubyRatio 는 Ruby(후리가나 렌더러)가 참조하므로 형태·키 유지.
 export const type = {
-  hero: { size: 28, weight: '700' },   // 큰 숫자·히어로
-  h1: { size: 22, weight: '700' },     // 화면 제목
-  h2: { size: 19, weight: '700' },     // 히어로 카드 제목
-  h3: { size: 17, weight: '700' },     // 카드 제목
-  body: { size: 15, weight: '400' },   // 본문
-  bodySm: { size: 13, weight: '400' }, // 보조 본문
-  caption: { size: 12, weight: '500' },// 라벨·캡션
-  micro: { size: 11, weight: '500' },  // 최소 캡션·뱃지
-  bodyJp: { fontSize: 18, lineHeight: 2.0 }, // 후리가나 본문(사양서 3.2)
-  rubyRatio: 0.5, // 루비 크기 = 본문의 50%
+  display:  { size: 32, line: 40, weight: '700', ls: -0.5 }, // 온보딩 대제목·빈 상태
+  title:    { size: 24, line: 32, weight: '700', ls: -0.5 }, // 화면 제목
+  heading:  { size: 20, line: 28, weight: '700', ls: -0.3 }, // 섹션 헤더
+  subtitle: { size: 18, line: 26, weight: '500', ls: -0.3 }, // 히어로 카드 제목
+  body:     { size: 16, line: 24, weight: '400', ls: 0 },    // 한국어 본문(기본)
+  bodySm:   { size: 14, line: 20, weight: '400', ls: 0 },    // 보조 본문
+  label:    { size: 12, line: 16, weight: '500', ls: 0 },    // 라벨·캡션
+  caption:  { size: 11, line: 16, weight: '500', ls: 0 },    // 배지·타임스탬프
+  number:   { size: 28, line: 32, weight: '700', ls: -0.5 }, // 큰 통계 수치(tabular-nums)
+  numberSm: { size: 20, line: 24, weight: '700', ls: -0.5 }, // 카드 안 보조 수치
+  bodyJp: { fontSize: 18, lineHeight: 2.0 }, // 후리가나 본문 — Ruby가 .fontSize 참조(형태 고정)
+  rubyRatio: 0.5, // 루비 = 본문의 50% — Ruby 참조
 };
 
 // 폰트 패밀리 (사양서 3.1.1). 웹은 @font-face(fonts.css)로 로드.
