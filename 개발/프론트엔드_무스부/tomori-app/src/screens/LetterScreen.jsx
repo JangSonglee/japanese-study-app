@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
@@ -6,7 +6,8 @@ import Ruby from '../components/Ruby';
 import LetterReply from '../components/LetterReply';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll } from '../theme/tokens';
-import { getLetter } from '../data/letters';
+import { getLetter, getLetterBySeq } from '../data/letters';
+import { markLetterRead } from '../data/stamps';
 
 /**
  * 편지 상세 (토모의 이정표 편지). 소장용 편지지 레이아웃.
@@ -15,13 +16,21 @@ import { getLetter } from '../data/letters';
  *  · 톤: 조용한 관찰자(PRD 14.4). 폭죽·축하·밝기 헤일로 없음(헤일로는 쪽지 전용 14.2.1).
  *  · 데모 데이터(data/letters.js). 실 생성은 인증·적립 후.
  */
-export default function LetterScreen({ nav, id }) {
+export default function LetterScreen({ nav, id, seq }) {
   const { t, mode } = useTheme();
   const S = makeStyles(t);
   const isDark = mode === 'dark';
-  const letter = getLetter(id);
+  // seq 우선(실데이터 경로). App.jsx가 아직 seq를 프롭으로 안 넘겨줘도 nav.current.params에서 읽는다.
+  // seq 없으면(데모) 기존 id 경로 그대로.
+  const letterSeq = seq != null ? seq : nav?.current?.params?.seq;
+  const letter = letterSeq != null ? getLetterBySeq(letterSeq) : getLetter(id);
   const [furi, setFuri] = useState(true);   // 후리가나 기본 ON
   const [trans, setTrans] = useState(false); // 해석 기본 OFF
+
+  // 편지 열람 = 도착 배지 해제. 게스트(letterSeq==null)면 스킵.
+  useEffect(() => {
+    if (letterSeq != null) markLetterRead(letterSeq).catch(() => {});
+  }, [letterSeq]);
 
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>

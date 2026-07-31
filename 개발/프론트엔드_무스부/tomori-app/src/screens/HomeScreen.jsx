@@ -4,6 +4,7 @@ import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius } from '../theme/tokens';
 import { loadStreak } from '../data/study';
+import { loadStampState } from '../data/stamps';
 
 /**
  * 홈 (기획 8) — 위젯 홈. EOND UI 원칙 반영 리디자인(2026-07-30 검토).
@@ -43,9 +44,19 @@ export default function HomeScreen({ nav }) {
 
   const [streak, setStreak] = useState(null);
   useEffect(() => { loadStreak().then(setStreak).catch(() => setStreak(null)); }, []);
+  const [stamp, setStamp] = useState(null);
+  useEffect(() => { loadStampState().then(setStamp).catch(() => setStamp(null)); }, []);
 
   const D = HOME_DEMO;
   const streakData = streak || D.streak;
+
+  // 우표/편지 위젯 파생값 — 실데이터(stamp) 우선, 게스트면 데모(D) 그대로.
+  const hasStamp = stamp != null;
+  const letterWaiting = hasStamp ? stamp.newest_unread_seq != null : D.letterWaiting;
+  const newestSeq = hasStamp ? stamp.newest_unread_seq : null;
+  const noMoreLetters = hasStamp && !letterWaiting && stamp.cycle_need == null;
+  const stampHave = hasStamp ? stamp.cycle_have : D.stamp.have;
+  const stampNeed = hasStamp ? stamp.cycle_need : D.stamp.need;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: t.bgBase }} contentContainerStyle={S.body}>
       {/* 앱바 */}
@@ -113,23 +124,31 @@ export default function HomeScreen({ nav }) {
           <ProgressBar t={t} pct={D.progress.pct / 100} color={t.brand} />
         </View>
         <Pressable
-          onPress={() => (D.letterWaiting ? nav.push('letter', { id: D.newestLetterId }) : nav.push('letterBox'))}
+          onPress={() => (letterWaiting
+            ? nav.push('letter', hasStamp ? { seq: newestSeq } : { id: D.newestLetterId })
+            : nav.push('letterBox'))}
           style={[card, S.col]}
           accessibilityRole="button"
-          accessibilityLabel={D.letterWaiting ? '도착한 편지 열기' : '편지함'}
+          accessibilityLabel={letterWaiting ? '도착한 편지 열기' : '편지함'}
         >
-          {D.letterWaiting ? (
+          {letterWaiting ? (
             <>
               <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>토모의 편지</Text>
               <Text style={[S.letterArrived, { color: t.brandText }, KEEP]}>편지가 도착했어요</Text>
               <Text style={[S.cardSub, { color: t.textMid }, KEEP]}>열어보기 ›</Text>
             </>
+          ) : noMoreLetters ? (
+            <>
+              <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>모은 우표</Text>
+              <Text style={[S.letterArrived, { color: t.textMid }, KEEP]}>다음 편지 준비 중</Text>
+              <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>조금만 기다려 주세요</Text>
+            </>
           ) : (
             <>
               <Text style={[S.cardLbl, { color: t.textMid }, KEEP]}>모은 우표</Text>
-              <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{D.stamp.have}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {D.stamp.need}</Text></View>
-              <ProgressBar t={t} pct={D.stamp.have / D.stamp.need} color={t.brand} />
-              <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>다음 편지까지 {D.stamp.need - D.stamp.have}장</Text>
+              <View style={S.bigRow}><Text style={[S.big, { color: t.textHigh }]}>{stampHave}</Text><Text style={[S.bigUnit, { color: t.textMid }]}>/ {stampNeed}</Text></View>
+              <ProgressBar t={t} pct={stampHave / stampNeed} color={t.brand} />
+              <Text style={[S.cardSub, { color: t.textLow }, KEEP]}>다음 편지까지 {stampNeed - stampHave}장</Text>
             </>
           )}
         </Pressable>

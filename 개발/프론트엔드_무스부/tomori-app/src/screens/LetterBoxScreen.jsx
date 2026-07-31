@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll } from '../theme/tokens';
-import { LETTERS } from '../data/letters';
+import { LETTERS, getLetterBySeq } from '../data/letters';
+import { loadDeliveredLetters } from '../data/stamps';
 
 /**
  * 편지함 (MY) — 받은 토모의 편지 컬렉션(데모). 받은 편지만 모은다(쪽지·요약 PDF는 별도).
@@ -14,7 +15,20 @@ export default function LetterBoxScreen({ nav }) {
   const { t, mode } = useTheme();
   const S = makeStyles(t);
   const isDark = mode === 'dark';
-  const letters = LETTERS;
+
+  const [delivered, setDelivered] = useState(null);
+  useEffect(() => { loadDeliveredLetters().then(setDelivered).catch(() => setDelivered(null)); }, []);
+
+  // 실데이터(delivered) 있으면 배달 목록과 편지 콘텐츠를 조인, 없으면(게스트) 기존 데모 목록.
+  const letters = delivered != null
+    ? delivered
+        .map((d) => {
+          const c = getLetterBySeq(d.letter_seq);
+          if (!c) return null;
+          return { seq: d.letter_seq, title: c.title, preview: c.preview, dateLabel: d.delivered_on, unread: !d.read_at };
+        })
+        .filter(Boolean)
+    : LETTERS;
 
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
@@ -35,8 +49,8 @@ export default function LetterBoxScreen({ nav }) {
         ) : (
           letters.map((l) => (
             <Pressable
-              key={l.id}
-              onPress={() => nav.push('letter', { id: l.id })}
+              key={l.seq}
+              onPress={() => nav.push('letter', { seq: l.seq })}
               accessibilityRole="button"
               accessibilityLabel={`${l.title} 편지 열기`}
               style={[S.item, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }]}
