@@ -59,28 +59,24 @@ export default function HomeScreen({ nav }) {
   const stampNeed = hasStamp ? stamp.cycle_need : D.stamp.need;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: t.bgBase }} contentContainerStyle={S.body}>
-      {/* 앱바 */}
-      <View style={S.appbar}>
-        <Text style={[S.brand, { color: t.textHigh }, KEEP]}>토모리</Text>
-        <View style={S.appbarRight}>
-          {/* 활성 코스 = JLPT. 탭하면 코스 허브(단어·문법·독해·청해)로 바로 간다.
-              코스 '전환'(다른 코스 고르기)은 MY로 옮겼다 — IA(03·Core Flows): 학습=활성 코스만, 코스 전환은 MY·설정.
-              코스 선택 자체는 온보딩(관심분야→추천)이 담당하고, 5개 목록은 메인 플로우의 단계가 아니다. */}
-          <Pressable onPress={() => nav.push('jlptHub')} style={[S.coursePill, { backgroundColor: t.sunk }]} accessibilityRole="button" accessibilityLabel="JLPT 학습 메뉴">
-            <Text style={[S.coursePillText, { color: t.textMid }]}>JLPT</Text>
-          </Pressable>
-          <Pressable onPress={() => nav.push('my')} style={[S.myPill, { borderColor: t.borderStrong }]} accessibilityRole="button" accessibilityLabel="MY 화면">
-            <Text style={[S.myText, { color: t.textMid }]}>MY</Text>
-          </Pressable>
-        </View>
+      {/* 헤더 — 홈 리디자인(v2) 반영: [등불 + N일차](좌) · 아바타(우).
+          🔴 디자인엔 상호작용이 없어 네비 유지용으로 배선: 좌측(등불+일차) 탭→JLPT 학습 메뉴, 아바타 탭→MY.
+          🅿️ 「N일차」는 「함께한 총 일수」 의도(디자인 999는 플레이스홀더) — 현재는 스트릭 값으로 대체(총 일수 지표는 BE 후속). */}
+      <View style={S.header}>
+        <Pressable onPress={() => nav.push('jlptHub')} style={S.headerLeft} accessibilityRole="button" accessibilityLabel="JLPT 학습 메뉴">
+          <Tomo scale={0.34} pose="shine" showNote={false} />
+          <Text style={[S.dayCount, { color: t.textHigh }, KEEP]}>{streakData.days}일차</Text>
+        </Pressable>
+        <Pressable onPress={() => nav.push('my')} style={[S.avatar, { borderColor: t.borderStrong, backgroundColor: t.bgSurface }]} accessibilityRole="button" accessibilityLabel="MY 화면">
+          <Tomo scale={0.3} pose="bright" showNote={false} />
+        </Pressable>
       </View>
 
-      {/* 인사 */}
+      {/* 인사 — 토모는 헤더 등불로 이동. 부제 = 격려 카피(v2). */}
       <View style={S.greet}>
-        <Tomo scale={0.6} pose="shine" showNote={false} />
         <View style={S.greetText}>
           <Text style={[S.greetTitle, { color: t.textHigh }, KEEP]}>오늘도 왔네요, {D.user}님</Text>
-          <Text style={[S.greetSub, { color: t.textMid }, KEEP]}>{streakData.days > 0 ? `${streakData.days}밤째 함께 불을 켰어요.` : '오늘도 함께 불을 켜요.'}</Text>
+          <Text style={[S.greetSub, { color: t.textMid }, KEEP]}>오래 하지 않아도 돼요. 같이 꾸준히만 해요!</Text>
         </View>
       </View>
 
@@ -182,13 +178,10 @@ function ProgressBar({ t, pct, color }) {
 function makeStyles(t) {
   return StyleSheet.create({
     body: { padding: 20, gap: 16, paddingBottom: 32 },
-    appbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 44 },
-    brand: { fontFamily: fonts.ko, ...typeStyle('subtitle'), fontWeight: '700' },
-    appbarRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    coursePill: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.full },
-    coursePillText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
-    myPill: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.full, borderWidth: 1 },
-    myText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '700' },
+    header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 44 },
+    headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    dayCount: { fontFamily: fonts.ko, ...typeStyle('subtitle') },
+    avatar: { width: 40, height: 40, borderRadius: radius.full, borderWidth: 1, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
     greet: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
     greetText: { flex: 1, gap: 4 },
     greetTitle: { fontFamily: fonts.ko, ...typeStyle('heading') },
