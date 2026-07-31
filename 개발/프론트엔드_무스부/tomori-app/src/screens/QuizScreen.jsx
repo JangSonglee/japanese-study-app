@@ -40,6 +40,9 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
   const [roundCards, setRoundCards] = useState(cards);  // 현재 라운드가 푸는 목록(원본 cards는 불변)
   const wrongRef = useRef([]);                     // 1차에서 못 맞춘 카드 누적(오답+모름) → 2차 목록
   const attemptsRef = useRef([]);                   // 1차 시도 전체 누적(정답/오답/모름) → DoneView 경유 기록
+  const answeredRef = useRef(false);                // 🔴 제출/스킵 연타 시 같은 문항 중복 채점·기록 방지(session_attempts 중복 차단)
+  const advancingRef = useRef(false);               // 다음 문제 연타 시 문항 스킵 방지
+  useEffect(() => { advancingRef.current = false; }, [idx]);  // 새 문항 렌더되면 다시 진행 허용
 
   const done = idx >= roundCards.length;
   const card = done ? null : roundCards[idx];
@@ -60,6 +63,8 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
 
   function submit() {
     if (selected == null || !q) return;
+    if (answeredRef.current) return; // 연타 방지: 이미 채점된 문항 재처리 금지
+    answeredRef.current = true;
     const chosen = q.choices.find((c) => c.seq === selected);
     const ok = !!(chosen && chosen.correct);
     if (ok) {
@@ -74,6 +79,8 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
   }
   function skip() {
     if (!q) return;
+    if (answeredRef.current) return; // 연타 방지: 이미 처리된 문항 재처리 금지
+    answeredRef.current = true;
     if (round === 1) wrongRef.current.push(card);   // 모름도 '못 맞춤' → 재노출
     if (round === 1 && card.question?.id) {
       attemptsRef.current.push({ question_id: card.question.id, outcome: 'skipped', is_correct: false });
@@ -82,6 +89,9 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
   }
   function toResult() { setPhase('result'); }   // reaction 유지 → 모달만 닫힘
   function advance() {
+    if (advancingRef.current) return; // 다음 연타 방지(문항 스킵 차단)
+    advancingRef.current = true;
+    answeredRef.current = false;       // 새 문항 = 다시 채점 가능
     const atEnd = idx + 1 >= roundCards.length;
     if (round === 1 && atEnd && wrongRef.current.length > 0) {
       setRoundCards(wrongRef.current);   // 2차 진입: 못 맞춘 문제만
@@ -99,6 +109,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
     setWordSheet(false);
   }
   function retry() {   // 2연속에서 같은 문제 다시(같은 idx)
+    answeredRef.current = false;       // 같은 문항 재도전 = 다시 제출 가능
     setPhase('solve');
     setSelected(null);
     setReaction(null);
@@ -108,7 +119,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
     return (
       <DoneView
         t={t} mode={mode} known={correct} total={cards.length} savedCount={savedWords.size} noun="문제"
-        onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); setRound(1); setRoundCards(cards); wrongRef.current = []; attemptsRef.current = []; }}
+        onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); setRound(1); setRoundCards(cards); wrongRef.current = []; attemptsRef.current = []; answeredRef.current = false; advancingRef.current = false; }}
         onBack={() => nav && nav.pop()}
         source={kind}
         attempts={attemptsRef.current}
