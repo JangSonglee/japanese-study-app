@@ -115,7 +115,9 @@ function WordSession({ nav, level }) {
         const imagedKeys = (await loadImageManifest()).filter((k) => k.startsWith(prefix));
         let cards;
         if (imagedKeys.length) {
-          const imaged = await loadCardsByKeys(imagedKeys);
+          // 매니페스트 키 = 실제 이미지가 있는 카드 → hasImage 태그.
+          // 이미지 없는 카드(rest)에 <Image>를 마운트하면 404→붕괴로 카드 전환 시 깜빡임(레이아웃 점프)이 생긴다.
+          const imaged = (await loadCardsByKeys(imagedKeys)).map((c) => ({ ...c, hasImage: true }));
           const rest = await loadCards(level, 10);
           const seen = new Set(imaged.map((c) => c.key));
           cards = [...imaged, ...rest.filter((c) => !seen.has(c.key))];

@@ -130,8 +130,10 @@ export default function WordCardScreen({ nav, level = '', cards }) {
 
           {/* 중간 이미지 슬롯 — content_key 규칙(images/vocab/{content_key}.png, 점→밑줄)으로 자동 로드.
               🔴 이미지 있으면 표시, 없으면 아무것도 안 보여준다(플레이스홀더 없음 — 대표님 결정 2026-07-29).
+              🔴 card.hasImage(매니페스트 태그, App.jsx)일 때만 렌더 — 이미지 없는 카드에 Image를 마운트하면
+                 404→onError→언마운트로 고정 슬롯(134px)이 붕괴해 카드 전환마다 깜빡임(레이아웃 점프)이 났다.
               DB 스키마 변경 불필요(웹 슬라이스). */}
-          {!imgFailed ? (
+          {card.hasImage && !imgFailed ? (
             <Image
               source={{ uri: `images/vocab/${card.key.replace(/\./g, '_')}.png` }}
               style={S.image}
