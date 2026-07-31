@@ -80,7 +80,7 @@ export default function App() {
             ) : name === 'letterBox' ? (
               <LetterBoxScreen nav={nav} />
             ) : name === 'letter' ? (
-              <LetterScreen nav={nav} id={params.id} />
+              <LetterScreen nav={nav} id={params.id} seq={params.seq} />
             ) : null}
           </ThemeProvider>
         </View>

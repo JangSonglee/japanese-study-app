@@ -20,10 +20,8 @@ export default function LetterScreen({ nav, id, seq }) {
   const { t, mode } = useTheme();
   const S = makeStyles(t);
   const isDark = mode === 'dark';
-  // seq 우선(실데이터 경로). App.jsx가 아직 seq를 프롭으로 안 넘겨줘도 nav.current.params에서 읽는다.
-  // seq 없으면(데모) 기존 id 경로 그대로.
-  const letterSeq = seq != null ? seq : nav?.current?.params?.seq;
-  const letter = letterSeq != null ? getLetterBySeq(letterSeq) : getLetter(id);
+  // seq 우선(실데이터 경로, App.jsx가 params.seq를 프롭으로 넘김). 없으면(데모) 기존 id 경로.
+  const letter = seq != null ? getLetterBySeq(seq) : getLetter(id);
   const [furi, setFuri] = useState(true);   // 후리가나 기본 ON
   const [trans, setTrans] = useState(false); // 해석 기본 OFF
 
