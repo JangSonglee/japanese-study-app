@@ -39,6 +39,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
   const [round, setRound] = useState(1);          // 1=전체, 2=오답 재노출
   const [roundCards, setRoundCards] = useState(cards);  // 현재 라운드가 푸는 목록(원본 cards는 불변)
   const wrongRef = useRef([]);                     // 1차에서 못 맞춘 카드 누적(오답+모름) → 2차 목록
+  const attemptsRef = useRef([]);                   // 1차 시도 전체 누적(정답/오답/모름) → DoneView 경유 기록
 
   const done = idx >= roundCards.length;
   const card = done ? null : roundCards[idx];
@@ -66,11 +67,17 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
     } else if (round === 1) {
       wrongRef.current.push(card);   // 1차 오답 → 2차 재노출 큐
     }
+    if (round === 1 && card.question?.id) {
+      attemptsRef.current.push({ question_id: card.question.id, outcome: ok ? 'correct' : 'wrong', is_correct: ok });
+    }
     setReaction(ok ? 'correct' : 'wrong');
   }
   function skip() {
     if (!q) return;
     if (round === 1) wrongRef.current.push(card);   // 모름도 '못 맞춤' → 재노출
+    if (round === 1 && card.question?.id) {
+      attemptsRef.current.push({ question_id: card.question.id, outcome: 'skipped', is_correct: false });
+    }
     setReaction('unknown');
   }
   function toResult() { setPhase('result'); }   // reaction 유지 → 모달만 닫힘
@@ -101,9 +108,10 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
     return (
       <DoneView
         t={t} mode={mode} known={correct} total={cards.length} savedCount={savedWords.size} noun="문제"
-        onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); setRound(1); setRoundCards(cards); wrongRef.current = []; }}
+        onRestart={() => { setIdx(0); setCorrect(0); setSelected(null); setPhase('solve'); setReaction(null); setRound(1); setRoundCards(cards); wrongRef.current = []; attemptsRef.current = []; }}
         onBack={() => nav && nav.pop()}
         source={kind}
+        attempts={attemptsRef.current}
       />
     );
   }
