@@ -237,13 +237,15 @@ function ToggleBtn({ t, on, label, onPress }) {
  *  · CTA 2개 [다시 보기](sec) + [테스트 시작하기](pri). 다시 보기를 지우지 않는다(강제 진행 없음 PRD 1.3).
  *  · 「안다고 했는데 틀린 단어」 lift 카드는 2단계(테스트 후) 전용 — 이 슬라이스엔 테스트가 없어 미표시.
  */
-export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어', source, attempts = [] }) {
+export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어', source, attempts = [], onWrongNote }) {
   const recordedRef = useRef(false);
   useEffect(() => {
     if (recordedRef.current || !source) return;
     recordedRef.current = true;
     recordSessionComplete(source, Math.min(known, total), Math.max(0, total - known), attempts).catch(() => {});
   }, [source, known, total, attempts]);
+  // 오답노트 추가분 — 이번 세션 1차 시도 중 틀리거나 넘어간 문항 수(퀴즈만; 단어·문법은 attempts 없음).
+  const wrongCount = (attempts || []).filter((a) => a && a.outcome !== 'correct').length;
   return (
     <View style={[doneStyles.wrap, { backgroundColor: t.bgBase }]}>
       {/* 뒤로 — 세션 요약에서 허브로 나가는 길 */}
@@ -284,6 +286,14 @@ export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack,
           <Icon name="star" size={14} color={t.brandText} filled />
           <Text style={[doneStyles.savedNote, { color: t.brandText }]}>저장한 {noun} {savedCount}개 · 단어장에 담김</Text>
         </View>
+      ) : null}
+
+      {/* 오답노트 추가분(PRD 8.2) — 이번 세션 틀림·넘어감 문항. 탭하면 오답노트로(퀴즈만; onWrongNote 있을 때만 이동). */}
+      {wrongCount > 0 ? (
+        <Pressable style={doneStyles.savedRow} onPress={onWrongNote} disabled={!onWrongNote} accessibilityRole={onWrongNote ? 'button' : undefined} accessibilityLabel={onWrongNote ? '오답노트에서 다시 보기' : undefined}>
+          <Text style={[doneStyles.wrongMark, { color: t.textMid }]}>✕</Text>
+          <Text style={[doneStyles.savedNote, { color: t.textMid }, keepAll]}>틀리거나 넘어간 {wrongCount}문제 · 오답노트에 담겼어요{onWrongNote ? ' · 다시 보기 ›' : ''}</Text>
+        </Pressable>
       ) : null}
 
       {/* CTA — [다시 보기] sec + [테스트 시작하기] pri (슬라이스엔 테스트 없어 둘 다 재시작으로 연결) */}
@@ -335,6 +345,7 @@ const doneStyles = StyleSheet.create({
 
   savedRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   savedNote: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', ...keepAll },
+  wrongMark: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
 
   cta: { flexDirection: 'row', gap: 8, marginTop: 4 },
   btnSec: { width: 129, height: 48, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },

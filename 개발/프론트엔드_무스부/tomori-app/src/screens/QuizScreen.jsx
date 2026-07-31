@@ -123,6 +123,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
         onBack={() => nav && nav.pop()}
         source={kind}
         attempts={attemptsRef.current}
+        onWrongNote={() => nav && nav.push('wrongNote')}
       />
     );
   }
