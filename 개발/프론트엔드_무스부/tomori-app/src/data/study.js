@@ -6,11 +6,12 @@ function localISO(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-export async function recordSessionComplete(source, correct, wrong) {
+export async function recordSessionComplete(source, correct, wrong, attempts = []) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
   const { data, error } = await supabase.rpc('record_session_complete', {
     p_source: source, p_correct: correct | 0, p_wrong: wrong | 0,
+    p_attempts: Array.isArray(attempts) ? attempts : [],
   });
   if (error) throw error;
   return data;

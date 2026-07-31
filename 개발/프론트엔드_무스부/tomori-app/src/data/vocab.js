@@ -199,7 +199,7 @@ export async function loadReading(level = 'N5', limit = 10) {
   const keys = texts.map((t) => t.content_key);
   const { data: qs, error: qe } = await supabase
     .from('questions')
-    .select('content_key, target_item_key, stem_ja, stem_ruby, explanation, question_choices(seq, choice_text, choice_ruby, is_correct)')
+    .select('id, content_key, target_item_key, stem_ja, stem_ruby, explanation, question_choices(seq, choice_text, choice_ruby, is_correct)')
     .eq('target_item_type', 'reading')
     .in('target_item_key', keys);
   if (qe) throw new Error('Supabase: ' + qe.message);
@@ -228,7 +228,7 @@ export async function loadListening(level = 'N5', limit = 10) {
   const keys = items.map((i) => i.content_key);
   const { data: qs, error: qe } = await supabase
     .from('questions')
-    .select('content_key, target_item_key, stem_ja, stem_ruby, explanation, question_choices(seq, choice_text, choice_ruby, is_correct)')
+    .select('id, content_key, target_item_key, stem_ja, stem_ruby, explanation, question_choices(seq, choice_text, choice_ruby, is_correct)')
     .eq('target_item_type', 'listening')
     .in('target_item_key', keys);
   if (qe) throw new Error('Supabase: ' + qe.message);
@@ -278,7 +278,7 @@ function questionVM(q) {
   const choices = (q.question_choices || [])
     .slice().sort((a, b) => a.seq - b.seq)
     .map((c) => ({ seq: c.seq, front: rubyOr(c.choice_ruby, c.choice_text), correct: !!c.is_correct }));
-  return { stem: rubyOr(q.stem_ruby, q.stem_ja), explanation: q.explanation || '', choices };
+  return { id: q.id || null, stem: rubyOr(q.stem_ruby, q.stem_ja), explanation: q.explanation || '', choices };
 }
 
 // 폴백: 로컬 CSV (오프라인/DB 미가용 시)
