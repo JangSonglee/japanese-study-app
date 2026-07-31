@@ -25,10 +25,10 @@ export default function LetterScreen({ nav, id, seq }) {
   const [furi, setFuri] = useState(true);   // 후리가나 기본 ON
   const [trans, setTrans] = useState(false); // 해석 기본 OFF
 
-  // 편지 열람 = 도착 배지 해제. 게스트(letterSeq==null)면 스킵.
+  // 편지 열람 = 도착 배지 해제. 게스트(seq==null)면 스킵.
   useEffect(() => {
-    if (letterSeq != null) markLetterRead(letterSeq).catch(() => {});
-  }, [letterSeq]);
+    if (seq != null) markLetterRead(seq).catch(() => {});
+  }, [seq]);
 
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
