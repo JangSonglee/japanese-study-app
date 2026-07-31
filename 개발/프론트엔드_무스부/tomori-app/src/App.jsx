@@ -13,6 +13,7 @@ import SettingsScreen from './screens/SettingsScreen';
 import AboutScreen from './screens/AboutScreen';
 import LetterBoxScreen from './screens/LetterBoxScreen';
 import LetterScreen from './screens/LetterScreen';
+import WrongNoteScreen from './screens/WrongNoteScreen';
 import WordCardScreen from './screens/WordCardScreen';
 import GrammarCardScreen from './screens/GrammarCardScreen';
 import QuizScreen from './screens/QuizScreen';
@@ -81,6 +82,8 @@ export default function App() {
               <LetterBoxScreen nav={nav} />
             ) : name === 'letter' ? (
               <LetterScreen nav={nav} id={params.id} seq={params.seq} />
+            ) : name === 'wrongNote' ? (
+              <WrongNoteScreen nav={nav} />
             ) : null}
           </ThemeProvider>
         </View>

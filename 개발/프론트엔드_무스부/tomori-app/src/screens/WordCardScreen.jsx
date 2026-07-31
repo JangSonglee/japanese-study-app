@@ -231,13 +231,13 @@ function ToggleBtn({ t, on, label, onPress }) {
  *  · CTA 2개 [다시 보기](sec) + [테스트 시작하기](pri). 다시 보기를 지우지 않는다(강제 진행 없음 PRD 1.3).
  *  · 「안다고 했는데 틀린 단어」 lift 카드는 2단계(테스트 후) 전용 — 이 슬라이스엔 테스트가 없어 미표시.
  */
-export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어', source }) {
+export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어', source, attempts = [] }) {
   const recordedRef = useRef(false);
   useEffect(() => {
     if (recordedRef.current || !source) return;
     recordedRef.current = true;
-    recordSessionComplete(source, known, Math.max(0, total - known)).catch(() => {});
-  }, [source, known, total]);
+    recordSessionComplete(source, known, Math.max(0, total - known), attempts).catch(() => {});
+  }, [source, known, total, attempts]);
   return (
     <View style={[doneStyles.wrap, { backgroundColor: t.bgBase }]}>
       {/* 뒤로 — 세션 요약에서 허브로 나가는 길 */}
