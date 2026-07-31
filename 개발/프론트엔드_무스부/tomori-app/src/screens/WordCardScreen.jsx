@@ -29,6 +29,8 @@ export default function WordCardScreen({ nav, level = '', cards }) {
   const [saved, setSaved] = useState(() => new Set());
   const [known, setKnown] = useState(0);
   const [imgFailed, setImgFailed] = useState(false); // 이미지 없으면 플레이스홀더로 폴백
+  const advancingRef = useRef(false); // 전환 중 중복 탭 무시(빠른 더블탭이 known을 total 초과로 올려 요약이 음수 표시되던 버그)
+  useEffect(() => { advancingRef.current = false; }, [idx]); // 새 카드 렌더되면 다시 탭 허용
 
   const done = idx >= cards.length;
   const card = done ? null : cards[idx];
@@ -40,6 +42,8 @@ export default function WordCardScreen({ nav, level = '', cards }) {
   //    (이전 「정답면=MY›설정 기본값 따름」은 뜻 보기가 원치 않은 보조를 얹는다는 지적으로 폐기.)
 
   function next(gotKnown) {
+    if (advancingRef.current) return; // 전환 중 두 번째 탭 무시(중복 카운트·카드 스킵 방지)
+    advancingRef.current = true;
     if (gotKnown) setKnown((k) => k + 1);
     setRevealed(false);
     setFuri(false);   // 새 카드 = 항상 OFF (챌린지)
@@ -238,7 +242,7 @@ export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack,
   useEffect(() => {
     if (recordedRef.current || !source) return;
     recordedRef.current = true;
-    recordSessionComplete(source, known, Math.max(0, total - known), attempts).catch(() => {});
+    recordSessionComplete(source, Math.min(known, total), Math.max(0, total - known), attempts).catch(() => {});
   }, [source, known, total, attempts]);
   return (
     <View style={[doneStyles.wrap, { backgroundColor: t.bgBase }]}>
@@ -254,11 +258,11 @@ export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack,
 
       <View style={doneStyles.stats}>
         <View style={[doneStyles.stat, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, dark(mode) && { borderWidth: 1, borderColor: t.border }]}>
-          <Text style={[doneStyles.big, { color: t.textHigh }]}>{known}<Text style={[doneStyles.unit, { color: t.textMid }]}>개</Text></Text>
+          <Text style={[doneStyles.big, { color: t.textHigh }]}>{Math.min(known, total)}<Text style={[doneStyles.unit, { color: t.textMid }]}>개</Text></Text>
           <Text style={[doneStyles.statLbl, { color: t.textMid }]}>아는 {noun}</Text>
         </View>
         <View style={[doneStyles.stat, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, dark(mode) && { borderWidth: 1, borderColor: t.border }]}>
-          <Text style={[doneStyles.big, { color: t.textHigh }]}>{total - known}<Text style={[doneStyles.unit, { color: t.textMid }]}>개</Text></Text>
+          <Text style={[doneStyles.big, { color: t.textHigh }]}>{Math.max(0, total - known)}<Text style={[doneStyles.unit, { color: t.textMid }]}>개</Text></Text>
           <Text style={[doneStyles.statLbl, { color: t.textMid }]}>모르는 {noun}</Text>
         </View>
       </View>
@@ -270,7 +274,7 @@ export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack,
           <Text style={[doneStyles.progKbd, { color: t.textMid, backgroundColor: t.sunk }]}>이번 세션 +{known}</Text>
         </View>
         <View style={[doneStyles.progTrack, { backgroundColor: t.sunk }]}>
-          <View style={[doneStyles.progFill, { backgroundColor: t.brand, width: `${Math.round((known / total) * 100)}%` }]} />
+          <View style={[doneStyles.progFill, { backgroundColor: t.brand, width: `${Math.min(100, Math.round((known / total) * 100))}%` }]} />
         </View>
         <Text style={[doneStyles.progNote, { color: t.textMid }]}>누적 수치(N / 급수 총량)는 백엔드 연결 후 표시</Text>
       </View>
