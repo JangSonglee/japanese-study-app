@@ -92,7 +92,7 @@ export default function WrongNoteScreen({ nav }) {
                   </View>
 
                   <View style={S.qArea}>
-                    {n.stem_ruby ? (
+                    {n.stem_ruby && n.stem_ruby.base ? (
                       <Ruby base={n.stem_ruby.base} ruby={n.stem_ruby.ruby} show size={17} color={t.textHigh} />
                     ) : (
                       <Text style={[S.plainJa, { color: t.textHigh }]} lang="ja">{n.stem_ja}</Text>
@@ -101,7 +101,7 @@ export default function WrongNoteScreen({ nav }) {
 
                   <View style={S.answerRow}>
                     <Text style={[S.answerLabel, { color: t.textLow }]}>정답</Text>
-                    {n.correct_ruby ? (
+                    {n.correct_ruby && n.correct_ruby.base ? (
                       <Ruby base={n.correct_ruby.base} ruby={n.correct_ruby.ruby} show size={15} color={t.textHigh} />
                     ) : (
                       <Text style={[S.plainJa, { color: t.textHigh }]} lang="ja">{n.correct_text}</Text>
