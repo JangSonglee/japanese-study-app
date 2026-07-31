@@ -96,6 +96,13 @@ export const type = {
   rubyRatio: 0.5, // 루비 = 본문의 50% — Ruby 참조
 };
 
+// 역할 → RN 텍스트 스타일. 화면 이관용: 스타일에 {...typeStyle('body'), fontFamily: fonts.ko} 로 스프레드.
+//   필요 시 fontWeight 등은 뒤에 덧써서 오버라이드(예: 라벨을 굵게).
+export function typeStyle(role) {
+  const x = type[role];
+  return { fontSize: x.size, lineHeight: x.line, fontWeight: x.weight, letterSpacing: x.ls };
+}
+
 // 폰트 패밀리 (사양서 3.1.1). 웹은 @font-face(fonts.css)로 로드.
 //   RN(Expo)에서는 expo-font 로 같은 이름을 등록해야 한다 (보고 참조).
 export const fonts = {

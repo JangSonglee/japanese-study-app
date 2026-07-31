@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius } from '../theme/tokens';
+import { fonts, radius, typeStyle } from '../theme/tokens';
 import { loadStreak } from '../data/study';
 import { loadStampState } from '../data/stamps';
 
@@ -175,43 +175,47 @@ function ProgressBar({ t, pct, color }) {
   );
 }
 
+// 🔴 디자인 토큰 이관 시범(2026-07-31): 폰트는 typeStyle(role) 스케일로, 여백은 4px 그리드로 정규화.
+//   역할 매핑 — brand/letterArrived=subtitle, greetTitle/contTitle=heading, big=number,
+//   greetSub/bigUnit/advBody=bodySm, cardLbl/contLbl/progText/advLbl=label, cardSub/courseBadge=caption,
+//   contBtnText=body. 라벨류의 굵기는 뒤에 fontWeight로 오버라이드. 버튼 높이 50→48(button 토큰).
 function makeStyles(t) {
   return StyleSheet.create({
     body: { padding: 20, gap: 16, paddingBottom: 32 },
     appbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', height: 44 },
-    brand: { fontFamily: fonts.ko, fontSize: 18, fontWeight: '700' },
+    brand: { fontFamily: fonts.ko, ...typeStyle('subtitle'), fontWeight: '700' },
     appbarRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    coursePill: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.full },
-    coursePillText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
-    myPill: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: radius.full, borderWidth: 1 },
-    myText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
+    coursePill: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.full },
+    coursePillText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
+    myPill: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.full, borderWidth: 1 },
+    myText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '700' },
     greet: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4 },
-    greetText: { flex: 1, gap: 3 },
-    greetTitle: { fontFamily: fonts.ko, fontSize: 21, fontWeight: '700' },
-    greetSub: { fontFamily: fonts.ko, fontSize: 14 },
+    greetText: { flex: 1, gap: 4 },
+    greetTitle: { fontFamily: fonts.ko, ...typeStyle('heading') },
+    greetSub: { fontFamily: fonts.ko, ...typeStyle('bodySm') },
     row2: { flexDirection: 'row', gap: 12 },
     col: { flex: 1 },
     card: { borderRadius: radius.lg, padding: 16, gap: 12 },
-    cardLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '500' },
-    cardSub: { fontFamily: fonts.ko, fontSize: 11 },
-    letterArrived: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', marginTop: 2 },
-    bigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 3 },
-    big: { fontFamily: fonts.ko, fontSize: 30, fontWeight: '700', letterSpacing: -0.5 },
-    bigUnit: { fontFamily: fonts.ko, fontSize: 14, marginBottom: 4 },
-    dots: { flexDirection: 'row', gap: 5, marginTop: 2 },
+    cardLbl: { fontFamily: fonts.ko, ...typeStyle('label') },
+    cardSub: { fontFamily: fonts.ko, ...typeStyle('caption') },
+    letterArrived: { fontFamily: fonts.ko, ...typeStyle('subtitle'), fontWeight: '700', marginTop: 2 },
+    bigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 4 },
+    big: { fontFamily: fonts.ko, ...typeStyle('number'), fontVariant: ['tabular-nums'] },
+    bigUnit: { fontFamily: fonts.ko, ...typeStyle('bodySm'), marginBottom: 4 },
+    dots: { flexDirection: 'row', gap: 4, marginTop: 2 },
     dot: { width: 8, height: 8, borderRadius: 999 },
     contHead: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    courseBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.full },
-    courseBadgeText: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '700' },
-    contLbl: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '500' },
-    contTitle: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700', marginTop: 2 },
-    progRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-    progText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
-    contBtn: { height: 50, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
-    contBtnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    courseBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: radius.full },
+    courseBadgeText: { fontFamily: fonts.ko, ...typeStyle('caption'), fontWeight: '700' },
+    contLbl: { fontFamily: fonts.ko, ...typeStyle('label') },
+    contTitle: { fontFamily: fonts.ko, ...typeStyle('heading'), marginTop: 2 },
+    progRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    progText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
+    contBtn: { height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
+    contBtnText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
     advCard: { flexDirection: 'row', alignItems: 'center', gap: 14 },
     advText: { flex: 1, gap: 4 },
-    advLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
-    advBody: { fontFamily: fonts.ko, fontSize: 13.5, lineHeight: 21 },
+    advLbl: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '700' },
+    advBody: { fontFamily: fonts.ko, ...typeStyle('bodySm') },
   });
 }
