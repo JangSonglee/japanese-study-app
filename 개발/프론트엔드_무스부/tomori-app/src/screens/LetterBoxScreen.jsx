@@ -7,9 +7,16 @@ import { fonts, radius, keepAll } from '../theme/tokens';
 import { LETTERS, getLetterBySeq } from '../data/letters';
 import { loadDeliveredLetters } from '../data/stamps';
 
+// 배달일 ISO(YYYY-MM-DD) → 「M월 D일」. 문자열 파싱(타임존 이동 방지).
+function koDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+  return m ? `${Number(m[2])}월 ${Number(m[3])}일` : (iso || '');
+}
+
 /**
- * 편지함 (MY) — 받은 토모의 편지 컬렉션(데모). 받은 편지만 모은다(쪽지·요약 PDF는 별도).
- *  · 빈 상태는 담담하게(압박·빨간점 없음). 실 도착은 인증·적립 후.
+ * 편지함 (MY) — 받은 토모의 편지 컬렉션. 받은 편지만 모은다(쪽지·요약 PDF는 별도).
+ *  · 로그인=배달 목록(user_letters) 실데이터, 게스트·조회실패=데모(LETTERS) 폴백.
+ *  · 빈 상태는 담담하게(압박·빨간점 없음).
  */
 export default function LetterBoxScreen({ nav }) {
   const { t, mode } = useTheme();
@@ -19,13 +26,14 @@ export default function LetterBoxScreen({ nav }) {
   const [delivered, setDelivered] = useState(null);
   useEffect(() => { loadDeliveredLetters().then(setDelivered).catch(() => setDelivered(null)); }, []);
 
-  // 실데이터(delivered) 있으면 배달 목록과 편지 콘텐츠를 조인, 없으면(게스트) 기존 데모 목록.
-  const letters = delivered != null
+  // 실데이터(delivered) 있으면 배달 목록과 편지 콘텐츠를 조인, 없으면(게스트·조회실패) 기존 데모 목록.
+  const isReal = delivered != null;
+  const letters = isReal
     ? delivered
         .map((d) => {
           const c = getLetterBySeq(d.letter_seq);
           if (!c) return null;
-          return { seq: d.letter_seq, title: c.title, preview: c.preview, dateLabel: d.delivered_on, unread: !d.read_at };
+          return { seq: d.letter_seq, title: c.title, preview: c.preview, dateLabel: koDate(d.delivered_on), unread: !d.read_at };
         })
         .filter(Boolean)
     : LETTERS;
@@ -50,7 +58,7 @@ export default function LetterBoxScreen({ nav }) {
           letters.map((l) => (
             <Pressable
               key={l.seq}
-              onPress={() => nav.push('letter', { seq: l.seq })}
+              onPress={() => nav.push('letter', isReal ? { seq: l.seq } : { id: l.id })}
               accessibilityRole="button"
               accessibilityLabel={`${l.title} 편지 열기`}
               style={[S.item, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }]}
