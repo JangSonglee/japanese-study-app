@@ -4,7 +4,7 @@ import Ruby from '../components/Ruby';
 import Tomo from '../components/Tomo';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { recordSessionComplete } from '../data/study';
 
 /**
@@ -320,7 +320,7 @@ const tStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  toggleText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+  toggleText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
 });
 
 const doneStyles = StyleSheet.create({
@@ -329,29 +329,29 @@ const doneStyles = StyleSheet.create({
   backBtn: { position: 'absolute', top: 12, left: 12 },
   back: { fontSize: 26 },
 
-  title: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700', ...keepAll },
+  title: { fontFamily: fonts.ko, ...typeStyle('heading'), fontWeight: '700', ...keepAll },
   stats: { flexDirection: 'row', gap: 10 },
   stat: { width: 128, borderRadius: radius.lg, padding: 14, gap: 4, alignItems: 'flex-start' },
-  big: { fontFamily: fonts.ko, fontSize: 27, fontWeight: '700', fontVariant: ['tabular-nums'] },
-  unit: { fontSize: 13, fontWeight: '400' },
-  statLbl: { fontFamily: fonts.ko, fontSize: 13, ...keepAll },
+  big: { fontFamily: fonts.ko, ...typeStyle('number'), fontVariant: ['tabular-nums'] },
+  unit: { fontFamily: fonts.ko, ...typeStyle('bodySm') },
+  statLbl: { fontFamily: fonts.ko, ...typeStyle('bodySm'), ...keepAll },
 
   progCard: { width: 266, borderRadius: radius.lg, padding: 13, gap: 8 },
   progHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  progKbd: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.full, overflow: 'hidden', fontVariant: ['tabular-nums'] },
+  progKbd: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600', paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.full, overflow: 'hidden', fontVariant: ['tabular-nums'] },
   progTrack: { height: 8, borderRadius: radius.full, overflow: 'hidden' },
   progFill: { height: 8, borderRadius: radius.full },
-  progNote: { fontFamily: fonts.ko, fontSize: 11, ...keepAll },
+  progNote: { fontFamily: fonts.ko, ...typeStyle('caption'), ...keepAll },
 
   savedRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  savedNote: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', ...keepAll },
-  wrongMark: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
+  savedNote: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600', ...keepAll },
+  wrongMark: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '700' },
 
   cta: { flexDirection: 'row', gap: 8, marginTop: 4 },
   btnSec: { width: 129, height: 48, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  btnSecText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+  btnSecText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
   btnPri: { width: 129, height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-  btnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+  btnText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
 });
 
 function makeStyles(t) {
@@ -361,39 +361,39 @@ function makeStyles(t) {
       height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10,
     },
     back: { fontSize: 26, width: 20 },
-    appTitle: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    appTitle: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     kbd: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: radius.full },
-    kbdText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', fontVariant: ['tabular-nums'] },
+    kbdText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600', fontVariant: ['tabular-nums'] },
     body: { padding: 14, gap: 10, minHeight: '100%' },
     areaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     areaBar: { width: 4, height: 16, borderRadius: radius.full },
-    areaLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700' },
-    areaHint: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    areaLabel: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '700' },
+    areaHint: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     card: { flex: 1, borderRadius: radius.lg, padding: 16, gap: 12 },
     cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    lblLow: { fontFamily: fonts.ko, fontSize: 13 },
-    saveStar: { fontFamily: fonts.ko, fontSize: 14 },
+    lblLow: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400' },
+    saveStar: { fontFamily: fonts.ko, ...typeStyle('bodySm') },
     wordArea: { alignItems: 'flex-start', justifyContent: 'center', paddingVertical: 4, gap: 6 },
-    romaji: { fontFamily: fonts.ko, fontSize: 16 },
+    romaji: { fontFamily: fonts.ko, ...typeStyle('body') },
     image: { width: '100%', height: 118, borderRadius: radius.md, marginBottom: 16 },
     errRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-    errText: { fontFamily: fonts.ko, fontSize: 12 },
+    errText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400' },
     answer: { gap: 4 },
     divider: { height: 1, marginBottom: 6 },
-    meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', ...keepAll },
-    exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2, ...keepAll },
+    meaning: { fontFamily: fonts.ko, ...typeStyle('subtitle'), fontWeight: '700', ...keepAll },
+    exKo: { fontFamily: fonts.ko, ...typeStyle('bodySm'), marginTop: 2, ...keepAll },
     toggleRow: { flexDirection: 'row', gap: 6 },
     btnSec: {
       height: 44, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center',
     },
-    btnSecText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+    btnSecText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
     cta: { flexDirection: 'row', gap: 8 },
     btnPri: { flex: 1, height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-    btnPriText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    btnPriText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
     btnGhost: {
       flex: 1, height: 48, borderRadius: radius.sm,
       alignItems: 'center', justifyContent: 'center',
     },
-    btnGhostText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+    btnGhostText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
   });
 }

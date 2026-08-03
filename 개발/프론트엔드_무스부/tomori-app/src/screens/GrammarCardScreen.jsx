@@ -4,7 +4,7 @@ import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { DoneView } from './WordCardScreen';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 
 /**
  * 문법 카드 화면 (JLPT · 리콜 카드). 단어 카드와 같은 학습 흐름, 필드만 문법용.
@@ -164,41 +164,41 @@ function ToggleBtn({ t, on, label, onPress }) {
 
 const tStyles = StyleSheet.create({
   toggle: { flex: 1, height: 40, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  toggleText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+  toggleText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
 });
 
 function makeStyles(t) {
   return StyleSheet.create({
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
-    appTitle: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    appTitle: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     kbd: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: radius.full },
-    kbdText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', fontVariant: ['tabular-nums'] },
+    kbdText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600', fontVariant: ['tabular-nums'] },
     body: { padding: 14, gap: 10, minHeight: '100%' },
     areaRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     areaBar: { width: 4, height: 16, borderRadius: radius.full },
-    areaLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700' },
-    areaHint: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    areaLabel: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '700' },
+    areaHint: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     card: { flex: 1, borderRadius: radius.lg, padding: 16, gap: 12 },
     cardHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    lblLow: { fontFamily: fonts.ko, fontSize: 13 },
+    lblLow: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400' },
     patternArea: { alignItems: 'center', justifyContent: 'center', paddingVertical: 20, gap: 8 },
-    romaji: { fontFamily: fonts.ko, fontSize: 15 },
+    romaji: { fontFamily: fonts.ko, ...typeStyle('body') },
     connRow: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 8 },
-    connLbl: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
-    connText: { fontFamily: fonts.ko, fontSize: 13, flex: 1, ...keepAll },
+    connLbl: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
+    connText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), flex: 1, ...keepAll },
     answer: { gap: 4 },
     divider: { height: 1, marginBottom: 6 },
-    meaning: { fontFamily: fonts.ko, fontSize: 17, fontWeight: '700', ...keepAll },
-    usage: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 21, ...keepAll },
-    exKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2, ...keepAll },
+    meaning: { fontFamily: fonts.ko, ...typeStyle('subtitle'), fontWeight: '700', ...keepAll },
+    usage: { fontFamily: fonts.ko, ...typeStyle('bodySm'), ...keepAll },
+    exKo: { fontFamily: fonts.ko, ...typeStyle('bodySm'), marginTop: 2, ...keepAll },
     toggleRow: { flexDirection: 'row', gap: 6 },
     btnSec: { height: 44, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-    btnSecText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+    btnSecText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
     cta: { flexDirection: 'row', gap: 8 },
     btnPri: { flex: 1, height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-    btnPriText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    btnPriText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
     btnGhost: { flex: 1, height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-    btnGhostText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+    btnGhostText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
   });
 }
