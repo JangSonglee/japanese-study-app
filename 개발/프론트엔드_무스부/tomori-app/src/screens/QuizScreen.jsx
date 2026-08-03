@@ -539,7 +539,7 @@ function ToggleBtn({ t, on, label, onPress }) {
 
 const tStyles = StyleSheet.create({
   toggle: { flex: 1, height: 40, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  toggleText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+  toggleText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
 });
 
 function makeStyles(t) {
