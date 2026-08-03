@@ -20,6 +20,12 @@ import { recordSessionComplete } from '../data/study';
  *  · Primary 버튼 = 앰버(brand, 대표님 결정 2026-07-29). 오답(모르겠어요) = 중립 채움(sunk), 점선 아님.
  *  · 카드 = 그림자(sh-1), 테두리 없음.
  */
+
+// 🔴 카드 이미지 표시 OFF (대표님 결정 2026-08-03). 이미지 제작이 병목이라 지금 단계는 이미지 없이 보여준다.
+//    기능·파이프라인(hasImage 매니페스트·images/vocab·optimize 스크립트)은 그대로 보존 —
+//    이미지 준비되면 이 한 줄만 true 로 돌리면 즉시 복원된다. (이미지 없는 카드는 원래 빈 자리 없이 렌더돼 구멍 안 생김.)
+const SHOW_CARD_IMAGES = false;
+
 export default function WordCardScreen({ nav, level = '', cards }) {
   const { t, mode } = useTheme();
   const [idx, setIdx] = useState(0);
@@ -137,7 +143,7 @@ export default function WordCardScreen({ nav, level = '', cards }) {
               🔴 card.hasImage(매니페스트 태그, App.jsx)일 때만 렌더 — 이미지 없는 카드에 Image를 마운트하면
                  404→onError→언마운트로 고정 슬롯(134px)이 붕괴해 카드 전환마다 깜빡임(레이아웃 점프)이 났다.
               DB 스키마 변경 불필요(웹 슬라이스). */}
-          {card.hasImage && !imgFailed ? (
+          {SHOW_CARD_IMAGES && card.hasImage && !imgFailed ? (
             <Image
               source={{ uri: `images/vocab/${card.key.replace(/\./g, '_')}.png` }}
               style={S.image}
