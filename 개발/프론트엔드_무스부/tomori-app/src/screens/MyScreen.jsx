@@ -4,7 +4,7 @@ import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
 import { useAuth } from '../auth/AuthContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 
 /**
  * MY 홈 (Hi-fi 34) — 프로필 요약 + 메뉴.
@@ -110,7 +110,7 @@ function makeStyles(t) {
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
     back: { fontSize: 26, width: 20 },
-    title: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    title: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 10 },
     profile: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
@@ -118,17 +118,17 @@ function makeStyles(t) {
     },
     tomoWrap: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
     profileText: { flex: 1, gap: 3 },
-    name: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    subtle: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    name: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
+    subtle: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     googleBtn: { height: 48, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
-    googleText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
-    authMsg: { fontFamily: fonts.ko, fontSize: 12, textAlign: 'center', ...keepAll },
-    section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600', marginTop: 6 },
+    googleText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
+    authMsg: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', textAlign: 'center', ...keepAll },
+    section: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600', marginTop: 6 },
     row: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
       borderRadius: radius.lg, padding: 16,
     },
-    rowLabel: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600' },
+    rowLabel: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600' },
     chev: { fontFamily: fonts.ko, fontSize: 22 },
   });
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 
 /**
  * 코스 전환 (Hi-fi 10) — 5개 코스.
@@ -84,7 +84,7 @@ function makeStyles(t) {
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
     back: { fontSize: 26, width: 20 },
-    title: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    title: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 10 },
     card: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
@@ -92,10 +92,10 @@ function makeStyles(t) {
     },
     accent: { width: 4, height: 34, borderRadius: radius.full },
     cardText: { flex: 1, gap: 3 },
-    name: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    desc: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    name: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
+    desc: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     chev: { fontFamily: fonts.ko, fontSize: 22, fontWeight: '400' },
     soon: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.full },
-    soonText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
+    soonText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
   });
 }

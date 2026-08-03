@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 
 // 🔴 Tanos CC BY 출처 표기는 「서비스 정보」(AboutScreen)로 옮겼다(2026-07-28, 대표님 결정).
 //    설정 화면엔 두지 않는다 — 출처는 서비스 개요와 함께 About 하단에 보인다.
@@ -82,20 +82,20 @@ function makeStyles(t) {
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
     back: { fontSize: 26, width: 20 },
-    appTitle: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    appTitle: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 12 },
-    section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
+    section: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     row: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
       borderRadius: radius.lg, padding: 14,
     },
     rowText: { flex: 1, gap: 3 },
-    rowLabel: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
-    rowDesc: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, ...keepAll },
+    rowLabel: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
+    rowDesc: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     track: {
       width: 48, height: 28, borderRadius: radius.full, borderWidth: 1, padding: 3, justifyContent: 'center',
     },
     thumb: { width: 20, height: 20, borderRadius: radius.full },
-    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 19, marginTop: 4, ...keepAll },
+    note: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', marginTop: 4, ...keepAll },
   });
 }

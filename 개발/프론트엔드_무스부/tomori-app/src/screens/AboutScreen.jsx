@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet, Linking } from 'react-na
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, keepAll } from '../theme/tokens';
+import { fonts, keepAll, typeStyle } from '../theme/tokens';
 
 // JLPT 급수 데이터 대조에 tanos.co.uk를 썼다. 라이선스 CC BY의 조건 = 출처(사이트) 표기.
 // 🔴 이행 의무(진행상태.md · 규격 8장 ②) — 이 출처 표기를 지우면 라이선스 위반.
@@ -67,16 +67,16 @@ function makeStyles(t) {
   return StyleSheet.create({
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
-    title: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    title: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 12 },
     hero: { alignItems: 'center', gap: 8, paddingVertical: 12 },
-    brand: { fontFamily: fonts.ko, fontSize: 18, fontWeight: '700', marginTop: 6 },
-    tagline: { fontFamily: fonts.ko, fontSize: 13, ...keepAll },
-    overview: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 22, ...keepAll },
+    brand: { fontFamily: fonts.ko, ...typeStyle('subtitle'), fontWeight: '700', marginTop: 6 },
+    tagline: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', ...keepAll },
+    overview: { fontFamily: fonts.ko, ...typeStyle('bodySm'), ...keepAll },
     divider: { height: 1, marginTop: 8 },
-    section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
-    credit: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 20, ...keepAll },
+    section: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
+    credit: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', ...keepAll },
     linkRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 },
-    link: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
+    link: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
   });
 }

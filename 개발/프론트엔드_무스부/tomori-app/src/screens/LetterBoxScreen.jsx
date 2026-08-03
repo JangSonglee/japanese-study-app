@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { LETTERS, getLetterBySeq } from '../data/letters';
 import { loadDeliveredLetters } from '../data/stamps';
 
@@ -84,17 +84,17 @@ function makeStyles(t) {
   return StyleSheet.create({
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
-    appTitle: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    appTitle: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 10 },
     empty: { alignItems: 'center', gap: 8, paddingVertical: 48 },
-    emptyText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600', textAlign: 'center' },
-    emptySub: { fontFamily: fonts.ko, fontSize: 13, textAlign: 'center' },
+    emptyText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600', textAlign: 'center' },
+    emptySub: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', textAlign: 'center' },
     item: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: radius.lg, padding: 16 },
     itemText: { flex: 1, gap: 4 },
     itemHead: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    itemTitle: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
+    itemTitle: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
     dot: { width: 7, height: 7, borderRadius: radius.full },
-    itemPreview: { fontFamily: fonts.ko, fontSize: 13 },
-    itemDate: { fontFamily: fonts.ko, fontSize: 11 },
+    itemPreview: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400' },
+    itemDate: { fontFamily: fonts.ko, ...typeStyle('caption'), fontWeight: '400' },
   });
 }

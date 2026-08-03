@@ -4,7 +4,7 @@ import Icon from '../components/Icon';
 import Tomo from '../components/Tomo';
 import Ruby from '../components/Ruby';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { loadWrongNotes, graduateWrongNote } from '../data/wrongNotes';
 
 // last_at(ISO) → 「M월 D일」. 문자열 파싱(타임존 이동 방지) — LetterBoxScreen koDate와 동일 패턴.
@@ -139,33 +139,33 @@ function makeStyles(t) {
   return StyleSheet.create({
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
-    appTitle: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    appTitle: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 10 },
     empty: { alignItems: 'center', gap: 8, paddingVertical: 48 },
-    emptyText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '600', textAlign: 'center' },
-    emptySub: { fontFamily: fonts.ko, fontSize: 13, textAlign: 'center' },
+    emptyText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600', textAlign: 'center' },
+    emptySub: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', textAlign: 'center' },
 
     item: { borderRadius: radius.lg, padding: 16, gap: 10 },
     itemTap: { gap: 10 },
     itemHead: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     badge: { width: 22, height: 22, borderRadius: radius.full, alignItems: 'center', justifyContent: 'center' },
-    badgeText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '700' },
-    badgeLabel: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
+    badgeText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '700' },
+    badgeLabel: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
     metaRow: { flex: 1, flexDirection: 'row', justifyContent: 'flex-end', gap: 10 },
-    metaText: { fontFamily: fonts.ko, fontSize: 11, fontVariant: ['tabular-nums'] },
+    metaText: { fontFamily: fonts.ko, ...typeStyle('caption'), fontWeight: '400', fontVariant: ['tabular-nums'] },
 
     qArea: { paddingVertical: 2 },
     plainJa: { fontFamily: fonts.jp, fontSize: 17 },
 
     answerRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    answerLabel: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
+    answerLabel: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
 
     explainBox: { borderRadius: radius.md, padding: 12, gap: 4 },
-    explainLabel: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
-    explainText: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 19 },
+    explainLabel: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
+    explainText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400' },
 
     foot: { flexDirection: 'row', justifyContent: 'flex-end' },
     graduateBtn: { paddingHorizontal: 14, height: 36, borderRadius: radius.sm, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-    graduateText: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
+    graduateText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
   });
 }

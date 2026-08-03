@@ -3,7 +3,7 @@ import { View, Text, Pressable, TextInput, StyleSheet } from 'react-native';
 import Ruby from './Ruby';
 import { useTheme } from '../theme/ThemeContext';
 import { useAuth } from '../auth/AuthContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { REPLY_PHRASES, phraseByKey, loadReply, saveReply } from '../data/letterReplies';
 
 /**
@@ -136,19 +136,19 @@ function makeStyles(t) {
   return StyleSheet.create({
     wrap: { alignSelf: 'stretch', gap: 10, marginTop: 4 },
     divider: { height: 1, marginBottom: 4 },
-    myLabel: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '700' },
-    ack: { fontFamily: fonts.ko, fontSize: 12 },
-    guide: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 20 },
+    myLabel: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '700' },
+    ack: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400' },
+    guide: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400' },
     ghostBtn: { alignSelf: 'flex-start', borderWidth: 1, borderRadius: radius.sm, paddingHorizontal: 16, paddingVertical: 9, alignItems: 'center', justifyContent: 'center' },
-    ghostText: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
+    ghostText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     savedBox: { gap: 6, paddingVertical: 4 },
-    savedKo: { fontFamily: fonts.ko, fontSize: 13, marginTop: 2 },
+    savedKo: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', marginTop: 2 },
     cards: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     card: { borderWidth: 1, borderRadius: radius.md, paddingHorizontal: 12, paddingVertical: 8, gap: 2, alignItems: 'flex-start' },
-    cardKo: { fontFamily: fonts.ko, fontSize: 11 },
-    input: { borderWidth: 1, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 10, fontFamily: fonts.ko, fontSize: 14 },
-    err: { fontFamily: fonts.ko, fontSize: 12 },
+    cardKo: { fontFamily: fonts.ko, ...typeStyle('caption'), fontWeight: '400' },
+    input: { borderWidth: 1, borderRadius: radius.sm, paddingHorizontal: 12, paddingVertical: 10, fontFamily: fonts.ko, ...typeStyle('bodySm') },
+    err: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400' },
     sendBtn: { height: 46, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-    sendText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    sendText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
   });
 }

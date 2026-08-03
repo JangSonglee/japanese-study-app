@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import BottomSheet from '../components/BottomSheet';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { LEVELS } from '../data/vocab';
 
 // 급수별 난이도 라벨 — 0/xxx·0% 같은 사기 저하 숫자 대신 「어디쯤인지」만 담백하게(철학: 북돋는다).
@@ -121,7 +121,7 @@ function LevelBadge({ t, level }) {
 
 const bS = StyleSheet.create({
   badge: { width: 40, height: 40, borderRadius: radius.full, alignItems: 'center', justifyContent: 'center' },
-  badgeText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  badgeText: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '700', fontVariant: ['tabular-nums'] },
 });
 
 function makeStyles(t) {
@@ -131,16 +131,16 @@ function makeStyles(t) {
     back: { fontSize: 26, width: 20 },
     titleWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     accent: { width: 4, height: 16, borderRadius: radius.full },
-    title: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    title: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
     body: { padding: 16, gap: 10 },
-    section: { fontFamily: fonts.ko, fontSize: 13, fontWeight: '600' },
+    section: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     select: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
       borderRadius: radius.lg, borderWidth: 1, padding: 12,
     },
     selectText: { flex: 1, gap: 2 },
-    selectName: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    selectSub: { fontFamily: fonts.ko, fontSize: 12 },
+    selectName: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
+    selectSub: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400' },
     sheetList: { paddingHorizontal: 8, paddingBottom: 8 },
     sheetRow: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
@@ -151,9 +151,9 @@ function makeStyles(t) {
       borderRadius: radius.lg, padding: 16,
     },
     areaText: { flex: 1, gap: 3 },
-    areaName: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '700' },
-    areaProg: { fontFamily: fonts.ko, fontSize: 12, ...keepAll },
+    areaName: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
+    areaProg: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     chev: { fontFamily: fonts.ko, fontSize: 22 },
-    note: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 19, marginTop: 6, ...keepAll },
+    note: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', marginTop: 6, ...keepAll },
   });
 }

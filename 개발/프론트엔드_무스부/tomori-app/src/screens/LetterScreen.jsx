@@ -5,7 +5,7 @@ import Tomo from '../components/Tomo';
 import Ruby from '../components/Ruby';
 import LetterReply from '../components/LetterReply';
 import { useTheme } from '../theme/ThemeContext';
-import { fonts, radius, keepAll } from '../theme/tokens';
+import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { getLetter, getLetterBySeq } from '../data/letters';
 import { markLetterRead } from '../data/stamps';
 
@@ -96,27 +96,27 @@ function Toggle({ t, label, on, onPress }) {
 
 const tStyles = StyleSheet.create({
   toggle: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: radius.full, borderWidth: 1 },
-  toggleText: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600' },
+  toggleText: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '600' },
 });
 
 function makeStyles(t) {
   return StyleSheet.create({
     screen: { flex: 1 },
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
-    appTitle: { flex: 1, fontFamily: fonts.ko, fontSize: 14, fontWeight: '600' },
+    appTitle: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     body: { padding: 16, gap: 14 },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-    missing: { fontFamily: fonts.ko, fontSize: 14, textAlign: 'center' },
+    missing: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', textAlign: 'center' },
     paper: { borderRadius: radius.lg, padding: 22, gap: 6, alignItems: 'flex-start' },
     toggleRow: { flexDirection: 'row', alignSelf: 'flex-end', gap: 6, marginBottom: 2 },
     tomoWrap: { alignSelf: 'center', marginBottom: 6 },
-    title: { fontFamily: fonts.ko, fontSize: 19, fontWeight: '700' },
-    date: { fontFamily: fonts.ko, fontSize: 12, marginBottom: 10 },
+    title: { fontFamily: fonts.ko, ...typeStyle('heading'), fontWeight: '700' },
+    date: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', marginBottom: 10 },
     lines: { gap: 16, marginTop: 2, alignSelf: 'stretch' },
     lineBlock: { gap: 3 },
-    trans: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 21 },
+    trans: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400' },
     signoff: { fontFamily: fonts.jp, fontSize: 14, fontWeight: '700', alignSelf: 'flex-end', marginTop: 16 },
     btn: { height: 50, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
-    btnText: { fontFamily: fonts.ko, fontSize: 15, fontWeight: '700' },
+    btnText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
   });
 }
