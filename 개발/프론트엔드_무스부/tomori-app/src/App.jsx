@@ -18,7 +18,8 @@ import WordCardScreen from './screens/WordCardScreen';
 import GrammarCardScreen from './screens/GrammarCardScreen';
 import QuizScreen from './screens/QuizScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
-import { isOnboardingDone } from './data/onboarding';
+import RecommendScreen from './screens/RecommendScreen';
+import { isOnboardingDone, saveOnboarding, readAidFromQ2 } from './data/onboarding';
 import { loadCards, loadGrammar, loadReading, loadListening, loadCardsByKeys, loadImageManifest } from './data/vocab';
 
 /**
@@ -45,6 +46,16 @@ export default function App() {
     try { localStorage.setItem('tomori.readAid', JSON.stringify(settings)); } catch { /* ignore */ }
   }, [settings]);
 
+  function handleOnboardingFinish(answers) {
+    const result = saveOnboarding(answers);        // 저장 + 추천 계산
+    setSettings(readAidFromQ2(answers.q2));         // Q2 → 읽기도움 기본값(localStorage 반영)
+    nav.replace('recommend', { result });
+  }
+  function handleStart() {
+    nav.reset('home');
+    nav.push('courses');                            // 홈 + 학습 코스(추천 태그)로 랜딩
+  }
+
   const { name, params } = nav.current;
 
   return (
@@ -61,10 +72,9 @@ export default function App() {
         <View style={[styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
           <ThemeProvider mode={mode}>
             {name === 'onboarding' ? (
-              <OnboardingScreen
-                onFinish={(answers) => { console.log('onboarding answers', answers); nav.reset('home'); }}
-                onExit={() => nav.reset('home')}
-              />
+              <OnboardingScreen onFinish={handleOnboardingFinish} onExit={() => nav.reset('home')} />
+            ) : name === 'recommend' ? (
+              <RecommendScreen result={params.result} onStart={handleStart} />
             ) : name === 'home' ? (
               <HomeScreen nav={nav} />
             ) : name === 'courses' ? (
