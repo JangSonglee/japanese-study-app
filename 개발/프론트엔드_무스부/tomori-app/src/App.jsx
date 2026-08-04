@@ -17,6 +17,8 @@ import WrongNoteScreen from './screens/WrongNoteScreen';
 import WordCardScreen from './screens/WordCardScreen';
 import GrammarCardScreen from './screens/GrammarCardScreen';
 import QuizScreen from './screens/QuizScreen';
+import OnboardingScreen from './screens/OnboardingScreen';
+import { isOnboardingDone } from './data/onboarding';
 import { loadCards, loadGrammar, loadReading, loadListening, loadCardsByKeys, loadImageManifest } from './data/vocab';
 
 /**
@@ -28,7 +30,7 @@ import { loadCards, loadGrammar, loadReading, loadListening, loadCardsByKeys, lo
  */
 export default function App() {
   const [mode, setMode] = useState('light');
-  const nav = useRouter('home');
+  const nav = useRouter(isOnboardingDone() ? 'home' : 'onboarding');
   const [settings, setSettings] = useState(() => {
     // MY›설정 읽기 도움 기본값 — localStorage 유지. 없으면 「조금 안다」 기본(후리 ON·발음 OFF).
     try {
@@ -58,7 +60,12 @@ export default function App() {
 
         <View style={[styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
           <ThemeProvider mode={mode}>
-            {name === 'home' ? (
+            {name === 'onboarding' ? (
+              <OnboardingScreen
+                onFinish={(answers) => { console.log('onboarding answers', answers); nav.reset('home'); }}
+                onExit={() => nav.reset('home')}
+              />
+            ) : name === 'home' ? (
               <HomeScreen nav={nav} />
             ) : name === 'courses' ? (
               <CourseListScreen nav={nav} />
