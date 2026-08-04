@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native';
 import Ruby from '../components/Ruby';
+import Tomo from '../components/Tomo';
 import { fonts } from '../theme/tokens';
 
 /**
  * 홈 (리디자인) - 배너형 — Figma `시험 일정 등록 - 제거`(node 59:3819) 재현.
- *  · 대표님 Figma→코드 파이프라인 테스트용. 이 프레임의 팔레트·에셋·문구를 그대로 옮겼다.
+ *  · 대표님 Figma→코드 파이프라인 테스트용. 이 프레임의 팔레트·에셋·문구·여백을 그대로 옮겼다.
  *    🔴 색은 앱 웜 토큰(brand #F5B942)과 다른 이 프레임 값(#F6AA13 등)을 의도적으로 사용.
  *  · 핵심 동작 = 「JLPT 시험 일정 등록」 배너의 X(제거). 좌(있음)→우(제거)를 한 화면 상태로 재현.
- *  · 에셋: public/images/figma/*(Figma export). 폰트: Pretendard(fonts.ko)·Noto Sans JP(Ruby).
+ *  · 히어로 토모 = 앱 Tomo(pose intellectual) 단일 아트. Figma의 스프라이트 크롭 대신 정식 컴포넌트.
+ *  · 폰트 = Pretendard(fonts.ko, 400/500/600/700)·일본어 Noto Sans JP(Ruby). index.html @font-face 로드.
+ *  · 여백 = Figma 구조: 바깥 gap 24 / 콘텐츠 그룹 gap 16 / 카드 padding 16 / 히어로 padding 20.
  */
 
-// Figma 변수(그대로). 앱 토큰과 별개로 이 화면 전용.
 const C = {
   bg: '#FCF8F2',
   surface: '#FFFFFF',
@@ -36,9 +38,9 @@ const A = (f) => ({ uri: `images/figma/${f}` });
 // 오늘의 N3 표현 후리가나 좌표(夢は逃げない。逃げるのはいつも自分だ)
 const QUOTE = '夢は逃げない。逃げるのはいつも自分だ';
 const QUOTE_RUBY = [
-  { s: 0, e: 1, rt: 'ゆめ' },   // 夢
-  { s: 2, e: 3, rt: 'に' },     // 逃
-  { s: 7, e: 8, rt: 'に' },     // 逃
+  { s: 0, e: 1, rt: 'ゆめ' },     // 夢
+  { s: 2, e: 3, rt: 'に' },       // 逃
+  { s: 7, e: 8, rt: 'に' },       // 逃
   { s: 15, e: 17, rt: 'じぶん' }, // 自分
 ];
 
@@ -62,79 +64,84 @@ export default function HomeV3Screen({ nav }) {
           <Text style={S.streakText}>연속 학습 1일차</Text>
         </View>
 
-        {/* 인사 */}
-        <View style={S.greet}>
-          <Text style={S.greetTitle}>안녕하세요, 송이님</Text>
-          <Text style={S.greetSub}>짧게라도 괜찮아요. 오늘의 불씨를 이어가요!</Text>
-        </View>
+        {/* 콘텐츠 그룹 (Figma gap 16) */}
+        <View style={S.group}>
+          {/* 인사 */}
+          <View style={S.greet}>
+            <Text style={S.greetTitle}>안녕하세요, 송이님</Text>
+            <Text style={S.greetSub}>짧게라도 괜찮아요. 오늘의 불씨를 이어가요!</Text>
+          </View>
 
-        {/* 히어로 — 레벨 테스트 */}
-        <View style={S.hero}>
-          <Image source={A('paper.png')} style={S.heroPaper} resizeMode="cover" />
-          <Image source={A('intellectual.png')} style={S.heroTomo} resizeMode="contain" />
-          <View style={S.heroText}>
-            <Text style={S.heroLabel}>JLPT</Text>
-            <Text style={S.heroTitle}>레벨 테스트를 해볼까요 ?</Text>
-            <View style={S.heroRow}>
-              <Text style={S.heroDesc}>단어 · 어휘 · 문법</Text>
-              <View style={S.timeChip}><Text style={S.timeChipText}>약 5분~10분 소요</Text></View>
+          {/* 히어로 — 레벨 테스트 */}
+          <View style={S.hero}>
+            <Image source={A('paper.png')} style={S.heroPaper} resizeMode="cover" />
+            <View style={S.heroTomo} pointerEvents="none">
+              <Tomo pose="intellectual" scale={1.35} showNote={false} />
             </View>
+            <View style={S.heroText}>
+              <Text style={S.heroLabel}>JLPT</Text>
+              <Text style={S.heroTitle}>레벨 테스트를 해볼까요 ?</Text>
+              <View style={S.heroRow}>
+                <Text style={S.heroDesc}>단어 · 어휘 · 문법</Text>
+                <View style={S.timeChip}><Text style={S.timeChipText}>약 5분~10분 소요</Text></View>
+              </View>
+            </View>
+            <View style={S.progRow}>
+              <View style={S.progTrack}><View style={S.progFill} /></View>
+              <Text style={S.progText}>0<Text style={S.progPct}>%</Text></Text>
+            </View>
+            <Pressable style={S.cta}><Text style={S.ctaText}>레벨테스트 보러 가기</Text></Pressable>
           </View>
-          <View style={S.progRow}>
-            <View style={S.progTrack}><View style={S.progFill} /></View>
-            <Text style={S.progText}>0<Text style={S.progPct}>%</Text></Text>
-          </View>
-          <Pressable style={S.cta}><Text style={S.ctaText}>레벨테스트 보러 가기</Text></Pressable>
-        </View>
 
-        {/* 시험 일정 등록 배너 — X 로 제거(등록/제거) */}
-        {bannerShown ? (
-          <View style={S.banner}>
-            <View style={S.bannerLeft}>
-              <Image source={A('calendar.svg')} style={S.calIcon} resizeMode="contain" />
-              <Text style={S.bannerText} numberOfLines={1}>JLPT 시험 일정 등록하고, 일정 챙기세요!</Text>
+          {/* 시험 일정 등록 배너 — X 로 제거(등록/제거) */}
+          {bannerShown ? (
+            <View style={S.banner}>
+              <View style={S.bannerLeft}>
+                <Image source={A('calendar.svg')} style={S.calIcon} resizeMode="contain" />
+                <Text style={S.bannerText} numberOfLines={1}>JLPT 시험 일정 등록하고, 일정 챙기세요!</Text>
+              </View>
+              <Pressable
+                onPress={() => setBannerShown(false)}
+                hitSlop={10}
+                accessibilityRole="button"
+                accessibilityLabel="시험 일정 배너 닫기"
+                style={S.bannerClose}
+              >
+                <Image source={A('close.svg')} style={S.closeIcon} resizeMode="contain" />
+              </Pressable>
             </View>
-            <Pressable
-              onPress={() => setBannerShown(false)}
-              hitSlop={10}
-              accessibilityRole="button"
-              accessibilityLabel="시험 일정 배너 닫기"
-              style={S.bannerClose}
-            >
-              <Image source={A('close.svg')} style={S.closeIcon} resizeMode="contain" />
-            </Pressable>
-          </View>
-        ) : null}
+          ) : null}
 
-        {/* 통계 2칸 */}
-        <View style={S.statRow}>
-          <View style={S.statCard}>
-            <View style={S.statTextWrap}>
-              <Text style={S.statLabel}>오늘 진행한 학습</Text>
-              <Text style={S.statBig}>0<Text style={S.statUnit}>개</Text></Text>
+          {/* 통계 2칸 */}
+          <View style={S.statRow}>
+            <View style={S.statCard}>
+              <View style={S.statTextWrap}>
+                <Text style={S.statLabel}>오늘 진행한 학습</Text>
+                <Text style={S.statBig}>0<Text style={S.statUnit}>개</Text></Text>
+              </View>
+              <Image source={A('notebook.png')} style={S.notebook} resizeMode="contain" />
             </View>
-            <Image source={A('notebook.png')} style={S.notebook} resizeMode="contain" />
-          </View>
-          <View style={S.statCard}>
-            <View style={S.statTextWrap}>
-              <Text style={S.statLabel}>모은 우표</Text>
-              <Text style={S.statBig}>10<Text style={S.statUnit}>/14</Text></Text>
+            <View style={S.statCard}>
+              <View style={S.statTextWrap}>
+                <Text style={S.statLabel}>모은 우표</Text>
+                <Text style={S.statBig}>10<Text style={S.statUnit}>/14</Text></Text>
+              </View>
+              <Image source={A('stamps.png')} style={S.stamps} resizeMode="contain" />
             </View>
-            <Image source={A('stamps.png')} style={S.stamps} resizeMode="contain" />
           </View>
-        </View>
 
-        {/* 오늘의 N3 표현 */}
-        <View style={S.quoteCard}>
-          <View style={S.quoteHead}>
-            <Text style={S.quoteTitle}>오늘의 N3 표현</Text>
-            <View style={S.quoteToggles}>
-              <View style={S.toggleChip}><Text style={S.toggleChipText}>해석</Text></View>
-              <View style={S.toggleChip}><Text style={S.toggleChipText}>단어</Text></View>
+          {/* 오늘의 N3 표현 */}
+          <View style={S.quoteCard}>
+            <View style={S.quoteHead}>
+              <Text style={S.quoteTitle}>오늘의 N3 표현</Text>
+              <View style={S.quoteToggles}>
+                <View style={S.toggleChip}><Text style={S.toggleChipText}>해석</Text></View>
+                <View style={S.toggleChip}><Text style={S.toggleChipText}>단어</Text></View>
+              </View>
             </View>
-          </View>
-          <View style={S.quoteBody}>
-            <Ruby base={QUOTE} ruby={QUOTE_RUBY} show size={16} color={C.brandMainText} />
+            <View style={S.quoteBody}>
+              <Ruby base={QUOTE} ruby={QUOTE_RUBY} show size={16} color={C.brandMainText} />
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -163,10 +170,11 @@ export default function HomeV3Screen({ nav }) {
 
 const S = StyleSheet.create({
   screen: { flex: 1, backgroundColor: C.bg },
-  body: { padding: 20, gap: 20, paddingBottom: 90 },
+  body: { padding: 20, gap: 24, paddingBottom: 90 },
+  group: { gap: 16 },
 
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  fire: { width: 18, height: 22 },
+  fire: { width: 20, height: 24 },
   streakText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.mainText },
 
   greet: { gap: 2 },
@@ -177,8 +185,10 @@ const S = StyleSheet.create({
     backgroundColor: C.heroAmber, borderRadius: 16, padding: 20, gap: 12,
     overflow: 'hidden', position: 'relative', boxShadow: C.cardShadow,
   },
-  heroPaper: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.22 },
-  heroTomo: { position: 'absolute', right: -14, bottom: -18, width: 150, height: 170 },
+  // squared-paper-texture — 앰버 위 격자 질감. Figma는 mix-blend overlay·opacity .8. RN Web은 blend 지원이 불안정해
+  //   opacity 로 노출(격자가 보이도록). 히어로 배경 바로 위, 텍스트·토모 아래.
+  heroPaper: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.5, mixBlendMode: 'overlay' },
+  heroTomo: { position: 'absolute', right: -4, bottom: -8 },
   heroText: { gap: 6, alignSelf: 'flex-start' },
   heroLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandAmber },
   heroTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
@@ -204,7 +214,7 @@ const S = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, boxShadow: C.cardShadow,
   },
   bannerLeft: { flexDirection: 'row', alignItems: 'center', gap: 4, flex: 1, minWidth: 0 },
-  calIcon: { width: 18, height: 18 },
+  calIcon: { width: 16, height: 16 },
   bannerText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandMainText, flexShrink: 1 },
   bannerClose: { width: 24, height: 24, alignItems: 'center', justifyContent: 'center' },
   closeIcon: { width: 10, height: 10 },
@@ -212,14 +222,14 @@ const S = StyleSheet.create({
   statRow: { flexDirection: 'row', gap: 16 },
   statCard: {
     flex: 1, backgroundColor: C.cardWarm, borderRadius: 16, padding: 16,
-    overflow: 'hidden', position: 'relative', minHeight: 78, boxShadow: C.cardShadow,
+    overflow: 'hidden', position: 'relative', minHeight: 76, boxShadow: C.cardShadow,
   },
   statTextWrap: { gap: 4 },
   statLabel: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', color: C.brandMainText },
   statBig: { fontFamily: fonts.ko, fontSize: 24, fontWeight: '700', letterSpacing: -0.5, color: C.brandMainText },
   statUnit: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '400' },
-  notebook: { position: 'absolute', right: 4, bottom: 10, width: 45, height: 45 },
-  stamps: { position: 'absolute', right: 6, bottom: 12, width: 50, height: 51 },
+  notebook: { position: 'absolute', right: 6, bottom: 10, width: 36, height: 36 },
+  stamps: { position: 'absolute', right: 8, bottom: 12, width: 40, height: 40 },
 
   quoteCard: { backgroundColor: C.cardWarm, borderRadius: 16, padding: 16, gap: 8, boxShadow: C.cardShadow },
   quoteHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
@@ -235,6 +245,6 @@ const S = StyleSheet.create({
     boxShadow: C.navShadow,
   },
   tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2 },
-  tabIcon: { width: 24, height: 24 },
+  tabIcon: { width: 20, height: 20 },
   tabLabel: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '500' },
 });
