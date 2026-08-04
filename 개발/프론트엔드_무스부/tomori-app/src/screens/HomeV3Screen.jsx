@@ -58,9 +58,9 @@ export default function HomeV3Screen({ nav }) {
   return (
     <View style={S.screen}>
       <ScrollView contentContainerStyle={S.body}>
-        {/* 헤더 — 불씨 + 연속 학습 */}
+        {/* 헤더 — 불씨 + 연속 학습. 🔴 fire.png는 1536×1024 통이미지(불꽃이 일부)라 작게 나와 이모지로 대체(대표님 요청 「불꽃 키움」). */}
         <View style={S.headerRow}>
-          <Image source={A('fire.png')} style={S.fire} resizeMode="contain" />
+          <Text style={S.fireEmoji}>🔥</Text>
           <Text style={S.streakText}>연속 학습 1일차</Text>
         </View>
 
@@ -76,7 +76,7 @@ export default function HomeV3Screen({ nav }) {
           <View style={S.hero}>
             <Image source={A('paper.png')} style={S.heroPaper} resizeMode="cover" />
             <View style={S.heroTomo} pointerEvents="none">
-              <Tomo pose="intellectual" scale={1.35} showNote={false} />
+              <Tomo pose="intellectual" scale={1.15} showNote={false} />
             </View>
             <View style={S.heroText}>
               <Text style={S.heroLabel}>JLPT</Text>
@@ -173,8 +173,8 @@ const S = StyleSheet.create({
   body: { padding: 20, gap: 24, paddingBottom: 90 },
   group: { gap: 16 },
 
-  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  fire: { width: 20, height: 24 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  fireEmoji: { fontSize: 20, lineHeight: 24 },
   streakText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.mainText },
 
   greet: { gap: 2 },
@@ -187,9 +187,10 @@ const S = StyleSheet.create({
   },
   // squared-paper-texture — 앰버 위 격자 질감. Figma는 mix-blend overlay·opacity .8. RN Web은 blend 지원이 불안정해
   //   opacity 로 노출(격자가 보이도록). 히어로 배경 바로 위, 텍스트·토모 아래.
-  heroPaper: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.5, mixBlendMode: 'overlay' },
-  heroTomo: { position: 'absolute', right: -4, bottom: -8 },
-  heroText: { gap: 6, alignSelf: 'flex-start' },
+  // 종이질감 — CSS(index.html)에서 mix-blend-mode:overlay 적용(RN Web은 blend 스타일 무시). opacity로 강도 조절.
+  heroPaper: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.85 },
+  heroTomo: { position: 'absolute', right: 2, bottom: -4 },
+  heroText: { gap: 6, alignSelf: 'flex-start', maxWidth: 160 },
   heroLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandAmber },
   heroTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
   heroRow: { flexDirection: 'row', alignItems: 'center', gap: 4, flexWrap: 'wrap' },
@@ -197,14 +198,14 @@ const S = StyleSheet.create({
   timeChip: { backgroundColor: C.chipBg, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 1 },
   timeChipText: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '500', color: C.chipText },
 
-  progRow: { flexDirection: 'row', alignItems: 'center', gap: 10, width: 170 },
+  progRow: { flexDirection: 'row', alignItems: 'center', gap: 10, width: 150 },
   progTrack: { flex: 1, height: 6, backgroundColor: C.chipBg, borderRadius: 999, overflow: 'hidden' },
   progFill: { width: 10, height: 6, backgroundColor: C.brandAmber, borderRadius: 999 },
   progText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandMainText },
   progPct: { fontSize: 10 },
 
   cta: {
-    backgroundColor: C.ctaDark, borderRadius: 8, height: 33, width: 170,
+    backgroundColor: C.ctaDark, borderRadius: 8, height: 33, width: 150,
     alignItems: 'center', justifyContent: 'center',
   },
   ctaText: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '500', color: C.inverse },
@@ -244,7 +245,7 @@ const S = StyleSheet.create({
     backgroundColor: C.surface, flexDirection: 'row', alignItems: 'center',
     boxShadow: C.navShadow,
   },
-  tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 2 },
-  tabIcon: { width: 20, height: 20 },
+  tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 },
+  tabIcon: { width: 18, height: 18 },
   tabLabel: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '500' },
 });

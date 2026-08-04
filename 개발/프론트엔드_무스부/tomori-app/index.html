@@ -16,6 +16,8 @@
     @font-face{font-family:"Zen Maru Gothic";src:url("/fonts/ZenMaruGothic-700.woff2") format("woff2");font-weight:700;font-display:swap}
     html,body,#root{height:100%}
     body{margin:0;background:#EFE9E1}
+    /* squared-paper-texture — RN Web은 mixBlendMode 스타일을 무시하므로 CSS로 직접 overlay 블렌드 */
+    [style*="paper.png"]{ mix-blend-mode:overlay; }
   </style>
 </head>
 <body>
