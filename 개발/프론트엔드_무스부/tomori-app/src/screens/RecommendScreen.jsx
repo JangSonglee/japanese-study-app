@@ -32,7 +32,7 @@ export default function RecommendScreen({ result, onStart }) {
 
         {/* 메인 코스 카드 */}
         <View style={[S.card, { backgroundColor: t.bgSurface, boxShadow: t.sh1 }, isDark && { borderWidth: 1, borderColor: t.border }]}>
-          <View style={[S.accent, { backgroundColor: t.courseJlpt }]} />
+          <View style={[S.accent, { backgroundColor: result.mainReady ? t.courseJlpt : t.borderStrong }]} />
           <Text style={[S.courseName, { color: t.textHigh }, keepAll]}>{main.name}</Text>
           <Text style={[S.courseDesc, { color: t.textMid }, keepAll]}>{main.desc}</Text>
           {!result.mainReady ? (
