@@ -72,6 +72,7 @@ export default function MyScreen({ nav }) {
 
         {/* 학습 — 코스 전환. IA(03·Core Flows): 코스 전환은 MY·설정에서. */}
         <Text style={[S.section, { color: t.textLow }]}>학습</Text>
+        <MenuRow t={t} label="코스 추천 다시 받기" onPress={() => nav.push('onboarding')} />
         <MenuRow t={t} label="코스 전환" onPress={() => nav.push('courses')} />
 
         {/* 설정 */}

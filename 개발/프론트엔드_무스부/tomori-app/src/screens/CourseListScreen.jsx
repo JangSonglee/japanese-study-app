@@ -3,6 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
+import { loadOnboarding } from '../data/onboarding';
 
 /**
  * 코스 전환 (Hi-fi 10) — 5개 코스.
@@ -30,6 +31,7 @@ const COURSES = [
 export default function CourseListScreen({ nav }) {
   const { t } = useTheme();
   const S = makeStyles(t);
+  const recommended = (loadOnboarding() || {}).mainCourse || null;
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
       <View style={S.appbar}>
@@ -41,14 +43,14 @@ export default function CourseListScreen({ nav }) {
 
       <ScrollView contentContainerStyle={S.body}>
         {COURSES.map((c) => (
-          <CourseCard key={c.key} t={t} course={c} onPress={() => c.ready && nav.push('jlptHub')} />
+          <CourseCard key={c.key} t={t} course={c} recommended={c.key === recommended} onPress={() => c.ready && nav.push('jlptHub')} />
         ))}
       </ScrollView>
     </View>
   );
 }
 
-function CourseCard({ t, course, onPress }) {
+function CourseCard({ t, course, onPress, recommended }) {
   const S = makeStyles(t);
   const { name, desc, ready } = course;
   return (
@@ -65,7 +67,14 @@ function CourseCard({ t, course, onPress }) {
     >
       <View style={[S.accent, { backgroundColor: ready ? t.courseJlpt : t.borderStrong }]} />
       <View style={S.cardText}>
-        <Text style={[S.name, { color: ready ? t.textHigh : t.textMid }]}>{name}</Text>
+        <View style={S.nameRow}>
+          <Text style={[S.name, { color: ready ? t.textHigh : t.textMid }]}>{name}</Text>
+          {recommended ? (
+            <View style={[S.recBadge, { backgroundColor: t.brand }]}>
+              <Text style={[S.recText, { color: t.onBrand }]}>추천</Text>
+            </View>
+          ) : null}
+        </View>
         <Text style={[S.desc, { color: t.textMid }]}>{desc}</Text>
       </View>
       {ready ? (
@@ -92,6 +101,9 @@ function makeStyles(t) {
     },
     accent: { width: 4, height: 34, borderRadius: radius.full },
     cardText: { flex: 1, gap: 3 },
+    nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+    recBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.full },
+    recText: { fontFamily: fonts.ko, ...typeStyle('caption'), fontWeight: '700' },
     name: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
     desc: { fontFamily: fonts.ko, ...typeStyle('label'), fontWeight: '400', ...keepAll },
     chev: { fontFamily: fonts.ko, fontSize: 22, fontWeight: '400' },
