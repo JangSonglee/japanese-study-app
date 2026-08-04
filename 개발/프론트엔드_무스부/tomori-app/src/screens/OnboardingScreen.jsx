@@ -80,7 +80,7 @@ export default function OnboardingScreen({ onFinish, onExit }) {
           accessibilityRole="button"
           style={[S.btnPri, { backgroundColor: selected == null ? t.sunk : t.brand }]}
         >
-          <Text style={[S.btnPriText, { color: selected == null ? t.textLow : t.onBrand }]}>
+          <Text style={[S.btnPriText, { color: selected == null ? t.textLow : t.onBrand }, keepAll]}>
             {isLast ? '결과 보기' : '다음'}
           </Text>
         </Pressable>
@@ -102,6 +102,7 @@ function makeStyles(t) {
     hint: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '400', textAlign: 'center' },
     options: { alignSelf: 'stretch', gap: 10, marginTop: 12 },
     option: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: radius.lg, borderWidth: 1, padding: 16 },
+    // 이모지 글리프 — 아이콘처럼 고정 크기(타입 스케일 대상 아님, back/chev 선례와 동일).
     emoji: { fontSize: 22 },
     optionText: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '600', flex: 1 },
     foot: { padding: 16 },
