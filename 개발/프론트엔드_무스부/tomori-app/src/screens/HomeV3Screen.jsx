@@ -187,8 +187,8 @@ const S = StyleSheet.create({
   },
   // squared-paper-texture — 앰버 위 격자 질감. Figma는 mix-blend overlay·opacity .8. RN Web은 blend 지원이 불안정해
   //   opacity 로 노출(격자가 보이도록). 히어로 배경 바로 위, 텍스트·토모 아래.
-  // 종이질감 — CSS(index.html)에서 mix-blend-mode:overlay 적용(RN Web은 blend 스타일 무시). opacity로 강도 조절.
-  heroPaper: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.85 },
+  // 종이질감 — CSS(index.html)에서 mix-blend-mode:multiply. 🔴 opacity<1은 stacking을 격리해 뒤 앰버와 안 섞이므로 opacity 미지정(=1).
+  heroPaper: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   heroTomo: { position: 'absolute', right: 2, bottom: -4 },
   heroText: { gap: 6, alignSelf: 'flex-start', maxWidth: 160 },
   heroLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandAmber },
