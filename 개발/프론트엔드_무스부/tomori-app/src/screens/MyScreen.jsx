@@ -75,6 +75,10 @@ export default function MyScreen({ nav }) {
         <MenuRow t={t} label="코스 추천 다시 받기" onPress={() => nav.push('onboarding')} />
         <MenuRow t={t} label="코스 전환" onPress={() => nav.push('courses')} />
 
+        {/* 🧪 Figma 재현 테스트 진입 (임시) — 홈 리디자인(배너형) */}
+        <Text style={[S.section, { color: t.textLow }]}>미리보기 (테스트)</Text>
+        <MenuRow t={t} label="홈 리디자인 · 배너형" onPress={() => nav.push('homeV3')} />
+
         {/* 설정 */}
         <Text style={[S.section, { color: t.textLow }]}>설정</Text>
         <MenuRow t={t} label="설정 · 읽기 도움" onPress={() => nav.push('settings')} />
