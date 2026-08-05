@@ -19,7 +19,7 @@
     /* squared-paper-texture — RN Web은 mixBlendMode 스타일을 무시하므로 CSS로 직접 블렌드.
        multiply = 흰 배경은 뒤 앰버가 그대로 비치고 격자선만 앰버를 은은히 어둡게(박스 색에 스며듦).
        🔴 부모 래퍼에 opacity<1을 주면 stacking이 격리돼 뒤 배경과 안 섞임 → 래퍼는 opacity 1 유지. */
-    [style*="paper.png"]{ mix-blend-mode:multiply; }
+    [style*="paper.png"]{ mix-blend-mode:overlay; }
   </style>
 </head>
 <body>
