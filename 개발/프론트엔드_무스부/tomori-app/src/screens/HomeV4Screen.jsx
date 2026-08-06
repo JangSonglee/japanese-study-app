@@ -501,7 +501,7 @@ const S = StyleSheet.create({
   toggleChipText: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.sub },
   toggleChipTextOn: { color: C.darkCardText },
   quoteBody: { paddingTop: 2 },
-  interp: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '500', lineHeight: 18, color: C.interpText },
+  interp: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', lineHeight: 21, color: C.interpText },
 
   wordDivider: { height: 1, backgroundColor: '#E7E1D6' },
   wordList: { gap: 8 },
