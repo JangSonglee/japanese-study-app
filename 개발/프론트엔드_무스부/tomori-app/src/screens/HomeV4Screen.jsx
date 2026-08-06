@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { fonts, keepAll } from '../theme/tokens';
+import { loadHomeProgress } from '../data/home';
 
 /**
  * 홈 (리디자인 v4) — Claude Design `오늘의 표현.dc.html`(프로젝트 "홈 화면 디자인 개선") 재현.
@@ -80,19 +81,32 @@ export default function HomeV4Screen({ nav }) {
   const [showInterp, setShowInterp] = useState(false);
   const [showWords, setShowWords] = useState(false);
   const [saved, setSaved] = useState(() => new Set(['逃げる']));
-  // 히어로 3상태 — 실제론 데이터로 자동 결정(레벨 미정 / 오늘 학습 전 / 오늘 학습 후).
-  // 미리보기라 상단 전환 버튼으로 셋 다 확인 가능(dev). 기본=학습 전.
-  const [heroState, setHeroState] = useState('before'); // 'level' | 'before' | 'after'
+  // 실데이터 로드(로그인 시). 게스트·조회실패면 null → 데모 폴백.
+  const [prog, setProg] = useState(null);
+  useEffect(() => { loadHomeProgress().then(setProg).catch(() => setProg(null)); }, []);
+
   const D = DEMO;
-  const pct = Math.round((D.vocabDone / D.vocabTotal) * 100);
-  const remain = Math.max(0, D.vocabTotal - D.vocabDone);
+  const P = prog;
+  const level = (P && P.level) || D.level;
+  const hasLevel = P ? P.has_level : true;               // 게스트는 데모(레벨 있음) 취급
+  const vocabDone = P ? P.vocab_done : D.vocabDone;
+  const vocabTotal = P ? P.vocab_total : D.vocabTotal;
+  const studiedToday = P ? P.studied_today : false;
+  const todayCount = P ? P.today_sessions : D.todayCount;
+  const todayKnown = P ? P.today_known : D.reviewCount;
+  const show3min = P ? (todayKnown > 0) : true;          // 오늘 배운 단어 있을 때만(복습 대상). 데모는 표시
+  // 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
+  const heroState = !hasLevel ? 'level' : (studiedToday ? 'after' : 'before');
+
+  const pct = vocabTotal > 0 ? Math.round((vocabDone / vocabTotal) * 100) : 0;
+  const remain = Math.max(0, vocabTotal - vocabDone);
 
   // 상태별 히어로 구성(멘트·급수·진행바·CTA·토모 아트).
   // 🅿️ 토모 아트 = 지금은 앱 Tomo pose 근사. Figma cat-tomo1/2/3 실아트는 스왑 대기(art 필드).
   const HERO = {
     level:  { badge: null, title: '레벨 테스트를 해볼까요?', showProg: false, cta: '레벨테스트 보러 가기', art: 'cat-tomo1.png' },
-    before: { badge: `JLPT ${D.level}`, title: `완료까지 ${remain}개 남았어요`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo2.png' },
-    after:  { badge: `JLPT ${D.level}`, title: `오늘 총 ${D.todayCount}개 학습했어요!`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo3.png' },
+    before: { badge: `JLPT ${level}`, title: `완료까지 ${remain}개 남았어요`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo2.png' },
+    after:  { badge: `JLPT ${level}`, title: `오늘 총 ${todayCount}개 학습했어요!`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo3.png' },
   };
   const H = HERO[heroState];
 
@@ -143,7 +157,7 @@ export default function HomeV4Screen({ nav }) {
             {H.showProg ? (
               <View style={S.heroRow}>
                 <Text style={S.heroDesc}>단어 · 어휘</Text>
-                <Text style={S.heroDesc}>{D.vocabDone} / {D.vocabTotal}</Text>
+                <Text style={S.heroDesc}>{vocabDone} / {vocabTotal}</Text>
               </View>
             ) : null}
           </View>
@@ -156,17 +170,19 @@ export default function HomeV4Screen({ nav }) {
           <View style={S.cta}><Text style={S.ctaText}>{H.cta}</Text></View>
         </Pressable>
 
-        {/* 오늘의 3분 복습 (다크 카드) */}
-        <Pressable style={S.reviewCard} accessibilityRole="button" accessibilityLabel="오늘의 3분 복습">
-          <View style={S.reviewLeft}>
-            <Image source={A('ic-review.svg')} style={S.reviewIcon} resizeMode="contain" />
-            <View>
-              <Text style={S.reviewTitle}>오늘의 3분 복습</Text>
-              <Text style={S.reviewSub}>학습한 단어 {D.reviewCount}개 다시 확인하기</Text>
+        {/* 오늘의 3분 복습 — 오늘 학습한 게 있을 때만 표시(1을 하고 2로 가기 전 1 복습). */}
+        {show3min ? (
+          <Pressable style={S.reviewCard} accessibilityRole="button" accessibilityLabel="오늘의 3분 복습">
+            <View style={S.reviewLeft}>
+              <Image source={A('ic-review.svg')} style={S.reviewIcon} resizeMode="contain" />
+              <View>
+                <Text style={S.reviewTitle}>오늘의 3분 복습</Text>
+                <Text style={S.reviewSub}>학습한 단어 {todayKnown}개 다시 확인하기</Text>
+              </View>
             </View>
-          </View>
-          <Icon name="forward" size={18} color={C.darkCardText} />
-        </Pressable>
+            <Icon name="forward" size={18} color={C.darkCardText} />
+          </Pressable>
+        ) : null}
 
         {/* 시험 날짜 */}
         <Pressable style={S.examCard} accessibilityRole="button" accessibilityLabel={`JLPT ${D.level} 시험 D-${D.dday}`}>
@@ -185,7 +201,7 @@ export default function HomeV4Screen({ nav }) {
           <View style={S.statCard}>
             <View style={S.statTextWrap}>
               <Text style={S.statLabel}>오늘 진행한 학습</Text>
-              <Text style={S.statBig}>{D.todayCount}<Text style={S.statUnit}>개</Text></Text>
+              <Text style={S.statBig}>{todayCount}<Text style={S.statUnit}>개</Text></Text>
             </View>
             <Image source={A('notebook.png')} style={S.notebook} resizeMode="contain" />
           </View>
