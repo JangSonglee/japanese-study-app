@@ -27,10 +27,11 @@ export default function Ruby({
   size = type.bodyJp.fontSize, // 본문 px (기본 18)
   color = '#1A1613',
   rubyColor,                    // 루비 색 (기본 = 본문색)
+  rubyRatio = type.rubyRatio,   // 루비/본문 비율 (기본 50%, 사양서 3.2). 필요 시 인스턴스별로 키움.
   bold = false,
   style,
 }) {
-  const rubySize = Math.round(size * type.rubyRatio); // 50%
+  const rubySize = Math.round(size * rubyRatio);
   // 루비 슬롯은 항상 이 높이를 차지한다 (표시 여부와 무관) → 점프 방지의 핵심
   const rubySlotHeight = Math.ceil(rubySize * 1.35);
   const baseLineHeight = Math.ceil(size * 1.35);

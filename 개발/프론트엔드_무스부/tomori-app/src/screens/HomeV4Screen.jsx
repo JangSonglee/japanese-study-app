@@ -339,7 +339,7 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
           </View>
 
           <View style={S.quoteBody}>
-            <Ruby base={exprBase} ruby={exprRuby} show size={16} color={C.brandMainText} />
+            <Ruby base={exprBase} ruby={exprRuby} show size={16} rubyRatio={0.68} color={C.brandMainText} />
           </View>
 
           {showInterp ? (
@@ -489,7 +489,7 @@ const S = StyleSheet.create({
   notebook: { position: 'absolute', right: 10, bottom: 12, width: 32, height: 32 },
   stamps: { position: 'absolute', right: 10, bottom: 12, width: 36, height: 36 },
 
-  quoteCard: { backgroundColor: C.cardWarm, borderRadius: 16, padding: 16, gap: 12, boxShadow: C.cardShadow },
+  quoteCard: { backgroundColor: C.cardWarm, borderRadius: 16, padding: 16, gap: 8, boxShadow: C.cardShadow },
   quoteHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   quoteTitle: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, fontWeight: '600', color: C.brandMainText },
   quoteToggles: { flexDirection: 'row', gap: 8 },
@@ -506,7 +506,7 @@ const S = StyleSheet.create({
   wordDivider: { height: 1, backgroundColor: '#E7E1D6' },
   wordList: { gap: 8 },
   wordRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  wordPair: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  wordPair: { flexDirection: 'row', alignItems: 'baseline', gap: 12 },
   wordJa: { fontFamily: fonts.jp, fontSize: 16, lineHeight: 24, color: C.brandMainText },
   wordKo: { fontFamily: fonts.ko, fontSize: 16, lineHeight: 24, color: C.wordKo },
   star: { width: 20, height: 18 },
