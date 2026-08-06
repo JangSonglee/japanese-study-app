@@ -33,8 +33,10 @@ import { loadCards, loadGrammar, loadReading, loadListening, loadCardsByKeys, lo
  */
 export default function App() {
   const [mode, setMode] = useState('light');
-  // 딥링크(미리보기 편의): ?screen=homeV4 처럼 특정 화면으로 바로 진입.
-  const initialScreen = (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('screen')) || null;
+  // 딥링크(미리보기 편의): ?screen=homeV4 로 특정 화면 직접 진입, ?full=1 로 목업 프레임 제거(전체폭).
+  const _qs = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const initialScreen = (_qs && _qs.get('screen')) || null;
+  const fullMode = !!(_qs && _qs.get('full') === '1'); // 해상도 테스터용: 320×640 목업 대신 뷰포트 꽉 채움
   const nav = useRouter(initialScreen || (isOnboardingDone() ? 'home' : 'onboarding'));
   const [settings, setSettings] = useState(() => {
     // MY›설정 읽기 도움 기본값 — localStorage 유지. 없으면 「조금 안다」 기본(후리 ON·발음 OFF).
@@ -64,16 +66,18 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <View style={styles.stage}>
-        <View style={styles.topbar}>
-          <Text style={styles.brand}>토모리 · FE 본편 (JLPT 단어 수직선)</Text>
-          <Pressable style={styles.modeBtn} onPress={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}>
-            <Icon name={mode === 'dark' ? 'sun' : 'moon'} size={15} color="#FFF9EC" />
-            <Text style={styles.modeBtnText}>{mode === 'dark' ? '라이트' : '다크'}</Text>
-          </Pressable>
-        </View>
+      <View style={fullMode ? styles.stageFull : styles.stage}>
+        {!fullMode ? (
+          <View style={styles.topbar}>
+            <Text style={styles.brand}>토모리 · FE 본편 (JLPT 단어 수직선)</Text>
+            <Pressable style={styles.modeBtn} onPress={() => setMode((m) => (m === 'dark' ? 'light' : 'dark'))}>
+              <Icon name={mode === 'dark' ? 'sun' : 'moon'} size={15} color="#FFF9EC" />
+              <Text style={styles.modeBtnText}>{mode === 'dark' ? '라이트' : '다크'}</Text>
+            </Pressable>
+          </View>
+        ) : null}
 
-        <View style={[styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
+        <View style={[fullMode ? styles.phoneFull : styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
           <ThemeProvider mode={mode}>
             {name === 'onboarding' ? (
               <OnboardingScreen onFinish={handleOnboardingFinish} onExit={() => nav.reset('home')} />
@@ -113,7 +117,9 @@ export default function App() {
           </ThemeProvider>
         </View>
 
-        <Text style={styles.note}>실 Supabase · 스택 네비 · 현재: {name}{params.level ? ` · ${params.level}` : ''}</Text>
+        {!fullMode ? (
+          <Text style={styles.note}>실 Supabase · 스택 네비 · 현재: {name}{params.level ? ` · ${params.level}` : ''}</Text>
+        ) : null}
       </View>
     </AuthProvider>
   );
@@ -221,6 +227,9 @@ const styles = StyleSheet.create({
     width: 320, height: 640, borderRadius: 26, borderWidth: 1, overflow: 'hidden',
     boxShadow: '0 12px 32px rgba(26,22,19,.18)',
   },
+  // 전체폭 모드(?full=1) — 목업 프레임/여백 제거, 뷰포트 꽉 채워 실제 기기폭으로 렌더.
+  stageFull: { flex: 1, minHeight: '100%', backgroundColor: '#EFE9E1' },
+  phoneFull: { flex: 1, width: '100%', overflow: 'hidden' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
   msg: { fontFamily: fonts.ko, fontSize: 13, padding: 16, textAlign: 'center' },
   note: { fontFamily: fonts.ko, fontSize: 12, color: '#9C948B' },

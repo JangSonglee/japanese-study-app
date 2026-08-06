@@ -96,14 +96,15 @@ export default function HomeV4Screen({ nav }) {
   };
   const H = HERO[heroState];
 
-  // 히어로 토모 = 화면 폭 반응. 오른쪽 끝에서 약 40% 크롭(반쯤 잘린 연출). 원본 비율 116:156.
+  // 히어로 토모 = 화면 폭 반응. 오른쪽 하단 모서리에서 아래로 내려 몸통 하단을 크롭(반쯤 잘린 연출).
   const { width } = useWindowDimensions();
-  const tomoW = Math.round(Math.min(154, Math.max(112, width * 0.40)));
+  const tomoW = Math.round(Math.min(150, Math.max(116, width * 0.34)));
   const tomoH = Math.round(tomoW * (156 / 116));
-  const tomoCrop = Math.round(tomoW * 0.40);        // 오른쪽으로 넘겨 잘라낼 폭
-  const tomoVisible = tomoW - tomoCrop;             // 카드 안에 보이는 폭
-  // 텍스트 최대 폭 = 히어로 안쪽 폭 − 보이는 토모 − (히어로 패딩+여유). 이 폭 안에서 제목 한 줄.
-  const textMax = Math.round((width - 40) - tomoVisible - 30);
+  const tomoRightCrop = Math.round(tomoW * 0.10);   // 오른쪽 살짝 크롭(모서리에 붙임)
+  const tomoBottomCrop = Math.round(tomoH * 0.36);  // 아래로 내려 몸통 하단 크롭
+  const tomoVisibleW = tomoW - tomoRightCrop;       // 가로로 보이는 폭
+  // 텍스트 최대 폭 = 히어로 안쪽 폭 − 보이는 토모 − 여유. 이 폭 안에서 제목이 (가능하면) 한 줄.
+  const textMax = Math.round((width - 40) - tomoVisibleW - 24);
 
   function toggleSave(ja) {
     setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
@@ -111,7 +112,7 @@ export default function HomeV4Screen({ nav }) {
 
   return (
     <View style={S.screen}>
-      <ScrollView contentContainerStyle={S.body}>
+      <ScrollView style={S.scroll} contentContainerStyle={S.body}>
         {/* 헤더 — 불씨 + 연속 학습 */}
         <View style={S.headerRow}>
           <Image source={A('flame.png')} style={S.flame} resizeMode="contain" />
@@ -135,7 +136,7 @@ export default function HomeV4Screen({ nav }) {
         >
           <Image source={A('cat-background.png')} style={S.heroBgImg} resizeMode="cover" />
           {/* 토모 = 절대배치·화면 폭 반응 크기. 텍스트 maxWidth를 토모 폭만큼 비워 겹침 방지. */}
-          <Image source={A(H.art)} style={[S.heroTomo, { width: tomoW, height: tomoH, right: -tomoCrop }]} resizeMode="contain" pointerEvents="none" />
+          <Image source={A(H.art)} style={[S.heroTomo, { width: tomoW, height: tomoH, right: -tomoRightCrop, bottom: -tomoBottomCrop }]} resizeMode="contain" pointerEvents="none" />
           <View style={[S.heroText, { maxWidth: textMax }]}>
             {H.badge ? <Text style={S.heroLabel}>{H.badge}</Text> : null}
             <Text style={[S.heroTitle, keepAll]}>{H.title}</Text>
@@ -280,6 +281,7 @@ export default function HomeV4Screen({ nav }) {
 
 const S = StyleSheet.create({
   screen: { flex: 1, backgroundColor: C.bg },
+  scroll: { flex: 1, alignSelf: 'stretch' },
   body: { padding: 20, paddingBottom: 98, gap: 24 },
 
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
