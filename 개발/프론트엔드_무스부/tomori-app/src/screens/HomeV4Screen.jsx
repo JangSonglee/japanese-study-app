@@ -101,7 +101,7 @@ export default function HomeV4Screen({ nav }) {
   const tomoW = Math.round(Math.min(150, Math.max(116, width * 0.34)));
   const tomoH = Math.round(tomoW * (156 / 116));
   const tomoRightCrop = Math.round(tomoW * 0.10);   // 오른쪽 살짝 크롭(모서리에 붙임)
-  const tomoBottomCrop = Math.round(tomoH * 0.36);  // 아래로 내려 몸통 하단 크롭
+  const tomoBottomCrop = Math.round(tomoH * 0.24);  // 하단 크롭(리본까지 보이도록 축소)
   const tomoVisibleW = tomoW - tomoRightCrop;       // 가로로 보이는 폭
   // 텍스트 최대 폭 = 히어로 안쪽 폭 − 보이는 토모 − 여유. 이 폭 안에서 제목이 (가능하면) 한 줄.
   const textMax = Math.round((width - 40) - tomoVisibleW - 24);
