@@ -8,6 +8,7 @@ import { useAuth } from '../auth/AuthContext';
 import { fonts, keepAll } from '../theme/tokens';
 import { loadHomeProgress, loadDailyExpression, listExamDates, setExamDate } from '../data/home';
 import { loadStampState } from '../data/stamps';
+import { saveWord, unsaveWord, loadSavedKeys } from '../data/wordbook';
 
 /**
  * 홈 (리디자인 v4) — Claude Design `오늘의 표현.dc.html`(프로젝트 "홈 화면 디자인 개선") 재현.
@@ -110,6 +111,8 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
   useEffect(() => { loadHomeProgress().then((v) => { cacheProg = v; setProg(v); }).catch(() => {}); }, []);
   useEffect(() => { loadStampState().then((v) => { cacheStamp = v; setStamp(v); }).catch(() => {}); }, []);
   useEffect(() => { loadDailyExpression().then((v) => { cacheExpr = v; setExpr(v); }).catch(() => {}); }, []);
+  // 표현 단어 저장(별) 상태 프리로드 — 이미 단어장에 담긴 표현 단어는 별이 켜져 보이게.
+  useEffect(() => { loadSavedKeys().then((set) => setSaved((prev) => new Set([...prev, ...set]))).catch(() => {}); }, []);
 
   // 로그인 사용자에겐 데모를 쓰지 않는다. 게스트(미로그인 확정)만 DEMO, 로그인+로딩중은 대기.
   const authed = !!user;
@@ -177,8 +180,17 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
   // 텍스트 최대 폭 = 히어로 안쪽 폭 − 보이는 토모 − 여유. 이 폭 안에서 제목이 (가능하면) 한 줄.
   const textMax = Math.round((width - 40) - tomoVisibleW - 24);
 
-  function toggleSave(ja) {
-    setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
+  // 표현 단어 저장 식별키 — 카탈로그 밖이라 source+표제로 생성(data/wordbook.wordDedup과 동일 규칙).
+  const exprDedup = (w) => `x:expression:${w.ja}`;
+  function toggleSave(w) {
+    const dedup = exprDedup(w);
+    const willSave = !saved.has(dedup);
+    setSaved((s) => { const n = new Set(s); if (n.has(dedup)) n.delete(dedup); else n.add(dedup); return n; });
+    if (willSave) {
+      saveWord({ dedup, contentKey: null, source: 'expression', tag: 'JLPT', level: exprLevel || null, ja: w.ja, reading: '', ruby: null, meaning: w.ko || '' }).catch(() => {});
+    } else {
+      unsaveWord(dedup).catch(() => {});
+    }
   }
 
   // "시험 일정 등록" 탭 → 회차 목록 시트. 선택 시 저장 후 홈 새로고침.
@@ -357,12 +369,12 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
                       <Text style={S.wordKo}>{w.ko}</Text>
                     </View>
                     <Pressable
-                      onPress={() => toggleSave(w.ja)}
+                      onPress={() => toggleSave(w)}
                       hitSlop={8}
                       accessibilityRole="button"
-                      accessibilityLabel={saved.has(w.ja) ? `${w.ja} 저장 해제` : `${w.ja} 저장`}
+                      accessibilityLabel={saved.has(exprDedup(w)) ? `${w.ja} 저장 해제` : `${w.ja} 저장`}
                     >
-                      <Image source={A(saved.has(w.ja) ? 'ic-star-fill.svg' : 'ic-star-line.svg')} style={S.star} resizeMode="contain" />
+                      <Image source={A(saved.has(exprDedup(w)) ? 'ic-star-fill.svg' : 'ic-star-line.svg')} style={S.star} resizeMode="contain" />
                     </Pressable>
                   </View>
                 ))}

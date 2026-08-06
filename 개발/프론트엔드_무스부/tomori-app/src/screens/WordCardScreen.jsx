@@ -7,6 +7,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { recordSessionComplete, sessionSignature } from '../data/study';
 import { recordVocabKnown } from '../data/home';
+import { saveWord, unsaveWord, loadSavedKeys } from '../data/wordbook';
 
 /**
  * 단어 카드 화면 (Hi-fi 14번) — JLPT N5, 10개 세션.
@@ -40,6 +41,13 @@ export default function WordCardScreen({ nav, level = '', cards }) {
   const knownKeysRef = useRef([]);    // 「안다」로 표시한 카드의 content_key → 완료 시 진도 적립(이어서 학습)
   useEffect(() => { advancingRef.current = false; }, [idx]); // 새 카드 렌더되면 다시 탭 허용
 
+  // 저장(별) 상태 프리로드 — 이미 단어장에 담긴 카드는 별이 켜져 보이게(로그인 시).
+  useEffect(() => {
+    let alive = true;
+    loadSavedKeys().then((set) => { if (alive) setSaved((prev) => new Set([...prev, ...set])); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   const done = idx >= cards.length;
   const card = done ? null : cards[idx];
 
@@ -64,11 +72,24 @@ export default function WordCardScreen({ nav, level = '', cards }) {
   }
 
   function toggleSave() {
+    if (!card || !card.key) return;
+    const willSave = !saved.has(card.key);
     setSaved((s) => {
       const n = new Set(s);
       if (n.has(card.key)) n.delete(card.key); else n.add(card.key);
       return n;
     });
+    // 실 저장/해제(로그인 시). 게스트는 no-op → 로컬 표시만.
+    if (willSave) {
+      saveWord({
+        dedup: card.key, contentKey: card.key, source: 'vocab', tag: 'JLPT', level: card.level || null,
+        ja: (card.front && card.front.base) || card.headword, reading: card.reading || '',
+        ruby: card.front && card.front.base ? { base: card.front.base, ruby: card.front.ruby || [] } : null,
+        meaning: card.meaning || '',
+      }).catch(() => {});
+    } else {
+      unsaveWord(card.key).catch(() => {});
+    }
   }
 
   if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} knownKeys={knownKeysRef.current} sessionSig={sessionSignature('vocab', level, cards)} onRestart={() => { setIdx(0); setKnown(0); knownKeysRef.current = []; }} onBack={() => nav && nav.pop()} source="vocab" />;
