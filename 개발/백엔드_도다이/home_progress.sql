@@ -1,17 +1,22 @@
--- 홈 실데이터 RPC — 이어서 학습(단어 진도)·오늘 진행한 학습·3분 복습 (2026-08-07)
--- Supabase 마이그레이션: home_vocab_progress → home_progress_today_items → session_signature_and_review.
--- 이 파일은 저장소 기록용(최신 상태 반영).
+-- 홈 실데이터 RPC — 이어서 학습·오늘 진행한 학습·3분 복습·연속학습·시험 D-day (2026-08-07)
+-- Supabase 마이그레이션 순서:
+--   home_vocab_progress → home_progress_today_items → session_signature_and_review
+--   → home_progress_review_sig(_fix) → home_progress_streak_dday(_v2)
+-- 이 파일은 저장소 기록용(최신 상태).
 --
 -- 설계 결정(대표님 2026-08-07):
 --  · 이어서 학습 진도 = 「안다」 표시 단어 수 / 급수의 공개 단어 수(분모). vocab_goal_count가 null이라 공개 vocab_items 수 사용.
---  · 세션 크기: 단어·어휘 10 / 문법 3 / 독해 1(지문) / 청해 1(음성). (App.jsx 로더 인자)
---  · 세션 서명(study_sessions.signature) = 영역+급수+항목 content_key 세트 → 같은 세션 다시보기 판별.
---  · 오늘 진행한 학습 = 오늘 완료 세션의 distinct signature 수(다시보기는 1회).
---  · 오늘의 3분 복습 = 오늘 세션 1개↑면 노출, 랜덤 1세션의 크기(그 세션 항목 수).
---  · 스트릭·우표(daily_studies/grant_stamp)는 기존 로직 그대로(세션당 +1, 분리).
-
--- record_session_complete 는 스트릭 마이그레이션에서 정의됨. session_signature_and_review 에서
---   p_signature 인자 추가(study_sessions.signature 저장). 스트릭·우표 로직은 불변.
+--  · 세션 크기: 단어·어휘 10 / 문법 3 / 독해 1(지문) / 청해 1(음성)(App.jsx 로더 인자).
+--  · 세션 서명(study_sessions.signature = 영역+급수+content_key세트) → 같은 세션 다시보기 판별.
+--  · 오늘 진행한 학습 = 오늘 완료 세션의 distinct signature 수(다시보기=1회).
+--  · 오늘의 3분 복습 = 오늘 세션 1개↑면 노출, 랜덤 1세션(review_sig로 복습화면이 항목 재로드).
+--  · 연속학습 = users_profile.streak_count. 시험 D-day = app_configs('jlpt.exam_date') − 오늘(KST).
+--  · 모은 우표는 홈이 별도 load_stamp_state() 재사용(잔액=stamp_balances). 여기 미포함.
+--  · 스트릭·우표(daily_studies/grant_stamp)는 세션당 +1 기존 로직 유지(카운트 표시와 분리).
+--
+-- record_session_complete 는 스트릭 마이그레이션에서 정의. session_signature_and_review 에서
+--   p_signature 인자 추가(study_sessions.signature 저장). 스트릭·우표 로직 불변.
+-- app_configs('jlpt.exam_date') = 다음 JLPT 시험일(전역, jsonb 문자열). 사용자별 등록 UI는 추후.
 
 -- 1) 「안다」 표시 단어 적립: content_key 배열 → vocab_states(acquired) upsert.
 create or replace function public.record_vocab_known(p_keys text[])
@@ -34,19 +39,21 @@ begin
   return v_n;
 end $$;
 
--- 2) 홈 진도 로드: 단어 진도 + 오늘 진행한 학습(distinct 세션) + 3분복습(랜덤 1세션 크기).
+-- 2) 홈 진도 로드.
 create or replace function public.load_home_progress()
 returns jsonb
 language plpgsql security definer set search_path to 'public'
 as $$
 declare
   v_uid uuid := auth.uid();
-  v_level text; v_level_id uuid;
+  v_level text; v_level_id uuid; v_streak int := 0;
   v_done int := 0; v_total int := 0; v_today int := 0; v_review int := 0; v_review_sig text;
+  v_exam date; v_dday int;
   v_today_date date := (now() at time zone 'Asia/Seoul')::date;
 begin
   if v_uid is null then raise exception 'auth required'; end if;
-  select level_estimate into v_level from public.users_profile where user_id = v_uid;
+  select level_estimate, coalesce(streak_count,0) into v_level, v_streak
+    from public.users_profile where user_id = v_uid;
   select id into v_level_id from public.course_levels where code = v_level limit 1;
   if v_level_id is not null then
     select count(*) into v_total from public.vocab_items
@@ -69,15 +76,21 @@ begin
     where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date
     order by coalesce(signature, 'nosig:'||id::text), finished_at desc
   ) dd order by random() limit 1;
+  -- 시험 D-day
+  select (value #>> '{}')::date into v_exam from public.app_configs where key = 'jlpt.exam_date';
+  if v_exam is not null then v_dday := v_exam - v_today_date; end if;
   return jsonb_build_object(
     'level', v_level,
     'has_level', v_level is not null,
+    'streak', coalesce(v_streak,0),
     'vocab_done', coalesce(v_done,0),
     'vocab_total', coalesce(v_total,0),
     'today_sessions', coalesce(v_today,0),
     'studied_today', coalesce(v_today,0) > 0,
     'review_count', coalesce(v_review,0),
-    'review_sig', v_review_sig
+    'review_sig', v_review_sig,
+    'exam_date', to_char(v_exam, 'YYYY-MM-DD'),
+    'dday', v_dday
   );
 end $$;
 

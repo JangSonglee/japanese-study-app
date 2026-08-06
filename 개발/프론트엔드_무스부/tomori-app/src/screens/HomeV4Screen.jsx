@@ -4,6 +4,7 @@ import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { fonts, keepAll } from '../theme/tokens';
 import { loadHomeProgress } from '../data/home';
+import { loadStampState } from '../data/stamps';
 
 /**
  * 홈 (리디자인 v4) — Claude Design `오늘의 표현.dc.html`(프로젝트 "홈 화면 디자인 개선") 재현.
@@ -83,12 +84,18 @@ export default function HomeV4Screen({ nav }) {
   const [saved, setSaved] = useState(() => new Set(['逃げる']));
   // 실데이터 로드(로그인 시). 게스트·조회실패면 null → 데모 폴백.
   const [prog, setProg] = useState(null);
+  const [stamp, setStamp] = useState(null);
   useEffect(() => { loadHomeProgress().then(setProg).catch(() => setProg(null)); }, []);
+  useEffect(() => { loadStampState().then(setStamp).catch(() => setStamp(null)); }, []);
 
   const D = DEMO;
   const P = prog;
   const level = (P && P.level) || D.level;
   const hasLevel = P ? P.has_level : true;               // 게스트는 데모(레벨 있음) 취급
+  const streakDays = P ? P.streak : D.streakDays;        // 연속학습(users_profile.streak_count)
+  const dday = P && P.dday != null ? P.dday : D.dday;    // 시험 D-day(app_configs.jlpt.exam_date)
+  const stampHave = stamp ? stamp.cycle_have : D.stampHave;   // 모은 우표
+  const stampNeed = stamp ? stamp.cycle_need : D.stampNeed;
   const vocabDone = P ? P.vocab_done : D.vocabDone;
   const vocabTotal = P ? P.vocab_total : D.vocabTotal;
   const studiedToday = P ? P.studied_today : false;
@@ -131,7 +138,7 @@ export default function HomeV4Screen({ nav }) {
         {/* 헤더 — 불씨 + 연속 학습 */}
         <View style={S.headerRow}>
           <Image source={A('flame.png')} style={S.flame} resizeMode="contain" />
-          <Text style={S.streakText}>연속 학습 {D.streakDays}일차</Text>
+          <Text style={S.streakText}>연속 학습 {streakDays}일차</Text>
         </View>
 
         {/* 인사 */}
@@ -197,7 +204,7 @@ export default function HomeV4Screen({ nav }) {
             <Text style={S.examLabel}>JLPT {D.level} 시험</Text>
           </View>
           <View style={S.examRight}>
-            <Text style={S.dday}>D-{D.dday}</Text>
+            <Text style={S.dday}>D-{dday}</Text>
             <Icon name="forward" size={18} color={C.brandMainText} />
           </View>
         </Pressable>
@@ -214,7 +221,7 @@ export default function HomeV4Screen({ nav }) {
           <View style={S.statCard}>
             <View style={S.statTextWrap}>
               <Text style={S.statLabel}>모은 우표</Text>
-              <Text style={S.statBig}>{D.stampHave}<Text style={S.statUnit}> / {D.stampNeed}</Text></Text>
+              <Text style={S.statBig}>{stampHave}<Text style={S.statUnit}> / {stampNeed}</Text></Text>
             </View>
             <Image source={A('stamps.png')} style={S.stamps} resizeMode="contain" />
           </View>
