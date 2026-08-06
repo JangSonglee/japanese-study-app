@@ -504,7 +504,7 @@ const S = StyleSheet.create({
   interp: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', lineHeight: 21, color: C.interpText },
 
   wordDivider: { height: 1, backgroundColor: '#E7E1D6' },
-  wordList: { gap: 8 },
+  wordList: { gap: 4 },
   wordRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wordPair: { flexDirection: 'row', alignItems: 'baseline', gap: 12 },
   wordJa: { fontFamily: fonts.jp, fontSize: 16, lineHeight: 24, color: C.brandMainText },
