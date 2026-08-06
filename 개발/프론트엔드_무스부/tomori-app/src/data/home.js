@@ -41,6 +41,23 @@ export async function registerUpcomingExam() {
   return data; // 등록된 날짜(YYYY-MM-DD) | null
 }
 
+// 다가오는 JLPT 회차 목록(YYYY-MM-DD 배열). 게스트면 [].
+export async function listExamDates() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+  const { data, error } = await supabase.rpc('list_exam_dates');
+  if (error) return [];
+  return Array.isArray(data) ? data : [];
+}
+
+// 사용자 시험일을 선택한 날짜로 설정. 게스트 no-op.
+export async function setExamDate(dateStr) {
+  if (!dateStr) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  await supabase.rpc('set_exam_date', { p_date: dateStr });
+}
+
 // { level, has_level, vocab_done, vocab_total, today_sessions, studied_today, today_known } | null
 export async function loadHomeProgress() {
   const { data: { user } } = await supabase.auth.getUser();

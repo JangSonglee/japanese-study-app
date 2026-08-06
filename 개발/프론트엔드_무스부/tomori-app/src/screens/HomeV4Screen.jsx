@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
+import BottomSheet from '../components/BottomSheet';
+import { useTheme } from '../theme/ThemeContext';
 import { fonts, keepAll } from '../theme/tokens';
-import { loadHomeProgress, loadDailyExpression, registerUpcomingExam } from '../data/home';
+import { loadHomeProgress, loadDailyExpression, listExamDates, setExamDate } from '../data/home';
 import { loadStampState } from '../data/stamps';
 
 /**
@@ -78,10 +80,22 @@ const DEMO = {
   reviewCount: 10,
 };
 
+// YYYY-MM-DD → "YYYY년 M월 D일 (요일)"
+const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
+function fmtExam(d) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || '');
+  if (!m) return d || '';
+  const dt = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return `${Number(m[1])}년 ${Number(m[2])}월 ${Number(m[3])}일 (${WEEK[dt.getDay()]})`;
+}
+
 export default function HomeV4Screen({ nav }) {
   const [showInterp, setShowInterp] = useState(false);
   const [showWords, setShowWords] = useState(false);
+  const { t } = useTheme();
   const [saved, setSaved] = useState(() => new Set());
+  const [examSheet, setExamSheet] = useState(false);
+  const [examDates, setExamDates] = useState([]);
   // 실데이터 로드(로그인 시). 게스트·조회실패면 null → 데모 폴백.
   const [prog, setProg] = useState(null);
   const [stamp, setStamp] = useState(null);
@@ -156,9 +170,14 @@ export default function HomeV4Screen({ nav }) {
     setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
   }
 
-  // "시험 일정 등록" 탭 → 다가오는 JLPT 등록 후 홈 새로고침.
-  function handleRegisterExam() {
-    registerUpcomingExam().then((d) => { if (d) loadHomeProgress().then(setProg).catch(() => {}); }).catch(() => {});
+  // "시험 일정 등록" 탭 → 회차 목록 시트. 선택 시 저장 후 홈 새로고침.
+  function openExamSheet() {
+    setExamSheet(true);
+    listExamDates().then(setExamDates).catch(() => setExamDates([]));
+  }
+  function chooseExamDate(d) {
+    setExamSheet(false);
+    setExamDate(d).then(() => loadHomeProgress().then(setProg).catch(() => {})).catch(() => {});
   }
 
   return (
@@ -244,7 +263,7 @@ export default function HomeV4Screen({ nav }) {
             </View>
           </Pressable>
         ) : (
-          <Pressable style={S.examCard} onPress={handleRegisterExam} accessibilityRole="button" accessibilityLabel="JLPT 시험 일정 등록">
+          <Pressable style={S.examCard} onPress={openExamSheet} accessibilityRole="button" accessibilityLabel="JLPT 시험 일정 등록">
             <View style={S.examLeft}>
               <Image source={A('ic-calendar.svg')} style={S.calIcon} resizeMode="contain" />
               <Text style={S.examLabel} numberOfLines={1}>JLPT 시험 일정을 등록해요</Text>
@@ -351,6 +370,24 @@ export default function HomeV4Screen({ nav }) {
           );
         })}
       </View>
+
+      {/* 시험 일정 선택 시트 — 다가오는 JLPT 회차 중 선택 */}
+      <BottomSheet visible={examSheet} title="JLPT 시험 일정 선택" onClose={() => setExamSheet(false)}>
+        <View style={S.sheetBody}>
+          <Text style={[S.sheetHint, { color: t.textMid }]}>다가오는 JLPT 회차 중 하나를 골라주세요.</Text>
+          {examDates.length === 0 ? (
+            <Text style={[S.sheetHint, { color: t.textLow }]}>불러오는 중…</Text>
+          ) : (
+            examDates.map((d) => (
+              <Pressable key={d} style={[S.dateRow, { borderBottomColor: t.border }]} onPress={() => chooseExamDate(d)} accessibilityRole="button" accessibilityLabel={fmtExam(d)}>
+                <Image source={A('ic-calendar.svg')} style={S.calIcon} resizeMode="contain" />
+                <Text style={[S.dateText, { color: t.textHigh }]}>{fmtExam(d)}</Text>
+                <Icon name="forward" size={18} color={t.textLow} />
+              </Pressable>
+            ))
+          )}
+        </View>
+      </BottomSheet>
     </View>
   );
 }
@@ -457,4 +494,9 @@ const S = StyleSheet.create({
   tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 },
   tabIcon: { width: 22, height: 22 },
   tabLabel: { fontFamily: fonts.ko, fontSize: 11, lineHeight: 16.5, fontWeight: '500' },
+
+  sheetBody: { paddingHorizontal: 16, paddingTop: 4, gap: 2 },
+  sheetHint: { fontFamily: fonts.ko, fontSize: 13, lineHeight: 20, fontWeight: '400', paddingVertical: 6 },
+  dateRow: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 15, borderBottomWidth: 1 },
+  dateText: { flex: 1, fontFamily: fonts.ko, fontSize: 15, lineHeight: 22, fontWeight: '600' },
 });
