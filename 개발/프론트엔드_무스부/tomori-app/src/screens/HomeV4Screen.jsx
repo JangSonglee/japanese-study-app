@@ -95,7 +95,6 @@ export default function HomeV4Screen({ nav }) {
     after:  { badge: `JLPT ${D.level}`, title: `오늘 총 ${D.todayCount}개 학습했어요!`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo3.png' },
   };
   const H = HERO[heroState];
-  const DEV_LABEL = { level: '레벨테스트', before: '학습 전', after: '학습 후' };
 
   function toggleSave(ja) {
     setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
@@ -116,22 +115,7 @@ export default function HomeV4Screen({ nav }) {
           <Text style={S.greetSub}>짧게라도 괜찮아요. 오늘의 불씨를 이어가요!</Text>
         </View>
 
-        {/* 미리보기용 히어로 상태 전환(개발) — 실제론 데이터로 자동 결정 */}
-        <View style={S.devSwitch}>
-          {['level', 'before', 'after'].map((k) => (
-            <Pressable
-              key={k}
-              onPress={() => setHeroState(k)}
-              style={[S.devChip, heroState === k && S.devChipOn]}
-              accessibilityRole="button"
-              accessibilityLabel={`미리보기 상태: ${DEV_LABEL[k]}`}
-            >
-              <Text style={[S.devChipText, heroState === k && S.devChipTextOn]}>{DEV_LABEL[k]}</Text>
-            </Pressable>
-          ))}
-        </View>
-
-        {/* 이어서 학습 (히어로) — 3상태 */}
+        {/* 이어서 학습 (히어로) — 3상태(실제론 데이터로 자동 결정: 레벨 미정/오늘 학습 전/후) */}
         <Pressable
           style={S.hero}
           onPress={() => nav && nav.push('jlptHub')}
@@ -294,19 +278,13 @@ const S = StyleSheet.create({
   greetTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
   greetSub: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '400', color: C.greetSub },
 
-  devSwitch: { flexDirection: 'row', gap: 6, alignSelf: 'flex-start' },
-  devChip: { borderWidth: 1, borderColor: C.borderStrong, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 3 },
-  devChipOn: { backgroundColor: C.ctaDark, borderColor: C.ctaDark },
-  devChipText: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '500', color: C.sub },
-  devChipTextOn: { color: C.inverse },
-
   hero: {
     backgroundColor: C.heroBg, borderRadius: 16, padding: 20, gap: 12,
     overflow: 'hidden', position: 'relative', boxShadow: C.cardShadow,
   },
   heroBgImg: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   heroTomo: { position: 'absolute', right: -8, bottom: -4, width: 116, height: 156 },
-  heroText: { gap: 4, alignSelf: 'flex-start', maxWidth: 178 },
+  heroText: { gap: 4, alignSelf: 'flex-start', maxWidth: 200 },
   heroLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandAmber },
   heroTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
   heroRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
