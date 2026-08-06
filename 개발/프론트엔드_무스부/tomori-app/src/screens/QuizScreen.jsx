@@ -5,6 +5,7 @@ import Icon from '../components/Icon';
 import BottomSheet from '../components/BottomSheet';
 import Tomo from '../components/Tomo';
 import { DoneView } from './WordCardScreen';
+import { sessionSignature } from '../data/study';
 import { loadPassageWords } from '../data/vocab';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
@@ -123,6 +124,7 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
         onBack={() => nav && nav.pop()}
         source={kind}
         attempts={attemptsRef.current}
+        sessionSig={sessionSignature(kind, level, cards)}
         onWrongNote={() => nav && nav.push('wrongNote')}
       />
     );

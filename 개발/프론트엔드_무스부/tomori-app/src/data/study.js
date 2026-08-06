@@ -6,15 +6,22 @@ function localISO(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-export async function recordSessionComplete(source, correct, wrong, attempts = []) {
+export async function recordSessionComplete(source, correct, wrong, attempts = [], signature = null) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
   const { data, error } = await supabase.rpc('record_session_complete', {
     p_source: source, p_correct: correct | 0, p_wrong: wrong | 0,
     p_attempts: Array.isArray(attempts) ? attempts : [],
+    p_signature: signature || null,
   });
   if (error) throw error;
   return data;
+}
+
+// 세션 서명 — 같은 세션(다시보기) 판별용. 영역+급수+항목 content_key 세트.
+export function sessionSignature(source, level, cards) {
+  const keys = (cards || []).map((c) => c && c.key).filter(Boolean).sort();
+  return `${source || 'unknown'}|${level || ''}|${keys.join(',')}`;
 }
 
 export async function loadStreak() {

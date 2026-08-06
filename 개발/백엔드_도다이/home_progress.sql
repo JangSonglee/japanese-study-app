@@ -1,12 +1,17 @@
--- 홈 실데이터 RPC — 이어서 학습(단어 진도)·오늘 진행한 학습·복습 (2026-08-07)
--- Supabase 마이그레이션 `home_vocab_progress`로 적용됨. 이 파일은 저장소 기록용.
+-- 홈 실데이터 RPC — 이어서 학습(단어 진도)·오늘 진행한 학습·3분 복습 (2026-08-07)
+-- Supabase 마이그레이션: home_vocab_progress → home_progress_today_items → session_signature_and_review.
+-- 이 파일은 저장소 기록용(최신 상태 반영).
 --
 -- 설계 결정(대표님 2026-08-07):
---  · 이어서 학습 진도 = 「안다」로 표시한 단어 수 / 급수의 공개 단어 수(분모).
---    (course_levels.vocab_goal_count가 null이라, 급수의 is_published vocab_items 수를 분모로 씀.)
---  · 오늘 진행한 학습 = 오늘(KST) 완료 세션 수(daily_studies.completed_sessions). 단어/독해/청해/문법 공통.
---  · 오늘의 3분 복습 = 오늘 학습을 완료했을 때 노출(studied_today), 개수 = 오늘 학습한 항목 수(today_items, 모든 영역).
---  · 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
+--  · 이어서 학습 진도 = 「안다」 표시 단어 수 / 급수의 공개 단어 수(분모). vocab_goal_count가 null이라 공개 vocab_items 수 사용.
+--  · 세션 크기: 단어·어휘 10 / 문법 3 / 독해 1(지문) / 청해 1(음성). (App.jsx 로더 인자)
+--  · 세션 서명(study_sessions.signature) = 영역+급수+항목 content_key 세트 → 같은 세션 다시보기 판별.
+--  · 오늘 진행한 학습 = 오늘 완료 세션의 distinct signature 수(다시보기는 1회).
+--  · 오늘의 3분 복습 = 오늘 세션 1개↑면 노출, 랜덤 1세션의 크기(그 세션 항목 수).
+--  · 스트릭·우표(daily_studies/grant_stamp)는 기존 로직 그대로(세션당 +1, 분리).
+
+-- record_session_complete 는 스트릭 마이그레이션에서 정의됨. session_signature_and_review 에서
+--   p_signature 인자 추가(study_sessions.signature 저장). 스트릭·우표 로직은 불변.
 
 -- 1) 「안다」 표시 단어 적립: content_key 배열 → vocab_states(acquired) upsert.
 create or replace function public.record_vocab_known(p_keys text[])
@@ -29,7 +34,7 @@ begin
   return v_n;
 end $$;
 
--- 2) 홈 진도 로드: 프로필 급수 기준 단어 진도 + 오늘 학습 수 + 오늘 복습 대상 수.
+-- 2) 홈 진도 로드: 단어 진도 + 오늘 진행한 학습(distinct 세션) + 3분복습(랜덤 1세션 크기).
 create or replace function public.load_home_progress()
 returns jsonb
 language plpgsql security definer set search_path to 'public'
@@ -37,7 +42,7 @@ as $$
 declare
   v_uid uuid := auth.uid();
   v_level text; v_level_id uuid;
-  v_done int := 0; v_total int := 0; v_today int := 0; v_today_known int := 0; v_today_items int := 0;
+  v_done int := 0; v_total int := 0; v_today int := 0; v_review int := 0;
   v_today_date date := (now() at time zone 'Asia/Seoul')::date;
 begin
   if v_uid is null then raise exception 'auth required'; end if;
@@ -50,13 +55,17 @@ begin
       join public.vocab_items vi on vi.id = vs.vocab_item_id
       where vs.user_id = v_uid and vs.status = 'acquired' and vi.course_level_id = v_level_id;
   end if;
-  select coalesce(completed_sessions,0) into v_today from public.daily_studies
-    where user_id = v_uid and study_date = v_today_date;
-  select count(*) into v_today_known from public.vocab_states
-    where user_id = v_uid and (last_seen_at at time zone 'Asia/Seoul')::date = v_today_date;
-  -- 오늘 학습한 항목 수 = 오늘 완료 세션의 (정답+오답) 합(단어=안다+모름, 퀴즈=정답+오답).
-  select coalesce(sum(correct_count + wrong_count),0) into v_today_items from public.study_sessions
-    where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date;
+  -- 오늘 완료 세션(다시보기=서명 중복은 1회): distinct signature.
+  with today_sess as (
+    select distinct on (coalesce(signature, 'nosig:'||id::text))
+           coalesce(signature, 'nosig:'||id::text) sig,
+           (correct_count + wrong_count) sz
+    from public.study_sessions
+    where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date
+    order by coalesce(signature, 'nosig:'||id::text), finished_at desc
+  )
+  select count(*) into v_today from today_sess;
+  select sz into v_review from today_sess order by random() limit 1;  -- 3분복습: 랜덤 1세션
   return jsonb_build_object(
     'level', v_level,
     'has_level', v_level is not null,
@@ -64,8 +73,7 @@ begin
     'vocab_total', coalesce(v_total,0),
     'today_sessions', coalesce(v_today,0),
     'studied_today', coalesce(v_today,0) > 0,
-    'today_known', coalesce(v_today_known,0),
-    'today_items', coalesce(v_today_items,0)
+    'review_count', coalesce(v_review,0)
   );
 end $$;
 

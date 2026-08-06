@@ -3,6 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { DoneView } from './WordCardScreen';
+import { sessionSignature } from '../data/study';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 
@@ -42,7 +43,7 @@ export default function GrammarCardScreen({ nav, level = '', cards }) {
     });
   }
 
-  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} noun="문형" onRestart={() => { setIdx(0); setKnown(0); }} onBack={() => nav && nav.pop()} source="grammar" />;
+  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} noun="문형" sessionSig={sessionSignature('grammar', level, cards)} onRestart={() => { setIdx(0); setKnown(0); }} onBack={() => nav && nav.pop()} source="grammar" />;
 
   const isSaved = saved.has(card.key);
   const S = makeStyles(t);

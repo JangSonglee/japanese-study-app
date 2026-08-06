@@ -5,7 +5,7 @@ import Tomo from '../components/Tomo';
 import Icon from '../components/Icon';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
-import { recordSessionComplete } from '../data/study';
+import { recordSessionComplete, sessionSignature } from '../data/study';
 import { recordVocabKnown } from '../data/home';
 
 /**
@@ -71,7 +71,7 @@ export default function WordCardScreen({ nav, level = '', cards }) {
     });
   }
 
-  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} knownKeys={knownKeysRef.current} onRestart={() => { setIdx(0); setKnown(0); knownKeysRef.current = []; }} onBack={() => nav && nav.pop()} source="vocab" />;
+  if (done) return <DoneView t={t} mode={mode} known={known} total={cards.length} savedCount={saved.size} knownKeys={knownKeysRef.current} sessionSig={sessionSignature('vocab', level, cards)} onRestart={() => { setIdx(0); setKnown(0); knownKeysRef.current = []; }} onBack={() => nav && nav.pop()} source="vocab" />;
 
   const isSaved = saved.has(card.key);
   const S = makeStyles(t);
@@ -248,15 +248,16 @@ function ToggleBtn({ t, on, label, onPress }) {
  *  · CTA 2개 [다시 보기](sec) + [테스트 시작하기](pri). 다시 보기를 지우지 않는다(강제 진행 없음 PRD 1.3).
  *  · 「안다고 했는데 틀린 단어」 lift 카드는 2단계(테스트 후) 전용 — 이 슬라이스엔 테스트가 없어 미표시.
  */
-export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어', source, attempts = [], knownKeys = [], onWrongNote }) {
+export function DoneView({ t, mode, known, total, savedCount, onRestart, onBack, noun = '단어', source, attempts = [], knownKeys = [], sessionSig = null, onWrongNote }) {
   const recordedRef = useRef(false);
   useEffect(() => {
     if (recordedRef.current || !source) return;
     recordedRef.current = true;
-    recordSessionComplete(source, Math.min(known, total), Math.max(0, total - known), attempts).catch(() => {});
+    // sessionSig = 같은 세션(다시보기) 판별용 서명 → 오늘 진행한 학습 카운트에서 중복 제거.
+    recordSessionComplete(source, Math.min(known, total), Math.max(0, total - known), attempts, sessionSig).catch(() => {});
     // 이어서 학습(단어 진도) — 「안다」로 표시한 단어를 vocab_states 에 적립(단어 세션만).
     if (knownKeys && knownKeys.length) recordVocabKnown(knownKeys).catch(() => {});
-  }, [source, known, total, attempts, knownKeys]);
+  }, [source, known, total, attempts, knownKeys, sessionSig]);
   // 오답노트 추가분 — 이번 세션 1차 시도 중 틀리거나 넘어간 문항 수(퀴즈만; 단어·문법은 attempts 없음).
   const wrongCount = (attempts || []).filter((a) => a && a.outcome !== 'correct').length;
   return (

@@ -178,7 +178,7 @@ function GrammarSession({ nav, level }) {
     let alive = true;
     setCards(null);
     setErr('');
-    loadGrammar(level, 12)
+    loadGrammar(level, 3)
       .then((cs) => { if (alive) setCards(cs); })
       .catch((e) => { if (alive) setErr(String(e.message || e)); });
     return () => { alive = false; };
@@ -201,7 +201,7 @@ function QuizSession({ nav, level, kind }) {
     setCards(null);
     setErr('');
     const load = kind === 'reading' ? loadReading : loadListening;
-    load(level, 12)
+    load(level, 1)
       .then((cs) => { if (alive) setCards(cs); })
       .catch((e) => { if (alive) setErr(String(e.message || e)); });
     return () => { alive = false; };
