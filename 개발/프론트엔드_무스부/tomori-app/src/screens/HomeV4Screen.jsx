@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { fonts, keepAll } from '../theme/tokens';
@@ -96,6 +96,13 @@ export default function HomeV4Screen({ nav }) {
   };
   const H = HERO[heroState];
 
+  // 히어로 토모 크기 = 화면 폭 반응(작은 화면일수록 축소, 글씨 방해 방지). 원본 비율 116:156.
+  const { width } = useWindowDimensions();
+  const tomoW = Math.round(Math.min(92, Math.max(66, width * 0.23)));
+  const tomoH = Math.round(tomoW * (156 / 116));
+  // 텍스트가 차지할 최대 폭 = 히어로 안쪽 폭 − 토모 폭 − 여유. 이 폭 안에서 제목이 한 줄로.
+  const textMax = Math.round(width - 40 - tomoW - 14);
+
   function toggleSave(ja) {
     setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
   }
@@ -125,9 +132,9 @@ export default function HomeV4Screen({ nav }) {
           accessibilityLabel={H.cta}
         >
           <Image source={A('cat-background.png')} style={S.heroBgImg} resizeMode="cover" />
-          <Image source={A(H.art)} style={S.heroTomo} resizeMode="contain" pointerEvents="none" />
-
-          <View style={S.heroText}>
+          {/* 토모 = 절대배치·화면 폭 반응 크기. 텍스트 maxWidth를 토모 폭만큼 비워 겹침 방지. */}
+          <Image source={A(H.art)} style={[S.heroTomo, { width: tomoW, height: tomoH }]} resizeMode="contain" pointerEvents="none" />
+          <View style={[S.heroText, { maxWidth: textMax }]}>
             {H.badge ? <Text style={S.heroLabel}>{H.badge}</Text> : null}
             <Text style={[S.heroTitle, keepAll]}>{H.title}</Text>
             {H.showProg ? (
@@ -138,7 +145,7 @@ export default function HomeV4Screen({ nav }) {
             ) : null}
           </View>
           {H.showProg ? (
-            <View style={S.progRow}>
+            <View style={[S.progRow, { maxWidth: textMax }]}>
               <View style={S.progTrack}><View style={[S.progFill, { width: `${pct}%` }]} /></View>
               <Text style={S.progText}><Text style={S.progPctNum}>{pct}</Text>%</Text>
             </View>
@@ -275,36 +282,36 @@ const S = StyleSheet.create({
 
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   flame: { width: 18, height: 22 },
-  streakText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.mainText },
+  streakText: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.mainText },
 
   greet: { gap: 0 },
   cards: { gap: 16, alignSelf: 'stretch' },
-  greetTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
-  greetSub: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '400', color: C.greetSub },
+  greetTitle: { fontFamily: fonts.ko, fontSize: 20, lineHeight: 30, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
+  greetSub: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '400', color: C.greetSub },
 
   hero: {
     backgroundColor: C.heroBg, borderRadius: 16, padding: 20, gap: 12,
     overflow: 'hidden', position: 'relative', boxShadow: C.cardShadow,
   },
   heroBgImg: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
-  heroTomo: { position: 'absolute', right: -8, bottom: -4, width: 116, height: 156 },
-  heroText: { gap: 4, alignSelf: 'flex-start', maxWidth: 200 },
-  heroLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandAmber },
-  heroTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
+  heroTomo: { position: 'absolute', right: -4, bottom: -4 },
+  heroText: { gap: 4, alignSelf: 'flex-start' },
+  heroLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandAmber },
+  heroTitle: { fontFamily: fonts.ko, fontSize: 20, lineHeight: 30, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
   heroRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  heroDesc: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandMainText },
+  heroDesc: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandMainText },
 
   progRow: { flexDirection: 'row', alignItems: 'center', gap: 10, width: 170 },
   progTrack: { flex: 1, height: 6, backgroundColor: C.trackBg, borderRadius: 999, overflow: 'hidden' },
   progFill: { height: 6, backgroundColor: C.brandAmber, borderRadius: 999 },
-  progText: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '500', color: C.brandMainText },
+  progText: { fontFamily: fonts.ko, fontSize: 11, lineHeight: 16.5, fontWeight: '500', color: C.brandMainText },
   progPctNum: { fontWeight: '700', color: C.brandMainText },
 
   cta: {
-    backgroundColor: C.ctaDark, borderRadius: 8, height: 36, width: 170,
+    backgroundColor: C.ctaDark, borderRadius: 8, height: 36, width: 170, maxWidth: '100%',
     alignItems: 'center', justifyContent: 'center',
   },
-  ctaText: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '500', color: C.inverse },
+  ctaText: { fontFamily: fonts.ko, fontSize: 16, lineHeight: 24, fontWeight: '500', color: C.inverse },
 
   reviewCard: {
     backgroundColor: C.ctaDark, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12,
@@ -312,8 +319,8 @@ const S = StyleSheet.create({
   },
   reviewLeft: { flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 },
   reviewIcon: { width: 32, height: 32 },
-  reviewTitle: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '600', color: C.darkCardText },
-  reviewSub: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '400', color: C.darkCardText },
+  reviewTitle: { fontFamily: fonts.ko, fontSize: 16, lineHeight: 24, fontWeight: '600', color: C.darkCardText },
+  reviewSub: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '400', color: C.darkCardText },
 
   examCard: {
     backgroundColor: C.cardWarm, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12,
@@ -321,9 +328,9 @@ const S = StyleSheet.create({
   },
   examLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   calIcon: { width: 18, height: 18 },
-  examLabel: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.brandMainText },
+  examLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandMainText },
   examRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  dday: { fontFamily: fonts.ko, fontSize: 18, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
+  dday: { fontFamily: fonts.ko, fontSize: 18, lineHeight: 27, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
 
   statRow: { flexDirection: 'row', gap: 16 },
   statCard: {
@@ -331,22 +338,22 @@ const S = StyleSheet.create({
     overflow: 'hidden', position: 'relative', minHeight: 78, boxShadow: C.cardShadow,
   },
   statTextWrap: { gap: 4 },
-  statLabel: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', color: C.brandMainText },
-  statBig: { fontFamily: fonts.ko, fontSize: 24, fontWeight: '700', letterSpacing: -0.5, color: C.brandMainText },
-  statUnit: { fontFamily: fonts.ko, fontSize: 16, fontWeight: '400' },
-  notebook: { position: 'absolute', right: 8, bottom: 10, width: 44, height: 44 },
-  stamps: { position: 'absolute', right: 8, bottom: 10, width: 48, height: 48 },
+  statLabel: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, fontWeight: '600', color: C.brandMainText },
+  statBig: { fontFamily: fonts.ko, fontSize: 24, lineHeight: 36, fontWeight: '700', letterSpacing: -0.5, color: C.brandMainText },
+  statUnit: { fontFamily: fonts.ko, fontSize: 16, lineHeight: 24, fontWeight: '400' },
+  notebook: { position: 'absolute', right: 10, bottom: 12, width: 32, height: 32 },
+  stamps: { position: 'absolute', right: 10, bottom: 12, width: 36, height: 36 },
 
   quoteCard: { backgroundColor: C.cardWarm, borderRadius: 16, padding: 16, gap: 12, boxShadow: C.cardShadow },
   quoteHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  quoteTitle: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '600', color: C.brandMainText },
+  quoteTitle: { fontFamily: fonts.ko, fontSize: 12, lineHeight: 18, fontWeight: '600', color: C.brandMainText },
   quoteToggles: { flexDirection: 'row', gap: 8 },
   toggleChip: {
     width: 41, height: 29, borderRadius: 8, borderWidth: 1, borderColor: C.borderStrong,
     alignItems: 'center', justifyContent: 'center',
   },
   toggleChipOn: { backgroundColor: C.ctaDark, borderColor: C.ctaDark },
-  toggleChipText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.sub },
+  toggleChipText: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.sub },
   toggleChipTextOn: { color: C.darkCardText },
   quoteBody: { paddingTop: 2 },
   interp: { fontFamily: fonts.ko, fontSize: 12, fontWeight: '500', lineHeight: 18, color: C.interpText },
@@ -355,8 +362,8 @@ const S = StyleSheet.create({
   wordList: { gap: 8 },
   wordRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   wordPair: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  wordJa: { fontFamily: fonts.jp, fontSize: 16, color: C.brandMainText },
-  wordKo: { fontFamily: fonts.ko, fontSize: 16, color: C.wordKo },
+  wordJa: { fontFamily: fonts.jp, fontSize: 16, lineHeight: 24, color: C.brandMainText },
+  wordKo: { fontFamily: fonts.ko, fontSize: 16, lineHeight: 24, color: C.wordKo },
   star: { width: 20, height: 18 },
 
   nav: {
@@ -366,5 +373,5 @@ const S = StyleSheet.create({
   },
   tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 },
   tabIcon: { width: 22, height: 22 },
-  tabLabel: { fontFamily: fonts.ko, fontSize: 11, fontWeight: '500' },
+  tabLabel: { fontFamily: fonts.ko, fontSize: 11, lineHeight: 16.5, fontWeight: '500' },
 });
