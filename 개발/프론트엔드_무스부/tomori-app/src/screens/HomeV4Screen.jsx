@@ -89,7 +89,7 @@ function fmtExam(d) {
   return `${Number(m[1])}년 ${Number(m[2])}월 ${Number(m[3])}일 (${WEEK[dt.getDay()]})`;
 }
 
-export default function HomeV4Screen({ nav }) {
+export default function HomeV4Screen({ nav, hideTabBar = false }) {
   const [showInterp, setShowInterp] = useState(false);
   const [showWords, setShowWords] = useState(false);
   const { t } = useTheme();
@@ -351,24 +351,26 @@ export default function HomeV4Screen({ nav }) {
         </View>
       </ScrollView>
 
-      {/* 하단 탭 */}
-      <View style={S.nav}>
-        {TABS.map((tb) => {
-          const active = tb.key === 'home';
-          return (
-            <Pressable
-              key={tb.key}
-              style={S.tab}
-              onPress={() => { if (tb.route && nav) nav.push(tb.route); }}
-              accessibilityRole="button"
-              accessibilityLabel={tb.label}
-            >
-              <Image source={A(tb.icon)} style={S.tabIcon} resizeMode="contain" />
-              <Text style={[S.tabLabel, { color: active ? C.brandAmber : C.sub }]}>{tb.label}</Text>
-            </Pressable>
-          );
-        })}
-      </View>
+      {/* 하단 탭 — 전역 셸(TabShell) 안에서는 셸이 제공하므로 숨김 */}
+      {!hideTabBar ? (
+        <View style={S.nav}>
+          {TABS.map((tb) => {
+            const active = tb.key === 'home';
+            return (
+              <Pressable
+                key={tb.key}
+                style={S.tab}
+                onPress={() => { if (tb.route && nav) nav.push(tb.route); }}
+                accessibilityRole="button"
+                accessibilityLabel={tb.label}
+              >
+                <Image source={A(tb.icon)} style={S.tabIcon} resizeMode="contain" />
+                <Text style={[S.tabLabel, { color: active ? C.brandAmber : C.sub }]}>{tb.label}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      ) : null}
 
       {/* 시험 일정 선택 시트 — 다가오는 JLPT 회차 중 선택 */}
       <BottomSheet visible={examSheet} title="JLPT 시험 일정 선택" onClose={() => setExamSheet(false)}>

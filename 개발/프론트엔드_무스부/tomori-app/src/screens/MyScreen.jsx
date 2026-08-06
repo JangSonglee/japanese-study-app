@@ -79,6 +79,7 @@ export default function MyScreen({ nav }) {
         <Text style={[S.section, { color: t.textLow }]}>미리보기 (테스트)</Text>
         <MenuRow t={t} label="홈 리디자인 · 배너형" onPress={() => nav.push('homeV3')} />
         <MenuRow t={t} label="홈 리디자인 · 오늘의 표현(v4)" onPress={() => nav.push('homeV4')} />
+        <MenuRow t={t} label="전역 5탭 셸 (홈·학습·단어장·번역·MY)" onPress={() => nav.push('shell')} />
 
         {/* 설정 */}
         <Text style={[S.section, { color: t.textLow }]}>설정</Text>

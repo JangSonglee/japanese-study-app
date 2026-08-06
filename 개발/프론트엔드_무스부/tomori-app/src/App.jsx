@@ -20,6 +20,7 @@ import QuizScreen from './screens/QuizScreen';
 import HomeV3Screen from './screens/HomeV3Screen';
 import HomeV4Screen from './screens/HomeV4Screen';
 import ReviewScreen from './screens/ReviewScreen';
+import TabShell from './screens/TabShell';
 import OnboardingScreen from './screens/OnboardingScreen';
 import RecommendScreen from './screens/RecommendScreen';
 import { isOnboardingDone, saveOnboarding, readAidFromQ2 } from './data/onboarding';
@@ -88,6 +89,8 @@ export default function App() {
               <HomeV3Screen nav={nav} />
             ) : name === 'homeV4' ? (
               <HomeV4Screen nav={nav} />
+            ) : name === 'shell' ? (
+              <TabShell nav={nav} params={params} />
             ) : name === 'review' ? (
               <ReviewScreen nav={nav} sig={params.sig} />
             ) : name === 'home' ? (
