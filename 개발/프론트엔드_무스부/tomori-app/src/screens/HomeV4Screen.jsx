@@ -116,6 +116,17 @@ export default function HomeV4Screen({ nav }) {
   // 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
   const heroState = !hasLevel ? 'level' : (studiedToday ? 'after' : 'before');
 
+  // 톤앤매너 — 상태별 인사말(첫 진입 / 오늘 학습 전 / 학습 중 / 오늘 목표 완료).
+  const dailyDone = P ? P.daily_done : false;
+  const dayState = !hasLevel ? 'new' : (dailyDone ? 'done' : (studiedToday ? 'during' : 'before'));
+  const GREET = {
+    new:    { title: `만나서 반가워요, ${D.user}님`, sub: '먼저 나에게 맞는 학습을 찾아볼까요?' },
+    before: { title: `오늘도 함께 공부해요, ${D.user}님`, sub: '짧게라도 괜찮아요. 오늘의 불씨를 이어가요!' },
+    during: { title: `잘하고 있어요, ${D.user}님`, sub: '이 기세로 오늘 목표까지 가볼까요?' },
+    done:   { title: `오늘도 해냈어요, ${D.user}님!`, sub: '불씨가 한층 밝아졌어요. 정말 잘했어요!' },
+  };
+  const G = GREET[dayState];
+
   const pct = vocabTotal > 0 ? Math.round((vocabDone / vocabTotal) * 100) : 0;
   const remain = Math.max(0, vocabTotal - vocabDone);
 
@@ -153,8 +164,8 @@ export default function HomeV4Screen({ nav }) {
 
         {/* 인사 */}
         <View style={S.greet}>
-          <Text style={S.greetTitle}>오늘도 함께 공부해요, {D.user}님</Text>
-          <Text style={S.greetSub}>짧게라도 괜찮아요. 오늘의 불씨를 이어가요!</Text>
+          <Text style={[S.greetTitle, keepAll]}>{G.title}</Text>
+          <Text style={[S.greetSub, keepAll]}>{G.sub}</Text>
         </View>
 
         {/* 카드 영역 — 카드끼리 간격 16 (대표님 요청, 헤더·인사말은 24 유지) */}

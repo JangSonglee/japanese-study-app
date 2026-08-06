@@ -49,6 +49,7 @@ declare
   v_level text; v_level_id uuid; v_streak int := 0;
   v_done int := 0; v_total int := 0; v_today int := 0; v_review int := 0; v_review_sig text;
   v_exam date; v_dday int;
+  v_daily_done boolean := false; v_daily_target int; v_daily_completed int := 0;  -- 톤앤매너 상태용
   v_today_date date := (now() at time zone 'Asia/Seoul')::date;
 begin
   if v_uid is null then raise exception 'auth required'; end if;
@@ -76,6 +77,10 @@ begin
     where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date
     order by coalesce(signature, 'nosig:'||id::text), finished_at desc
   ) dd order by random() limit 1;
+  -- 오늘 목표 달성 여부(홈 인사말 톤: 첫진입/학습전/학습중/완료 구분).
+  select coalesce(is_completed,false), target_sessions, coalesce(completed_sessions,0)
+    into v_daily_done, v_daily_target, v_daily_completed
+    from public.daily_studies where user_id = v_uid and study_date = v_today_date;
   -- 시험 D-day
   select (value #>> '{}')::date into v_exam from public.app_configs where key = 'jlpt.exam_date';
   if v_exam is not null then v_dday := v_exam - v_today_date; end if;
@@ -87,6 +92,9 @@ begin
     'vocab_total', coalesce(v_total,0),
     'today_sessions', coalesce(v_today,0),
     'studied_today', coalesce(v_today,0) > 0,
+    'daily_done', coalesce(v_daily_done,false),
+    'daily_target', v_daily_target,
+    'daily_completed', coalesce(v_daily_completed,0),
     'review_count', coalesce(v_review,0),
     'review_sig', v_review_sig,
     'exam_date', to_char(v_exam, 'YYYY-MM-DD'),
