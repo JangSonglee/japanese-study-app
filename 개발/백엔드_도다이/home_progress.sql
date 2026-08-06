@@ -5,7 +5,7 @@
 --  · 이어서 학습 진도 = 「안다」로 표시한 단어 수 / 급수의 공개 단어 수(분모).
 --    (course_levels.vocab_goal_count가 null이라, 급수의 is_published vocab_items 수를 분모로 씀.)
 --  · 오늘 진행한 학습 = 오늘(KST) 완료 세션 수(daily_studies.completed_sessions). 단어/독해/청해/문법 공통.
---  · 오늘의 3분 복습 = 오늘 배운 단어가 있을 때만 노출(today_known>0), 개수 = 오늘 배운 단어 수.
+--  · 오늘의 3분 복습 = 오늘 학습을 완료했을 때 노출(studied_today), 개수 = 오늘 학습한 항목 수(today_items, 모든 영역).
 --  · 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
 
 -- 1) 「안다」 표시 단어 적립: content_key 배열 → vocab_states(acquired) upsert.
@@ -37,7 +37,7 @@ as $$
 declare
   v_uid uuid := auth.uid();
   v_level text; v_level_id uuid;
-  v_done int := 0; v_total int := 0; v_today int := 0; v_today_known int := 0;
+  v_done int := 0; v_total int := 0; v_today int := 0; v_today_known int := 0; v_today_items int := 0;
   v_today_date date := (now() at time zone 'Asia/Seoul')::date;
 begin
   if v_uid is null then raise exception 'auth required'; end if;
@@ -54,6 +54,9 @@ begin
     where user_id = v_uid and study_date = v_today_date;
   select count(*) into v_today_known from public.vocab_states
     where user_id = v_uid and (last_seen_at at time zone 'Asia/Seoul')::date = v_today_date;
+  -- 오늘 학습한 항목 수 = 오늘 완료 세션의 (정답+오답) 합(단어=안다+모름, 퀴즈=정답+오답).
+  select coalesce(sum(correct_count + wrong_count),0) into v_today_items from public.study_sessions
+    where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date;
   return jsonb_build_object(
     'level', v_level,
     'has_level', v_level is not null,
@@ -61,7 +64,8 @@ begin
     'vocab_total', coalesce(v_total,0),
     'today_sessions', coalesce(v_today,0),
     'studied_today', coalesce(v_today,0) > 0,
-    'today_known', coalesce(v_today_known,0)
+    'today_known', coalesce(v_today_known,0),
+    'today_items', coalesce(v_today_items,0)
   );
 end $$;
 

@@ -93,8 +93,8 @@ export default function HomeV4Screen({ nav }) {
   const vocabTotal = P ? P.vocab_total : D.vocabTotal;
   const studiedToday = P ? P.studied_today : false;
   const todayCount = P ? P.today_sessions : D.todayCount;
-  const todayKnown = P ? P.today_known : D.reviewCount;
-  const show3min = P ? (todayKnown > 0) : true;          // 오늘 배운 단어 있을 때만(복습 대상). 데모는 표시
+  const todayItems = P ? P.today_items : D.reviewCount;  // 오늘 학습한 항목 수(복습 대상)
+  const show3min = P ? studiedToday : true;              // 오늘 학습을 완료했으면 표시(데모는 표시)
   // 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
   const heroState = !hasLevel ? 'level' : (studiedToday ? 'after' : 'before');
 
@@ -177,7 +177,7 @@ export default function HomeV4Screen({ nav }) {
               <Image source={A('ic-review.svg')} style={S.reviewIcon} resizeMode="contain" />
               <View>
                 <Text style={S.reviewTitle}>오늘의 3분 복습</Text>
-                <Text style={S.reviewSub}>학습한 단어 {todayKnown}개 다시 확인하기</Text>
+                <Text style={S.reviewSub}>오늘 학습한 {todayItems}개 다시 확인하기</Text>
               </View>
             </View>
             <Icon name="forward" size={18} color={C.darkCardText} />
