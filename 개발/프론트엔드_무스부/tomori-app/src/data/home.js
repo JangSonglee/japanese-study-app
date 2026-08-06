@@ -23,6 +23,15 @@ export async function loadReviewItems(sig) {
   return { source: p.source, level: p.level, items };
 }
 
+// 오늘의 표현 — 사용자 급수의 공개 표현 중 일자 결정 1개. { ja_text, reading, ruby, meaning_ko, words, level } | null
+export async function loadDailyExpression() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data, error } = await supabase.rpc('load_daily_expression');
+  if (error) return null;
+  return data;
+}
+
 // { level, has_level, vocab_done, vocab_total, today_sessions, studied_today, today_known } | null
 export async function loadHomeProgress() {
   const { data: { user } } = await supabase.auth.getUser();

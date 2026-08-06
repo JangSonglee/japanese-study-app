@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet, Image, useWindowDimensio
 import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { fonts, keepAll } from '../theme/tokens';
-import { loadHomeProgress } from '../data/home';
+import { loadHomeProgress, loadDailyExpression } from '../data/home';
 import { loadStampState } from '../data/stamps';
 
 /**
@@ -81,12 +81,14 @@ const DEMO = {
 export default function HomeV4Screen({ nav }) {
   const [showInterp, setShowInterp] = useState(false);
   const [showWords, setShowWords] = useState(false);
-  const [saved, setSaved] = useState(() => new Set(['逃げる']));
+  const [saved, setSaved] = useState(() => new Set());
   // 실데이터 로드(로그인 시). 게스트·조회실패면 null → 데모 폴백.
   const [prog, setProg] = useState(null);
   const [stamp, setStamp] = useState(null);
+  const [expr, setExpr] = useState(null);
   useEffect(() => { loadHomeProgress().then(setProg).catch(() => setProg(null)); }, []);
   useEffect(() => { loadStampState().then(setStamp).catch(() => setStamp(null)); }, []);
+  useEffect(() => { loadDailyExpression().then(setExpr).catch(() => setExpr(null)); }, []);
 
   const D = DEMO;
   const P = prog;
@@ -103,6 +105,14 @@ export default function HomeV4Screen({ nav }) {
   const reviewCount = P ? P.review_count : D.reviewCount; // 3분복습 = 랜덤 1세션의 크기
   const reviewSig = P ? P.review_sig : null;             // 그 랜덤 세션의 서명(복습 화면용)
   const show3min = P ? studiedToday : true;              // 오늘 세션 1개↑면 표시(데모는 표시)
+
+  // 오늘의 표현 — 실데이터(expression_items). 게스트·미시드면 데모 문구 폴백.
+  const E = expr;
+  const exprBase = (E && E.ruby && E.ruby.base) || QUOTE;
+  const exprRuby = (E && E.ruby && E.ruby.ruby) || QUOTE_RUBY;
+  const exprInterp = (E && E.meaning_ko) || QUOTE_INTERP;
+  const exprWords = (E && Array.isArray(E.words) && E.words.length) ? E.words : QUOTE_WORDS;
+  const exprLevel = (E && E.level) || level;
   // 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
   const heroState = !hasLevel ? 'level' : (studiedToday ? 'after' : 'before');
 
@@ -230,7 +240,7 @@ export default function HomeV4Screen({ nav }) {
         {/* 오늘의 N3 표현 */}
         <View style={S.quoteCard}>
           <View style={S.quoteHead}>
-            <Text style={S.quoteTitle}>오늘의 {D.level} 표현</Text>
+            <Text style={S.quoteTitle}>오늘의 {exprLevel} 표현</Text>
             <View style={S.quoteToggles}>
               <Pressable
                 onPress={() => setShowInterp((v) => !v)}
@@ -252,18 +262,18 @@ export default function HomeV4Screen({ nav }) {
           </View>
 
           <View style={S.quoteBody}>
-            <Ruby base={QUOTE} ruby={QUOTE_RUBY} show size={16} color={C.brandMainText} />
+            <Ruby base={exprBase} ruby={exprRuby} show size={16} color={C.brandMainText} />
           </View>
 
           {showInterp ? (
-            <Text style={S.interp}>{QUOTE_INTERP}</Text>
+            <Text style={S.interp}>{exprInterp}</Text>
           ) : null}
 
           {showWords ? (
             <>
               <View style={S.wordDivider} />
               <View style={S.wordList}>
-                {QUOTE_WORDS.map((w) => (
+                {exprWords.map((w) => (
                   <View key={w.ja} style={S.wordRow}>
                     <View style={S.wordPair}>
                       <Text style={S.wordJa} lang="ja">{w.ja}</Text>
