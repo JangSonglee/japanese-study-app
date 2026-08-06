@@ -96,12 +96,14 @@ export default function HomeV4Screen({ nav }) {
   };
   const H = HERO[heroState];
 
-  // 히어로 토모 크기 = 화면 폭 반응(작은 화면일수록 축소, 글씨 방해 방지). 원본 비율 116:156.
+  // 히어로 토모 = 화면 폭 반응. 오른쪽 끝에서 약 40% 크롭(반쯤 잘린 연출). 원본 비율 116:156.
   const { width } = useWindowDimensions();
-  const tomoW = Math.round(Math.min(92, Math.max(66, width * 0.23)));
+  const tomoW = Math.round(Math.min(154, Math.max(112, width * 0.40)));
   const tomoH = Math.round(tomoW * (156 / 116));
-  // 텍스트가 차지할 최대 폭 = 히어로 안쪽 폭 − 토모 폭 − 여유. 이 폭 안에서 제목이 한 줄로.
-  const textMax = Math.round(width - 40 - tomoW - 14);
+  const tomoCrop = Math.round(tomoW * 0.40);        // 오른쪽으로 넘겨 잘라낼 폭
+  const tomoVisible = tomoW - tomoCrop;             // 카드 안에 보이는 폭
+  // 텍스트 최대 폭 = 히어로 안쪽 폭 − 보이는 토모 − (히어로 패딩+여유). 이 폭 안에서 제목 한 줄.
+  const textMax = Math.round((width - 40) - tomoVisible - 30);
 
   function toggleSave(ja) {
     setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
@@ -133,7 +135,7 @@ export default function HomeV4Screen({ nav }) {
         >
           <Image source={A('cat-background.png')} style={S.heroBgImg} resizeMode="cover" />
           {/* 토모 = 절대배치·화면 폭 반응 크기. 텍스트 maxWidth를 토모 폭만큼 비워 겹침 방지. */}
-          <Image source={A(H.art)} style={[S.heroTomo, { width: tomoW, height: tomoH }]} resizeMode="contain" pointerEvents="none" />
+          <Image source={A(H.art)} style={[S.heroTomo, { width: tomoW, height: tomoH, right: -tomoCrop }]} resizeMode="contain" pointerEvents="none" />
           <View style={[S.heroText, { maxWidth: textMax }]}>
             {H.badge ? <Text style={S.heroLabel}>{H.badge}</Text> : null}
             <Text style={[S.heroTitle, keepAll]}>{H.title}</Text>
@@ -294,7 +296,7 @@ const S = StyleSheet.create({
     overflow: 'hidden', position: 'relative', boxShadow: C.cardShadow,
   },
   heroBgImg: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
-  heroTomo: { position: 'absolute', right: -4, bottom: -4 },
+  heroTomo: { position: 'absolute', bottom: -6 },
   heroText: { gap: 4, alignSelf: 'flex-start' },
   heroLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandAmber },
   heroTitle: { fontFamily: fonts.ko, fontSize: 20, lineHeight: 30, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },

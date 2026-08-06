@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>토모리 홈 v4 — 해상도 미리보기</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #EFE9E1; min-height: 100vh;
+    font-family: Pretendard, -apple-system, system-ui, sans-serif; color: #2A211D;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  header {
+    width: 100%; background: #fff; border-bottom: 1px solid #e6ded2;
+    padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    position: sticky; top: 0; z-index: 2;
+  }
+  h1 { font-size: 15px; margin: 0 12px 0 0; font-weight: 700; }
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; }
+  button {
+    font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1px solid #c2c4c8; background: #fff; color: #555; border-radius: 999px;
+    padding: 5px 12px; transition: all .12s;
+  }
+  button:hover { border-color: #F6AA13; }
+  button.active { background: #3B2A22; color: #fff; border-color: #3B2A22; }
+  .slider { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .slider input { width: 180px; }
+  .wlabel { font-size: 13px; font-variant-numeric: tabular-nums; min-width: 70px; }
+  .stage { padding: 24px 16px 48px; width: 100%; display: flex; justify-content: center; }
+  .frame {
+    background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.18);
+    transition: width .15s ease;
+  }
+  iframe { border: 0; display: block; width: 100%; height: 100%; }
+  .hint { font-size: 12px; color: #8a7f76; margin-left: 6px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🔥 토모리 홈 v4 · 해상도 미리보기</h1>
+    <div class="presets" id="presets"></div>
+    <div class="slider">
+      <input type="range" id="range" min="300" max="900" step="1" value="390" />
+      <span class="wlabel" id="wlabel">390 px</span>
+    </div>
+  </header>
+  <div class="stage">
+    <div class="frame" id="frame" style="width:390px;height:820px;">
+      <iframe id="app" src="/?screen=homeV4" title="토모리 홈 v4"></iframe>
+    </div>
+  </div>
+
+<script>
+  var PRESETS = [
+    { w: 320, label: 'iPhone SE' },
+    { w: 360, label: 'Android' },
+    { w: 375, label: 'iPhone 8' },
+    { w: 390, label: 'iPhone 13' },
+    { w: 414, label: 'iPhone+' },
+    { w: 430, label: 'iPhone Pro Max' },
+    { w: 768, label: 'iPad' },
+  ];
+  var frame = document.getElementById('frame');
+  var range = document.getElementById('range');
+  var wlabel = document.getElementById('wlabel');
+  var presetsEl = document.getElementById('presets');
+  var btns = [];
+
+  function heightFor(w) {
+    // 폰은 세로로 길게, 태블릿은 조금 더 길게
+    if (w >= 700) return 1024;
+    return 820;
+  }
+  function setWidth(w, fromSlider) {
+    w = Math.round(w);
+    frame.style.width = w + 'px';
+    frame.style.height = heightFor(w) + 'px';
+    wlabel.textContent = w + ' px';
+    if (!fromSlider) range.value = w;
+    btns.forEach(function (b) { b.el.classList.toggle('active', b.w === w); });
+  }
+  PRESETS.forEach(function (p) {
+    var b = document.createElement('button');
+    b.textContent = p.w + '  ·  ' + p.label;
+    b.onclick = function () { setWidth(p.w); };
+    presetsEl.appendChild(b);
+    btns.push({ el: b, w: p.w });
+  });
+  range.addEventListener('input', function () { setWidth(parseInt(range.value, 10), true); });
+  setWidth(390);
+</script>
+</body>
+</html>

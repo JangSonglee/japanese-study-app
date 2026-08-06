@@ -33,7 +33,9 @@ import { loadCards, loadGrammar, loadReading, loadListening, loadCardsByKeys, lo
  */
 export default function App() {
   const [mode, setMode] = useState('light');
-  const nav = useRouter(isOnboardingDone() ? 'home' : 'onboarding');
+  // 딥링크(미리보기 편의): ?screen=homeV4 처럼 특정 화면으로 바로 진입.
+  const initialScreen = (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('screen')) || null;
+  const nav = useRouter(initialScreen || (isOnboardingDone() ? 'home' : 'onboarding'));
   const [settings, setSettings] = useState(() => {
     // MY›설정 읽기 도움 기본값 — localStorage 유지. 없으면 「조금 안다」 기본(후리 ON·발음 OFF).
     try {
