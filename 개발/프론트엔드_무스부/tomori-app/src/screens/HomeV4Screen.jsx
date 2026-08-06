@@ -450,7 +450,8 @@ const S = StyleSheet.create({
   examLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandMainText },
   examRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   dday: { fontFamily: fonts.ko, fontSize: 18, lineHeight: 27, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
-  registerCta: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '600', color: C.brandAmber },
+  // "등록" 글자 = D-day 숫자와 동일 크기(카드 높이 통일 → 전환 시 레이아웃 안 밀림).
+  registerCta: { fontFamily: fonts.ko, fontSize: 18, lineHeight: 27, fontWeight: '700', letterSpacing: -0.3, color: C.brandAmber },
 
   statRow: { flexDirection: 'row', gap: 16 },
   statCard: {

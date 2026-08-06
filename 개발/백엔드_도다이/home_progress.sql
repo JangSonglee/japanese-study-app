@@ -83,8 +83,8 @@ begin
     into v_daily_done, v_daily_target, v_daily_completed
     from public.daily_studies where user_id = v_uid and study_date = v_today_date;
   -- 시험 D-day = 사용자 exam_date 기준(위 profile에서 조회). 미설정이면 dday null → 홈 "시험 일정 등록" 카드.
-  -- 시험일 설정: list_exam_dates()(app_configs 'jlpt.exam_dates' 배열 중 오늘 이후 회차) →
-  --   사용자가 시트에서 선택 → set_exam_date(date). (register_upcoming_exam()=원탭 등록도 유지.)
+  -- 시험일 설정: list_exam_dates()(매년 7·12월 "첫째 일요일"을 호출 시점에 동적 계산 → 크론 불필요,
+  --   항상 최신) → 사용자가 시트에서 선택 → set_exam_date(date). (register_upcoming_exam()=원탭 등록 유지.)
   if v_exam is not null then v_dday := v_exam - v_today_date; end if;
   return jsonb_build_object(
     'level', v_level,
