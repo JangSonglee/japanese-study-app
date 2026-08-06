@@ -339,7 +339,7 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
           </View>
 
           <View style={S.quoteBody}>
-            <Ruby base={exprBase} ruby={exprRuby} show size={16} rubyRatio={0.68} color={C.brandMainText} />
+            <Ruby base={exprBase} ruby={exprRuby} show size={16} rubyRatio={0.625} color={C.brandMainText} />
           </View>
 
           {showInterp ? (
