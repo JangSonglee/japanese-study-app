@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet, Image, useWindowDimensio
 import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import { fonts, keepAll } from '../theme/tokens';
-import { loadHomeProgress, loadDailyExpression } from '../data/home';
+import { loadHomeProgress, loadDailyExpression, registerUpcomingExam } from '../data/home';
 import { loadStampState } from '../data/stamps';
 
 /**
@@ -95,7 +95,8 @@ export default function HomeV4Screen({ nav }) {
   const level = (P && P.level) || D.level;
   const hasLevel = P ? P.has_level : true;               // 게스트는 데모(레벨 있음) 취급
   const streakDays = P ? P.streak : D.streakDays;        // 연속학습(users_profile.streak_count)
-  const dday = P && P.dday != null ? P.dday : D.dday;    // 시험 D-day(app_configs.jlpt.exam_date)
+  const dday = P && P.dday != null ? P.dday : D.dday;    // 시험 D-day(사용자 exam_date)
+  const hasExamDate = P ? (P.exam_date != null) : true;  // 미설정이면 "시험 일정 등록" 카드
   const stampHave = stamp ? stamp.cycle_have : D.stampHave;   // 모은 우표
   const stampNeed = stamp ? stamp.cycle_need : D.stampNeed;
   const vocabDone = P ? P.vocab_done : D.vocabDone;
@@ -104,7 +105,7 @@ export default function HomeV4Screen({ nav }) {
   const todayCount = P ? P.today_sessions : D.todayCount;
   const reviewCount = P ? P.review_count : D.reviewCount; // 3분복습 = 랜덤 1세션의 크기
   const reviewSig = P ? P.review_sig : null;             // 그 랜덤 세션의 서명(복습 화면용)
-  const show3min = P ? studiedToday : true;              // 오늘 세션 1개↑면 표시(데모는 표시)
+  const show3min = P ? (hasLevel && studiedToday) : true; // 레벨 미정(첫 진입)이면 숨김. 데모는 표시
 
   // 오늘의 표현 — 실데이터(expression_items). 게스트·미시드면 데모 문구 폴백.
   const E = expr;
@@ -133,11 +134,13 @@ export default function HomeV4Screen({ nav }) {
   // 상태별 히어로 구성(멘트·급수·진행바·CTA·토모 아트).
   // 🅿️ 토모 아트 = 지금은 앱 Tomo pose 근사. Figma cat-tomo1/2/3 실아트는 스왑 대기(art 필드).
   const HERO = {
-    level:  { badge: null, title: '레벨 테스트를 해볼까요?', showProg: false, cta: '레벨테스트 보러 가기', art: 'cat-tomo1.png' },
+    // 첫 진입 = 레벨 미정 → 배지는 급수 없이 'JLPT'. 무엇을·몇 분 걸리는지 명시.
+    level:  { badge: 'JLPT', title: '레벨 테스트를 해볼까요?', showProg: true, desc: '단어 · 어휘 · 문법', timeChip: '약 5분~10분 소요', cta: '레벨테스트 보러 가기', art: 'cat-tomo1.png' },
     before: { badge: `JLPT ${level}`, title: `완료까지 ${remain}개 남았어요`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo2.png' },
     after:  { badge: `JLPT ${level}`, title: `오늘 총 ${todayCount}개 학습했어요!`, showProg: true, cta: '이어서 학습하기', art: 'cat-tomo3.png' },
   };
   const H = HERO[heroState];
+  const heroPct = heroState === 'level' ? 0 : pct;       // 레벨테스트는 0%
 
   // 히어로 토모 = 화면 폭 반응. 오른쪽 하단 모서리에서 아래로 내려 몸통 하단을 크롭(반쯤 잘린 연출).
   const { width } = useWindowDimensions();
@@ -151,6 +154,11 @@ export default function HomeV4Screen({ nav }) {
 
   function toggleSave(ja) {
     setSaved((s) => { const n = new Set(s); if (n.has(ja)) n.delete(ja); else n.add(ja); return n; });
+  }
+
+  // "시험 일정 등록" 탭 → 다가오는 JLPT 등록 후 홈 새로고침.
+  function handleRegisterExam() {
+    registerUpcomingExam().then((d) => { if (d) loadHomeProgress().then(setProg).catch(() => {}); }).catch(() => {});
   }
 
   return (
@@ -183,7 +191,12 @@ export default function HomeV4Screen({ nav }) {
           <View style={[S.heroText, { maxWidth: textMax }]}>
             {H.badge ? <Text style={S.heroLabel}>{H.badge}</Text> : null}
             <Text style={[S.heroTitle, keepAll]}>{H.title}</Text>
-            {H.showProg ? (
+            {H.desc ? (
+              <View style={S.heroRow}>
+                <Text style={S.heroDesc}>{H.desc}</Text>
+                {H.timeChip ? <View style={S.timeChip}><Text style={S.timeChipText}>{H.timeChip}</Text></View> : null}
+              </View>
+            ) : H.showProg ? (
               <View style={S.heroRow}>
                 <Text style={S.heroDesc}>단어 · 어휘</Text>
                 <Text style={S.heroDesc}>{vocabDone} / {vocabTotal}</Text>
@@ -192,8 +205,8 @@ export default function HomeV4Screen({ nav }) {
           </View>
           {H.showProg ? (
             <View style={[S.progRow, { maxWidth: textMax }]}>
-              <View style={S.progTrack}><View style={[S.progFill, { width: `${pct}%` }]} /></View>
-              <Text style={S.progText}><Text style={S.progPctNum}>{pct}</Text>%</Text>
+              <View style={S.progTrack}><View style={[S.progFill, { width: `${heroPct}%` }]} /></View>
+              <Text style={S.progText}><Text style={S.progPctNum}>{heroPct}</Text>%</Text>
             </View>
           ) : null}
           <View style={S.cta}><Text style={S.ctaText}>{H.cta}</Text></View>
@@ -218,17 +231,30 @@ export default function HomeV4Screen({ nav }) {
           </Pressable>
         ) : null}
 
-        {/* 시험 날짜 */}
-        <Pressable style={S.examCard} accessibilityRole="button" accessibilityLabel={`JLPT ${D.level} 시험 D-${D.dday}`}>
-          <View style={S.examLeft}>
-            <Image source={A('ic-calendar.svg')} style={S.calIcon} resizeMode="contain" />
-            <Text style={S.examLabel}>JLPT {D.level} 시험</Text>
-          </View>
-          <View style={S.examRight}>
-            <Text style={S.dday}>D-{dday}</Text>
-            <Icon name="forward" size={18} color={C.brandMainText} />
-          </View>
-        </Pressable>
+        {/* 시험 날짜 — 등록돼 있으면 D-day, 아니면 등록 카드 */}
+        {hasExamDate ? (
+          <Pressable style={S.examCard} accessibilityRole="button" accessibilityLabel={`JLPT ${level} 시험 D-${dday}`}>
+            <View style={S.examLeft}>
+              <Image source={A('ic-calendar.svg')} style={S.calIcon} resizeMode="contain" />
+              <Text style={S.examLabel}>JLPT {level} 시험</Text>
+            </View>
+            <View style={S.examRight}>
+              <Text style={S.dday}>D-{dday}</Text>
+              <Icon name="forward" size={18} color={C.brandMainText} />
+            </View>
+          </Pressable>
+        ) : (
+          <Pressable style={S.examCard} onPress={handleRegisterExam} accessibilityRole="button" accessibilityLabel="JLPT 시험 일정 등록">
+            <View style={S.examLeft}>
+              <Image source={A('ic-calendar.svg')} style={S.calIcon} resizeMode="contain" />
+              <Text style={S.examLabel} numberOfLines={1}>JLPT 시험 일정을 등록해요</Text>
+            </View>
+            <View style={S.examRight}>
+              <Text style={S.registerCta}>등록</Text>
+              <Icon name="forward" size={18} color={C.brandAmber} />
+            </View>
+          </Pressable>
+        )}
 
         {/* 통계 2칸 */}
         <View style={S.statRow}>
@@ -352,8 +378,10 @@ const S = StyleSheet.create({
   heroText: { gap: 4, alignSelf: 'flex-start' },
   heroLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandAmber },
   heroTitle: { fontFamily: fonts.ko, fontSize: 20, lineHeight: 30, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
-  heroRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  heroRow: { flexDirection: 'row', alignItems: 'center', gap: 4, flexWrap: 'wrap' },
   heroDesc: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandMainText },
+  timeChip: { backgroundColor: C.trackBg, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 1 },
+  timeChipText: { fontFamily: fonts.ko, fontSize: 11, lineHeight: 16.5, fontWeight: '500', color: '#9C5800' },
 
   progRow: { flexDirection: 'row', alignItems: 'center', gap: 10, width: 170 },
   progTrack: { flex: 1, height: 6, backgroundColor: C.trackBg, borderRadius: 999, overflow: 'hidden' },
@@ -385,6 +413,7 @@ const S = StyleSheet.create({
   examLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandMainText },
   examRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   dday: { fontFamily: fonts.ko, fontSize: 18, lineHeight: 27, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
+  registerCta: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '600', color: C.brandAmber },
 
   statRow: { flexDirection: 'row', gap: 16 },
   statCard: {

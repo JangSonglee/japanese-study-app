@@ -32,6 +32,15 @@ export async function loadDailyExpression() {
   return data;
 }
 
+// "시험 일정 등록" — 다가오는 JLPT(config)를 사용자 시험일로 등록. 게스트 no-op.
+export async function registerUpcomingExam() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data, error } = await supabase.rpc('register_upcoming_exam');
+  if (error) return null;
+  return data; // 등록된 날짜(YYYY-MM-DD) | null
+}
+
 // { level, has_level, vocab_done, vocab_total, today_sessions, studied_today, today_known } | null
 export async function loadHomeProgress() {
   const { data: { user } } = await supabase.auth.getUser();

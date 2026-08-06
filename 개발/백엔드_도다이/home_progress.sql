@@ -53,7 +53,8 @@ declare
   v_today_date date := (now() at time zone 'Asia/Seoul')::date;
 begin
   if v_uid is null then raise exception 'auth required'; end if;
-  select level_estimate, coalesce(streak_count,0) into v_level, v_streak
+  select level_estimate, coalesce(streak_count,0), exam_date
+    into v_level, v_streak, v_exam
     from public.users_profile where user_id = v_uid;
   select id into v_level_id from public.course_levels where code = v_level limit 1;
   if v_level_id is not null then
@@ -81,8 +82,8 @@ begin
   select coalesce(is_completed,false), target_sessions, coalesce(completed_sessions,0)
     into v_daily_done, v_daily_target, v_daily_completed
     from public.daily_studies where user_id = v_uid and study_date = v_today_date;
-  -- 시험 D-day
-  select (value #>> '{}')::date into v_exam from public.app_configs where key = 'jlpt.exam_date';
+  -- 시험 D-day = 사용자 exam_date 기준(위 profile에서 조회). 미설정이면 dday null → 홈 "시험 일정 등록" 카드.
+  -- 시험일 설정: set_exam_date(date) / register_upcoming_exam()(app_configs 'jlpt.exam_date'로 원탭 등록).
   if v_exam is not null then v_dday := v_exam - v_today_date; end if;
   return jsonb_build_object(
     'level', v_level,
