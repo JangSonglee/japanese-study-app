@@ -115,6 +115,8 @@ export default function HomeV4Screen({ nav }) {
           <Text style={S.greetSub}>짧게라도 괜찮아요. 오늘의 불씨를 이어가요!</Text>
         </View>
 
+        {/* 카드 영역 — 카드끼리 간격 16 (대표님 요청, 헤더·인사말은 24 유지) */}
+        <View style={S.cards}>
         {/* 이어서 학습 (히어로) — 3상태(실제론 데이터로 자동 결정: 레벨 미정/오늘 학습 전/후) */}
         <Pressable
           style={S.hero}
@@ -242,6 +244,7 @@ export default function HomeV4Screen({ nav }) {
             </>
           ) : null}
         </View>
+        </View>
       </ScrollView>
 
       {/* 하단 탭 */}
@@ -275,6 +278,7 @@ const S = StyleSheet.create({
   streakText: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '500', color: C.mainText },
 
   greet: { gap: 0 },
+  cards: { gap: 16, alignSelf: 'stretch' },
   greetTitle: { fontFamily: fonts.ko, fontSize: 20, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
   greetSub: { fontFamily: fonts.ko, fontSize: 14, fontWeight: '400', color: C.greetSub },
 
