@@ -42,7 +42,7 @@ as $$
 declare
   v_uid uuid := auth.uid();
   v_level text; v_level_id uuid;
-  v_done int := 0; v_total int := 0; v_today int := 0; v_review int := 0;
+  v_done int := 0; v_total int := 0; v_today int := 0; v_review int := 0; v_review_sig text;
   v_today_date date := (now() at time zone 'Asia/Seoul')::date;
 begin
   if v_uid is null then raise exception 'auth required'; end if;
@@ -55,17 +55,20 @@ begin
       join public.vocab_items vi on vi.id = vs.vocab_item_id
       where vs.user_id = v_uid and vs.status = 'acquired' and vi.course_level_id = v_level_id;
   end if;
-  -- 오늘 완료 세션(다시보기=서명 중복은 1회): distinct signature.
-  with today_sess as (
+  -- 오늘 완료 세션 distinct signature 수(다시보기=1회).
+  select count(*) into v_today from (
+    select distinct coalesce(signature, 'nosig:'||id::text) k
+    from public.study_sessions
+    where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date
+  ) c;
+  -- 3분복습: 중복 제거 후 랜덤 1세션의 서명·크기(복습 화면이 서명으로 항목 재로드).
+  select real_sig, sz into v_review_sig, v_review from (
     select distinct on (coalesce(signature, 'nosig:'||id::text))
-           coalesce(signature, 'nosig:'||id::text) sig,
-           (correct_count + wrong_count) sz
+           signature real_sig, (correct_count + wrong_count) sz
     from public.study_sessions
     where user_id = v_uid and (finished_at at time zone 'Asia/Seoul')::date = v_today_date
     order by coalesce(signature, 'nosig:'||id::text), finished_at desc
-  )
-  select count(*) into v_today from today_sess;
-  select sz into v_review from today_sess order by random() limit 1;  -- 3분복습: 랜덤 1세션
+  ) dd order by random() limit 1;
   return jsonb_build_object(
     'level', v_level,
     'has_level', v_level is not null,
@@ -73,7 +76,8 @@ begin
     'vocab_total', coalesce(v_total,0),
     'today_sessions', coalesce(v_today,0),
     'studied_today', coalesce(v_today,0) > 0,
-    'review_count', coalesce(v_review,0)
+    'review_count', coalesce(v_review,0),
+    'review_sig', v_review_sig
   );
 end $$;
 

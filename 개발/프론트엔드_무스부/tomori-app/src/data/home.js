@@ -1,6 +1,27 @@
 // 홈 실데이터 — 이어서 학습(단어 진도)·오늘 진행한 학습·복습 대상.
 // 로그인 시 실 Supabase, 게스트면 null(→ 화면 데모 폴백).
 import { supabase } from './supabaseClient';
+import { loadCardsByKeys, loadGrammarByKeys, loadReadingByKeys, loadListeningByKeys } from './vocab';
+
+// 세션 서명 "source|level|k1,k2,..." → { source, level, keys }
+export function parseSessionSig(sig) {
+  if (!sig || typeof sig !== 'string') return null;
+  const [source = '', level = '', keysCsv = ''] = sig.split('|');
+  const keys = keysCsv ? keysCsv.split(',').filter(Boolean) : [];
+  return { source, level, keys };
+}
+
+// 3분복습 — 서명으로 그 세션의 실제 항목을 로드(복습용, 읽기 전용 표시).
+export async function loadReviewItems(sig) {
+  const p = parseSessionSig(sig);
+  if (!p || !p.keys.length) return { source: p ? p.source : '', level: p ? p.level : '', items: [] };
+  let items = [];
+  if (p.source === 'vocab') items = await loadCardsByKeys(p.keys);
+  else if (p.source === 'grammar') items = await loadGrammarByKeys(p.keys);
+  else if (p.source === 'reading') items = await loadReadingByKeys(p.keys);
+  else if (p.source === 'listening') items = await loadListeningByKeys(p.keys);
+  return { source: p.source, level: p.level, items };
+}
 
 // { level, has_level, vocab_done, vocab_total, today_sessions, studied_today, today_known } | null
 export async function loadHomeProgress() {

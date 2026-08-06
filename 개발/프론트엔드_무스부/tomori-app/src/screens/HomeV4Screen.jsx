@@ -94,6 +94,7 @@ export default function HomeV4Screen({ nav }) {
   const studiedToday = P ? P.studied_today : false;
   const todayCount = P ? P.today_sessions : D.todayCount;
   const reviewCount = P ? P.review_count : D.reviewCount; // 3분복습 = 랜덤 1세션의 크기
+  const reviewSig = P ? P.review_sig : null;             // 그 랜덤 세션의 서명(복습 화면용)
   const show3min = P ? studiedToday : true;              // 오늘 세션 1개↑면 표시(데모는 표시)
   // 히어로 상태 자동 결정: 레벨 미정→레벨테스트 / 오늘 학습함→학습 후 / 그 외→학습 전.
   const heroState = !hasLevel ? 'level' : (studiedToday ? 'after' : 'before');
@@ -172,7 +173,12 @@ export default function HomeV4Screen({ nav }) {
 
         {/* 오늘의 3분 복습 — 오늘 학습한 게 있을 때만 표시(1을 하고 2로 가기 전 1 복습). */}
         {show3min ? (
-          <Pressable style={S.reviewCard} accessibilityRole="button" accessibilityLabel="오늘의 3분 복습">
+          <Pressable
+            style={S.reviewCard}
+            onPress={() => { if (nav && reviewSig) nav.push('review', { sig: reviewSig }); }}
+            accessibilityRole="button"
+            accessibilityLabel="오늘의 3분 복습"
+          >
             <View style={S.reviewLeft}>
               <Image source={A('ic-review.svg')} style={S.reviewIcon} resizeMode="contain" />
               <View>

@@ -237,6 +237,50 @@ export async function loadListening(level = 'N5', limit = 10) {
   return items.map((i) => listeningRowToCard(i, qByItem[i.content_key]));
 }
 
+// ── 복습(3분복습)용: content_key 목록으로 항목 로드(순서 유지) ──
+export async function loadGrammarByKeys(keys) {
+  if (!keys || !keys.length) return [];
+  const { data, error } = await supabase.from('grammar_items').select(GRAMMAR_SELECT).in('content_key', keys);
+  if (error) throw new Error('Supabase: ' + error.message);
+  const byKey = {};
+  (data || []).forEach((o) => { byKey[o.content_key] = o; });
+  return keys.map((k) => byKey[k]).filter(Boolean).map(grammarRowToCard);
+}
+
+export async function loadReadingByKeys(keys) {
+  if (!keys || !keys.length) return [];
+  const { data: texts, error } = await supabase
+    .from('reading_texts')
+    .select('content_key, title, note, reading_sentences(seq, ja, reading, romaji_ko, ko)')
+    .in('content_key', keys);
+  if (error) throw new Error('Supabase: ' + error.message);
+  const { data: qs, error: qe } = await supabase
+    .from('questions')
+    .select('id, content_key, target_item_key, stem_ja, stem_ruby, explanation, question_choices(seq, choice_text, choice_ruby, is_correct)')
+    .eq('target_item_type', 'reading').in('target_item_key', keys);
+  if (qe) throw new Error('Supabase: ' + qe.message);
+  const qByItem = {}; (qs || []).forEach((q) => { qByItem[q.target_item_key] = q; });
+  const byKey = {}; (texts || []).forEach((t) => { byKey[t.content_key] = t; });
+  return keys.map((k) => byKey[k]).filter(Boolean).map((t) => readingRowToCard(t, qByItem[t.content_key]));
+}
+
+export async function loadListeningByKeys(keys) {
+  if (!keys || !keys.length) return [];
+  const { data: items, error } = await supabase
+    .from('listening_items')
+    .select('content_key, title, audio_url, speaker_count, listening_lines(seq, speaker, ja, ruby, romaji_ko, ko)')
+    .in('content_key', keys);
+  if (error) throw new Error('Supabase: ' + error.message);
+  const { data: qs, error: qe } = await supabase
+    .from('questions')
+    .select('id, content_key, target_item_key, stem_ja, stem_ruby, explanation, question_choices(seq, choice_text, choice_ruby, is_correct)')
+    .eq('target_item_type', 'listening').in('target_item_key', keys);
+  if (qe) throw new Error('Supabase: ' + qe.message);
+  const qByItem = {}; (qs || []).forEach((q) => { qByItem[q.target_item_key] = q; });
+  const byKey = {}; (items || []).forEach((i) => { byKey[i.content_key] = i; });
+  return keys.map((k) => byKey[k]).filter(Boolean).map((i) => listeningRowToCard(i, qByItem[i.content_key]));
+}
+
 export function listeningRowToCard(i, q) {
   const lines = (i.listening_lines || [])
     .slice().sort((a, b) => a.seq - b.seq)
