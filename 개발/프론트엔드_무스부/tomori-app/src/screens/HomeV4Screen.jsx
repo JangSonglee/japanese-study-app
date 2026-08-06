@@ -4,6 +4,7 @@ import Ruby from '../components/Ruby';
 import Icon from '../components/Icon';
 import BottomSheet from '../components/BottomSheet';
 import { useTheme } from '../theme/ThemeContext';
+import { useAuth } from '../auth/AuthContext';
 import { fonts, keepAll } from '../theme/tokens';
 import { loadHomeProgress, loadDailyExpression, listExamDates, setExamDate } from '../data/home';
 import { loadStampState } from '../data/stamps';
@@ -66,7 +67,7 @@ const TABS = [
   { key: 'my', label: '내 정보', icon: 'ic-my.svg', route: 'my' },
 ];
 
-// 데모 데이터 — 다음 단계에서 실데이터로 교체
+// 데모 데이터 — 게스트(미로그인)·미리보기 전용. 로그인 사용자에겐 쓰지 않는다(데모 플래시 방지).
 const DEMO = {
   streakDays: 23,
   user: '송이',
@@ -79,6 +80,10 @@ const DEMO = {
   dday: 42,
   reviewCount: 10,
 };
+
+// 실데이터 모듈 캐시 — 탭 전환 재마운트 시 널→실 플래시 방지(마지막 실값을 즉시 복원).
+//  · 화면 단위 상태는 재마운트마다 초기화되지만, 모듈 스코프 변수는 JS 세션 내내 유지된다.
+let cacheProg = null, cacheStamp = null, cacheExpr = null;
 
 // YYYY-MM-DD → "YYYY년 M월 D일 (요일)"
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
@@ -96,14 +101,20 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
   const [saved, setSaved] = useState(() => new Set());
   const [examSheet, setExamSheet] = useState(false);
   const [examDates, setExamDates] = useState([]);
-  // 실데이터 로드(로그인 시). 게스트·조회실패면 null → 데모 폴백.
-  const [prog, setProg] = useState(null);
-  const [stamp, setStamp] = useState(null);
-  const [expr, setExpr] = useState(null);
-  useEffect(() => { loadHomeProgress().then(setProg).catch(() => setProg(null)); }, []);
-  useEffect(() => { loadStampState().then(setStamp).catch(() => setStamp(null)); }, []);
-  useEffect(() => { loadDailyExpression().then(setExpr).catch(() => setExpr(null)); }, []);
+  // 실데이터 로드(로그인 시). 캐시로 초기화 → 재마운트 즉시 지난 실값 표시(플래시 없음).
+  //  · 실패(catch) 시 이전 값을 유지한다(널로 되돌려 데모로 튀는 것 방지).
+  const { user, loading: authLoading } = useAuth();
+  const [prog, setProg] = useState(cacheProg);
+  const [stamp, setStamp] = useState(cacheStamp);
+  const [expr, setExpr] = useState(cacheExpr);
+  useEffect(() => { loadHomeProgress().then((v) => { cacheProg = v; setProg(v); }).catch(() => {}); }, []);
+  useEffect(() => { loadStampState().then((v) => { cacheStamp = v; setStamp(v); }).catch(() => {}); }, []);
+  useEffect(() => { loadDailyExpression().then((v) => { cacheExpr = v; setExpr(v); }).catch(() => {}); }, []);
 
+  // 로그인 사용자에겐 데모를 쓰지 않는다. 게스트(미로그인 확정)만 DEMO, 로그인+로딩중은 대기.
+  const authed = !!user;
+  const guest = !authed && !authLoading;
+  const dataReady = prog != null || guest;   // 실값 있음(로그인·캐시) 또는 게스트(즉시 데모)
   const D = DEMO;
   const P = prog;
   const level = (P && P.level) || D.level;
@@ -177,7 +188,18 @@ export default function HomeV4Screen({ nav, hideTabBar = false }) {
   }
   function chooseExamDate(d) {
     setExamSheet(false);
-    setExamDate(d).then(() => loadHomeProgress().then(setProg).catch(() => {})).catch(() => {});
+    setExamDate(d).then(() => loadHomeProgress().then((v) => { cacheProg = v; setProg(v); }).catch(() => {})).catch(() => {});
+  }
+
+  // 로그인 사용자인데 실데이터가 아직 안 왔고 캐시도 없을 때(세션 첫 진입)만 잠깐 대기.
+  //  · 재마운트(탭 전환)는 캐시로 prog가 채워져 이 분기를 타지 않는다 → 데모 플래시 없음.
+  if (!dataReady) {
+    return (
+      <View style={[S.screen, S.loadingWrap]}>
+        <Image source={A('flame.png')} style={S.flame} resizeMode="contain" />
+        <Text style={S.loadingText}>불러오는 중…</Text>
+      </View>
+    );
   }
 
   return (
@@ -397,6 +419,9 @@ const S = StyleSheet.create({
   screen: { flex: 1, backgroundColor: C.bg },
   scroll: { flex: 1, alignSelf: 'stretch' },
   body: { padding: 20, paddingBottom: 98, gap: 24 },
+
+  loadingWrap: { alignItems: 'center', justifyContent: 'center', gap: 8 },
+  loadingText: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.sub },
 
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   flame: { width: 18, height: 22 },
