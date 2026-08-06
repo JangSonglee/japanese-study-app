@@ -269,7 +269,6 @@ export default function HomeV4Screen({ nav }) {
               <Text style={S.examLabel} numberOfLines={1}>JLPT 시험 일정을 등록해요</Text>
             </View>
             <View style={S.examRight}>
-              <Text style={S.registerCta}>등록</Text>
               <Icon name="forward" size={18} color={C.brandMainText} />
             </View>
           </Pressable>
@@ -442,7 +441,7 @@ const S = StyleSheet.create({
   reviewSub: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '400', color: C.darkCardText },
 
   examCard: {
-    backgroundColor: C.cardWarm, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 12,
+    backgroundColor: C.cardWarm, borderRadius: 16, paddingHorizontal: 16, minHeight: 51,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', boxShadow: C.cardShadow,
   },
   examLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },
@@ -450,8 +449,6 @@ const S = StyleSheet.create({
   examLabel: { fontFamily: fonts.ko, fontSize: 14, lineHeight: 21, fontWeight: '500', color: C.brandMainText },
   examRight: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   dday: { fontFamily: fonts.ko, fontSize: 18, lineHeight: 27, fontWeight: '700', letterSpacing: -0.3, color: C.brandMainText },
-  // "등록" 글자 = D-day 숫자와 동일 크기(카드 높이 통일)·동일 색(#2A211D). 볼드 아닌 기본 굵기(덜 튀게).
-  registerCta: { fontFamily: fonts.ko, fontSize: 18, lineHeight: 27, fontWeight: '400', letterSpacing: -0.3, color: C.brandMainText },
 
   statRow: { flexDirection: 'row', gap: 16 },
   statCard: {
