@@ -286,7 +286,9 @@ export default function QuizScreen({ nav, level = '', kind = 'reading', cards })
                     <Text style={[S.explainText, { color: t.textMid }, keepAll]}>{q.explanation}</Text>
                   </View>
                 ) : null}
-                {/* TODO: 인증 후 오답노트 저장 배선 — 지금은 안내 문구만 */}
+                {/* 오답노트 저장 = 세션 완료 시 DoneView가 record_session_complete(attempts)로 일괄 기록
+                   (attempts는 1차 시도에서 outcome별로 attemptsRef에 누적). load_wrong_notes가 그걸 파생.
+                   2026-08-07 로그인 상태로 저장→파생→오답노트 렌더까지 end-to-end 검증 완료. */}
                 {round === 2 && reaction !== 'correct' ? (
                   <>
                     <Text style={[S.retryNote, { color: t.textMid }, keepAll]}>넘어가도 오답노트에 남아요.</Text>

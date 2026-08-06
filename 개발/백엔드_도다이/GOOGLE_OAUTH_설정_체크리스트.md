@@ -40,3 +40,10 @@
 - 첫 로그인 시 `users_profile` 행이 자동 생성됩니다(handle_new_user 트리거).
 
 문제가 생기면 저(클로드)에게 화면 캡처와 함께 알려주세요 — 값은 가리고 보내셔도 됩니다.
+
+## 🔴 자주 겪는 문제 (2026-08-07 실검증에서 확인)
+- **증상: 로그인 후 빈 화면이 뜨거나 `localhost:3000`으로 튕기고, 주소에 `error_code=bad_oauth_state / OAuth state has expired` 가 붙는다.**
+  - **원인**: 4단계의 **Redirect URLs에 `http://localhost:5599`(앱 프리뷰 주소)가 빠져 있음.** 그러면 Supabase가 기본값 Site URL(`http://localhost:3000`)로 되돌려 보내는데, 거기엔 앱이 없어 빈 화면이 된다.
+  - **해결**: `Authentication → URL Configuration` → **Redirect URLs**에 `http://localhost:5599` 추가(+ Site URL도 `:3000`이면 `:5599`로) → Save → 로그인 재시도.
+  - 🔴 **배포 후엔 실제 서비스 URL도 같은 목록에 추가**해야 함(프리뷰 주소만 넣으면 배포판에서 같은 증상 재발).
+- **검증 완료(2026-08-07)**: 위 설정 반영 후 MY → Google 로그인 → :5599 복귀 → 세션 저장(`sb-…-auth-token`) → MY에 `송이 / songl0351@gmail.com` 표시 → `users_profile` 행 확인까지 end-to-end 통과.
