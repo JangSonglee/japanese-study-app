@@ -38,7 +38,9 @@ export default function App() {
   // 딥링크(미리보기 편의): ?screen=homeV4 로 특정 화면 직접 진입, ?full=1 로 목업 프레임 제거(전체폭).
   const _qs = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const initialScreen = (_qs && _qs.get('screen')) || null;
-  const fullMode = !!(_qs && _qs.get('full') === '1'); // 해상도 테스터용: 320×640 목업 대신 뷰포트 꽉 채움
+  // 기본 = 전체폭(실기기 뷰, 뷰포트 꽉 채움). 개발용 320×640 목업 프레임(라이트/다크 토글 포함)은
+  // ?dev=1 또는 ?full=0 으로 진입. (기존 ?full=1 링크는 그대로 full)
+  const fullMode = !(_qs && (_qs.get('full') === '0' || _qs.get('dev') === '1'));
   // 시작화면 = 전역 5탭 셸(홈 탭=HomeV4). 신규 사용자는 온보딩 먼저(레벨·추천 세팅) → 완료 후 셸.
   const nav = useRouter(initialScreen || (isOnboardingDone() ? 'shell' : 'onboarding'));
   const [settings, setSettings] = useState(() => {
