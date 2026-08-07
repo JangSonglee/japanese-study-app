@@ -39,7 +39,8 @@ export default function App() {
   const _qs = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const initialScreen = (_qs && _qs.get('screen')) || null;
   const fullMode = !!(_qs && _qs.get('full') === '1'); // 해상도 테스터용: 320×640 목업 대신 뷰포트 꽉 채움
-  const nav = useRouter(initialScreen || (isOnboardingDone() ? 'home' : 'onboarding'));
+  // 시작화면 = 전역 5탭 셸(홈 탭=HomeV4). 신규 사용자는 온보딩 먼저(레벨·추천 세팅) → 완료 후 셸.
+  const nav = useRouter(initialScreen || (isOnboardingDone() ? 'shell' : 'onboarding'));
   const [settings, setSettings] = useState(() => {
     // MY›설정 읽기 도움 기본값 — localStorage 유지. 없으면 「조금 안다」 기본(후리 ON·발음 OFF).
     try {
@@ -60,8 +61,8 @@ export default function App() {
     nav.replace('recommend', { result });
   }
   function handleStart() {
-    nav.reset('home');
-    nav.push('courses');                            // 홈 + 학습 코스(추천 태그)로 랜딩
+    nav.reset('shell');                             // 셸(홈 탭)을 루트로
+    nav.push('courses');                            // 그 위에 추천 코스 리스트(back → 셸)
   }
 
   const { name, params } = nav.current;
@@ -82,7 +83,7 @@ export default function App() {
         <View style={[fullMode ? styles.phoneFull : styles.phone, { backgroundColor: t.bgBase, borderColor: t.borderStrong }]}>
           <ThemeProvider mode={mode}>
             {name === 'onboarding' ? (
-              <OnboardingScreen onFinish={handleOnboardingFinish} onExit={() => nav.reset('home')} />
+              <OnboardingScreen onFinish={handleOnboardingFinish} onExit={() => nav.reset('shell')} />
             ) : name === 'recommend' ? (
               <RecommendScreen result={params.result} onStart={handleStart} />
             ) : name === 'homeV3' ? (
