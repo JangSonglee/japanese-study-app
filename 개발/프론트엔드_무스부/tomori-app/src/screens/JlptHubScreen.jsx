@@ -132,7 +132,7 @@ function makeStyles(t) {
     titleWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     accent: { width: 4, height: 16, borderRadius: radius.full },
     title: { fontFamily: fonts.ko, ...typeStyle('body'), fontWeight: '700' },
-    body: { padding: 16, gap: 10 },
+    body: { padding: 16, paddingBottom: 88, gap: 10 },
     section: { fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
     select: {
       flexDirection: 'row', alignItems: 'center', gap: 12,

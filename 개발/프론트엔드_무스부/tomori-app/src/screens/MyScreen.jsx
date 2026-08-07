@@ -118,7 +118,7 @@ function makeStyles(t) {
     appbar: { height: 52, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10 },
     back: { fontSize: 26, width: 20 },
     title: { flex: 1, fontFamily: fonts.ko, ...typeStyle('bodySm'), fontWeight: '600' },
-    body: { padding: 16, gap: 10 },
+    body: { padding: 16, paddingBottom: 88, gap: 10 },
     profile: {
       flexDirection: 'row', alignItems: 'center', gap: 12,
       borderRadius: radius.lg, padding: 16,

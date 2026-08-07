@@ -234,8 +234,11 @@ const styles = StyleSheet.create({
     boxShadow: '0 12px 32px rgba(26,22,19,.18)',
   },
   // 전체폭 모드(?full=1) — 목업 프레임/여백 제거, 뷰포트 꽉 채워 실제 기기폭으로 렌더.
-  stageFull: { flex: 1, minHeight: '100%', backgroundColor: '#EFE9E1' },
-  phoneFull: { flex: 1, width: '100%', overflow: 'hidden' },
+  //  · 🔴 height '100%'(#root=100%=뷰포트)로 고정 + overflow hidden → 콘텐츠가 길어도 스테이지가
+  //    뷰포트를 넘지 않는다. minHeight(늘어남)면 셸 하단 nav(absolute bottom:0)가 아래로 밀려
+  //    스크롤해야 보이던 버그. 이제 각 화면 내부 ScrollView가 스크롤하고 nav는 항상 고정.
+  stageFull: { flex: 1, height: '100%', overflow: 'hidden', backgroundColor: '#EFE9E1' },
+  phoneFull: { flex: 1, width: '100%', height: '100%', overflow: 'hidden' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
   msg: { fontFamily: fonts.ko, fontSize: 13, padding: 16, textAlign: 'center' },
   note: { fontFamily: fonts.ko, fontSize: 12, color: '#9C948B' },

@@ -75,8 +75,10 @@ export default function TabShell({ nav, params }) {
 const S = StyleSheet.create({
   screen: { flex: 1, backgroundColor: C.bg },
   content: { flex: 1 },
+  // 🔴 nav = flex 형제(absolute 아님). 콘텐츠(flex:1)가 nav 위 공간만 차지 → 화면 내 BottomSheet가
+  //    nav를 넘지 않고, nav는 항상 뷰포트 바닥에 고정(스테이지가 height 100%로 고정된 덕).
   nav: {
-    position: 'absolute', left: 0, right: 0, bottom: 0, height: 70,
+    height: 70, flexShrink: 0,
     backgroundColor: C.navBg, flexDirection: 'row', alignItems: 'center', boxShadow: C.navShadow,
   },
   tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 3 },
