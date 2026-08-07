@@ -40,13 +40,13 @@ export default function TabShell({ nav, params }) {
         {tab === 'home' ? (
           <HomeV4Screen nav={nav} hideTabBar />
         ) : tab === 'learn' ? (
-          <JlptHubScreen nav={nav} />
+          <JlptHubScreen nav={nav} hideBack />
         ) : tab === 'vocab' ? (
           <VocabBookScreen nav={nav} />
         ) : tab === 'trans' ? (
           <TranslateScreen nav={nav} />
         ) : (
-          <MyScreen nav={nav} />
+          <MyScreen nav={nav} hideBack />
         )}
       </View>
 

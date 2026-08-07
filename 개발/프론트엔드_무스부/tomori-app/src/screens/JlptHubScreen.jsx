@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from '../components/Icon';
 import BottomSheet from '../components/BottomSheet';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
 import { LEVELS } from '../data/vocab';
+import { loadUserLevel } from '../data/home';
 
 // 급수별 난이도 라벨 — 0/xxx·0% 같은 사기 저하 숫자 대신 「어디쯤인지」만 담백하게(철학: 북돋는다).
 const LEVEL_LABEL = { N5: '입문', N4: '초급', N3: '중급', N2: '중상급', N1: '고급' };
@@ -26,18 +27,27 @@ const AREAS = [
   { key: 'listening', name: '청해', route: 'listeningSession', ready: true },
 ];
 
-export default function JlptHubScreen({ nav }) {
+export default function JlptHubScreen({ nav, hideBack = false }) {
   const { t } = useTheme();
   const [level, setLevel] = useState('N5');
   const [sheetOpen, setSheetOpen] = useState(false);
   const S = makeStyles(t);
 
+  // 급수 기본값 = 사용자 급수(로그인·설정 시). 게스트·미설정이면 N5 유지.
+  useEffect(() => {
+    let alive = true;
+    loadUserLevel().then((lv) => { if (alive && lv) setLevel(lv); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
-      <View style={S.appbar}>
-        <Pressable onPress={() => nav.pop()} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로">
-          <Icon name="back" size={22} color={t.textHigh} />
-        </Pressable>
+      <View style={[S.appbar, hideBack && { paddingHorizontal: 20 }]}>
+        {!hideBack ? (
+          <Pressable onPress={() => nav.pop()} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로">
+            <Icon name="back" size={22} color={t.textHigh} />
+          </Pressable>
+        ) : null}
         <View style={S.titleWrap}>
           <View style={[S.accent, { backgroundColor: t.courseJlpt }]} />
           <Text style={[S.title, { color: t.courseJlptText }]}>JLPT</Text>

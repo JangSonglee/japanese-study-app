@@ -67,6 +67,13 @@ export async function loadHomeProgress() {
   return data;
 }
 
+// 사용자 급수(N5~N1) — 학습 허브 기본 급수 연동용. 게스트·미설정이면 null(→ 화면 N5 폴백).
+//  · load_home_progress가 이미 레벨을 반환하므로 재사용(별도 RPC 불필요).
+export async function loadUserLevel() {
+  const p = await loadHomeProgress();
+  return p && p.has_level ? p.level : null;
+}
+
 // 「안다」로 표시한 단어(content_key 배열)를 진도에 적립. 게스트면 no-op.
 export async function recordVocabKnown(keys) {
   const arr = Array.isArray(keys) ? keys.filter(Boolean) : [];

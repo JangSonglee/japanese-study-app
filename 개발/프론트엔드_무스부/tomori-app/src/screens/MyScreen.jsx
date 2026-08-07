@@ -12,7 +12,7 @@ import { fonts, radius, keepAll, typeStyle } from '../theme/tokens';
  *  · 콘텐츠 학습은 게스트도 무제한(PRD 1.3). 로그인은 내 데이터(오답노트·스트릭·진도·우표)를 남기는 선택.
  *  · 🔴 provider 미설정(GCP 키 전)엔 signInWithGoogle이 에러 → 「준비 중」 안내로 방어(크래시 금지).
  */
-export default function MyScreen({ nav }) {
+export default function MyScreen({ nav, hideBack = false }) {
   const { t } = useTheme();
   const { user, signInWithGoogle, signOut } = useAuth();
   const [authMsg, setAuthMsg] = useState('');
@@ -29,10 +29,12 @@ export default function MyScreen({ nav }) {
 
   return (
     <View style={[S.screen, { backgroundColor: t.bgBase }]}>
-      <View style={S.appbar}>
-        <Pressable onPress={() => nav.pop()} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로">
-          <Icon name="back" size={22} color={t.textHigh} />
-        </Pressable>
+      <View style={[S.appbar, hideBack && { paddingHorizontal: 20 }]}>
+        {!hideBack ? (
+          <Pressable onPress={() => nav.pop()} hitSlop={12} accessibilityRole="button" accessibilityLabel="뒤로">
+            <Icon name="back" size={22} color={t.textHigh} />
+          </Pressable>
+        ) : null}
         <Text style={[S.title, { color: t.textHigh }]}>MY</Text>
       </View>
 
